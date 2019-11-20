@@ -1,0 +1,56 @@
+version: '3.7'
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    restart: always
+    volumes:
+      - ./docker/nginx/sites.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./www:/var/www/html
+    ports:
+      - 280:80
+    depends_on:
+      - postgres
+      - php
+  postgres:
+    build:
+      context: .
+      dockerfile: docker/postgres/Dockerfile
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: motdepasse
+      POSTGRES_USER: utilisateur
+      POSTGRES_DB: project_cms
+    volumes:
+      - ./docker/postgres/data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    restart: always
+#    env_file:
+#      - ./.env
+    volumes:
+      - ./www:/var/www/html
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini-development
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini-production
+    ports:
+      - '9000:9000'
+    user: 1000:1000
+    depends_on:
+      - postgres
+  adminer:
+    build:
+      context: .
+      dockerfile: docker/adminer/Dockerfile
+    restart: always
+    environment:
+      PMA_HOST: postgres
+      PMA_PORT: 5432
+    ports:
+      - 281:8080
+    depends_on:
+      - postgres

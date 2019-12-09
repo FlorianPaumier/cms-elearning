@@ -19,7 +19,9 @@ class ExceptionHandler
         //header("{$_SERVER["SERVER_PROTOCOL"]} 405 Method Not Allowed");
         if ($_SERVER["APP_ENV"] == "dev") {
             $renderer = new RenderView();
-            $renderer->render("Errors/405", ["${$request->getServer()["SERVER_PROTOCOL"]} 405 Method Not Allowed"]);
+            $renderer->render("Errors/405", [
+                "message" => "${$request->getServer()["SERVER_PROTOCOL"]} 405 Method Not Allowed"
+            ]);
         } else {
             //Send Mail
             $redirect = new RedirectionHandler();
@@ -29,6 +31,7 @@ class ExceptionHandler
                 $redirect->redirectToRoute("app_home");
             }
         }
+        die();
     }
 
     public static function forbiddenHandler()

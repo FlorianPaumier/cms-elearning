@@ -14,12 +14,16 @@ abstract class FormType
     /**
      * @var string
      */
-    protected $prefix;
+    public $prefix = "app";
 
     protected $fields;
 
     public function __construct(){
-        $this->formBuilder = new Form();
+        if(is_null($this->formBuilder)){
+            $this->formBuilder = new Form();
+        }
+
+        $this->getBlockPrefix();
     }
 
     /**
@@ -32,20 +36,23 @@ abstract class FormType
     /**
      * Build a form skeleton
      */
-    protected function buildForm(){
+    public function buildForm(){
         return [];
     }
 
+    protected function createForm(){}
 
     /**
      * @return string
      */
-    protected function createForm(){}
+    public function setBlockPrefix(){
+        return "form";
+    }
 
     /**
-     *
+     * @return string
      */
-    protected function getBlockPrefix(){
+    public function getBlockPrefix(){
         $this->prefix = "app";
     }
 }

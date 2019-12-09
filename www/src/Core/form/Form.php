@@ -3,9 +3,14 @@
 namespace App\Core\Form;
 
 use App\Core\Kernel\Kernel;
+use App\Core\Renderer\RenderView;
 
 class Form
 {
+    /**
+     * @var FormType
+     */
+    private $formType;
 
     /**
      * @var array|object
@@ -27,11 +32,25 @@ class Form
      */
     private $prefix;
 
+    /** @var RenderView $render */
+    private $render;
+
+    /**
+     * @var array
+     */
+    private $fields;
+
     public function __construct()
     {
         $this->data = [];
         $this->errors = [];
+        $this->render = new RenderView();
+    }
 
+    public function buildForm(string $form)
+    {
+        $this->formType = new $form();
+        return $this;
     }
 
     public function input(string $key, string $label, bool $require = true, array $options = [])
@@ -39,7 +58,17 @@ class Form
         $value = $this->getValue($key);
         $type = $key === "password" || $key === "password_confirm" ? "password" : "text";
         $required = $require ? "required" : null;
-        $this->form[$key] = Kernel::get("render");
+
+        $options = array_merge($options, [
+            "value" => $value,
+            "label" => $label,
+            "key" => $key,
+            "type" => $type,
+            "required" => $required,
+            "errors" => $this->errors,
+        ]);
+
+        $this->form[$key] = $this->render->getHtmlElement("input",  $options);
         return $this;
     }
 
@@ -96,7 +125,13 @@ class Form
     }
 
     public function button(string $key, string $label,array $options = []){
-        $this->form[$key] = "";
+        $options = array_merge($options, [
+            "key" => $key,
+            "label" => $label,
+            "errors" => $this->errors,
+        ]);
+
+        $this->form[$key] = $this->render->getHtmlElement("button", $options);
     }
 
     public function select(string $key, string $label, array $options = [], bool $require = true, bool $multiple = false)
@@ -135,18 +170,20 @@ class Form
         unset($this->errors[$key]);
     }
 
-    public function createView(Form $form)
-    {
-        $view = "";
-        foreach ($form->form as $field) {
-            $view .= html_entity_decode($field);
-        }
-
-        return $view;
+    public function getForm(){
+        return $this->form;
     }
 
-    public function setPrefix(string $prefix)
+    public function createView()
     {
-        $this->prefix = $prefix;
+        /** @var Form $form */
+        $fields = $this->formType->buildForm();
+        $view = "<form method='post' action=''>";
+
+        foreach ($fields->getForm() as $field){
+            $view .= html_entity_decode($field);
+        }
+        $view .= "</form>";
+        return $view;
     }
 }

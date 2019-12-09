@@ -3,8 +3,10 @@
 
 namespace App\Core\Kernel;
 
+use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Request\Request;
 use App\Core\Router\Router;
+use App\Core\Session\PHPSession;
 
 class ConfigHandler
 {
@@ -52,9 +54,9 @@ class ConfigHandler
         $this->getRouting();
 
         Kernel::bind("request", Request::createFromGlobals());
-        /*Kernel::bind("session", new PHPSession());
-        Kernel::bind("exception", new ExceptionsHandler());
-        Kernel::bind("entityManager", new QueryBuilder());
+        Kernel::bind("exception", new ExceptionHandler());
+        Kernel::bind("session", new PHPSession());
+        /*Kernel::bind("entityManager", new QueryBuilder());
         Kernel::bind("repository", new Table());
         Kernel::bind("userManager", new UserManager());*/
         Kernel::bind("router", new Router());

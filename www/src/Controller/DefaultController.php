@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Core\Renderer\RenderView;
+
 class DefaultController
 {
 
     public function index()
     {
-        echo "Hello World";
+        (new RenderView())->render("home");
     }
 }

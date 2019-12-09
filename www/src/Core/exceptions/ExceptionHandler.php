@@ -1,25 +1,25 @@
 <?php
 
 
-namespace App\Core\Exception;
+namespace App\Core\Exceptions;
 
 
+use App\Core\Renderer\RenderView;
 use App\Core\request\RedirectionHandler;
 use App\Core\Request\Request;
 
-class ExcepetionHandler
+class ExceptionHandler
 {
-    //TODO: Remettre le template Engine
     /**
      * Redirect to 405 page error
      * @return false|string
      */
     public static function invalidMethodHandler(Request $request)
     {
-        header("{$_SERVER["SERVER_PROTOCOL"]} 405 Method Not Allowed");
+        //header("{$_SERVER["SERVER_PROTOCOL"]} 405 Method Not Allowed");
         if ($_SERVER["APP_ENV"] == "dev") {
-            /*$renderer = new RenderView();
-            $renderer->render("Errors/405", ["${$request->getServer()["SERVER_PROTOCOL"]} 405 Method Not Allowed"]);*/
+            $renderer = new RenderView();
+            $renderer->render("Errors/405", ["${$request->getServer()["SERVER_PROTOCOL"]} 405 Method Not Allowed"]);
         } else {
             //Send Mail
             $redirect = new RedirectionHandler();
@@ -50,8 +50,8 @@ class ExcepetionHandler
      */
     public static  function defaultRequestHandler($message = "Ce que vous cherchez n'est pas ici <a href='/'>Retour</a>"): void
     {
-        header("{$_SERVER["SERVER_PROTOCOL"]} 404 Not Found" . $message);
-        //(new RenderView())->render("Errors/404", ["message" => $message]);
+        //header("{$_SERVER["SERVER_PROTOCOL"]} 404 Not Found" . $message);
+        (new RenderView())->render("Errors/404", ["message" => $message]);
         die();
     }
 }

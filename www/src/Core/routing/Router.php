@@ -2,7 +2,7 @@
 
 namespace App\Core\Router;
 
-use App\Core\Exception\ExcepetionHandler;
+use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Kernel\Kernel;
 use App\Core\request\RedirectionHandler;
 use App\Core\Request\Request;
@@ -63,12 +63,12 @@ class Router
 
         //If nothing match throw new exception
         if (is_null($match)) {
-            ExcepetionHandler::defaultRequestHandler("La route ne correspond pas");
+            ExceptionHandler::defaultRequestHandler("La route ne correspond pas");
         }
 
         //If method don't match throw new exception
         if (isset($match["method"]) && !in_array($this->request->getMethod(), $match["method"])) {
-            ExcepetionHandler::invalidMethodHandler($this->request);
+            ExceptionHandler::invalidMethodHandler($this->request);
         };
 
         //If we have found params send it
@@ -105,7 +105,7 @@ class Router
         $action = $controllerData["action"];
 
         if (!is_callable([$controller, $action])) {
-            ExcepetionHandler::defaultRequestHandler("Pas de fonction trouvé au nom de ' ${action} ' dans le controller ' src/${controllerData['path']} '");
+            ExceptionHandler::defaultRequestHandler("Pas de fonction trouvé au nom de ' ${action} ' dans le controller ' src/${controllerData['path']} '");
         }
 
         //TODO : Remettre en place la injection de dépendance

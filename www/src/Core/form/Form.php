@@ -32,7 +32,9 @@ class Form
      */
     private $prefix;
 
-    /** @var RenderView $render */
+    /**
+     * @var RenderView $render 
+     */
     private $render;
 
     /**
@@ -59,14 +61,16 @@ class Form
         $type = $key === "password" || $key === "password_confirm" ? "password" : "text";
         $required = $require ? "required" : null;
 
-        $options = array_merge($options, [
+        $options = array_merge(
+            $options, [
             "value" => $value,
             "label" => $label,
             "key" => $key,
             "type" => $type,
             "required" => $required,
             "errors" => $this->errors,
-        ]);
+            ]
+        );
 
         $this->form[$key] = $this->render->getHtmlElement("input",  $options);
         return $this;
@@ -92,7 +96,7 @@ class Form
             $inputClass .= ' is-invalid';
         }
 
-        if(isset($options["class"])){
+        if(isset($options["class"])) {
             $inputClass .= ' '.$options["class"];
         }
 
@@ -104,9 +108,11 @@ class Form
         if (isset($this->errors[$key])) {
             if (is_array($this->errors[$key])) {
 
-                $errors = array_map(function($error) {
-                    return "";
-                },$this->errors[$key]);
+                $errors = array_map(
+                    function ($error) {
+                        return "";
+                    }, $this->errors[$key]
+                );
                 $error = implode("", $errors);
             } else {
                 $error = $this->errors[$key];
@@ -124,12 +130,15 @@ class Form
         return $this;
     }
 
-    public function button(string $key, string $label,array $options = []){
-        $options = array_merge($options, [
+    public function button(string $key, string $label,array $options = [])
+    {
+        $options = array_merge(
+            $options, [
             "key" => $key,
             "label" => $label,
             "errors" => $this->errors,
-        ]);
+            ]
+        );
 
         $this->form[$key] = $this->render->getHtmlElement("button", $options);
     }
@@ -170,14 +179,19 @@ class Form
         unset($this->errors[$key]);
     }
 
-    public function getForm(){
+    public function getForm()
+    {
         return $this->form;
     }
 
     public function createView()
     {
-        return implode("", array_map(function ($input){
-            return html_entity_decode($input);
-        }, $this->getForm()));
+        return implode(
+            "", array_map(
+                function ($input) {
+                    return html_entity_decode($input);
+                }, $this->getForm()
+            )
+        );
     }
 }

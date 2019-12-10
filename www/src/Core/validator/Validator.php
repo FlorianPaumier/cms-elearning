@@ -47,7 +47,7 @@ class Validator
     /**
      * Vérifie que les champs sont présents dans le tableau
      *
-     * @param string[] ...$keys
+     * @param  string[] ...$keys
      * @return Validator
      */
     public function required(string ...$keys): self
@@ -64,7 +64,7 @@ class Validator
     /**
      * Vérifie que le champs n'est pas vide
      *
-     * @param string[] ...$keys
+     * @param  string[] ...$keys
      * @return Validator
      */
     public function notEmpty(string ...$keys): self
@@ -82,21 +82,21 @@ class Validator
     {
         $value = $this->getValue($key);
         $length = mb_strlen($value);
-        if (!is_null($min) &&
-            !is_null($max) &&
-            ($length < $min || $length > $max)
+        if (!is_null($min) 
+            && !is_null($max) 
+            && ($length < $min || $length > $max)
         ) {
             $this->addError($key, 'betweenLength', [$min, $max]);
             return $this;
         }
-        if (!is_null($min) &&
-            $length < $min
+        if (!is_null($min) 
+            && $length < $min
         ) {
             $this->addError($key, 'minLength', [$min]);
             return $this;
         }
-        if (!is_null($max) &&
-            $length > $max
+        if (!is_null($max) 
+            && $length > $max
         ) {
             $this->addError($key, 'maxLength', [$max]);
         }
@@ -106,7 +106,7 @@ class Validator
     /**
      * Vérifie que l'élément est un slug
      *
-     * @param string $key
+     * @param  string $key
      * @return Validator
      */
     public function slug(string $key): self
@@ -122,8 +122,8 @@ class Validator
     /**
      * Vérifie qu'une date correspond au format demandé
      *
-     * @param string $key
-     * @param string $format
+     * @param  string $key
+     * @param  string $format
      * @return Validator
      */
     public function dateTime(string $key, string $format = "Y-m-d H:i:s"): self
@@ -140,8 +140,8 @@ class Validator
     /**
      * Vérifie que la clef existe dans la table donnée
      *
-     * @param string $key
-     * @param string $table
+     * @param  string $key
+     * @param  string $table
      * @return Validator
      * @throws \App\Core\Exceptions\NoRecordException
      */
@@ -159,10 +159,10 @@ class Validator
     /**
      * Vérifie que la clef est unique dans la base de donnée
      *
-     * @param string $key
-     * @param string|Table $table
-     * @param \PDO $pdo
-     * @param int|null $exclude
+     * @param  string       $key
+     * @param  string|Table $table
+     * @param  \PDO         $pdo
+     * @param  int|null     $exclude
      * @return Validator
      */
     public function unique(string $key,string $table, ?int $exclude = null): self
@@ -185,7 +185,8 @@ class Validator
 
     /**
      * Vérifie si le fichier a bien été uploadé
-     * @param string $key
+     *
+     * @param  string $key
      * @return Validator
      */
     public function uploaded(string $key): self
@@ -199,7 +200,8 @@ class Validator
 
     /**
      * Vérifie si l'email est valid
-     * @param string $key
+     *
+     * @param  string $key
      * @return Validator
      */
     public function email(string $key): self
@@ -223,13 +225,16 @@ class Validator
 
     /**
      * Vérifie le format de fichier
-     * @param string $key
-     * @param array $extensions
+     *
+     * @param  string $key
+     * @param  array  $extensions
      * @return Validator
      */
     public function extension(string $key, array $extensions): self
     {
-        /** @var \FilesystemIterator $file */
+        /**
+ * @var \FilesystemIterator $file 
+*/
         $file = $this->getValue($key);
 
         if ($file !== null && $file->getError() === UPLOAD_ERR_OK) {
@@ -254,6 +259,7 @@ class Validator
 
     /**
      * Récupère les erreurs
+     *
      * @return ValidationError[]
      */
     public function getErrors(): array
@@ -263,7 +269,8 @@ class Validator
 
     /**
      *  Take array of constraint and execute the validation
-     * @param array $constraint
+     *
+     * @param  array $constraint
      * @return Validator
      */
     public function buildValidator(array $constraints)
@@ -271,30 +278,30 @@ class Validator
         foreach ($constraints as $input => $constraint){
             foreach ($constraint as $param => $value){
                 switch ($param){
-                    case "length":
-                        $this->length($input, $value["min"], isset($value["max"]) ?: null);
-                        break;
-                    case "required":
-                        $this->required($input);
-                        break;
-                    case "empty":
-                        $this->notEmpty($input);
-                        break;
-                    case "email":
-                        $this->email($input);
-                        break;
-                    case "extension":
-                        $this->extension($input, $value);
-                        break;
-                    case "confirmation":
-                        $this->confirm($input);
-                        break;
-                    case "exist":
-                        $this->exists($input, $value["table"]);
-                        break;
-                    case "unique":
-                        $this->unique($input, $value["table"]);
-                        break;
+                case "length":
+                    $this->length($input, $value["min"], isset($value["max"]) ?: null);
+                    break;
+                case "required":
+                    $this->required($input);
+                    break;
+                case "empty":
+                    $this->notEmpty($input);
+                    break;
+                case "email":
+                    $this->email($input);
+                    break;
+                case "extension":
+                    $this->extension($input, $value);
+                    break;
+                case "confirmation":
+                    $this->confirm($input);
+                    break;
+                case "exist":
+                    $this->exists($input, $value["table"]);
+                    break;
+                case "unique":
+                    $this->unique($input, $value["table"]);
+                    break;
                 }
             }
         }
@@ -307,7 +314,7 @@ class Validator
      *
      * @param string $key
      * @param string $rule
-     * @param array $attributes
+     * @param array  $attributes
      */
     private function addError(string $key, string $rule, array $attributes = []): void
     {

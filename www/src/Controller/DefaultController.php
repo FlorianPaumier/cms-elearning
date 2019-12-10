@@ -13,8 +13,10 @@ class DefaultController extends BaseController
     {
         $form = $this->form->buildForm(UserLoginForm::class);
 
-        (new RenderView())->render("home", [
+        (new RenderView())->render(
+            "home", [
             "form" => $form->createView(),
-        ]);
+            ]
+        );
     }
 }

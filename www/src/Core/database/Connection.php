@@ -13,8 +13,7 @@ abstract class Connection
      */
     public static function instance()
     {
-        if( self::$connection === null )
-        {
+        if(self::$connection === null ) {
             // Late static binding (PHP 5.3+)
             $config = Kernel::get("config")["database"];
             $dsn = "${config['driver']}:host=${config['host']};dbname=${config['dbname']}";
@@ -33,21 +32,29 @@ abstract class Connection
     /**
      * Make constructor private, so nobody can call "new Class".
      */
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     /**
      * Make clone magic method private, so nobody can clone instance.
      */
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     /**
      * Make sleep magic method private, so nobody can serialize instance.
      */
-    private function __sleep() {}
+    private function __sleep()
+    {
+    }
 
     /**
      * Make wakeup magic method private, so nobody can unserialize instance.
      */
-    private function __wakeup() {}
+    private function __wakeup()
+    {
+    }
 
 }

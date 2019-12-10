@@ -23,18 +23,22 @@ Trait Entity
         return $this->id;
     }
 
-    public function getVariables(){
+    public function getVariables()
+    {
         return get_object_vars($this);
     }
 
-    public function objectToSql(){
+    public function objectToSql()
+    {
         $vars = [];
         foreach($this->getVariables() as $key => $value){
-            if(is_array($value))
+            if(is_array($value)) {
                 $value = json_encode($value);
+            }
 
-            if(!is_null($value))
+            if(!is_null($value)) {
                 $vars[$key] = $value;
+            }
         };
 
         return $vars;

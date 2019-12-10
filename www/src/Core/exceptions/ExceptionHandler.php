@@ -12,6 +12,7 @@ class ExceptionHandler
 {
     /**
      * Redirect to 405 page error
+     *
      * @return false|string
      */
     public static function invalidMethodHandler(Request $request)
@@ -19,9 +20,11 @@ class ExceptionHandler
         //header("{$_SERVER["SERVER_PROTOCOL"]} 405 Method Not Allowed");
         if ($_SERVER["APP_ENV"] == "dev") {
             $renderer = new RenderView();
-            $renderer->render("Errors/405", [
+            $renderer->render(
+                "Errors/405", [
                 "message" => "${$request->getServer()["SERVER_PROTOCOL"]} 405 Method Not Allowed"
-            ]);
+                ]
+            );
         } else {
             //Send Mail
             $redirect = new RedirectionHandler();
@@ -48,7 +51,8 @@ class ExceptionHandler
 
     /**
      * Redirect to 404 page error with message
-     * @param $message
+     *
+     * @param  $message
      * @return false|string
      */
     public static  function defaultRequestHandler($message = "Ce que vous cherchez n'est pas ici <a href='/'>Retour</a>"): void

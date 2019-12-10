@@ -1,6 +1,7 @@
 <?php
 
 use App\Core\Database\QueryBuilder;
+use App\Core\Database\Table;
 use PHPUnit\Framework\TestCase;
 
 final class QueryBuilderTest extends TestCase
@@ -27,9 +28,9 @@ final class QueryBuilderTest extends TestCase
         return $pdo;
     }
 
-    public function getBuilder(PDO $pdo): QueryBuilder
+    public function getBuilder(PDO $pdo): Table
     {
-        return new QueryBuilder($pdo);
+        return new Table($pdo);
     }
 
     public function testSimpleQuery()
@@ -155,8 +156,8 @@ final class QueryBuilderTest extends TestCase
             ->from("products")
             ->where("name = :name")
             ->setParam("name", "Product 1")
-            ->fetchOrFail("city");
-        $this->assertEquals("Ville 1", $city["city"]);
+            ->fetchOrFail();
+        $this->assertEquals("Ville 1", $city->city);
     }
 
     public function testFetchWithInvalidRow()

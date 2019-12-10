@@ -16,6 +16,7 @@ class ConfigHandler
 {
     /**
      * path to the configuration directory
+     *
      * @var array
      */
     private $path;
@@ -24,6 +25,7 @@ class ConfigHandler
     {
         /**
          * define default  configuration directory
+         *
          * @var array path
          */
         $this->path = [
@@ -35,13 +37,15 @@ class ConfigHandler
 
     /**
      * Return an array of the parsed yml
-     * @param string $key
+     *
+     * @param  string $key
      * @return bool|mixed
      */
-    public function get(string $key){
+    public function get(string $key)
+    {
         $file = $this->path["cache"]."/{$key}Cache.php";
-        if(file_exists($file) && (filemtime($file) + 5*60*60) > time()){
-            return include($file);
+        if(file_exists($file) && (filemtime($file) + 5*60*60) > time()) {
+            return include $file;
         }
         return false;
     }
@@ -50,7 +54,8 @@ class ConfigHandler
      * This function is call when a web application is start
      * Put all the  default class to  make the app working
      */
-    public function init(){
+    public function init()
+    {
 
         $this->getConfig();
         $this->getRouting();
@@ -77,13 +82,15 @@ class ConfigHandler
 
     /**
      * Get the configuration and making cache
-     * @param string $key
-     * @param array $data
+     *
+     * @param  string $key
+     * @param  array  $data
      * @return array|bool|mixed
      */
-    private function instanceCache(string $key, array $data){
+    private function instanceCache(string $key, array $data)
+    {
 
-        if(($config = $this->get($key)) !== false){
+        if(($config = $this->get($key)) !== false) {
             return $config;
         }
 
@@ -112,25 +119,28 @@ class ConfigHandler
     /**
      * Get the data from the routing dir in the routing dir
      */
-    private function getRouting(){
+    private function getRouting()
+    {
 
         $routing = [];
 
         foreach (dirToArray($this->path["routing"]) as $key => $file) {
             $table = [];
-            if(is_int($key)){
+            if(is_int($key)) {
                 $table = yaml_parse_file($this->path["routing"]."/$file");
             }else{
                 foreach ($file as $route){
                     $dir = dirToArray($this->path["routing"]."/$key");
-                    foreach ($dir as $dirFile)
-                        $table = array_merge($table,yaml_parse_file($this->path["routing"]."/$key/$dirFile"));
+                    foreach ($dir as $dirFile) {
+                        $table = array_merge($table, yaml_parse_file($this->path["routing"]."/$key/$dirFile"));
+                    }
                 }
             }
-            if(!is_null($table)){$routing = array_merge($routing, $table);};
+            if(!is_null($table)) {$routing = array_merge($routing, $table);
+            };
         };
 
-        Kernel::bind("routing" ,$this->instanceCache("routing", $routing));
+        Kernel::bind("routing", $this->instanceCache("routing", $routing));
     }
 
 }

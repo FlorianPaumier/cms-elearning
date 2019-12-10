@@ -10,12 +10,14 @@ class Table extends QueryBuilder
 
     /**
      * Nom de la table en BDD
+     *
      * @var string
      */
     protected $table;
 
     /**
      * Entité à utiliser
+     *
      * @var string|null
      */
     protected $entity;
@@ -98,9 +100,13 @@ class Table extends QueryBuilder
 
     private function buildWhereFieldQuery(array $params)
     {
-        return join(' AND ', array_map(function ($field) {
-            return "`$field` = :$field";
-        }, array_keys($params)));
+        return join(
+            ' AND ', array_map(
+                function ($field) {
+                    return "`$field` = :$field";
+                }, array_keys($params)
+            )
+        );
     }
 
 
@@ -113,25 +119,58 @@ class Table extends QueryBuilder
      */
     public function find(int $id)
     {
-        return $this->fetchOrFail("SELECT * FROM {$this->table} WHERE id = :id", ["id" => $id]);
+        $this->from($this->table)
+            ->where("id = :id");
+
+        $this->setParam("id", $id);
+        return $this->fetchOrFail();
     }
 
+    /**
+     * Crée un nouvel enregistrement
+     *
+     * @param array $params
+     * @return bool
+     */
+    public function insert(array $params): bool
+    {
+        $query = $this->pdo->prepare("INSERT INTO {$this->table} ("
+            . join(', ', array_keys($params)) .
+            ") VALUES (" . $this->buildFieldQuery($params) . ")");
+
+
+        if (!($result = $query->execute($params))) {
+            foreach ($params as $key => $param) {
+                $query->bindParam($key, $param);
+            }
+            $result = $query->execute($params);
+        }
+
+        return $result;
+
+    }
+
+    private function buildFieldQuery(array $params)
+    {
+        return join(
+            ', ', array_map(
+                function ($field) {
+                    return ":$field";
+                }, array_keys($params)
+            )
+        );
+    }
 
     /**
-     * Récupère la première colonne
+     * Supprime un enregistrment
      *
-     * @param string $query
-     * @param array $params
-     * @return mixed
+     * @param int $id
+     * @return bool
      */
-    private function fetchColumn(string $query, array $params = [])
+    public function delete(int $id): bool
     {
-        $query = $this->pdo->prepare($query);
-        $query->execute($params);
-        if ($this->entity) {
-            $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
-        }
-        return $query->fetchColumn();
+        $query = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = :id");
+        return $query->execute(["id" => $id]);
     }
 
     /**
@@ -143,53 +182,14 @@ class Table extends QueryBuilder
      */
     public function update(int $id, array $params): bool
     {
-        $fieldQuery = $this->buildFieldQuery($params);
-        $params["id"] = $id;
-        $query = $this->pdo->prepare("UPDATE {$this->table} SET $fieldQuery WHERE id = :id");
-        return $query->execute($params);
-    }
-
-    private function buildFieldQuery(array $params)
-    {
-        return join(', ', array_map(function ($field) {
-            return ":$field";
+        $fieldQuery = implode(',', array_map(function ($param) {
+            return $param . "=:" . $param;
         }, array_keys($params)));
-    }
 
-    /**
-     * Crée un nouvel enregistrement
-     *
-     * @param array $params
-     * @return bool
-     */
-    public function insert(array $params): bool
-    {
-        $values = $this->buildFieldQuery($params);
-        $fields = join(', ', array_keys($params));
-        $query = $this->pdo->prepare("INSERT INTO {$this->table} ($fields) VALUES ($values)");
-
-
-        if(!$query->execute($params)){
-            foreach ($params as $key => $param){
-                $query->bindParam($key, $param);
-            }
-            return $query->execute($params);
-        }else{
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Supprime un enregistrment
-     * @param int $id
-     * @return bool
-     */
-    public function delete(int $id): bool
-    {
-        $query = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = :id");
-        return $query->execute(["id" => $id]);
+        $params["id"] = $id;
+        $query = $this->pdo->prepare("UPDATE {$this->table} SET {$fieldQuery} WHERE id = :id");
+        $query->execute($params);
+        return $query->fetchObject();
     }
 
     /**
@@ -210,7 +210,8 @@ class Table extends QueryBuilder
 
     /**
      * Vérifie qu'un enregistrement existe
-     * @param $id
+     *
+     * @param  $id
      * @return bool
      */
     public function exists($id): bool
@@ -239,5 +240,22 @@ class Table extends QueryBuilder
         }
 
         return $object;
+    }
+
+    /**
+     * Récupère la première colonne
+     *
+     * @param string $query
+     * @param array $params
+     * @return mixed
+     */
+    private function fetchColumn(string $query, array $params = [])
+    {
+        $query = $this->pdo->prepare($query);
+        $query->execute($params);
+        if ($this->entity) {
+            $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
+        }
+        return $query->fetchColumn();
     }
 }

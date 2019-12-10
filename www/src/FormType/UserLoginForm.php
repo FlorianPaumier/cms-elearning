@@ -33,23 +33,28 @@ class UserLoginForm extends FormType
     public function buildForm()
     {
         $this->formBuilder
-            ->input("username", "username", true, [
+            ->input(
+                "username", "username", true, [
                 "class" => "form-control form-control-user"
-            ])
-            ->input("password", "password", true, [
+                ]
+            )
+            ->input(
+                "password", "password", true, [
                 "class" => "form-control form-control-user"
-            ])
-            ->button("submit", "Se connecter", [
+                ]
+            )
+            ->button(
+                "submit", "Se connecter", [
                 "type" => "submit",
                 "class" => "btn btn-primary btn-user btn-block"
-            ])
-        ;
+                ]
+            );
 
         return $this->formBuilder;
     }
 
     public function getBlockPrefix()
     {
-       $this->prefix = "app_login";
+        $this->prefix = "app_login";
     }
 }

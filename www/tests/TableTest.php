@@ -46,7 +46,7 @@ class TableTest extends TestCase{
     {
         $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
         $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a2")');
-        $this->assertEquals(['1' => 'a1', '2' => 'a2'], $this->table->findAll());
+        $this->assertEquals(['1' => 'a1', '2' => 'a2'], $this->table->findList());
     }
 
     public function testFindAll()
@@ -88,30 +88,32 @@ class TableTest extends TestCase{
         $this->assertEquals(3, $this->table->count());
     }
 
-    public function testUpdate()
-    {
-        $this->table->update(1, ['name' => 'Salut', 'slug' => 'demo']);
-        $post = $this->postTable->find(1);
-        $this->assertEquals('Salut', $post->name);
-        $this->assertEquals('demo', $post->slug);
-    }
-
     public function testInsert()
     {
         $this->table->insert(['name' => 'Salut', 'firstname' => 'demo']);
         $post = $this->table->find(1);
         $this->assertEquals('Salut', $post->name);
-        $this->assertEquals('firstname', $post->slug);
+        $this->assertEquals('demo', $post->firstname);
+    }
+
+    public function testUpdate()
+    {
+
+        $this->table->insert(['name' => 'Salut', 'firstname' => 'demo']);
+        $this->table->update(1, ['name' => 'Salut', 'firstname' => 'demo']);
+        $post = $this->table->find(1);
+        $this->assertEquals('Salut', $post->name);
+        $this->assertEquals('demo', $post->firstname);
     }
 
     public function testDelete()
     {
-        $this->postTable->insert(['name' => 'Salut', 'slug' => 'demo']);
-        $this->postTable->insert(['name' => 'Salut', 'slug' => 'demo']);
-        $count = $this->postTable->getPdo()->query('SELECT COUNT(id) FROM posts')->fetchColumn();
-        $this->assertEquals(2, (int) $count);
-        $this->postTable->delete($this->postTable->getPdo()->lastInsertId());
-        $count = $this->postTable->getPdo()->query('SELECT COUNT(id) FROM posts')->fetchColumn();
+        $this->table->insert(['name' => 'Salut', 'firstname' => 'demo']);
+        $this->table->insert(['name' => 'Salut', 'firstname' => 'demo']);
+        $count = $this->table->getPdo()->query('SELECT COUNT(id) FROM test')->fetchColumn();
+        $this->assertEquals(2, (int)$count);
+        $this->table->delete($this->table->getPdo()->lastInsertId());
+        $count = $this->table->getPdo()->query('SELECT COUNT(id) FROM test')->fetchColumn();
         $this->assertEquals(1, (int)$count);
     }
 

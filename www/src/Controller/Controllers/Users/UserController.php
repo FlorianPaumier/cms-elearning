@@ -16,9 +16,11 @@ class  UserController extends BaseController
         }*/
 
         $form = (new UserLoginForm())->buildForm();
-        $this->renderer->render( "/security/login", [
+        $this->renderer->render(
+            "/security/login", [
             "form" => $form->createView()
-        ]);
+             ]
+        );
     }
 
     public function register()
@@ -44,9 +46,11 @@ class  UserController extends BaseController
             }
         }
 
-        $this->renderer->render(ROOT_DIR . "/public/views/security/register", [
+        $this->renderer->render(
+            ROOT_DIR . "/public/views/security/register", [
             "form" => $this->form->createView(),
-        ]);
+            ]
+        );
     }
 
     public function loginCheck()

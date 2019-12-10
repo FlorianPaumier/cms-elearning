@@ -18,8 +18,9 @@ abstract class FormType
 
     protected $fields;
 
-    public function __construct(){
-        if(is_null($this->formBuilder)){
+    public function __construct()
+    {
+        if(is_null($this->formBuilder)) {
             $this->formBuilder = new Form();
         }
 
@@ -29,30 +30,36 @@ abstract class FormType
     /**
      * Add different parameter to test the form data
      */
-    protected static function getConstraint(){
+    protected static function getConstraint()
+    {
 
     }
 
     /**
      * Build a form skeleton
      */
-    public function buildForm(){
+    public function buildForm()
+    {
         return [];
     }
 
-    protected function createForm(){}
+    protected function createForm()
+    {
+    }
 
     /**
      * @return string
      */
-    public function setBlockPrefix(){
+    public function setBlockPrefix()
+    {
         return "form";
     }
 
     /**
      * @return string
      */
-    public function getBlockPrefix(){
+    public function getBlockPrefix()
+    {
         $this->prefix = "app";
     }
 }

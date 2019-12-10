@@ -9,8 +9,9 @@ class Hydrator
 {
     /**
      * Transforme un tableau en objet en utilisant les setters
-     * @param array $array
-     * @param $object
+     *
+     * @param  array  $array
+     * @param  $object
      * @return mixed
      */
     public static function hydrate(array $array, $object)

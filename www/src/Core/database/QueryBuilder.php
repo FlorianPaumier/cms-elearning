@@ -7,6 +7,7 @@ use PDO;
 
 /**
  * Class QueryBuilder
+ *
  * @package App\Core\Database
  */
 class QueryBuilder
@@ -21,6 +22,11 @@ class QueryBuilder
      * @var string
      */
     private $alias;
+
+    /**
+     * @var String 
+     */
+    protected $method =  "SELECT";
 
     /**
      * @var array
@@ -74,15 +80,15 @@ class QueryBuilder
 
     public function __construct(PDO $pdo = null)
     {
-        if(is_null($pdo)){
+        if(is_null($pdo)) {
             $pdo = Connection::instance();
         }
         $this->pdo = $pdo;
     }
 
     /**
-     * @param string $table
-     * @param string|null $alias
+     * @param  string      $table
+     * @param  string|null $alias
      * @return $this
      */
     public function from(string $table, string $alias = null): self
@@ -93,8 +99,8 @@ class QueryBuilder
     }
 
     /**
-     * @param string $key
-     * @param string $direction
+     * @param  string $key
+     * @param  string $direction
      * @return $this
      */
     public function orderBy(string $key, string $direction): self
@@ -109,7 +115,7 @@ class QueryBuilder
     }
 
     /**
-     * @param int $limit
+     * @param  int $limit
      * @return $this
      */
     public function limit(int $limit): self
@@ -119,7 +125,7 @@ class QueryBuilder
     }
 
     /**
-     * @param int $offset
+     * @param  int $offset
      * @return $this
      */
     public function offset(int $offset): self
@@ -129,7 +135,7 @@ class QueryBuilder
     }
 
     /**
-     * @param int $page
+     * @param  int $page
      * @return $this
      */
     public function page(int $page): self
@@ -138,7 +144,7 @@ class QueryBuilder
     }
 
     /**
-     * @param string $where
+     * @param  string $where
      * @return $this
      */
     public function where(string $where): self
@@ -148,7 +154,7 @@ class QueryBuilder
     }
 
     /**
-     * @param string $where
+     * @param  string $where
      * @return $this
      */
     public function andWhere(string $where): self
@@ -158,8 +164,8 @@ class QueryBuilder
     }
 
     /**
-     * @param string $key
-     * @param $value
+     * @param  string $key
+     * @param  $value
      * @return $this
      */
     public function setParam(string $key, $value): self
@@ -169,11 +175,13 @@ class QueryBuilder
     }
 
     /**
-     * @param mixed ...$fields
+     * @param  mixed ...$fields
      * @return $this
      */
     public function select(...$fields): self
     {
+        $this->method = "SELECT";
+        
         if (is_array($fields[0])) {
             $fields = $fields[0];
         }
@@ -190,8 +198,9 @@ class QueryBuilder
      */
     public function toSQL(): string
     {
+
         $fields = implode(', ', $this->fields);
-        $this->sql = "SELECT $fields FROM {$this->from}";
+        $this->sql = "$this->method $fields FROM {$this->from}";
         if ($this->where) {
             $this->sql .= " WHERE " . $this->where;
         }
@@ -216,7 +225,7 @@ class QueryBuilder
     }
 
     /**
-     * @param string $field
+     * @param  string $field
      * @return string|null
      */
     public function fetch(string $field): ?string
@@ -234,13 +243,14 @@ class QueryBuilder
     /**
      * Permet d'éxécuter une requête et de récupérer le premier résultat
      *
-     * @param string $query
-     * @param array $params
+     * @param  string $query
+     * @param  array  $params
      * @return mixed|false
      * @throws NoRecordException
      */
-    public function fetchOrFail(string $field)
+    public function fetchOrFail()
     {
+
         $query = $this->pdo->prepare($this->toSQL());
         $query->execute($this->params);
 
@@ -248,35 +258,20 @@ class QueryBuilder
             $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
         }
 
-        $record = $query->fetch();
+        $record = $query->fetchObject();
 
-        return $record !== false ?  $record : null;
-    }
-
-
-    /**
-     * @return array|null
-     */
-    public function fetchAll(): ?array
-    {
-        $query = $this->pdo->prepare($this->toSQL());
-        $query->execute($this->params);
-        $result = $query->fetchAll();
-        if ($result === false) {
-            return null;
-        }
-        return $result ?? null;
+        return $record !== false ? $record : null;
     }
 
     /**
-     * @param PDO $pdo
+     * @param  PDO $pdo
      * @return int
      */
     public function count(): int
     {
         $q = (clone $this)->select('COUNT(id) count')->fetchOrFail('count');
 
-        if(is_array($q)){
+        if(is_array($q)) {
              $count = (int)$q["count"];
         }else{
             $count = (int)$q->count;

@@ -37,8 +37,8 @@ class RenderView
         extract($param, EXTR_OVERWRITE);
         extract($defaultData, EXTR_SKIP);
 
-        if(file_exists($template . ".view.php")){
-            include($template . ".view.php");//How to pass $param to it? It needs that $row to renderer blog entry!
+        if(file_exists($template . ".view.php")) {
+            include $template . ".view.php";//How to pass $param to it? It needs that $row to renderer blog entry!
         }
 
         $ret = ob_get_contents();
@@ -51,7 +51,7 @@ class RenderView
     {
         $this->templateEngine->setTemplateFile($template);
 
-        if(!is_null($this->templateEngine->getTemplateFile())){
+        if(!is_null($this->templateEngine->getTemplateFile())) {
             $this->templateEngine->setData(["parameter" => $param, "config" => $this->defaultData]);
 
             $this->template = $this->templateEngine->generate_markup();

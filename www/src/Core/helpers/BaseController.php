@@ -44,7 +44,9 @@ abstract class BaseController
      */
     protected $redirect;
 
-    /** @var Form $form */
+    /**
+     * @var Form $form 
+     */
     protected $form;
 
     /**

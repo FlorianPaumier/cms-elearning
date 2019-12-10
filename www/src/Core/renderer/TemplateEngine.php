@@ -39,7 +39,7 @@ class TemplateEngine
     public function setTemplateFile(string $templateFile)
     {
         foreach (self::TPL_EXT as $ext){
-            if(file_exists(DEFAULT_VIEW_DIR.DIRECTORY_SEPARATOR.$templateFile.$ext)){
+            if(file_exists(DEFAULT_VIEW_DIR.DIRECTORY_SEPARATOR.$templateFile.$ext)) {
                 $this->templateFile = DEFAULT_VIEW_DIR.DIRECTORY_SEPARATOR.$templateFile.$ext;
             }
         }
@@ -72,7 +72,8 @@ class TemplateEngine
 
     /**
      * Render the html element to create a form
-     * @param string $type
+     *
+     * @param  string $type
      * @return string
      */
     public function renderHtmlElement(string $type)
@@ -118,32 +119,32 @@ class TemplateEngine
             $html = null;
 
             switch ($template) {
-                case "include":
-                case "require":
-                    $dir = ROOT_DIR . "/public/views";
-                    $value = str_replace("@View", $dir, $value);
-                    $html = RenderView::include($value, $this->data);
-                    break;
-                case "path":
-                    $html = Kernel::get("router")->getPath($value);
-                    break;
-                case "isRequired":
-                    $html = isset($this->data["required"]) ? 'required="required"' : "";
-                    break;
-                case "isMultiple":
-                    $html = isset($this->data["multiple"]) ? 'multiple' : "";
-                    break;
-                case "isSelected":
-                    $html = isset($this->data["selected"]) ? 'selected' : "";
-                    break;
-                case "errorFeedback":
-                    $html = isset($this->data["errors"]) ? " " : "";
-                    break;
-                default:
-                    if (function_exists("include")) {
-                        $html = $template($value);
-                    }
-                    break;
+            case "include":
+            case "require":
+                $dir = ROOT_DIR . "/public/views";
+                $value = str_replace("@View", $dir, $value);
+                $html = RenderView::include($value, $this->data);
+                break;
+            case "path":
+                $html = Kernel::get("router")->getPath($value);
+                break;
+            case "isRequired":
+                $html = isset($this->data["required"]) ? 'required="required"' : "";
+                break;
+            case "isMultiple":
+                $html = isset($this->data["multiple"]) ? 'multiple' : "";
+                break;
+            case "isSelected":
+                $html = isset($this->data["selected"]) ? 'selected' : "";
+                break;
+            case "errorFeedback":
+                $html = isset($this->data["errors"]) ? " " : "";
+                break;
+            default:
+                if (function_exists("include")) {
+                    $html = $template($value);
+                }
+                break;
             }
 
             if (!is_null($html)) {
@@ -153,12 +154,13 @@ class TemplateEngine
         }
     }
 
-    private function _replaceBlocks(){
+    private function _replaceBlocks()
+    {
         preg_match_all("/.*{%\ block.*?%}((?s:.+?)){%\ endblock.*?%}.*/m", $this->templateContent, $this->blockEntries, PREG_SET_ORDER, 0);
 
-        if(!is_null($this->extandEntries) && count($this->extandEntries) > 0){
+        if(!is_null($this->extandEntries) && count($this->extandEntries) > 0) {
             $fileName = trim($this->extandEntries[0][1]).".view.php";
-            if(file_exists(DEFAULT_VIEW_DIR."/".$fileName)){
+            if(file_exists(DEFAULT_VIEW_DIR."/".$fileName)) {
                 $this->extendsContent = file_get_contents(DEFAULT_VIEW_DIR."/".$fileName);
                 $this->extendsContent = preg_replace("/.*{%\ block.*?%}(?s:.+?){%\ endblock.*?%}.*/m", $this->blockEntries[0][1], $this->templateContent);
                 return true;

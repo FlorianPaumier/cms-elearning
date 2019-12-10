@@ -14,7 +14,9 @@ class Router
      */
     private $routingConfig;
 
-    /** @var Request */
+    /**
+     * @var Request 
+     */
     private $request;
 
     /**
@@ -43,6 +45,7 @@ class Router
 
     /**
      * Look into the routing configuration if the uri match with an entry
+     *
      * @return false|mixed|string
      * @throws \Exception
      */
@@ -80,6 +83,7 @@ class Router
 
     /**
      * Removes trailing forward slashes from the right of the route.
+     *
      * @param route (string)
      */
     private function formatRoute(): void
@@ -99,7 +103,8 @@ class Router
 
     /**
      * Try to match a simple route without parameters
-     * @param $route
+     *
+     * @param  $route
      * @return null
      * @throws \Exception
      */
@@ -118,7 +123,8 @@ class Router
 
     /**
      * Test if the url have some paramaters
-     * @param $params
+     *
+     * @param  $params
      * @return bool|mixed
      */
     private function hadParams($params): ?bool
@@ -128,7 +134,8 @@ class Router
 
     /**
      * Try to match a simple route with parameters
-     * @param $route
+     *
+     * @param  $route
      * @return null
      */
     private function getComplexRoute($route): ?array
@@ -160,7 +167,7 @@ class Router
     /**
      * Create the right regex then exec a regex on the value
      *
-     * @param $str
+     * @param  $str
      * @return mixed
      */
     private function matchParams($str): ?array
@@ -184,7 +191,8 @@ class Router
 
     /**
      * return all parameters in url
-     * @param $path
+     *
+     * @param  $path
      * @return |null
      */
     private function getParams($path): ?array
@@ -206,8 +214,8 @@ class Router
     /**
      * Call the controller refer to the route in the configuration
      *
-     * @param $route
-     * @param array $parameters
+     * @param  $route
+     * @param  array $parameters
      * @return false|mixed|string
      * @throws \Exception
      */
@@ -240,7 +248,8 @@ class Router
 
     /**
      * Get the name and the action from the route entry
-     * @param $route
+     *
+     * @param  $route
      * @return array
      */
     private function getController($route)
@@ -256,7 +265,8 @@ class Router
 
     /**
      * Return the path for the view
-     * @param string $name
+     *
+     * @param  string $name
      * @return |null
      */
     public function getPath(string $name)

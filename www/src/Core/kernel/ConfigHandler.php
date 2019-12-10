@@ -3,10 +3,14 @@
 
 namespace App\Core\Kernel;
 
+
+use App\Core\Database\QueryBuilder;
+use App\Core\Database\Table;
 use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Request\Request;
 use App\Core\Router\Router;
 use App\Core\Session\PHPSession;
+use App\Core\Kernel\Kernel;
 
 class ConfigHandler
 {
@@ -23,9 +27,9 @@ class ConfigHandler
          * @var array path
          */
         $this->path = [
-            "routing" => ROOT_DIR . "/app/config/routing",
+            "routing" => ROOT_DIR . "/app/routing",
             "config" => ROOT_DIR . "/app/config",
-            "cache" => ROOT_DIR."/app/cache",
+            "cache" => dirname(__DIR__, 2)."/app/cache",
         ];
     }
 
@@ -36,8 +40,7 @@ class ConfigHandler
      */
     public function get(string $key){
         $file = $this->path["cache"]."/{$key}Cache.php";
-
-        if(file_exists($file)){
+        if(file_exists($file) && (filemtime($file) + 5*60*60) > time()){
             return include($file);
         }
         return false;
@@ -49,16 +52,16 @@ class ConfigHandler
      */
     public function init(){
 
-        //TODO : Remettre en place le container
-        //$this->getConfig();
+        $this->getConfig();
         $this->getRouting();
 
         Kernel::bind("request", Request::createFromGlobals());
-        Kernel::bind("exception", new ExceptionHandler());
         Kernel::bind("session", new PHPSession());
-        /*Kernel::bind("entityManager", new QueryBuilder());
+        Kernel::bind("exception", new ExceptionHandler());
+        //Kernel::bind("entityManager", new QueryBuilder());
         Kernel::bind("repository", new Table());
-        Kernel::bind("userManager", new UserManager());*/
+        //Kernel::bind("container", new DependencyInjection());
+        //Kernel::bind("userManager", new UserManager());
         Kernel::bind("router", new Router());
 
     }
@@ -74,14 +77,12 @@ class ConfigHandler
 
     /**
      * Get the configuration and making cache
-     *
      * @param string $key
      * @param array $data
      * @return array|bool|mixed
      */
     private function instanceCache(string $key, array $data){
 
-        //If the configuration exist, we return it
         if(($config = $this->get($key)) !== false){
             return $config;
         }
@@ -89,8 +90,8 @@ class ConfigHandler
         /**
          * Create a php file cache with an array
          */
-        $file =  $this->path["cache"]."/{$key}Cache.php";
-        file_put_contents($file, "<?php \n\r return \$config = " .var_export($data, true).";");
+        $file = ROOT_DIR."/app/cache/{$key}Cache.php";
+        file_put_contents($file, "<?php \n\r return " .var_export($data, true).";");
 
         return $data;
     }
@@ -109,7 +110,7 @@ class ConfigHandler
     }
 
     /**
-     * Get the data from the routing dir in the routing dir and create the routing configuation file
+     * Get the data from the routing dir in the routing dir
      */
     private function getRouting(){
 

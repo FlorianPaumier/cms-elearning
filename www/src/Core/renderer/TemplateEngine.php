@@ -114,8 +114,9 @@ class TemplateEngine
     {
         foreach ($this->methodEntries as $tag) {
             $template = $tag[2];
-            $value = $template[0];
+            $value = $tag[1];
             $html = null;
+
             switch ($template) {
                 case "include":
                 case "require":

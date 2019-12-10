@@ -3,12 +3,12 @@
 
 namespace App\Core\Interfaces;
 
-
 use App\Core\database\Hydrator;
 
 Trait Entity
 {
     private $id;
+
 
     protected function __construct()
     {

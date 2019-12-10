@@ -8,7 +8,7 @@
  * @return array
  */
 function dirToArray(string $dir,string $ext = "yml") {
-    $files = array();
+    $config = array();
 
     $cdir = scandir($dir);
     foreach ($cdir as $key => $value)
@@ -27,6 +27,7 @@ function dirToArray(string $dir,string $ext = "yml") {
             }
         }
     }
+    if(!is_null($files)){$config = array_merge($config, $files);};
 
-    return $files;
+    return $config;
 }

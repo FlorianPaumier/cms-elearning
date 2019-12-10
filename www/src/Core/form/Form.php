@@ -176,14 +176,8 @@ class Form
 
     public function createView()
     {
-        /** @var Form $form */
-        $fields = $this->formType->buildForm();
-        $view = "<form method='post' action=''>";
-
-        foreach ($fields->getForm() as $field){
-            $view .= html_entity_decode($field);
-        }
-        $view .= "</form>";
-        return $view;
+        return implode("", array_map(function ($input){
+            return html_entity_decode($input);
+        }, $this->getForm()));
     }
 }

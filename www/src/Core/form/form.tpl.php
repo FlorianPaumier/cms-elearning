@@ -3,7 +3,7 @@
     <label for="{{prefix}}{{key}}">{{label}}</label>
     <input type="{{type}}"
            id="{{prefix}}{{key}}"
-           class="{{ options|getClass }} " placeholder="{{label}}"
+           class="{{class}} " placeholder="{{label}}"
            name="{{prefix}}{{key}}" value="{{value}}" {{ required|isRequired }}>
     {{ options|errorFeedback }}
 </div>
@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block button %}
-    <button id="{{prefix}}{{key}}" name="{{prefix}}{{key}}" type="{{type}}" class="{{ options|getClass }}">{{label}}</button>
+    <button id="{{prefix}}{{key}}" name="{{prefix}}{{key}}" type="{{type}}" class="{{class}}">{{label}}</button>
 {% endblock %}
 
 {% block select %}

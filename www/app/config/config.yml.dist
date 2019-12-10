@@ -1,0 +1,9 @@
+env: 'dev'
+database:
+    driver: mysql
+    host: localhost
+    port: null
+    dbname: projet-cms
+    username: user
+    password: null
+    charset: UTF8

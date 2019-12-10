@@ -2,6 +2,7 @@
 
 namespace App\Core\Database;
 
+use App\Core\Exception\NoRecordException;
 use PDO;
 
 /**
@@ -64,16 +65,19 @@ class QueryBuilder
     /**
      * @var \PDOStatement
      */
-    private $query;
+    protected $query;
 
     /**
      * @var PDO
      */
-    private $pdo;
+    protected $pdo;
 
-    public function __construct()
+    public function __construct(PDO $pdo = null)
     {
-        $this->pdo = Connection::instance();
+        if(is_null($pdo)){
+            $pdo = Connection::instance();
+        }
+        $this->pdo = $pdo;
     }
 
     /**
@@ -194,7 +198,7 @@ class QueryBuilder
 
         if (count($this->andWhere) > 0) {
             foreach ($this->andWhere as $selector) {
-                $this->sql .= " AND " . $selector;
+                $this->sql .= " AND WHERE " . $selector;
             }
         }
 
@@ -228,6 +232,29 @@ class QueryBuilder
     }
 
     /**
+     * Permet d'éxécuter une requête et de récupérer le premier résultat
+     *
+     * @param string $query
+     * @param array $params
+     * @return mixed|false
+     * @throws NoRecordException
+     */
+    public function fetchOrFail(string $field)
+    {
+        $query = $this->pdo->prepare($this->toSQL());
+        $query->execute($this->params);
+
+        if (isset($this->entity)) {
+            $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
+        }
+
+        $record = $query->fetch();
+
+        return $record !== false ?  $record : null;
+    }
+
+
+    /**
      * @return array|null
      */
     public function fetchAll(): ?array
@@ -247,7 +274,15 @@ class QueryBuilder
      */
     public function count(): int
     {
-        return (int)(clone $this)->select('COUNT(id) count')->fetch('count');
+        $q = (clone $this)->select('COUNT(id) count')->fetchOrFail('count');
+
+        if(is_array($q)){
+             $count = (int)$q["count"];
+        }else{
+            $count = (int)$q->count;
+        }
+
+        return $count;
     }
 
 }

@@ -3,14 +3,10 @@
 namespace App\Core\Database;
 
 use App\Core\Exception\NoRecordException;
+use PDO;
 
-class Table
+class Table extends QueryBuilder
 {
-
-    /**
-     * @var \PDO
-     */
-    protected $pdo;
 
     /**
      * Nom de la table en BDD
@@ -24,9 +20,9 @@ class Table
      */
     protected $entity;
 
-    public function __construct()
+    public function __construct(PDO $pdo = null)
     {
-        $this->pdo = Connection::instance();
+        parent::__construct($pdo);
     }
 
     /**
@@ -107,27 +103,6 @@ class Table
         }, array_keys($params)));
     }
 
-    /**
-     * Permet d'éxécuter une requête et de récupérer le premier résultat
-     *
-     * @param string $query
-     * @param array $params
-     * @return mixed|false
-     * @throws NoRecordException
-     */
-    protected function fetchOrFail(string $query, array $params = [])
-    {
-        $query = $this->pdo->prepare($query);
-        $query->execute($params);
-
-        if ($this->entity) {
-            $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
-        }
-
-        $record = $query->fetch();
-
-        return $record;
-    }
 
     /**
      * Récupère un élément à partir de son ID
@@ -141,15 +116,6 @@ class Table
         return $this->fetchOrFail("SELECT * FROM {$this->table} WHERE id = :id", ["id" => $id]);
     }
 
-    /**
-     * Récupère le nbre d'enregistrement
-     *
-     * @return int
-     */
-    public function count(): int
-    {
-        return $this->fetchColumn("SELECT COUNT(id) FROM {$this->table}");
-    }
 
     /**
      * Récupère la première colonne
@@ -232,12 +198,6 @@ class Table
     public function getEntity(): string
     {
         return $this->entity;
-    }
-
-    public function from(string $table)
-    {
-        $this->table = $table;
-        return $this;
     }
 
     /**

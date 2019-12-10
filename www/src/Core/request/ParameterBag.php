@@ -16,10 +16,11 @@ class ParameterBag
 
     public function get($key): ?string
     {
-        return key_exists($key ,$this->data) ? $this->data[$key] : null;
+        return key_exists($key, $this->data) ? $this->data[$key] : null;
     }
 
-    public function all(){
+    public function all()
+    {
         return $this->data;
     }
 }

@@ -22,7 +22,7 @@ class RenderView
     public function __construct()
     {
         $this->templateEngine = new TemplateEngine();
-        $this->defaultData["session"] = Kernel::get("session");
+        $this->defaultData["session"] = [];//Kernel::get("session");
     }
 
     public static function include(string $template, array $param = [])
@@ -37,9 +37,10 @@ class RenderView
         extract($param, EXTR_OVERWRITE);
         extract($defaultData, EXTR_SKIP);
 
-        if(file_exists($template . ".view.php")){
-            include($template . ".view.php");//How to pass $param to it? It needs that $row to renderer blog entry!
+        if(file_exists($template . ".view.php")) {
+            include $template . ".view.php";//How to pass $param to it? It needs that $row to renderer blog entry!
         }
+
         $ret = ob_get_contents();
         ob_end_clean();
 
@@ -50,7 +51,7 @@ class RenderView
     {
         $this->templateEngine->setTemplateFile($template);
 
-        if(!is_null($this->templateEngine->getTemplateFile())){
+        if(!is_null($this->templateEngine->getTemplateFile())) {
             $this->templateEngine->setData(["parameter" => $param, "config" => $this->defaultData]);
 
             $this->template = $this->templateEngine->generate_markup();
@@ -61,6 +62,17 @@ class RenderView
 
         ExceptionHandler::defaultRequestHandler("View Not Found");
         return;
+    }
+
+    public function getHtmlElement(string $type, array $options)
+    {
+        $elements = file_get_contents(dirname(__DIR__)."/form/form.tpl.php");
+
+        $options["prefix"] = "app_form";
+
+        $this->templateEngine->setData(["parameter" => $options]);
+        $this->templateEngine->setFormTemplateFile($elements);
+        return $this->templateEngine->renderHtmlElement($type);
     }
 
     public function __destruct()

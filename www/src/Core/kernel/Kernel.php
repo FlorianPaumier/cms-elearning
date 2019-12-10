@@ -16,14 +16,14 @@ class Kernel
         $_SERVER["APP_DEBUG"] = $debug;
 
 
-        require_once(dirname(__DIR__)."/helpers/VarDumper.php");
-        require_once(dirname(__DIR__)."/helpers/basicFunction.php");
+        include_once dirname(__DIR__)."/helpers/VarDumper.php";
+        include_once dirname(__DIR__)."/helpers/basicFunction.php";
     }
 
     /**
      * Get instance of the key in the container
      *
-     * @param string $key
+     * @param  string $key
      * @return mixed
      * @throws \Exception
      */
@@ -38,6 +38,7 @@ class Kernel
 
     /**
      * Entry of the application
+     *
      * @return show the result of the application
      */
     public static function resolve()

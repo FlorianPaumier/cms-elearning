@@ -1,0 +1,24 @@
+@import "variables";
+
+.blue{
+  color : blue;
+}
+
+.alert{
+  width: 30vw;
+  margin: auto;
+  &.alert-error{
+    background-color: $bg-error;
+    border-color: $border-error;
+  }
+}
+
+nav{
+  width: 100vw;
+  background-color: $blue;
+}
+
+.body{
+  padding-top: 5%;
+  min-height: 80vh;
+}

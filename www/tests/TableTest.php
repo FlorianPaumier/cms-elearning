@@ -20,7 +20,8 @@ class TableTest extends TestCase{
         ]);
         $pdo->exec('CREATE TABLE test (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name VARCHAR(255)
+            name VARCHAR(255),
+            firstname VARCHAR(255)
         )');
 
         $this->table = new Table($pdo);
@@ -45,7 +46,7 @@ class TableTest extends TestCase{
     {
         $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
         $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a2")');
-        $this->assertEquals(['1' => 'a1', '2' => 'a2'], $this->table->findList());
+        $this->assertEquals(['1' => 'a1', '2' => 'a2'], $this->table->findAll());
     }
 
     public function testFindAll()
@@ -86,4 +87,32 @@ class TableTest extends TestCase{
 
         $this->assertEquals(3, $this->table->count());
     }
+
+    public function testUpdate()
+    {
+        $this->table->update(1, ['name' => 'Salut', 'slug' => 'demo']);
+        $post = $this->postTable->find(1);
+        $this->assertEquals('Salut', $post->name);
+        $this->assertEquals('demo', $post->slug);
+    }
+
+    public function testInsert()
+    {
+        $this->table->insert(['name' => 'Salut', 'firstname' => 'demo']);
+        $post = $this->table->find(1);
+        $this->assertEquals('Salut', $post->name);
+        $this->assertEquals('firstname', $post->slug);
+    }
+
+    public function testDelete()
+    {
+        $this->postTable->insert(['name' => 'Salut', 'slug' => 'demo']);
+        $this->postTable->insert(['name' => 'Salut', 'slug' => 'demo']);
+        $count = $this->postTable->getPdo()->query('SELECT COUNT(id) FROM posts')->fetchColumn();
+        $this->assertEquals(2, (int) $count);
+        $this->postTable->delete($this->postTable->getPdo()->lastInsertId());
+        $count = $this->postTable->getPdo()->query('SELECT COUNT(id) FROM posts')->fetchColumn();
+        $this->assertEquals(1, (int)$count);
+    }
+
 }

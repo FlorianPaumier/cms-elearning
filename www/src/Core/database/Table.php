@@ -30,8 +30,8 @@ class Table extends QueryBuilder
     /**
      * Pagine des éléments
      *
-     * @param int $perPage
-     * @param int $currentPage
+     * @param  int $perPage
+     * @param  int $currentPage
      * @return Pagerfanta
      */
     public function findPaginated(int $perPage, int $currentPage): PagerFanta
@@ -86,7 +86,7 @@ class Table extends QueryBuilder
     /**
      * Récupère une ligne par rapport à un champs
      *
-     * @param array $params
+     * @param  array $params
      * @return mixed|false
      * @throws NoRecordException
      */
@@ -113,7 +113,7 @@ class Table extends QueryBuilder
     /**
      * Récupère un élément à partir de son ID
      *
-     * @param int $id
+     * @param  int $id
      * @return mixed
      * @throws NoRecordException
      */
@@ -129,14 +129,16 @@ class Table extends QueryBuilder
     /**
      * Crée un nouvel enregistrement
      *
-     * @param array $params
+     * @param  array $params
      * @return bool
      */
     public function insert(array $params): bool
     {
-        $query = $this->pdo->prepare("INSERT INTO {$this->table} ("
+        $query = $this->pdo->prepare(
+            "INSERT INTO {$this->table} ("
             . join(', ', array_keys($params)) .
-            ") VALUES (" . $this->buildFieldQuery($params) . ")");
+            ") VALUES (" . $this->buildFieldQuery($params) . ")"
+        );
 
 
         if (!($result = $query->execute($params))) {
@@ -164,7 +166,7 @@ class Table extends QueryBuilder
     /**
      * Supprime un enregistrment
      *
-     * @param int $id
+     * @param  int $id
      * @return bool
      */
     public function delete(int $id): bool
@@ -176,15 +178,19 @@ class Table extends QueryBuilder
     /**
      * Met à jour un enregistrement au niveau de la base de données
      *
-     * @param int $id
-     * @param array $params
+     * @param  int   $id
+     * @param  array $params
      * @return bool
      */
     public function update(int $id, array $params): bool
     {
-        $fieldQuery = implode(',', array_map(function ($param) {
-            return $param . "=:" . $param;
-        }, array_keys($params)));
+        $fieldQuery = implode(
+            ',', array_map(
+                function ($param) {
+                    return $param . "=:" . $param;
+                }, array_keys($params)
+            )
+        );
 
         $params["id"] = $id;
         $query = $this->pdo->prepare("UPDATE {$this->table} SET {$fieldQuery} WHERE id = :id");
@@ -245,8 +251,8 @@ class Table extends QueryBuilder
     /**
      * Récupère la première colonne
      *
-     * @param string $query
-     * @param array $params
+     * @param  string $query
+     * @param  array  $params
      * @return mixed
      */
     private function fetchColumn(string $query, array $params = [])

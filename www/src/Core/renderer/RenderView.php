@@ -22,7 +22,7 @@ class RenderView
     public function __construct()
     {
         $this->templateEngine = new TemplateEngine();
-        $this->defaultData["session"] = [];//Kernel::get("session");
+        $this->defaultData["session"] = Kernel::get("session");
     }
 
     public static function include(string $template, array $param = [])

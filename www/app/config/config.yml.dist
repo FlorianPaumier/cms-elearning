@@ -1,9 +1,17 @@
 env: 'dev'
 database:
-    driver: mysql
-    host: localhost
-    port: null
-    dbname: projet-cms
-    username: user
-    password: null
-    charset: UTF8
+  driver: mysql
+  host: localhost
+  port: null
+  dbname: projet-cms
+  username: user
+  password: null
+  charset: UTF8
+swiftmailer:
+  transport: smtp
+  host: smtp.gmail.com
+  port: null
+  encryption: ssl
+  username: null
+  password: null
+  spool: { type: memory }

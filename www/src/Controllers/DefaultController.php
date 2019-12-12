@@ -9,4 +9,8 @@ class DefaultController extends BaseController
     {
         return $this->renderer->render(ROOT_DIR."/public/views/home");
     }
+    public function doc()
+    {
+        $this->renderer->render("doc");
+    }
 }

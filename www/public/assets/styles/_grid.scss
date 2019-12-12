@@ -1,0 +1,59 @@
+
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+  padding: 10px 0;
+  overflow-x: hidden;
+
+  &::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+}
+
+.col-inner {
+  background-color: gray;
+  padding: 20px;
+  height: 10px;
+}
+
+@for $i from 1 through 12 {
+  .col-{
+    &#{$i} {
+      padding: 0 10px;
+      flex-basis: percentage($i/12);
+    }
+  }
+}
+
+@media screen and (min-width: 960px) {
+  @for $i from 1 through 12 {
+    .col-lg-#{$i} {
+      padding: 0 10px;
+      flex-basis: percentage($i/12);
+    }
+  }
+}
+
+@media screen and (min-width: 587px) and (max-width: 960px) {
+  @for $i from 1 through 12 {
+    .col-md-#{$i} {
+      padding: 0 10px;
+      flex-basis: percentage($i/12);
+    }
+  }
+}
+
+@media screen and (max-width: 587px) {
+  @for $i from 1 through 12 {
+    .col-sm-#{$i} {
+      padding: 0 10px;
+      flex-basis: percentage($i/12);
+    }
+  }
+}
+

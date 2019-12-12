@@ -2,3 +2,8 @@ app_home:
   path: "/"
   controller: App\Controllers\Default:index
   method: [GET]
+
+app_doc:
+  path: "/doc"
+  controller: App\Controllers\Default:doc
+  method: [GET]

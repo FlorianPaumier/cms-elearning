@@ -1,461 +1,275 @@
+#checkbox {
+  ul,
+  li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
 
-/* $activeColor: #c0392b; //red */
-/* $background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/13460/dark_wall.png'); */
+.tg-list {
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
 
+.tg-list-item {
+  margin: 0 2em;
+}
 
-/* .slideOne */
-.slideOne {
-  width: 50px;
-  height: 10px;
-  background: #333;
-  margin: 20px auto;
-  position: relative;
-  border-radius: 50px;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.2);
-  label {
+.tgl {
+  display: none;
+
+  // add default box-sizing for this scope
+  &,
+  &:after,
+  &:before,
+  & *,
+  & *:after,
+  & *:before,
+  & + .tgl-btn {
+    box-sizing: border-box;
+
+    &::selection {
+      background: none;
+    }
+  }
+
+  + .tgl-btn {
+    outline: 0;
     display: block;
-    width: 16px;
-    height: 16px;
-    position: absolute;
-    top: -3px;
-    left: -3px;
+    width: 4em;
+    height: 2em;
+    position: relative;
     cursor: pointer;
-    background: #fcfff4;
-    background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-    border-radius: 50px;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
-    transition: all 0.4s ease;
-  }
-  input[type=checkbox] {
-    visibility: hidden;
-    &:checked + label {
-      left: 37px;
-    }
-  }
-}
-/* end .slideOne */
+    user-select: none;
 
-
-/* .slideTwo */
-.slideTwo {
-  width: 80px;
-  height: 30px;
-  background: #333;
-  margin: 20px auto;
-  position: relative;
-  border-radius: 50px;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.2);
-  &:after {
-    content: '';
-    position: absolute;
-    top: 14px;
-    left: 14px;
-    height: 2px;
-    width: 52px;
-    background: #111;
-    border-radius: 50px;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.2);
-  }
-  label {
-    display: block;
-    width: 22px;
-    height: 22px;
-    cursor: pointer;
-    position: absolute;
-    top: 4px;
-    z-index: 1;
-    left: 4px;
-    background: #fcfff4;
-    border-radius: 50px;
-    transition: all 0.4s ease;
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.3);
-    background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-    &:after {
-      content: '';
-      width: 10px;
-      height: 10px;
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      background: #333;
-      border-radius: 50px;
-      box-shadow: inset 0 1px 1px rgba(0,0,0,1), 0 1px 0 rgba(255,255,255,0.9);
-    }
-  }
-  input[type=checkbox] {
-    visibility: hidden;
-    &:checked + label {
-      left: 54px;
-      &:after {
-        background: $checkbox-activeColor; /*activeColor*/
-      }
-    }
-  }
-}
-/* end .slideTwo */
-
-
-/* .slideThree */
-.slideThree {
-  width: 80px;
-  height: 26px;
-  background: #333;
-  margin: 20px auto;
-  position: relative;
-  border-radius: 50px;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.2);
-  &:after {
-    content: 'OFF';
-    color: #000;
-    position: absolute;
-    right: 10px;
-    z-index: 0;
-    font: 12px/26px Arial, sans-serif;
-    font-weight: bold;
-    text-shadow: 1px 1px 0 rgba(255,255,255,.15);
-  }
-  &:before {
-    content: 'ON';
-    color: $checkbox-activeColor;
-    position: absolute;
-    left: 10px;
-    z-index: 0;
-    font: 12px/26px Arial, sans-serif;
-    font-weight: bold;
-  }
-  label {
-    display: block;
-    width: 34px;
-    height: 20px;
-    cursor: pointer;
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    z-index: 1;
-    background: #fcfff4;
-    background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-    border-radius: 50px;
-    transition: all 0.4s ease;
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.3);
-  }
-  input[type=checkbox] {
-    visibility: hidden;
-    &:checked + label {
-      left: 43px;
-    }
-  }
-}
-/* end .slideThree */
-
-
-/* .roundedOne */
-.roundedOne {
-  width: 28px;
-  height: 28px;
-  position: relative;
-  margin: 20px auto;
-  background: #fcfff4;
-  background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-  border-radius: 50px;
-  box-shadow: inset 0 1px 1px white, 0 1px 3px rgba(0,0,0,0.5);
-  label {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    position: absolute;
-    left: 4px;
-    top: 4px;
-    background: linear-gradient(top, #222 0%, #45484d 100%);
-    border-radius: 50px;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,1);
-    &:after {
-      content: '';
-      width: 16px;
-      height: 16px;
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      background: $checkbox-activeColor;
-      background: linear-gradient(top, $checkbox-activeColor 0%, $checkbox-darkenColor 100%);
-      opacity: 0;
-      border-radius: 50px;
-      box-shadow: inset 0 1px 1px white, 0 1px 3px rgba(0,0,0,0.5);
-    }
-    &:hover::after {
-      opacity: 0.3;
-    }
-  }
-  input[type=checkbox] {
-    visibility: hidden;
-    &:checked + label:after {
-      opacity: 1;
-    }
-  }
-}
-/* end .roundedOne */
-
-
-/* .roundedTwo */
-.roundedTwo {
-  width: 28px;
-  height: 28px;
-  position: relative;
-  margin: 20px auto;
-  background: #fcfff4;
-  background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-  border-radius: 50px;
-  box-shadow: inset 0 1px 1px white, 0 1px 3px rgba(0,0,0,0.5);
-  label {
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    cursor: pointer;
-    background: linear-gradient(top, #222 0%, #45484d 100%);
-    border-radius: 50px;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,1);
-    &:after {
-      content: '';
-      width: 9px;
-      height: 5px;
-      position: absolute;
-      top: 5px;
-      left: 4px;
-      border: 3px solid #fcfff4;
-      border-top: none;
-      border-right: none;
-      background: transparent;
-      opacity: 0;
-      transform: rotate(-45deg);
-    }
-    &:hover::after {
-      opacity: 0.3;
-    }
-  }
-  input[type=checkbox] {
-    visibility: hidden;
-    &:checked + label:after {
-      opacity: 1;
-    }
-  }
-}
-/* end .roundedTwo */
-
-
-
-/* .squaredOne */
-.squaredOne {
-  width: 28px;
-  height: 28px;
-  position: relative;
-  margin: 20px auto;
-  background: #fcfff4;
-  background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-  box-shadow: inset 0 1px 1px white, 0 1px 3px rgba(0,0,0,0.5);
-  label {
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    cursor: pointer;
-    background: linear-gradient(top, #222 0%, #45484d 100%);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,1);
-    &:after {
-      content: '';
-      width: 16px;
-      height: 16px;
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      background: $checkbox-activeColor;
-      background: linear-gradient(top, $checkbox-activeColor 0%, $checkbox-darkenColor 100%);
-      box-shadow: inset 0 1px 1px white, 0 1px 3px rgba(0,0,0,0.5);
-      opacity: 0;
-    }
-    &:hover::after {
-      opacity: 0.3;
-    }
-  }
-  input[type=checkbox] {
-    visibility: hidden;
-    &:checked + label:after {
-      opacity: 1;
-    }
-  }
-}
-/* end .squaredOne */
-
-
-/* .squaredTwo */
-.squaredTwo {
-  width: 28px;
-  height: 28px;
-  position: relative;
-  margin: 20px auto;
-  background: #fcfff4;
-  background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-  box-shadow: inset 0 1px 1px white, 0 1px 3px rgba(0,0,0,0.5);
-  label {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    position: absolute;
-    left: 4px;
-    top: 4px;
-    background: linear-gradient(top, #222 0%, #45484d 100%);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,1);
-    &:after {
-      content: '';
-      width: 9px;
-      height: 5px;
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      border: 3px solid #fcfff4;
-      border-top: none;
-      border-right: none;
-      background: transparent;
-      opacity: 0;
-      transform: rotate(-45deg);
-    }
-    &:hover::after {
-      opacity: 0.3;
-    }
-  }
-  input[type=checkbox] {
-    visibility: hidden;
-    &:checked + label:after {
-      opacity: 1;
-    }
-  }
-}
-/* end .squaredTwo */
-
-
-/* .squaredThree */
-.squaredThree {
-  width: 20px;
-  position: relative;
-  margin: 20px auto;
-  label {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: linear-gradient(top, #222 0%, #45484d 100%);
-    border-radius: 4px;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,.4);
-    &:after {
-      content: '';
-      width: 9px;
-      height: 5px;
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      border: 3px solid #fcfff4;
-      border-top: none;
-      border-right: none;
-      background: transparent;
-      opacity: 0;
-      transform: rotate(-45deg);
-    }
-    &:hover::after {
-      opacity: 0.3;
-    }
-  }
-  input[type=checkbox] {
-    visibility: hidden;
-    &:checked + label:after {
-      opacity: 1;
-    }
-  }
-}
-/* end .squaredThree */
-
-
-/* .squaredFour */
-.squaredFour {
-  width: 20px;
-  position: relative;
-  margin: 20px auto;
-  label {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: #fcfff4;
-    background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-    border-radius: 4px;
-    box-shadow: inset 0 1px 1px white, 0 1px 3px rgba(0,0,0,0.5);
-    &:after {
-      content: '';
-      width: 9px;
-      height: 5px;
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      border: 3px solid #333;
-      border-top: none;
-      border-right: none;
-      background: transparent;
-      opacity: 0;
-      transform: rotate(-45deg);
-    }
-    &:hover::after {
-      opacity: 0.5;
-    }
-  }
-  input[type=checkbox] {
-    visibility: hidden;
-    &:checked + label:after {
-      opacity: 1;
-    }
-  }
-}
-/* end .squaredFour */
-
-
-
-
-
-// ** Page Styling - Nothing to do with the Radio Buttons **
-
-body {
-  .ondisplay{
-    text-align:center;
-    padding:20px 0;
-    section{
-      width:100px;
-      height:100px;
-      background: #555;
-      display:inline-block;
+    &:after,
+    &:before {
       position: relative;
-      text-align: center;
-      margin-top:5px;
-      border: 1px solid gray;
-      border-radius: 5px;
-      box-shadow:
-              0 1px 4px rgba(0, 0, 0, 0.3),
-              0 0 40px rgba(0, 0, 0, 0.1) inset;
-      &:after{
-        /*         visibility: hidden; */
-        content:attr(title);
-        position: absolute;
-        width: 100%;
-        left: 0;
-        bottom: 3px;
-        color: #fff;
-        font-size: 12px;
-        font-weight: 400;
-        -webkit-font-smoothing: antialiased;
-        text-shadow: 0 1px #000;
+      display: block;
+      content: "";
+      width: 50%;
+      height: 100%;
+    }
+
+    &:after {
+      left: 0;
+    }
+
+    &:before {
+      display: none;
+    }
+  }
+
+  &:checked + .tgl-btn:after {
+    left: 50%;
+  }
+}
+
+// themes
+.tgl-light {
+  + .tgl-btn {
+    background: #f0f0f0;
+    border-radius: 2em;
+    padding: 2px;
+    transition: all .4s ease;
+
+    &:after {
+      border-radius: 50%;
+      background: #fff;
+      transition: all .2s ease;
+    }
+  }
+
+  &:checked + .tgl-btn {
+    background: #9FD6AE;
+  }
+}
+
+.tgl-ios {
+  + .tgl-btn {
+    background: #fbfbfb;
+    border-radius: 2em;
+    padding: 2px;
+    transition: all .4s ease;
+    border: 1px solid #e8eae9;
+
+    &:after {
+      border-radius: 2em;
+      background: #fbfbfb;
+      transition: left .3s cubic-bezier(
+                      0.175, 0.885, 0.320, 1.275
+      ),
+      padding .3s ease, margin .3s ease;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, .1),
+      0 4px 0 rgba(0, 0, 0, .08);
+    }
+
+    &:hover:after {
+      will-change: padding;
+    }
+
+    &:active {
+      box-shadow: inset 0 0 0 2em #e8eae9;
+
+      &:after {
+        padding-right: .8em;
       }
+    }
+  }
+
+  &:checked + .tgl-btn {
+    background: #86d993;
+
+    &:active {
+      box-shadow: none;
+
+      &:after {
+        margin-left: -.8em;
+      }
+    }
+  }
+}
+
+.tgl-skewed {
+  + .tgl-btn {
+    overflow: hidden;
+    transform: skew(-10deg);
+    backface-visibility: hidden;
+    transition: all .2s ease;
+    font-family: sans-serif;
+    background: #888;
+
+    &:after,
+    &:before {
+      transform: skew(10deg);
+      display: inline-block;
+      transition: all .2s ease;
+      width: 100%;
+      text-align: center;
+      position: absolute;
+      line-height: 2em;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, .4);
+    }
+
+    &:after {
+      left: 100%;
+      content: attr(data-tg-on);
+    }
+
+    &:before {
+      left: 0;
+      content: attr(data-tg-off);
+    }
+
+    &:active {
+      background: #888;
+
+      &:before {
+        left: -10%;
+      }
+    }
+  }
+
+  &:checked + .tgl-btn {
+    background: #86d993;
+
+    &:before {
+      left: -100%;
+    }
+
+    &:after {
+      left: 0;
+    }
+
+    &:active:after {
+      left: 10%;
+    }
+  }
+}
+
+.tgl-flat {
+  + .tgl-btn {
+    padding: 2px;
+    transition: all .2s ease;
+    background: #fff;
+    border: 4px solid #f2f2f2;
+    border-radius: 2em;
+
+    &:after {
+      transition: all .2s ease;
+      background: #f2f2f2;
+      content: "";
+      border-radius: 1em;
+    }
+  }
+
+  &:checked + .tgl-btn {
+    border: 4px solid #7FC6A6;
+
+    &:after {
+      left: 50%;
+      background: #7FC6A6;
+    }
+  }
+}
+
+.tgl-flip {
+  + .tgl-btn {
+    padding: 2px;
+    transition: all .2s ease;
+    font-family: sans-serif;
+    perspective: 100px;
+
+    &:after,
+    &:before {
+      display: inline-block;
+      transition: all .4s ease;
+      width: 100%;
+      text-align: center;
+      position: absolute;
+      line-height: 2em;
+      font-weight: bold;
+      color: #fff;
+      position: absolute;
+      top: 0;
+      left: 0;
+      backface-visibility: hidden;
+      border-radius: 4px;
+    }
+
+    &:after {
+      content: attr(data-tg-on);
+      background: #02C66F;
+      transform: rotateY(-180deg);
+    }
+
+    &:before {
+      background: #FF3A19;
+      content: attr(data-tg-off);
+    }
+
+    &:active:before {
+      transform: rotateY(-20deg);
+    }
+  }
+
+  &:checked + .tgl-btn {
+    &:before {
+      transform: rotateY(180deg);
+    }
+
+    &:after {
+      transform: rotateY(0);
+      left: 0;
+      background: #7FC6A6;
+    }
+
+    &:active:after {
+      transform: rotateY(20deg);
     }
   }
 }

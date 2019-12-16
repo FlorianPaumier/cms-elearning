@@ -5,13 +5,11 @@
     <title>404</title>
 </head>
 <body>
-404 not found
+<h1 class="text-center">404 not found</h1>
+<p>At Line : {{line}}</p>
+<p>{{message}}</p>
 <pre>
-<?php
-    if (isset($message)){
-        echo $message;
-    }
-?>
+    {{ trace|stackTrace }}
 </pre>
 </body>
 </html>

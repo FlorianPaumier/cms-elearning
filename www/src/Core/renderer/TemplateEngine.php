@@ -117,11 +117,11 @@ class TemplateEngine
             $template = $tag[2];
             $value = $tag[1];
             $html = null;
+            $dir = ROOT_DIR . "/public/views";
 
             switch ($template) {
             case "include":
             case "require":
-                $dir = ROOT_DIR . "/public/views";
                 $value = str_replace("@View", $dir, $value);
                 $html = RenderView::include($value, $this->data);
                 break;
@@ -139,6 +139,9 @@ class TemplateEngine
                 break;
             case "errorFeedback":
                 $html = isset($this->data["errors"]) ? " " : "";
+                break;
+            case "stackTrace":
+                $html = RenderView::include($dir."/partials/stackTrace", $this->data);
                 break;
             default:
                 if (function_exists("include")) {

@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Admin;
 
-use App\Core\Interfaces\BaseController;
+use App\Core\Helpers\BaseController;
 
 class HomeController extends BaseController
 {

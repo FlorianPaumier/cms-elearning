@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Core\Kernel;
+namespace App\Core\kernel;
 
+
+use App\Core\Exceptions\ExceptionHandler;
+use App\Core\Exceptions\NotFoundException;
 
 class Kernel
 {
@@ -30,7 +33,7 @@ class Kernel
     public static function get(string $key)
     {
         if (!key_exists($key, self::$registry)) {
-            throw new \Exception("Key '${key}' don't exist");
+            throw new NotFoundException("Key '${key}' don't exist", 404);
         }
 
         return self::$registry[$key];

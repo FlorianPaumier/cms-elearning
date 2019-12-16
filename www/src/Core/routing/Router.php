@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Router;
+namespace App\Core\Routing;
 
 use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Kernel\Kernel;
@@ -76,9 +76,9 @@ class Router
 
                 return $this->exec($match, $params);
             };
-            ExceptionHandler::invalidMethodHandler($this->request);
+            ExceptionHandler::invalidMethodHandler($this->request, 405);
         }
-        ExceptionHandler::defaultRequestHandler("La route ne correspond pas");
+        ExceptionHandler::NotFoundHandler("La route ne correspond pas", 404);
     }
 
     /**

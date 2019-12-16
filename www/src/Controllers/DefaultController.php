@@ -1,13 +1,13 @@
 <?php
 namespace App\Controllers;
 
-use App\Core\Interfaces\BaseController;
+use App\Core\Helpers\BaseController;
 
 class DefaultController extends BaseController
 {
     public function index()
     {
-        return $this->renderer->render(ROOT_DIR."/public/views/home");
+        $this->renderer->render("homee");
     }
     public function doc()
     {

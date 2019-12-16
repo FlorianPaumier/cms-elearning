@@ -60,7 +60,7 @@ class RenderView
             return;
         }
 
-        ExceptionHandler::defaultRequestHandler("View Not Found");
+        ExceptionHandler::NotFoundHandler("View Not Found");
         return;
     }
 

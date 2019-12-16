@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Core\Interfaces;
+namespace App\Core\Helpers;
 
 use App\Core\database\Hydrator;
 

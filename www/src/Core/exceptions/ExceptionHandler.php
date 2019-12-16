@@ -8,14 +8,19 @@ use App\Core\Renderer\RenderView;
 use App\Core\request\RedirectionHandler;
 use App\Core\Request\Request;
 
+/**
+ * Class ExceptionHandler
+ * @package App\Core\Exceptions
+ */
 class ExceptionHandler
 {
     /**
      * Redirect to 405 page error
      *
      * @return false|string
+     * @throws MethodNotAllowedException
      */
-    public static function invalidMethodHandler(Request $request)
+    public static function invalidMethodHandler(Request $request, $code = 405): void
     {
         //header("{$_SERVER["SERVER_PROTOCOL"]} 405 Method Not Allowed");
         if ($_SERVER["APP_ENV"] == "dev") {
@@ -27,26 +32,46 @@ class ExceptionHandler
             );
         } else {
             //Send Mail
-            $redirect = new RedirectionHandler();
-            if (isset($_SERVER['HTTP_REFERER'])) {
-                $redirect->redirectTo($_SERVER['HTTP_REFERER']);
-            } else {
-                $redirect->redirectToRoute("app_home");
-            }
+            throw new MethodNotAllowedException();
         }
         die();
     }
 
+    /**
+     * @throws ForbiddenException
+     */
     public static function forbiddenHandler()
     {
-        $redirect = new RedirectionHandler();
-        $redirect->redirectToRoute("app_home");
+        throw new ForbiddenException();
     }
 
+    /**
+     * @throws InvalidTokenException
+     */
     public static function crsfInvalidHandler()
     {
-        $redirect = new RedirectionHandler();
-        $redirect->redirectToRoute("app_home");
+        throw new InvalidTokenException();
+    }
+
+    /**
+     * @throws ServerErrorException
+     */
+    public static function ServerErrorHandler(){
+        throw new ServerErrorException();
+    }
+
+    /**
+     * @throws ToManyRequestException
+     */
+    public static function ToManyRequestHandler(){
+        throw new ToManyRequestException();
+    }
+
+    /**
+     * @throws BadRequestException
+     */
+    public static function BadRequestHandler(){
+        throw new BadRequestException();
     }
 
     /**
@@ -54,11 +79,11 @@ class ExceptionHandler
      *
      * @param  $message
      * @return false|string
+     * @throws NotFoundException
      */
-    public static  function defaultRequestHandler($message = "Ce que vous cherchez n'est pas ici <a href='/'>Retour</a>"): void
+    public static function NotFoundHandler($message = "Ce que vous cherchez n'est pas ici <a href='/'>Retour</a>",int $code = 500): void
     {
         //header("{$_SERVER["SERVER_PROTOCOL"]} 404 Not Found" . $message);
-        (new RenderView())->render("Errors/404", ["message" => $message]);
-        die();
+       throw new NotFoundException($message, $code);
     }
 }

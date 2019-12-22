@@ -39,9 +39,9 @@ class Serializer
         return $formatter;
     }
 
-    public function deserialize($data, string $class, string $format)
+    public function deserialize($data, string $format, string $class = null)
     {
         $formatter = $this->formatter($format, $data);
-        return $formatter->serialize();
+        return $formatter->deserialize($class);
     }
 }

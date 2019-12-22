@@ -16,25 +16,32 @@ class XmlFormatter implements FormatterInterface
 
     public function serialize()
     {
-        return $this->xml_encode($this->data);
+        $data = ["root" => $this->data];
+        return $this->xml_encode($data);
     }
 
-    public function deserialize(string $class)
+    public function deserialize(string $class = null)
     {
-        if(!class_exists($class)){
+        if(!is_null($class) && !class_exists($class)){
             throw new ClassNotFoundException();
         }
+
         $array = $this->xml_decode($this->data);
+
+        if(is_null($class)){
+            return $array;
+        }
+
         $object = new $class();
         return Hydrator::hydrate($array, $object);
     }
 
     private function xml_encode($mixed, $domElement=null, $DOMDocument=null) {
         if (is_null($DOMDocument)) {
-            $DOMDocument =new DOMDocument;
+            $DOMDocument = new DOMDocument;
             $DOMDocument->formatOutput = true;
             $this->xml_encode($mixed, $DOMDocument, $DOMDocument);
-            echo $DOMDocument->saveXML();
+            return $DOMDocument->saveXML();
         }
         else {
             // To cope with embedded objects
@@ -73,8 +80,10 @@ class XmlFormatter implements FormatterInterface
         }
     }
 
-    private function xml_decode(): array
+    private function xml_decode($data)
     {
-        //TODO
+		$ob= simplexml_load_string($data);
+		$json  = json_encode($ob);
+		return json_decode($json, true);
     }
 }

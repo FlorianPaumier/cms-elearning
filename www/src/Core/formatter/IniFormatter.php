@@ -19,12 +19,18 @@ class IniFormatter implements FormatterInterface
         return $this->toIni($this->data);
     }
 
-    public function deserialize(string $class)
+    public function deserialize(string $class = null)
     {
-        if(!class_exists($class)){
+        if(!is_null($class) && !class_exists($class)){
             throw new ClassNotFoundException();
         }
+
         $array = parse_ini_string($this->data);
+
+        if(is_null($class)){
+            return $array;
+        }
+
         $object = new $class();
         return Hydrator::hydrate($array, $object);
     }

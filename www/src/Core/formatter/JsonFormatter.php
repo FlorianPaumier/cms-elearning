@@ -18,12 +18,17 @@ class JsonFormatter implements FormatterInterface
         return json_encode($this->data);
     }
 
-    public function deserialize(string $class)
+    public function deserialize(string $class = null)
     {
-        if(!class_exists($class)){
+        if(!is_null($class) && !class_exists($class)){
             throw new ClassNotFoundException();
         }
         $array = json_decode($this->data);
+
+        if(is_null($class)){
+            return $array;
+        }
+
         $object = new $class();
         return Hydrator::hydrate($array, $object);
     }

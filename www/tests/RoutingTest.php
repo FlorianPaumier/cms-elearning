@@ -3,7 +3,7 @@
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 
-final class QueryBuilderTest extends TestCase
+final class RoutingTest extends TestCase
 {
     private $client;
 

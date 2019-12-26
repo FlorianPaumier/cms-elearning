@@ -1,0 +1,24 @@
+version_1:
+    action: create
+    column:
+        id:
+            name: orange
+            type: bidule
+            options:
+                - PRIMARY KEY
+                - NOT NULL
+        name:
+            name: bad
+            type: orange
+version_2:
+    action: update
+    column:
+        id:
+            name: blue
+            type: rason
+            options:
+                - PRIM KEY
+                - NNULL
+        name:
+            name: bad
+            type: ooo

@@ -8,7 +8,8 @@
 	}
   ],
   "require": {
-	"ext-pdo": "*"
+	"ext-pdo": "*",
+    "ext-yaml": "*"
   },
   "autoload": {
 	"psr-4": {

@@ -6,7 +6,7 @@ use App\Core\Exceptions\ExceptionHandler;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 
-class ExceptionHandlerTest extends TestCase
+class ExceptionHandlerTest
 {
     private $client;
 

@@ -1,8 +1,8 @@
 <?php
 namespace Test;
 
-use App\Core\Database\QueryBuilder;
 use App\Core\Database\Table;
+use PDO;
 use PHPUnit\Framework\TestCase;
 
 final class QueryBuilderTest extends TestCase

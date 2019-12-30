@@ -7,8 +7,13 @@ set -xe
 
 # Install git (the php image doesn't have it) which is required by composer
 apt-get update -yqq
-apt-get install git -yqq
-apt-get install postgresql -yqq
+apt-get apt-utils -yqq
+apt-get install git postgresql libzip-dev zlib1g-dev libpq-dev -yqq
+
+# Install mysql driver
+# Here you can install any other extension that you need
+docker-php-ext-install pdo mysqli pdo_mysql pdo_pgsql
+
 apt-get install -y libpng-dev libfreetype6-dev libyaml-dev
 
 pecl install yaml-2.0.0 && docker-php-ext-enable yaml
@@ -17,11 +22,7 @@ pecl install yaml-2.0.0 && docker-php-ext-enable yaml
 curl --location --output /usr/local/bin/phpunit https://phar.phpunit.de/phpunit.phar
 chmod +x /usr/local/bin/phpunit
 
-# Install mysql driver
-# Here you can install any other extension that you need
-docker-php-ext-install pdo_mysql
-docker-php-ext-install pdo_pgsql
-docker-php-ext-install gd
+docker-php-ext-configure gd --with-freetype-dir=/usr/include/freetype2 && docker-php-ext-install gd
 
 docker-php-ext-install zip
 docker-php-ext-enable apcu

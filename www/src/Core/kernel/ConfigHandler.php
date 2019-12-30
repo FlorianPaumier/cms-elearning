@@ -69,6 +69,7 @@ class ConfigHandler
         //Kernel::bind("userManager", new UserManager());
         Kernel::bind("router", new Router());
 
+        $_SERVER["APP_ENV"] = $this->get('config')["env"] ?? "dev";
     }
 
     /**

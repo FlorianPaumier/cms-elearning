@@ -18,10 +18,14 @@ class ExceptionInterface extends Exception implements Throwable
 
     public function render()
     {
-        (new RenderView())->render("Errors/". $this->code, [
+        http_response_code($this->code);
+
+        (new RenderView())->render("Errors/errors", [
             "message" => $this->getMessage(),
             "line" => $this->getLine(),
             "trace" => $this->getTrace(),
+            "code" => $this->code,
         ]);
+        exit();
     }
 }

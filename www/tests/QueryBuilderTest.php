@@ -1,4 +1,5 @@
 <?php
+namespace Test;
 
 use App\Core\Database\QueryBuilder;
 use App\Core\Database\Table;

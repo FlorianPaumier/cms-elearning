@@ -20,21 +20,10 @@ class ExceptionHandler
      * @return false|string
      * @throws MethodNotAllowedException
      */
-    public static function invalidMethodHandler(Request $request, $code = 405): void
+    public static function invalidMethodHandler($message = "Method not Allowed", $code = 405): void
     {
         //header("{$_SERVER["SERVER_PROTOCOL"]} 405 Method Not Allowed");
-        if ($_SERVER["APP_ENV"] == "dev") {
-            $renderer = new RenderView();
-            $renderer->render(
-                "Errors/405", [
-                "message" => "${$request->getServer()["SERVER_PROTOCOL"]} 405 Method Not Allowed"
-                ]
-            );
-        } else {
-            //Send Mail
-            throw new MethodNotAllowedException();
-        }
-        die();
+        throw new MethodNotAllowedException($message, $code);
     }
 
     /**
@@ -70,8 +59,8 @@ class ExceptionHandler
     /**
      * @throws BadRequestException
      */
-    public static function BadRequestHandler(){
-        throw new BadRequestException();
+    public static function BadRequestHandler($message = "Bad Request", int $code = 400){
+        throw new BadRequestException($message, $code);
     }
 
     /**
@@ -81,7 +70,7 @@ class ExceptionHandler
      * @return false|string
      * @throws NotFoundException
      */
-    public static function NotFoundHandler($message = "Ce que vous cherchez n'est pas ici <a href='/'>Retour</a>",int $code = 500): void
+    public static function NotFoundHandler($message = "Ce que vous cherchez n'est pas ici <a href='/'>Retour</a>",int $code = 404): void
     {
         //header("{$_SERVER["SERVER_PROTOCOL"]} 404 Not Found" . $message);
        throw new NotFoundException($message, $code);

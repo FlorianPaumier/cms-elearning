@@ -2,6 +2,7 @@
 
 namespace App\Core\Routing;
 
+use App\Core\Exceptions\BadRequestException;
 use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Kernel\Kernel;
 use App\Core\request\RedirectionHandler;
@@ -58,6 +59,7 @@ class Router
         $params = [];
 
         foreach ($this->routingConfig as $route) {
+
             $match = $this->getRoute($route);
             if (!is_null($match)) {
                 break;
@@ -76,9 +78,13 @@ class Router
 
                 return $this->exec($match, $params);
             };
-            ExceptionHandler::invalidMethodHandler($this->request, 405);
+
+            ExceptionHandler::invalidMethodHandler();
         }
+
         ExceptionHandler::NotFoundHandler("La route ne correspond pas", 404);
+
+        return false;
     }
 
     /**
@@ -154,6 +160,7 @@ class Router
             }
         }
 
+
         $macthes = $this->matchParams($route["path"]);
 
         if (!is_null($macthes)) {
@@ -177,12 +184,17 @@ class Router
          */
         preg_match_all('/{(\w+)<{1}(\\\\\w+\+)>{1}\??}/m', $str, $pregParameters);
 
+
         // Print the entire match result
         $params = $this->getParams($str);
 
         if (isset($pregParameters[2][0]) && isset($pregParameters[1][0])) {
             $reg = $pregParameters[2][0];
-            return preg_match("/${reg}/", $params) ? [$pregParameters[1][0] => $params] : null;
+            if(preg_match("/${reg}/", $params)){
+                return [$pregParameters[1][0] => $params];
+            }else{
+                ExceptionHandler::BadRequestHandler("Le type de paramètre n'est pas correct", 400);
+            }
         }
 
 
@@ -195,12 +207,10 @@ class Router
      * @param  $path
      * @return |null
      */
-    private function getParams($path): ?array
+    private function getParams($path): ?string
     {
         $tabPath = explode("/", $path);
         $tabUri = explode("/", $this->uri);
-
-        $param = null;
 
         foreach ($tabPath as $key => $data) {
             if ($this->hadParams($data)) {

@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>405</title>
+    <title>{{code}}</title>
 </head>
 <body>
-<h1 class="text-center">404 not found</h1>
+<h3 class="text-center">{{message}}</h3>
 <p>At Line : {{line}}</p>
-<p>{{message}}</p>
 <pre>
     {{ trace|stackTrace }}
 </pre>

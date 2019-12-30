@@ -1,6 +1,7 @@
 image: php:7.2
 
 before_script:
+  - composer install --no-progress --no-interaction > /dev/null
   - bash ci/docker_install.sh > /dev/null
   - cp docker/php/php.ini /usr/local/etc/php/php.ini-development
   - cp docker/php/php.ini /usr/local/etc/php/php.ini-production

@@ -8,7 +8,8 @@ set -xe
 # Install git (the php image doesn't have it) which is required by composer
 apt-get update -yqq
 apt-get install git -yqq
-apt-get update -y && apt-get install -y libpng-dev libfreetype6-dev libyaml-dev
+apt-get install postgresql -yqq
+apt-get install -y libpng-dev libfreetype6-dev libyaml-dev
 
 pecl install yaml-2.0.0 && docker-php-ext-enable yaml
 

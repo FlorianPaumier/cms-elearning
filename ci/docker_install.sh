@@ -23,6 +23,3 @@ curl --location --output /usr/local/bin/phpunit https://phar.phpunit.de/phpunit.
 chmod +x /usr/local/bin/phpunit
 
 docker-php-ext-configure gd --with-freetype-dir=/usr/include/freetype2 && docker-php-ext-install gd
-
-docker-php-ext-install zip
-docker-php-ext-enable apcu

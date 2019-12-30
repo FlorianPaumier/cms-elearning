@@ -7,7 +7,7 @@ set -xe
 
 # Install git (the php image doesn't have it) which is required by composer
 apt-get update -yqq
-apt-get apt-utils -yqq
+apt-get install apt-utils -yqq
 apt-get install git postgresql libzip-dev zlib1g-dev libpq-dev -yqq
 
 # Install mysql driver

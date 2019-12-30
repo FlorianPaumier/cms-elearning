@@ -113,3 +113,5 @@ www/node_modules/*
 www/app/cache
 db_data
 docker/postgres/data
+
+.vscode/

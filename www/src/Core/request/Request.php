@@ -46,7 +46,7 @@ class Request extends RequestHandler
     }
 
     /**
-     * @param mixed $query
+     * @param  mixed $query
      * @return Request
      */
     public function setQuery($query)
@@ -64,7 +64,7 @@ class Request extends RequestHandler
     }
 
     /**
-     * @param mixed $request
+     * @param  mixed $request
      * @return Request
      */
     public function setRequest($request)
@@ -82,7 +82,7 @@ class Request extends RequestHandler
     }
 
     /**
-     * @param mixed $server
+     * @param  mixed $server
      * @return Request
      */
     public function setServer($server)
@@ -100,7 +100,7 @@ class Request extends RequestHandler
     }
 
     /**
-     * @param mixed $session
+     * @param  mixed $session
      * @return Request
      */
     public function setSession($session)
@@ -110,7 +110,8 @@ class Request extends RequestHandler
     }
 
 
-    public function getMethod(){
+    public function getMethod()
+    {
         return $this->server["REQUEST_METHOD"] ?: "GET";
     }
 }

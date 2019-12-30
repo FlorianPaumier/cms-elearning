@@ -9,9 +9,11 @@ class RedirectionHandler
 {
     /**
      * Redirect the user to the given uri
+     *
      * @param string $path
      */
-    public function redirectTo(string $path){
+    public function redirectTo(string $path)
+    {
         header('Status: 301 Moved Permanently', false, 301);
         header("Location: ".$path);
         exit();
@@ -19,9 +21,11 @@ class RedirectionHandler
 
     /**
      * Redirect the to the route reffered to the route name
+     *
      * @param string $name
      */
-    public function redirectToRoute(string $name){
+    public function redirectToRoute(string $name)
+    {
         $route = Kernel::get("routing")[$name];
         $this->redirectTo($route["path"]);
     }
@@ -29,5 +33,7 @@ class RedirectionHandler
     /**
      * Get the HTTP_REFERER
      */
-    public function getPreviousPath(){}
+    public function getPreviousPath()
+    {
+    }
 }

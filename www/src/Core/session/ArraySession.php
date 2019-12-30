@@ -9,8 +9,9 @@ class ArraySession implements SessionInterface
 
     /**
      * Récupère une information en Session
-     * @param string $key
-     * @param mixed $default
+     *
+     * @param  string $key
+     * @param  mixed  $default
      * @return mixed
      */
     public function get(string $key, $default = null)
@@ -24,8 +25,8 @@ class ArraySession implements SessionInterface
     /**
      * Ajoute une information en Session
      *
-     * @param string $key
-     * @param $value
+     * @param  string $key
+     * @param  $value
      * @return mixed
      */
     public function set(string $key, $value): void
@@ -35,6 +36,7 @@ class ArraySession implements SessionInterface
 
     /**
      * Supprime une clef en session
+     *
      * @param string $key
      */
     public function delete(string $key): void

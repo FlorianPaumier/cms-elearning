@@ -6,7 +6,8 @@ namespace App\Core\renderer;
 
 class LoopExtension
 {
-    public function forEachAction($entry, $template){
+    public function forEachAction($entry, $template)
+    {
 
     }
 

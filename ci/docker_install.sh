@@ -24,4 +24,4 @@ chmod +x /usr/local/bin/phpunit
 
 docker-php-ext-configure gd --with-freetype-dir=/usr/include/freetype2 && docker-php-ext-install gd
 
-cd www && composer install --dev
+cd www && composer install

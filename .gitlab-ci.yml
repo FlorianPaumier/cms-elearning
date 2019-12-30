@@ -1,1 +1,10 @@
 image: php:5.6
+
+before_script:
+  - bash ci/docker_install.sh > /dev/null
+  - cp docker/php/php.ini /usr/local/etc/php/php.ini-development
+  - cp docker/php/php.ini /usr/local/etc/php/php.ini-production
+
+test:app:
+  script:
+    - phpunit --configuration www/phpunit_cms.xml

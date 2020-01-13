@@ -20,7 +20,7 @@ abstract class BaseController
     protected $renderer;
 
     /**
-     * @var QueryBuilder
+     * @var Table
      */
     protected $entityManager;
 
@@ -59,7 +59,7 @@ abstract class BaseController
     public function __construct()
     {
         $this->renderer = new RenderView();
-        //$this->entityManager = Kernel::get("entityManager");
+        $this->entityManager = Kernel::get("entityManager");
         //$this->repository = Kernel::get('repository');
         //$this->userManager = Kernel::get("userManager");
         $this->query = Kernel::get("request");

@@ -16,7 +16,7 @@ class QueryBuilder
     /**
      * @var
      */
-    private $from;
+    protected $from;
 
     /**
      * @var string

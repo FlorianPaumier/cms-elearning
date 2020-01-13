@@ -60,7 +60,7 @@ abstract class BaseController
     {
         $this->renderer = new RenderView();
         $this->entityManager = Kernel::get("entityManager");
-        //$this->repository = Kernel::get('repository');
+        $this->repository = Kernel::get('repository');
         $this->userManager = Kernel::get("userManager");
         $this->query = Kernel::get("request");
         $this->form = new Form();

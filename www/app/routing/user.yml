@@ -18,6 +18,11 @@ app_user_logout:
   controller: App\Controllers\Users\User:logout
   method: [GET]
 
+app_user_forget_password:
+  path: "/forget_password"
+  controller: App\Controllers\Users\User:forgetPassword
+  method: [GET, POST]
+
 
 
 

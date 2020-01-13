@@ -1,16 +1,14 @@
-image: "ruby:2.5"
+image: php:7.2
 
 before_script:
-  - apt-get update -qq && apt-get install -y -qq sqlite3 libsqlite3-dev nodejs
-  - ruby -v
-  - which ruby
-  - gem install bundler --no-document
-  - bundle install --jobs $(nproc)  "${FLAGS[@]}"
+  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  - php composer-setup.php
+  - php -r "unlink('composer-setup.php');"
+  - mv composer.phar /usr/local/bin/composer
+  - bash ci/docker_install.sh > /dev/null
+  - cp docker/php/php.ini /usr/local/etc/php/php.ini-development
+  - cp docker/php/php.ini /usr/local/etc/php/php.ini-production
 
-rspec:
+test:app:
   script:
-    - bundle exec rspec
-
-rubocop:
-  script:
-    - bundle exec rubocop
+    - phpunit --configuration www/phpunit_cms.xml

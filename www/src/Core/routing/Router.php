@@ -15,7 +15,7 @@ class Router
     private $routingConfig;
 
     /**
-     * @var Request 
+     * @var Request
      */
     private $request;
 
@@ -185,7 +185,6 @@ class Router
             return preg_match("/${reg}/", $params) ? [$pregParameters[1][0] => $params] : null;
         }
 
-
         return [];
     }
 
@@ -221,12 +220,13 @@ class Router
      */
     public function exec($route, array $parameters = [])
     {
-        /*
-         TODO: Remmetre en place le userManager
-         $userManager = Kernel::get("userManager");
+
+        $userManager = kernel::get("userManager");
+
         if (!$userManager->isAllowed($route)) {
-            $this->redirect->redirectToRoute("app_user_login");
-        }*/
+            (new redirect())
+                ->redirectToRoute("app_user_login");
+        }
 
         //Get the different part of the controller row
         $controllerData = $this->getController($route);

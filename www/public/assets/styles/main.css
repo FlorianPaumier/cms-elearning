@@ -1846,11 +1846,6 @@ img {
   vertical-align: middle;
 }
 
-.btn--block {
-  display: block;
-  width: 100%;
-}
-
 .cards {
   display: flex;
   flex-wrap: wrap;
@@ -1858,7 +1853,6 @@ img {
   margin: 0;
   padding: 0;
 }
-
 .cards__item {
   display: flex;
   padding: 1rem;
@@ -1873,8 +1867,7 @@ img {
     width: 33.3333%;
   }
 }
-
-.card {
+.cards .card {
   background-color: white;
   border-radius: 0.25rem;
   box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
@@ -1882,18 +1875,19 @@ img {
   flex-direction: column;
   overflow: hidden;
 }
-.card:hover .card__image {
+.cards .card:hover .card__image {
   filter: contrast(100%);
 }
-
-.card__content {
+.cards .card .btn--block {
+  display: block;
+}
+.cards .card__content {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
   padding: 1rem;
 }
-
-.card__image {
+.cards .card__image {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1904,42 +1898,36 @@ img {
   position: relative;
   transition: filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91);
 }
-.card__image::before {
+.cards .card__image::before {
   content: "";
   display: block;
   padding-top: 56.25%;
 }
 @media (min-width: 40rem) {
-  .card__image::before {
+  .cards .card__image::before {
     padding-top: 66.6%;
   }
 }
-
-.card__image--flowers {
+.cards .card__image--flowers {
   background-image: url(https://unsplash.it/800/600?image=82);
 }
-
-.card__image--river {
+.cards .card__image--river {
   background-image: url(https://unsplash.it/800/600?image=11);
 }
-
-.card__image--record {
+.cards .card__image--record {
   background-image: url(https://unsplash.it/800/600?image=39);
 }
-
-.card__image--fence {
+.cards .card__image--fence {
   background-image: url(https://unsplash.it/800/600?image=59);
 }
-
-.card__title {
+.cards .card__title {
   color: #696969;
   font-size: 1.25rem;
   font-weight: 300;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
-
-.card__text {
+.cards .card__text {
   flex: 1 1 auto;
   font-size: 0.875rem;
   line-height: 1.5;

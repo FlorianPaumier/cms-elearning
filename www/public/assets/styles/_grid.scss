@@ -1,5 +1,3 @@
-
-
 .row {
   display: flex;
   flex-direction: row;
@@ -21,38 +19,38 @@
   height: 10px;
 }
 
-@for $i from 1 through 12 {
+@for $i from 1 through $colset {
   .col-{
     &#{$i} {
       padding: 0 10px;
-      flex-basis: percentage($i/12);
+      flex-basis: percentage($i/$colset);
     }
   }
 }
 
 @media screen and (min-width: 960px) {
-  @for $i from 1 through 12 {
+  @for $i from 1 through $colset {
     .col-lg-#{$i} {
       padding: 0 10px;
-      flex-basis: percentage($i/12);
+      flex-basis: percentage($i/$colset);
     }
   }
 }
 
 @media screen and (min-width: 587px) and (max-width: 960px) {
-  @for $i from 1 through 12 {
+  @for $i from 1 through $colset {
     .col-md-#{$i} {
       padding: 0 10px;
-      flex-basis: percentage($i/12);
+      flex-basis: percentage($i/$colset);
     }
   }
 }
 
 @media screen and (max-width: 587px) {
-  @for $i from 1 through 12 {
+  @for $i from 1 through $colset {
     .col-sm-#{$i} {
       padding: 0 10px;
-      flex-basis: percentage($i/12);
+      flex-basis: percentage($i/$colset);
     }
   }
 }

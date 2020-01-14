@@ -23,6 +23,11 @@ Trait Entity
         return $this->id;
     }
 
+    public function setId(int $id){
+        $this->id = $id;
+
+    }
+
     public function getVariables()
     {
         return get_object_vars($this);

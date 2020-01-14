@@ -16,12 +16,12 @@ class QueryBuilder
     /**
      * @var
      */
-    private $from;
+    protected $from;
 
     /**
      * @var string
      */
-    private $alias;
+    protected $alias;
 
     /**
      * @var String 
@@ -31,42 +31,42 @@ class QueryBuilder
     /**
      * @var array
      */
-    private $order = [];
+    protected $order = [];
 
     /**
      * @var
      */
-    private $limit;
+    protected $limit;
 
     /**
      * @var
      */
-    private $offset;
+    protected $offset;
 
     /**
      * @var
      */
-    private $where;
+    protected $where;
 
     /**
      * @var array
      */
-    private $andWhere = [];
+    protected $andWhere = [];
 
     /**
      * @var array
      */
-    private $fields = ["*"];
+    protected $fields = ["*"];
 
     /**
      * @var array
      */
-    private $params = [];
+    protected $params = [];
 
     /**
      * @var string
      */
-    private $sql;
+    protected $sql;
 
     /**
      * @var \PDOStatement
@@ -147,9 +147,9 @@ class QueryBuilder
      * @param  string $where
      * @return $this
      */
-    public function where(string $where): self
+    public function where(string $where, string $key): self
     {
-        $this->where = "$where";
+        $this->where = '"'.$where.'" = ' . $key;
         return $this;
     }
 
@@ -200,7 +200,7 @@ class QueryBuilder
     {
 
         $fields = implode(', ', $this->fields);
-        $this->sql = "$this->method $fields FROM {$this->from}";
+        $this->sql = "$this->method $fields FROM \"{$this->from}\"";
         if ($this->where) {
             $this->sql .= " WHERE " . $this->where;
         }

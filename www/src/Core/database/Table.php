@@ -7,14 +7,7 @@ use PDO;
 
 class Table extends QueryBuilder
 {
-
-    /**
-     * Nom de la table en BDD
-     *
-     * @var string
-     */
-    protected $table;
-
+    
     /**
      * Entité à utiliser
      *
@@ -39,7 +32,7 @@ class Table extends QueryBuilder
         $query = new PaginatedQuery(
             $this->pdo,
             $this->paginationQuery(),
-            "SELECT COUNT(id) FROM {$this->table}",
+            "SELECT COUNT(id) FROM {$this->from}",
             $this->entity
         );
         return (new Pagerfanta($query))
@@ -49,7 +42,7 @@ class Table extends QueryBuilder
 
     protected function paginationQuery()
     {
-        return "SELECT * FROM {$this->table}";
+        return "SELECT * FROM {$this->from}";
     }
 
     /**
@@ -58,7 +51,7 @@ class Table extends QueryBuilder
     public function findList(): array
     {
         $results = $this->pdo
-            ->query("SELECT id, name FROM {$this->table}")
+            ->query("SELECT id, name FROM {$this->from}")
             ->fetchAll(\PDO::FETCH_NUM);
         $list = [];
         foreach ($results as $result) {
@@ -74,7 +67,7 @@ class Table extends QueryBuilder
      */
     public function findAll(): array
     {
-        $query = $this->pdo->query("SELECT * FROM {$this->table}");
+        $query = $this->pdo->query("SELECT * FROM {$this->from}");
         if ($this->entity) {
             $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
         } else {
@@ -92,7 +85,7 @@ class Table extends QueryBuilder
      */
     public function findBy(array $params)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE ";
+        $sql = "SELECT * FROM {$this->from} WHERE ";
         $sql .= $this->buildWhereFieldQuery($params);
 
         return $this->fetchOrFail($sql, $params);
@@ -119,8 +112,8 @@ class Table extends QueryBuilder
      */
     public function find(int $id)
     {
-        $this->from($this->table)
-            ->where("id = :id");
+        $this->from($this->from)
+            ->where("id",  ':id');
 
         $this->setParam("id", $id);
         return $this->fetchOrFail();
@@ -135,7 +128,7 @@ class Table extends QueryBuilder
     public function insert(array $params): bool
     {
         $query = $this->pdo->prepare(
-            "INSERT INTO {$this->table} ("
+            "INSERT INTO {$this->from} ("
             . join(', ', array_keys($params)) .
             ") VALUES (" . $this->buildFieldQuery($params) . ")"
         );
@@ -171,7 +164,7 @@ class Table extends QueryBuilder
      */
     public function delete(int $id): bool
     {
-        $query = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = :id");
+        $query = $this->pdo->prepare("DELETE FROM {$this->from} WHERE id = :id");
         return $query->execute(["id" => $id]);
     }
 
@@ -193,7 +186,7 @@ class Table extends QueryBuilder
         );
 
         $params["id"] = $id;
-        $query = $this->pdo->prepare("UPDATE {$this->table} SET {$fieldQuery} WHERE id = :id");
+        $query = $this->pdo->prepare("UPDATE {$this->from} SET {$fieldQuery} WHERE id = :id");
         $query->execute($params);
         return $query->fetchObject();
     }
@@ -211,7 +204,7 @@ class Table extends QueryBuilder
      */
     public function getTable(): string
     {
-        return $this->table;
+        return $this->from;
     }
 
     /**
@@ -222,7 +215,7 @@ class Table extends QueryBuilder
      */
     public function exists($id): bool
     {
-        $query = $this->pdo->prepare("SELECT id FROM {$this->table} WHERE id = :id");
+        $query = $this->pdo->prepare("SELECT id FROM {$this->from} WHERE id = :id");
         $query->execute(["id" => $id]);
         return $query->fetchColumn() !== false;
     }

@@ -2,11 +2,13 @@
 namespace App\Controllers;
 
 use App\Core\Interfaces\BaseController;
+use App\Entity\User;
 
 class DefaultController extends BaseController
 {
     public function index()
     {
-        return $this->renderer->render(ROOT_DIR."/public/views/home");
+        $user = new User(1);
+        $this->renderer->render("home");
     }
 }

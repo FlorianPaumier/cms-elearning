@@ -111,6 +111,7 @@ www/app/config/config.yml
 www/package.json
 www/node_modules/*
 www/app/cache
+www/src/Core/assets/fonts
 db_data
 docker/postgres/data
 

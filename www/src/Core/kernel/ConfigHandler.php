@@ -63,8 +63,7 @@ class ConfigHandler
         Kernel::bind("request", Request::createFromGlobals());
         Kernel::bind("session", new PHPSession());
         Kernel::bind("exception", new ExceptionHandler());
-        //Kernel::bind("entityManager", new QueryBuilder());
-        Kernel::bind("repository", new Table());
+        Kernel::bind("entityManager", new Table());
         //Kernel::bind("container", new DependencyInjection());
         //Kernel::bind("userManager", new UserManager());
         Kernel::bind("router", new Router());

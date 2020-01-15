@@ -9,7 +9,7 @@ use App\Core\Entity\User;
 use App\Core\Exception\ForbiddenException;
 use App\Core\Request\Request;
 use App\Core\Session\PHPSession;
-use App\Core\Kernels\Kernel;
+use App\Core\Kernel\Kernel;
 
 class UserManager
 {

@@ -1,22 +1,8 @@
-{{ @View/partials/header|include }}
+{{ @View/base|extend }}
 
-<body id="page-top">
 
-<!-- Page Wrapper -->
-<div id="wrapper">
+@section(body)
 
-    <!-- Sidebar -->
-    {{ @View/partials/sidebar|include }}
-    <!-- End of Sidebar -->
-
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
-
-        <!-- Main Content -->
-        <div id="content">
-
-            <!-- Topbar -->
-            {{ @View/partials/nav|include }}
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
@@ -322,6 +308,6 @@
 </div>
 <!-- End of Page Wrapper -->
 
-{{ @View/partials/modal|include }}
-{{ @View/partials/footer|include }}
 
+
+@endsection

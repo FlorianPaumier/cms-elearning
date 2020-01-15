@@ -17,8 +17,6 @@ class RenderView
 
     private $templateEngine;
 
-    private $template;
-
     public function __construct()
     {
         $this->templateEngine = new TemplateEngine();
@@ -37,18 +35,22 @@ class RenderView
         extract($param, EXTR_OVERWRITE);
         extract($defaultData, EXTR_SKIP);
 
+        $includeEngine = new TemplateEngine();
+        $includeEngine->setTemplateFile($template);
 
-        if(file_exists($template . ".view.php")) {
-            include $template . ".view.php";//How to pass $param to it? It needs that $row to renderer blog entry!
+        if(!is_null($includeEngine->getTemplateFile())) {
+            $includeEngine->setData(["parameter" => $param, "config" => $param]);
+            $includeEngine->generate_markup();
+            $includeEngine->compile(false);
         }else{
-            ExceptionHandler::defaultRequestHandler();
-            exit;
+            ExceptionHandler::defaultRequestHandler("View Not Found");
         }
 
         $ret = ob_get_contents();
         ob_end_clean();
 
         return $ret;
+
     }
 
     public function render(string $template, array $param = [])
@@ -57,8 +59,7 @@ class RenderView
 
         if(!is_null($this->templateEngine->getTemplateFile())) {
             $this->templateEngine->setData(["parameter" => $param, "config" => $this->defaultData]);
-
-            $this->template = $this->templateEngine->generate_markup();
+            $this->templateEngine->generate_markup();
 
             Kernel::get("session")->set("app.flash", null);
             return;
@@ -79,8 +80,7 @@ class RenderView
         return $this->templateEngine->renderHtmlElement($type);
     }
 
-    public function __destruct()
-    {
-        print  $this->template;
+    public function compile(){
+        return $this->templateEngine->compile();
     }
 }

@@ -29,7 +29,7 @@ class RenderView
     {
         $defaultData = [
             "session" => Kernel::get("session")->offsetGet("app.user") ? ["connected" => true, "roles" => null] : ["connected" => false, "roles" => null],
-            "flash" => Kernel::get("session")->get("app.flash"),
+            "flash" => Kernel::get("session")->get("app.flash") ?? "",
         ];
 
         ob_start();
@@ -37,8 +37,12 @@ class RenderView
         extract($param, EXTR_OVERWRITE);
         extract($defaultData, EXTR_SKIP);
 
+
         if(file_exists($template . ".view.php")) {
             include $template . ".view.php";//How to pass $param to it? It needs that $row to renderer blog entry!
+        }else{
+            ExceptionHandler::defaultRequestHandler();
+            exit;
         }
 
         $ret = ob_get_contents();

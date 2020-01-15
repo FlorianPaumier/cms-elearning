@@ -9,6 +9,7 @@ use App\Core\Database\Table;
 use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Request\Request;
 use App\Core\Router\Router;
+use App\Core\Security\UserManager;
 use App\Core\Session\PHPSession;
 use App\Core\Kernel\Kernel;
 
@@ -63,9 +64,10 @@ class ConfigHandler
         Kernel::bind("request", Request::createFromGlobals());
         Kernel::bind("session", new PHPSession());
         Kernel::bind("exception", new ExceptionHandler());
-        Kernel::bind("entityManager", new Table());
+        Kernel::bind("repository", new Table());
+        Kernel::bind("entityManager", new QueryBuilder());
         //Kernel::bind("container", new DependencyInjection());
-        //Kernel::bind("userManager", new UserManager());
+        Kernel::bind("userManager", new UserManager());
         Kernel::bind("router", new Router());
 
     }

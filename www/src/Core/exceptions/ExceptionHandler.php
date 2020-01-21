@@ -59,6 +59,6 @@ class ExceptionHandler
     {
         //header("{$_SERVER["SERVER_PROTOCOL"]} 404 Not Found" . $message);
         (new RenderView())->render("Errors/404", ["message" => $message]);
-        die();
+        exit();
     }
 }

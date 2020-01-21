@@ -25,11 +25,11 @@ class RenderFunction
             exit;
         }
 
-        preg_match_all("#^@section\((\w+)\)$#m", $template, $sections);
+        preg_match_all("#^\s+?@section\((\w+)\)$#m", $template, $sections);
 
         foreach ($sections[1] as $key => $value){
-            preg_match("/@section\($value\)([\s\S]+)@endsection/m", $view, $sectionsValue);
-            $template = preg_replace("#^@section\($value\)$#m", $sectionsValue[1], $template);
+            preg_match("/^\s+?@section\($value\)([\s\S]+)@endsection$/mU", $view, $sectionsValue);
+            $template = preg_replace("#^\s+?@section\($value\)$#m", $sectionsValue[1], $template);
         }
 
         return $template;

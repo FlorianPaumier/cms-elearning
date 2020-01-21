@@ -4,17 +4,25 @@
 namespace App\Core\renderer;
 
 
+use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Kernel\Kernel;
 
 class ParseView
 {
     
     public function parseTags(string $content, array $data, array $fieldEntries){
+        foreach ($fieldEntries as $tag) {
         foreach ($data["parameter"] as $key => $value) {
-            foreach ($fieldEntries as $tag) {
+            $find = false;
                 if ($tag[1] == $key) {
-                    $content = preg_replace("/{{($key)}}/", $value, $content);
+                    $content = preg_replace("/{{\s+($key)\s+}}/", $value, $content);
+                    $find = true;
                 }
+            }
+
+            if(!$find){
+                ExceptionHandler::defaultRequestHandler("La clé $key n'a pas été trouver");
+                exit();
             }
         }
         

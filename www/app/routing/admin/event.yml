@@ -1,0 +1,12 @@
+admin_event_index:
+  path: /admin/event
+  controller: App\Controllers\Admin\Event:index
+  method: [GET]
+admin_event_new:
+  path: /admin/event/new
+  controller: App\Controllers\Admin\Event:new
+  method: [GET, POST]
+admin_event_edit:
+  path: /admin/event/edit/{id<\d+>}
+  controller: App\Controllers\Admin\Event:edit
+  method: [GET, POST]

@@ -10,13 +10,8 @@
     <meta name="author" content="">
 
     <title>
-        <?php
-        if(isset($title)){
-            echo $title;
-        }else{
-            echo "Accueil";
-        }
-        ?></title>
+        @section(title)
+    </title>
 
     <meta lang="fr">
 

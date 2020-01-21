@@ -194,7 +194,7 @@ class Router
      * @param  $path
      * @return |null
      */
-    private function getParams($path): ?array
+    private function getParams($path): ?string
     {
         $tabPath = explode("/", $path);
         $tabUri = explode("/", $this->uri);
@@ -271,6 +271,6 @@ class Router
      */
     public function getPath(string $name)
     {
-        return key_exists($name, $this->routingConfig) ? $this->routingConfig[$name]["path"] : null;
+        return key_exists($name, $this->routingConfig) ? preg_replace("/{(.*?)}/", "", $this->routingConfig[$name]["path"]) : null;
     }
 }

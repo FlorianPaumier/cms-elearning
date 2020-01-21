@@ -83,7 +83,7 @@ class TemplateEngine
 
     private function _parseTemplate()
     {
-        preg_match_all("/{{(\w+)}}/m", $this->templateContent, $this->fieldEntries, PREG_SET_ORDER, 0);
+        preg_match_all("/{{\s+(\w+)\s+}}/m", $this->templateContent, $this->fieldEntries, PREG_SET_ORDER, 0);
         preg_match_all("/{{ (@?[\w+\/?]+)\|(\w+) }}/m", $this->templateContent, $this->methodEntries, PREG_SET_ORDER, 0);
     }
 
@@ -148,6 +148,7 @@ class TemplateEngine
 
     private function _parseTags()
     {
+        dump($this->fieldEntries);
         $this->templateContent = $this->viewParser->parseTags($this->templateContent, $this->data, $this->fieldEntries);
     }
 }

@@ -13,7 +13,7 @@ class ParseView
         foreach ($data["parameter"] as $key => $value) {
             foreach ($fieldEntries as $tag) {
                 if ($tag[1] == $key) {
-                    $content = preg_replace("/{{($key)}}/", $value, $content);
+                    $content = preg_replace("/{{\s?($key)\s?}}/", $value, $content);
                 }
             }
         }

@@ -81,6 +81,6 @@ class RenderView
     }
 
     public function compile(){
-        return $this->templateEngine->compile();
+        $this->templateEngine->compile();
     }
 }

@@ -43,11 +43,17 @@ Les paquets à installer :
 | apcu | 
 
 | libzip-dev |
+
 | zlib1g-dev |
+
 | libpq-dev | 
+
 | libpng-dev |
+
 | libfreetype6-dev |
+
 | libyaml-dev |
+
 | yaml | version 2.0.0 |
 
 

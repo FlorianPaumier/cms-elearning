@@ -13,27 +13,28 @@ Pour commencer à utiliser le projet, vous aurez besoin d'installer : [here](#)
 Les paquets à installer :
 
     Pour installer le serveur nginx il faudra mettre en place ce code :
+    ```
         server {
-    server_name localhost;
-    root /var/www/html/public;
+            server_name localhost;
+            root /var/www/html/public;
 
-    location / {
-       try_files $uri /index.php$is_args$args;
-    }
+            location / {
+               try_files $uri /index.php$is_args$args;
+            }
 
-    location ~ ^/index\.php(/|$) {
-        client_max_body_size 50m;
+            location ~ ^/index\.php(/|$) {
+                client_max_body_size 50m;
 
-        fastcgi_pass php:9000;
-        fastcgi_buffers 16 16k;
-        fastcgi_buffer_size 32k;
-        include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME /var/www/html/public/index.php;
-    }
+                fastcgi_pass php:9000;
+                fastcgi_buffers 16 16k;
+                fastcgi_buffer_size 32k;
+                include fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME /var/www/html/public/index.php;
+            }
 
-     error_log  /var/log/nginx/error.log;
-     access_log /var/log/nginx/access.log;
-}
+                error_log  /var/log/nginx/error.log;
+                access_log /var/log/nginx/access.log;
+    }```
 
 
 | pdo_mysql | 

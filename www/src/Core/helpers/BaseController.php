@@ -73,4 +73,8 @@ abstract class BaseController
         return new Validator($this->query->getRequest());
     }
 
+    public function __destruct()
+    {
+        $this->renderer->compile();
+    }
 }

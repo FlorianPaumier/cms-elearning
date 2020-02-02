@@ -4,9 +4,6 @@
 namespace App\Core\Renderer;
 
 
-use App\Core\Exceptions\ExceptionHandler;
-use App\Core\Kernel\Kernel;
-
 class TemplateEngine
 {
     private const TPL_EXT = [
@@ -31,18 +28,22 @@ class TemplateEngine
     private $fieldEntries;
 
     private $methodEntries;
+    private $extendMethod;
 
     private $extandEntries = null;
 
     private $blockEntries;
 
-    public function setTemplateFile(string $templateFile)
+    private $functions = [];
+
+    private $viewParser;
+
+    private $cacheDir;
+
+    public function __construct()
     {
-        foreach (self::TPL_EXT as $ext){
-            if(file_exists(DEFAULT_VIEW_DIR.DIRECTORY_SEPARATOR.$templateFile.$ext)) {
-                $this->templateFile = DEFAULT_VIEW_DIR.DIRECTORY_SEPARATOR.$templateFile.$ext;
-            }
-        }
+        $this->viewParser = new ParseView();
+        $this->cacheDir = dirname(__DIR__, 3) . "/app/cache/views/";
     }
 
     public function setFormTemplateFile(string $templateFile)
@@ -55,6 +56,17 @@ class TemplateEngine
         return $this->templateFile;
     }
 
+    public function setTemplateFile(string $templateFile)
+    {
+        foreach (self::TPL_EXT as $ext) {
+            if (file_exists(DEFAULT_VIEW_DIR . DIRECTORY_SEPARATOR . $templateFile . $ext)) {
+                $this->templateFile = DEFAULT_VIEW_DIR . DIRECTORY_SEPARATOR . $templateFile . $ext;
+            } elseif (file_exists($templateFile . $ext)) {
+                $this->templateFile = $templateFile . $ext;
+            }
+        }
+    }
+
     public function setData(array $data = [])
     {
         $this->data = $data;
@@ -62,29 +74,12 @@ class TemplateEngine
 
     public function generate_markup($extra = [])
     {
-        $this->_load_template();
-        $this->_parseTemplate();
-        $this->_replaceTags();
-        $this->_replaceFunctions();
-
-        return !$this->_replaceBlocks() ? $this->templateContent : $this->extendsContent;
-    }
-
-    /**
-     * Render the html element to create a form
-     *
-     * @param  string $type
-     * @return string
-     */
-    public function renderHtmlElement(string $type)
-    {
-        preg_match_all("/.*{%\ block ${type} %}((?s:.+?)){%\ endblock.*?%}.*/m", $this->templateContent, $this->blockEntries, PREG_SET_ORDER, 0);
-        $this->templateContent = $this->blockEntries[0][1] ?? "";
-
-        $this->_parseTemplate();
-        $this->_replaceFunctions();
-        $this->_replaceTags();
-        return $this->templateContent;
+        if (!file_exists($this->cacheDir . md5($this->templateFile) . ".php")) {
+            $this->_load_template();
+            $this->_extendFile();
+        } else {
+            $this->templateContent = file_get_contents($this->cacheDir . md5($this->templateFile) . ".php");
+        }
     }
 
     private function _load_template()
@@ -96,88 +91,81 @@ class TemplateEngine
 
     private function _parseTemplate()
     {
-        preg_match_all("/{{(\w+)}}/m", $this->templateContent, $this->fieldEntries, PREG_SET_ORDER, 0);
+        preg_match_all("/{{\s?(\w+)\s?}}/m", $this->templateContent, $this->fieldEntries, PREG_SET_ORDER, 0);
         preg_match_all("/{{ (@?[\w+\/?]+)\|(\w+) }}/m", $this->templateContent, $this->methodEntries, PREG_SET_ORDER, 0);
     }
 
-    private function _replaceTags()
+    /**
+     * Render the html element to create a form
+     *
+     * @param string $type
+     * @return string
+     */
+    public function renderHtmlElement(string $type)
     {
-        foreach ($this->data["parameter"] as $key => $value) {
-            foreach ($this->fieldEntries as $tag) {
-                if ($tag[1] == $key) {
-                    $this->templateContent = preg_replace("/{{($key)}}/", $value, $this->templateContent);
-                }
-            }
-        }
+        preg_match_all("/.*{%\ block ${type} %}((?s:.+?)){%\ endblock.*?%}.*/m", $this->templateContent, $this->blockEntries, PREG_SET_ORDER, 0);
+        $this->templateContent = $this->blockEntries[0][1] ?? "";
+        $this->_parseTemplate();
     }
 
-    private function _replaceFunctions()
+    public function compile(bool $tags = true)
     {
-        foreach ($this->methodEntries as $tag) {
+        $this->_parseTemplate();
+        if (count($this->methodEntries) > 0) {
+            $this->_parseFunctions();
+        }
+        foreach ($this->functions as $regex => $html) {
+            $this->templateContent = preg_replace("/$regex/", $html, $this->templateContent);
+        }
+
+
+        if ($tags) {
+            $temp = tmpfile();
+            fwrite($temp, $this->templateContent);
+            $cacheFile = md5($this->templateFile) . ".php";
+            copy(stream_get_meta_data($temp)['uri'], $this->cacheDir . $cacheFile);
+
+            if (count($this->fieldEntries) > 0) {
+                $this->_parseTags();
+            }
+        }
+        $tmp = tmpfile();
+        fwrite($tmp, $this->templateContent);
+        include stream_get_meta_data($tmp)['uri'];
+
+    }
+
+    private function _extendFile()
+    {
+        preg_match_all("/{{ (@?[\w+\/?]+)\|(extend) }}/m", $this->templateContent, $this->extendMethod, PREG_SET_ORDER, 0);
+
+        if (is_null($this->extendMethod)) {
+            return "";
+        }
+
+        foreach ($this->extendMethod as $tag) {
             $template = $tag[2];
             $value = $tag[1];
             $html = null;
 
             switch ($template) {
-            case "include":
-            case "require":
-                $dir = ROOT_DIR . "/public/views";
-                $value = str_replace("@View", $dir, $value);
-                $html = RenderView::include($value, $this->data);
-                break;
-            case "path":
-                $html = Kernel::get("router")->getPath($value);
-                break;
-            case "isRequired":
-                $html = isset($this->data["required"]) ? 'required="required"' : "";
-                break;
-            case "isMultiple":
-                $html = isset($this->data["multiple"]) ? 'multiple' : "";
-                break;
-            case "isSelected":
-                $html = isset($this->data["selected"]) ? 'selected' : "";
-                break;
-            case "errorFeedback":
-                $html = isset($this->data["errors"]) ? " " : "";
-                break;
-            default:
-                if (function_exists("include")) {
-                    $html = $template($value);
-                }
-                break;
+                case "extend":
+                    $this->templateContent = RenderFunction::extend($value, $this->templateContent);
+                    break;
             }
 
-            if (!is_null($html)) {
-                $regex = addcslashes($tag[0], "/|");
-                $this->templateContent = preg_replace("/$regex/", $html, $this->templateContent);
-            }
+
         }
     }
 
-    private function _replaceBlocks()
+    private function _parseFunctions()
     {
-        preg_match_all("/.*{%\ block.*?%}((?s:.+?)){%\ endblock.*?%}.*/m", $this->templateContent, $this->blockEntries, PREG_SET_ORDER, 0);
 
-        if(!is_null($this->extandEntries) && count($this->extandEntries) > 0) {
-            $fileName = trim($this->extandEntries[0][1]).".view.php";
-            if(file_exists(DEFAULT_VIEW_DIR."/".$fileName)) {
-                $this->extendsContent = file_get_contents(DEFAULT_VIEW_DIR."/".$fileName);
-                $this->extendsContent = preg_replace("/.*{%\ block.*?%}(?s:.+?){%\ endblock.*?%}.*/m", $this->blockEntries[0][1], $this->templateContent);
-                return true;
-            }
-        };
-
-        return false;
+        $this->functions = $this->viewParser->parseFunction($this->data, $this->methodEntries);
     }
 
-    //TODO: Write a public method to output the result of the templating engine
-
-    //TODO: Write a private method to load the template
-
-    //TODO: Write a private method to parse the template
-
-    //TODO: Write a static method to replace the template tags with entry data
-
-    //TODO: Write a private currying function to facilitate tag replacement
-
+    private function _parseTags()
+    {
+        $this->templateContent = $this->viewParser->parseTags($this->templateContent, $this->data, $this->fieldEntries);
+    }
 }

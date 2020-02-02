@@ -24,36 +24,36 @@ class TableTest extends TestCase{
             firstname VARCHAR(255)
         )');
 
-        $this->table = new Table($pdo);
-        $this->table->from("test");
-        $reflection = new \ReflectionClass($this->table);
-        $property = $reflection->getProperty('table');
+        $this->from = new Table($pdo);
+        $this->from->from("test");
+        $reflection = new \ReflectionClass($this->from);
+        $property = $reflection->getProperty('from');
         $property->setAccessible(true);
-        $property->setValue($this->table, 'test');
+        $property->setValue($this->from, 'test');
     }
 
 
     public function testFind()
     {
-        $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
-        $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a2")');
-        $test = $this->table->find(1);
+        $this->from->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
+        $this->from->getPdo()->exec('INSERT INTO test (name) VALUES ("a2")');
+        $test = $this->from->find(1);
         $this->assertInstanceOf(\stdClass::class, $test);
         $this->assertEquals('a1', $test->name);
     }
 
     public function testFindList()
     {
-        $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
-        $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a2")');
-        $this->assertEquals(['1' => 'a1', '2' => 'a2'], $this->table->findList());
+        $this->from->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
+        $this->from->getPdo()->exec('INSERT INTO test (name) VALUES ("a2")');
+        $this->assertEquals(['1' => 'a1', '2' => 'a2'], $this->from->findList());
     }
 
     public function testFindAll()
     {
-        $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
-        $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a2")');
-        $categories = $this->table->findAll();
+        $this->from->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
+        $this->from->getPdo()->exec('INSERT INTO test (name) VALUES ("a2")');
+        $categories = $this->from->findAll();
         $this->assertCount(2, $categories);
         $this->assertInstanceOf(\stdClass::class, $categories[0]);
         $this->assertEquals('a1', $categories[0]->name);
@@ -62,36 +62,36 @@ class TableTest extends TestCase{
 
     public function testFindBy()
     {
-        $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
-        $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a2")');
-        $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
-        $category = $this->table->findBy(['name' => 'a1']);
+        $this->from->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
+        $this->from->getPdo()->exec('INSERT INTO test (name) VALUES ("a2")');
+        $this->from->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
+        $category = $this->from->findBy(['name' => 'a1']);
         $this->assertInstanceOf(\stdClass::class, $category);
         $this->assertEquals(1, (int)$category->id);
     }
 
     public function testExists()
     {
-        $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
-        $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a2")');
-        $this->assertTrue($this->table->exists(1));
-        $this->assertTrue($this->table->exists(2));
-        $this->assertFalse($this->table->exists(3123));
+        $this->from->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
+        $this->from->getPdo()->exec('INSERT INTO test (name) VALUES ("a2")');
+        $this->assertTrue($this->from->exists(1));
+        $this->assertTrue($this->from->exists(2));
+        $this->assertFalse($this->from->exists(3123));
     }
 
     public function testCount()
     {
-        $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
-        $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a2")');
-        $this->table->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
+        $this->from->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
+        $this->from->getPdo()->exec('INSERT INTO test (name) VALUES ("a2")');
+        $this->from->getPdo()->exec('INSERT INTO test (name) VALUES ("a1")');
 
-        $this->assertEquals(3, $this->table->count());
+        $this->assertEquals(3, $this->from->count());
     }
 
     public function testInsert()
     {
-        $this->table->insert(['name' => 'Salut', 'firstname' => 'demo']);
-        $post = $this->table->find(1);
+        $this->from->insert(['name' => 'Salut', 'firstname' => 'demo']);
+        $post = $this->from->find(1);
         $this->assertEquals('Salut', $post->name);
         $this->assertEquals('demo', $post->firstname);
     }
@@ -99,21 +99,21 @@ class TableTest extends TestCase{
     public function testUpdate()
     {
 
-        $this->table->insert(['name' => 'Salut', 'firstname' => 'demo']);
-        $this->table->update(1, ['name' => 'Salut', 'firstname' => 'demo']);
-        $post = $this->table->find(1);
+        $this->from->insert(['name' => 'Salut', 'firstname' => 'demo']);
+        $this->from->update(1, ['name' => 'Salut', 'firstname' => 'demo']);
+        $post = $this->from->find(1);
         $this->assertEquals('Salut', $post->name);
         $this->assertEquals('demo', $post->firstname);
     }
 
     public function testDelete()
     {
-        $this->table->insert(['name' => 'Salut', 'firstname' => 'demo']);
-        $this->table->insert(['name' => 'Salut', 'firstname' => 'demo']);
-        $count = $this->table->getPdo()->query('SELECT COUNT(id) FROM test')->fetchColumn();
+        $this->from->insert(['name' => 'Salut', 'firstname' => 'demo']);
+        $this->from->insert(['name' => 'Salut', 'firstname' => 'demo']);
+        $count = $this->from->getPdo()->query('SELECT COUNT(id) FROM test')->fetchColumn();
         $this->assertEquals(2, (int)$count);
-        $this->table->delete($this->table->getPdo()->lastInsertId());
-        $count = $this->table->getPdo()->query('SELECT COUNT(id) FROM test')->fetchColumn();
+        $this->from->delete($this->from->getPdo()->lastInsertId());
+        $count = $this->from->getPdo()->query('SELECT COUNT(id) FROM test')->fetchColumn();
         $this->assertEquals(1, (int)$count);
     }
 

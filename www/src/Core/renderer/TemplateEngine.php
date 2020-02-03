@@ -40,6 +40,9 @@ class TemplateEngine
 
     private $cacheDir;
 
+    /** @var bool */
+    private $rendering;
+
     public function __construct()
     {
         $this->viewParser = new ParseView();
@@ -54,6 +57,10 @@ class TemplateEngine
     public function getTemplateFile()
     {
         return $this->templateFile;
+    }
+
+    public function getContent(){
+        return $this->templateContent;
     }
 
     public function setTemplateFile(string $templateFile)
@@ -103,32 +110,55 @@ class TemplateEngine
      */
     public function renderHtmlElement(string $type)
     {
-        preg_match_all("/.*{%\ block ${type} %}((?s:.+?)){%\ endblock.*?%}.*/m", $this->templateContent, $this->blockEntries, PREG_SET_ORDER, 0);
+        if($type == "errors"){
+            dump($this->templateContent, "Template Content");
+        }
+        preg_match_all("/.*{%\s?block\s${type}\s?%}((?s:.+?)){%\s?endblock\s?%}.*/m", $this->templateContent, $this->blockEntries, PREG_SET_ORDER, 0);
+        if($type == "errors"){
+            dump($this->blockEntries, "Block Entries");
+        }
         $this->templateContent = $this->blockEntries[0][1] ?? "";
-        $this->_parseTemplate();
+        $debug = $type == "errors" ? true : false;
+        $this->_compileForm($debug);
+        return $this->templateContent;
     }
 
     public function compile(bool $tags = true)
     {
         $this->_parseTemplate();
+
         if (count($this->methodEntries) > 0) {
             $this->_parseFunctions();
         }
+
         foreach ($this->functions as $regex => $html) {
             $this->templateContent = preg_replace("/$regex/", $html, $this->templateContent);
         }
 
-
         if ($tags) {
+
             $temp = tmpfile();
             fwrite($temp, $this->templateContent);
             $cacheFile = md5($this->templateFile) . ".php";
-            copy(stream_get_meta_data($temp)['uri'], $this->cacheDir . $cacheFile);
+
+            if($_SERVER["APP_ENV"] != 'dev'){
+                copy(stream_get_meta_data($temp)['uri'], $this->cacheDir . $cacheFile);
+            }
 
             if (count($this->fieldEntries) > 0) {
                 $this->_parseTags();
+                $this->_parseTemplate();
+
+                if (count($this->methodEntries) > 0) {
+                    $this->_parseFunctions($this);
+                }
             }
         }
+
+        if(isset($this->data["render"]) && $this->data["render"]){
+            return $this->templateContent;
+        }
+
         $tmp = tmpfile();
         fwrite($tmp, $this->templateContent);
         include stream_get_meta_data($tmp)['uri'];
@@ -158,14 +188,19 @@ class TemplateEngine
         }
     }
 
-    private function _parseFunctions()
+    private function _parseFunctions(TemplateEngine $engine = null)
     {
-
-        $this->functions = $this->viewParser->parseFunction($this->data, $this->methodEntries);
+        $this->functions = $this->viewParser->parseFunction($this->data, $this->methodEntries, $engine);
     }
 
     private function _parseTags()
     {
         $this->templateContent = $this->viewParser->parseTags($this->templateContent, $this->data, $this->fieldEntries);
+    }
+
+    private function _compileForm(bool $debug = false)
+    {
+        $this->_parseTemplate();
+        $this->_parseTags();
     }
 }

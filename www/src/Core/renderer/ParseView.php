@@ -21,7 +21,7 @@ class ParseView
         return $content;
     }
 
-    public function parseFunction(array $data, array $methodEntries){
+    public function parseFunction(array $data, array $methodEntries, TemplateEngine $engine = null){
         $functions = [];
         foreach ($methodEntries as $tag) {
             $template = $tag[2];
@@ -46,7 +46,7 @@ class ParseView
                     $html = isset($data["selected"]) ? 'selected' : "";
                     break;
                 case "errorFeedback":
-                    $html = RenderFunction::getErrorFeedback($data["errors"]);
+                    $html = RenderFunction::getErrorFeedback($data["errors"] ?? [], $engine);
                     break;
                 default:
                     if (function_exists("include")) {

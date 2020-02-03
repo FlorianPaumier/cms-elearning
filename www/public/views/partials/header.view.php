@@ -4,7 +4,6 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    {{ @View/partials/sidebar|include }}
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -14,12 +13,10 @@
         <div id="content">
 
             <!-- Topbar -->
-            {{ @View/partials/nav|include }}
 
 <?php
 
 if(isset($session))
-    //include ("nav.view.php");
 
 if(isset($flash)){
     if(isset($flash["success"])){

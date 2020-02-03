@@ -36,3 +36,7 @@
 {% block option %}
     <option value="{{key}}" {{selected|isSelected}}>{{value}}</option>
 {% endblock %}
+
+{% block captcha %}
+<input type="text" value="Captcha">
+{% endblock %}

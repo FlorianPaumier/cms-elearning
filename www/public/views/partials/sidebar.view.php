@@ -16,7 +16,7 @@
     <li class="nav-item active">
         <a class="nav-link" href="index.html">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard <?= $config["session"]->get("app.user")["user"]?></span></a>
+            <span>Dashboard <?= $session["user"]?></span></a>
     </li>
 
     <!-- Divider -->

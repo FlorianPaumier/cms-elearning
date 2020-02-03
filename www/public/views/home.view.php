@@ -1,22 +1,8 @@
-{{ @View/partials/header|include }}
+{{ @View/base|extend }}
 
-<body id="page-top">
 
-<!-- Page Wrapper -->
-<div id="wrapper">
+@section(body)
 
-    <!-- Sidebar -->
-    {{ @View/partials/sidebar|include }}
-    <!-- End of Sidebar -->
-
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
-
-        <!-- Main Content -->
-        <div id="content">
-
-            <!-- Topbar -->
-            {{ @View/partials/nav|include }}
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
@@ -71,7 +57,7 @@
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks</div>
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">{{ Tasks }}</div>
                                         <div class="row no-gutters align-items-center">
                                             <div class="col-auto">
                                                 <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
@@ -322,6 +308,6 @@
 </div>
 <!-- End of Page Wrapper -->
 
-{{ @View/partials/modal|include }}
-{{ @View/partials/footer|include }}
 
+
+@endsection

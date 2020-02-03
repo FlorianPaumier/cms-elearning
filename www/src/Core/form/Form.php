@@ -42,6 +42,9 @@ class Form
      */
     private $fields;
 
+    /** @var string */
+    private $action;
+
     public function __construct()
     {
         $this->data = [];
@@ -55,19 +58,14 @@ class Form
         return $this;
     }
 
-    public function input(string $key, string $label, bool $require = true, array $options = [])
+    public function input(string $key, array $options = [])
     {
         $value = $this->getValue($key);
-        $type = $key === "password" || $key === "password_confirm" ? "password" : "text";
-        $required = $require ? "required" : null;
 
         $options = array_merge(
             $options, [
             "value" => $value,
-            "label" => $label,
             "key" => $key,
-            "type" => $type,
-            "required" => $required,
             "errors" => $this->errors,
             ]
         );
@@ -130,17 +128,17 @@ class Form
         return $this;
     }
 
-    public function button(string $key, string $label,array $options = [])
+    public function button(string $key, array $options = [])
     {
         $options = array_merge(
             $options, [
             "key" => $key,
-            "label" => $label,
             "errors" => $this->errors,
             ]
         );
 
         $this->form[$key] = $this->render->getHtmlElement("button", $options);
+        return $this;
     }
 
     public function select(string $key, string $label, array $options = [], bool $require = true, bool $multiple = false)
@@ -184,14 +182,31 @@ class Form
         return $this->form;
     }
 
+    /**
+     * @param string $action
+     * @return Form
+     */
+    public function setAction(string $action): Form
+    {
+        $this->action = $action;
+        return $this;
+    }
+
+
     public function createView()
     {
-        return implode(
+        $html =  implode(
             "", array_map(
                 function ($input) {
                     return html_entity_decode($input);
                 }, $this->getForm()
             )
         );
+
+        return $this->render->render("templates/form", [
+            "form_view" => $html,
+            "method" => "POST",
+            "action"  => $this->action,
+        ], true);
     }
 }

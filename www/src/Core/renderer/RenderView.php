@@ -53,20 +53,23 @@ class RenderView
 
     }
 
-    public function render(string $template, array $param = [])
+    public function render(string $template, array $param = [], bool $display = false): ?string
     {
         $this->templateEngine->setTemplateFile($template);
 
         if(!is_null($this->templateEngine->getTemplateFile())) {
-            $this->templateEngine->setData(["parameter" => $param, "config" => $this->defaultData]);
+            $this->templateEngine->setData(["parameter" => $param, "config" => $this->defaultData, "render" => $display]);
             $this->templateEngine->generate_markup();
 
             Kernel::get("session")->set("app.flash", null);
-            return;
+            if($display){
+                return $this->templateEngine->compile();
+            }
+            return null;
         }
 
         ExceptionHandler::defaultRequestHandler("View Not Found");
-        return;
+        return null;
     }
 
     public function getHtmlElement(string $type, array $options)

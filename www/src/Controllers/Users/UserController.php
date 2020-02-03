@@ -1,25 +1,27 @@
 <?php
-
-namespace App\Controllers\Users;
+namespace Controllers\Users;
 
 use App\Core\Interfaces\BaseController;
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
 
-class  UserController extends BaseController
+class UserController extends BaseController
 {
 
     public function login()
     {
-        /*if($this->userManager->isConnected()){
-            $this->redirect->redirectToRoute("app_home");
-        }*/
+        if ($this->userManager->isConnected()) {
+            (new RedirectionHandler())
+                ->redirectToRoute("app_home");
+        }
 
         $form = (new UserLoginForm())->buildForm();
+
         $this->renderer->render(
             "/security/login", [
-            "form" => $form->createView()
-             ]
+                "form" => $form->createView(),
+                "errors" => [],
+            ]
         );
     }
 
@@ -48,7 +50,7 @@ class  UserController extends BaseController
 
         $this->renderer->render(
             ROOT_DIR . "/public/views/security/register", [
-            "form" => $this->form->createView(),
+                "form" => $this->form->createView(),
             ]
         );
     }
@@ -60,10 +62,10 @@ class  UserController extends BaseController
         if ($validator->isValid()) {
             if ($this->userManager->connectUser($this->query->getRequest()->get("username"), $this->query->getRequest()->get("password"))) {
                 $this->redirect->redirectToRoute("app_home");
-            }else{
+            } else {
                 $this->session->set("app.flash", ["error" => ["Votre username ou votre mot de passe est incorrect"]]);
             }
-        }else{
+        } else {
             $this->session->set("app.flash", ["error" => $validator->getErrors()]);
         }
 
@@ -74,5 +76,10 @@ class  UserController extends BaseController
     {
         $this->userManager->disconnectUser();
         $this->redirect->redirectToRoute("app_home");
+    }
+
+    public function forgotpassword()
+    {
+        $this->renderer->render("security/forget_password");
     }
 }

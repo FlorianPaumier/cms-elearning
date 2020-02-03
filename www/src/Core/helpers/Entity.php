@@ -4,15 +4,16 @@
 namespace App\Core\Interfaces;
 
 use App\Core\database\Hydrator;
+use App\Core\Database\Table;
+use App\Core\Kernel\Kernel;
 
 Trait Entity
 {
-    private $id;
+    protected $id;
 
-
-    protected function __construct()
+    public function __construct(int $id = null)
     {
-        $this->id = null;
+        return $this->setId($id);
     }
 
     /**
@@ -23,9 +24,18 @@ Trait Entity
         return $this->id;
     }
 
-    public function setId(int $id){
+    public function setId(int $id = null){
         $this->id = $id;
 
+        if(is_null($id)){
+            return $this;
+        }
+
+        /** @var Table $table */
+        $table = Kernel::get('repository');
+        $entityNamespace = explode("\\", get_class());
+        $entityName = strtolower(array_pop($entityNamespace));
+        return Hydrator::hydrate($table->from($entityName)->find($id), $this);
     }
 
     public function getVariables()

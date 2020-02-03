@@ -14,19 +14,26 @@ class Hydrator
      * @param  $object
      * @return mixed
      */
-    public static function hydrate(array $array, $object)
+    public static function hydrate($array, $object)
     {
         if (is_string($object)) {
             $instance = new $object();
         } else {
             $instance = $object;
         }
+
+        $i = 0;
         foreach ($array as $key => $value) {
+            if($key == 'id')
+                continue;
             $method = self::getSetter($key);
+
             if (method_exists($instance, $method)) {
                 $instance->$method($value);
             }
+            $i++;
         }
+
         return $instance;
     }
 

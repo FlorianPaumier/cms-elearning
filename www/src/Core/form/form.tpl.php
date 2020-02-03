@@ -5,7 +5,6 @@
            id="{{prefix}}{{key}}"
            class="{{class}} " placeholder="{{label}}"
            name="{{prefix}}{{key}}" value="{{value}}" {{ required|isRequired }}>
-    {{ options|errorFeedback }}
 </div>
 {% endblock %}
 
@@ -13,7 +12,6 @@
     <div class="form-group">
         <label for="{{prefix}}{{key}}">{{label}}</label>
         <textarea type="text" id="{{prefix}}{{key}}" class="{{class}}" name="{{prefix}}{{key}}" {{ required|isRequired }}>{{value}}</textarea>
-        {{ options|errorFeedback }}
     </div>
 {% endblock %}
 
@@ -25,12 +23,11 @@
     <div class="form-group">
         <label for="{{prefix}}{{key}}">{{label}}</label>
         <select id="{{prefix}}{{key}}" class="{{type}}" name="{{prefix}}{{key}}[]" {{ required|isRequired }} {{ multi|isMultiple }}>{{optionsHTML}}</select>
-        {{ options|errorFeedback }}
     </div>
 {% endblock %}
 
 {% block errors %}
-    <div class="invalid-feedback"> {{error}}</div>
+    <div class="invalid-feedback">{{error}}</div>
 {% endblock %}
 
 {% block option %}

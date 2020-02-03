@@ -4,6 +4,7 @@ namespace App\Form;
 
 
 use App\Core\Form\FormType;
+use App\Core\Kernel\Kernel;
 
 class UserLoginForm extends FormType
 {
@@ -33,20 +34,36 @@ class UserLoginForm extends FormType
     public function buildForm()
     {
         $this->formBuilder
+            ->setAction(Kernel::get("router")->getPath("app_user_login_check"))
             ->input(
-                "username", "username", true, [
-                "class" => "form-control form-control-user"
+                "username", [
+                    'type' => 'text',
+                    'required' => true,
+                    'label' => 'Username',
+                    "class" => "form-control form-control-user"
                 ]
             )
             ->input(
-                "password", "password", true, [
-                "class" => "form-control form-control-user"
+                "password",  [
+                    'type' => 'password',
+                    'required' => true,
+                    'label' => 'Password',
+                    "class" => "form-control form-control-user"
+                ]
+            )
+            ->input(
+                "remember_me",  [
+                    'required' => true,
+                    'label' => 'Ce souvenir de moi',
+                    "type" => "checkbox",
+                    "class" => "btn btn-primary btn-user btn-block"
                 ]
             )
             ->button(
-                "submit", "Se connecter", [
-                "type" => "submit",
-                "class" => "btn btn-primary btn-user btn-block"
+                "submit", [
+                    'label' => "Se connecter",
+                    "type" => "submit",
+                    "class" => "btn btn-primary btn-user btn-block"
                 ]
             );
 

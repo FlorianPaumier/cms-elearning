@@ -113,7 +113,7 @@ class Table extends QueryBuilder
     public function find(int $id)
     {
         $this->from($this->from)
-            ->where("id",  ':id');
+            ->where("id = :id");
 
         $this->setParam("id", $id);
         return $this->fetchOrFail();

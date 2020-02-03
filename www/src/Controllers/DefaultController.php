@@ -2,13 +2,16 @@
 namespace App\Controllers;
 
 use App\Core\Interfaces\BaseController;
-use App\Entity\User;
+use App\Core\renderer\Nodes\CaptchaNode;
 
 class DefaultController extends BaseController
 {
     public function index()
     {
-        $user = new User(1);
-        $this->renderer->render("home");
+        return $this->renderer->render(ROOT_DIR."/public/views/home");
+    }
+    public function doc()
+    {
+        $this->renderer->render("doc");
     }
 }

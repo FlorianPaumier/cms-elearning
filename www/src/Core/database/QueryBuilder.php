@@ -147,9 +147,9 @@ class QueryBuilder
      * @param  string $where
      * @return $this
      */
-    public function where(string $where, string $key): self
+    public function where(string $where): self
     {
-        $this->where = '"'.$where.'" = ' . $key;
+        $this->where = "$where";
         return $this;
     }
 

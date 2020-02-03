@@ -20,7 +20,3 @@
 <!-- Page level custom scripts -->
 <script src="assets/scripts/demo/chart-area-demo.js"></script>
 <script src="assets/scripts/demo/chart-pie-demo.js"></script>
-
-</body>
-
-</html>

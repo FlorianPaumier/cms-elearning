@@ -8,9 +8,8 @@ class DefaultController extends BaseController
 {
     public function index()
     {
-        $this->renderer->render("home",["Tasks" => "World"]);
+        return $this->renderer->render(ROOT_DIR."/public/views/home");
     }
-
     public function doc()
     {
         $this->renderer->render("doc");

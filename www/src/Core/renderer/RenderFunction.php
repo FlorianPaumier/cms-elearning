@@ -18,8 +18,8 @@ class RenderFunction
         $dir = ROOT_DIR . "/public/views";
         $value = str_replace("@View", $dir, $value);
 
-        if(file_exists($value . ".view.php")) {
-            $template = file_get_contents($value . ".view.php");
+        if(file_exists($value . ".tpl.php")) {
+            $template = file_get_contents($value . ".tpl.php");
         }else{
             ExceptionHandler::defaultRequestHandler();
             exit;
@@ -34,18 +34,23 @@ class RenderFunction
 
         return $template;
     }
+
     public static function loop(){}
 
     public static function getErrorFeedback(array $errors, TemplateEngine $engine){
-        if(isset($data["errors"])){
-            return "";
-        }
 
-        $errorsInput = $engine->renderHtmlElement("error");
+        $engine->setData(["parameter" => $errors]);
+        $errorsInput = $engine->renderHtmlElement("errors");
+        dump($errorsInput, "Error input");
+        die($engine->getContent());
         $html = "";
 
+        if(empty($errors)){
+            return preg_replace("/^{{\s?error\s?}}/", "", $errorsInput);;
+        }
+
         foreach ($errors as $key => $value){
-            $html .= preg_replace("^{{ ?value ?}}$", $value, $errorsInput);
+            $html .= preg_replace("/^{{\s?error\s?}}/", $value, $errorsInput);
         }
 
         return $html;

@@ -40,8 +40,7 @@ class UserLoginForm extends FormType
                     'type' => 'text',
                     'required' => true,
                     'label' => 'Username',
-                    "class" => "form-control form-control-user",
-                    "before" => "<i class=\"fa fa-user\"></i>"
+                    "class" => "form-control form-control-user"
                 ]
             )
             ->input(
@@ -65,8 +64,7 @@ class UserLoginForm extends FormType
                 "submit", [
                     'label' => "Se connecter",
                     "type" => "submit",
-                    "class" => "state",
-                    "after" => "<i class=\"spinner\"></i>"
+                    "class" => "btn btn-primary btn-user btn-block"
                 ]
             );
 

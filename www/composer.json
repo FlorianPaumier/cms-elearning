@@ -9,7 +9,7 @@
   ],
   "require": {
 	"ext-pdo": "*",
-	"ext-gd": "*"
+    "guzzlehttp/guzzle": "^6.5"
   },
   "autoload": {
 	"psr-4": {

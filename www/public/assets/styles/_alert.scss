@@ -1,5 +1,5 @@
 .alert {
-  &:before {
+  &::before {
     content: '';
     position: absolute;
     width: 0;

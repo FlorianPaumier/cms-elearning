@@ -48,15 +48,16 @@ class UserLoginForm extends FormType
                     'type' => 'password',
                     'required' => true,
                     'label' => 'Password',
-                    "class" => "form-control form-control-user"
+                    "class" => "form-control form-control-user",
+                    "before" => "<i class=\"fa fa-key\"></i>"
                 ]
             )
-            ->input(
+            ->checkbox(
                 "remember_me",  [
                     'required' => true,
                     'label' => 'Ce souvenir de moi',
                     "type" => "checkbox",
-                    "class" => "btn btn-primary btn-user btn-block"
+                    "class" => "col-1"
                 ]
             )
             ->button(

@@ -5,20 +5,21 @@ html {
 }
 
 * {
-  box-sizing: inherit;
+  box-sizing: border-box;
+
   &:before,
   &:after {
-    box-sizing: inherit;
+    box-sizing: border-box;
   }
 }
 
 
-#doc{
+#doc {
   margin: 0;
   padding: 0;
   font-family: $lato;
   font-weight: 300;
-  background: linear-gradient(135deg, rgba(85,239,203,1) 0%,rgba(30,87,153,1) 0%,rgba(85,239,203,1) 0%,rgba(91,202,255,1) 100%);
+  background: linear-gradient(135deg, rgba(85, 239, 203, 1) 0%, rgba(30, 87, 153, 1) 0%, rgba(85, 239, 203, 1) 0%, rgba(91, 202, 255, 1) 100%);
 }
 
 html, body {
@@ -28,9 +29,13 @@ html, body {
 
 body {
   display: flex;
+  height: 100vh;
+  &#doc{
+    display: block;
+  }
 }
 
-em{
+em {
   font-size: 14px;
   text-align: center;
   display: block;
@@ -49,4 +54,32 @@ em{
 .container {
   max-width: 80vw;
   margin: auto;
+}
+
+li {
+  &.sidebar-divider {
+    margin: 10px 0;
+    padding: 0;
+    height: 0 !important;
+    border:2px $white;
+
+    &.dotted {
+      border-style: dotted;
+    }
+
+    &.solid {
+      border-style: solid;
+    }
+
+    &.dashed {
+      border-style: dashed;
+    }
+  }
+}
+
+
+.text-center{
+  align-items: center;
+  justify-content: center;
+  vertical-align: center;
 }

@@ -1,10 +1,110 @@
 nav {
   display: flex;
+  flex-direction: column;
 
-  &.navbar{
+  &.navbar {
     background: $background;
-    min-height: 100vh;
-    width: 30%;
     margin-left: auto;
+
+  }
+
+  &.sidebar {
+    &-nav {
+      background: $background;
+      min-height: 100vh;
+
+      a {
+        color: $white;
+        text-decoration: none;
+      }
+
+      .hamburger {
+        padding-top: 1rem;
+        width: auto;
+      }
+
+      ul {
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+        height: 64px;
+        align-items: center;
+        vertical-align: center;
+        .list-icon {
+            font-size: 30px;
+        }
+
+        .list-content {
+          display: none;
+          font-size: 16px;
+          @media screen and (min-width: 1024px) {
+            display:inline-block;
+          }
+        }
+
+        .collapsed {
+          +.collapse {
+            display: none;
+          }
+
+          &.active {
+            display: block;
+          }
+        }
+      }
+
+      &--footer{
+        position: fixed;
+        bottom: 0;
+      }
+    }
+  }
+
+  &.is-active {
+    min-width: 100vw;
+
+    + .container {
+      display: none;
+    }
+
+    .hamburger {
+      justify-content: right;
+    }
+
+    li {
+      .list-content {
+        display: block;
+      }
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    display: flex;
+    width: 30vw;
+
+    &.is-active {
+      max-width: 10vw !important;
+      min-width: 10vh;
+
+      + .container {
+        display: flex;
+      }
+
+      .hamburger {
+        justify-content: right;
+      }
+
+      li {
+        justify-content: center;
+        .list-content {
+          display: none;
+        }
+      }
+    }
   }
 }

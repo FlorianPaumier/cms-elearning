@@ -74,6 +74,22 @@ class Form
         return $this;
     }
 
+    public function checkbox(string $key, array $options = [])
+    {
+        $value = $this->getValue($key);
+
+        $options = array_merge(
+            $options, [
+            "value" => $value,
+            "key" => $key,
+            "errors" => $this->errors,
+            ]
+        );
+
+        $this->form[$key] = $this->render->getHtmlElement("checkbox",  $options);
+        return $this;
+    }
+
     private function getValue(string $key)
     {
         if (is_array($this->data)) {

@@ -25,7 +25,7 @@ class RenderFunction
             exit;
         }
 
-        preg_match_all("#^@section\((\w+)\)$#m", $template, $sections);
+        preg_match_all("#^\s+?@section\((\w+)\)$#m", $template, $sections);
 
         foreach ($sections[1] as $key => $value){
             preg_match("/@section\($value\)([\s\S]+)@endsection/m", $view, $sectionsValue);
@@ -41,8 +41,6 @@ class RenderFunction
 
         $engine->setData(["parameter" => $errors]);
         $errorsInput = $engine->renderHtmlElement("errors");
-        dump($errorsInput, "Error input");
-        die($engine->getContent());
         $html = "";
 
         if(empty($errors)){

@@ -1,9 +1,12 @@
 {{ @View/templates/back|extend }}
 
 @section(body)
-<div class="container">
+<section class="wrapper">
+    <div class="login">
+        <p class="title">Log in</p>
+        {{ form }}
+    </div>
+    <footer><a target="blank" href="http://boudra.me/">boudra.me</a></footer>
 
-    {{ form }}
-
-</div>
+</section>
 @endsection

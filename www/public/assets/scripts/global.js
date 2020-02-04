@@ -5,6 +5,7 @@ $(document).ready(function () {
     });
 
     $(".hamburger").click(function(){
+        $("nav.sidebar-nav").toggleClass("is-active");
         $(this).toggleClass("is-active");
     });
 });

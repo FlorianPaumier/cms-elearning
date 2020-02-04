@@ -41,8 +41,6 @@ class RenderFunction
 
         $engine->setData(["parameter" => $errors]);
         $errorsInput = $engine->renderHtmlElement("errors");
-        dump($errorsInput, "Error input");
-        die($engine->getContent());
         $html = "";
 
         if(empty($errors)){

@@ -1,5 +1,5 @@
 <?php
-namespace Controllers\Users;
+namespace App\Controllers\Users;
 
 use App\Core\Interfaces\BaseController;
 use App\Form\UserLoginForm;

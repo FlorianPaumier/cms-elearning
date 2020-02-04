@@ -27,9 +27,12 @@ class Kernel
      * @return mixed
      * @throws \Exception
      */
-    public static function get(string $key)
+    public static function get(string $key, bool $injection = false)
     {
         if (!key_exists($key, self::$registry)) {
+            if($injection){
+                return false;
+            }
             throw new \Exception("Key '${key}' don't exist");
         }
 

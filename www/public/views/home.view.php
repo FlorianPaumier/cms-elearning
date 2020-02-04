@@ -2,7 +2,6 @@
 
 
 @section(body)
-
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->

@@ -6,6 +6,7 @@ use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Kernel\Kernel;
 use App\Core\request\RedirectionHandler;
 use App\Core\Request\Request;
+use App\Core\routing\DependencyInjection;
 
 class Router
 {
@@ -236,8 +237,7 @@ class Router
 
         if (is_callable([$controller, $action])) {
             //TODO : Remettre en place la injection de dépendance
-            //$methodParameters = (new DependencyInjection($controllerData["name"], $action))->getParameters($parameters);
-            $methodParameters = $parameters;
+            $methodParameters = (new DependencyInjection($controllerData["name"], $action))->getParameters($parameters);
 
             //Call the action with the params if needed
             return !empty($methodParameters) ? call_user_func_array([$controller, $action], $methodParameters) : $controller->$action();

@@ -30,3 +30,7 @@ test_complex:
     path: '/test/{id<\d+>}'
     controller: App\Controllers\Test:complexRouting
     method: [GET]
+test_flux_rss:
+    path: '/test/fluxrss'
+    controller: App\Controllers\FluxRSSController
+    method: [GET]

@@ -8,6 +8,21 @@
 </div>
 {% endblock %}
 
+{% block checkbox %}
+<div class="form-group tg-list">
+    <ul class="tg-list">
+        <li class="tg-list-item row">
+            <span>{{label}}</span>
+            <input class="{{class}} tgl tgl-skewed"
+                   type="{{type}}"
+                   id="{{prefix}}{{key}}"placeholder="{{label}}"
+                   name="{{prefix}}{{key}}" value="{{value}}" {{ required|isRequired }}>
+            <label class="tgl-btn pl-5 " data-tg-off="OFF" data-tg-on="ON" for="{{prefix}}{{key}}"></label>
+        </li>
+    </ul>
+</div>
+{% endblock %}
+
 {% block textarea %}
     <div class="form-group">
         <label for="{{prefix}}{{key}}">{{label}}</label>

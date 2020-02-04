@@ -1,4 +1,4 @@
-{{ @View/base|extend }}
+{{ @View/templates/back|extend }}
 
 
 @section(body)

@@ -27,9 +27,7 @@
     <!-- Custom styles for this template-->
     <link href="assets/styles/main.css" rel="stylesheet" type="text/css">
 
-    <link rel="stylesheet" href="assets/styles/login.css">
-
-
+    @section(style)
 </head>
 
 <body id="page-top">
@@ -44,9 +42,9 @@
 
 @section(body)
 
+{{ @View/partials/modal|include }}
 {{ @View/partials/footer|include }}
-
-<script src="assets/scripts/login.js"></script>
+@section(script)
 </body>
 </html>
 

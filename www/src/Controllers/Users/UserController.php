@@ -1,7 +1,7 @@
 <?php
 namespace Controllers\Users;
 
-use App\Core\Interfaces\BaseController;
+use App\Core\helpers\BaseController;
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
 

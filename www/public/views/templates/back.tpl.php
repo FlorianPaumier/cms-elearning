@@ -36,7 +36,7 @@
 
     <!-- Custom styles for this template-->
     <link href="assets/styles/css/sb-admin-2.min.css" rel="stylesheet">
-
+    @section(style)
 </head>
 
 <body id="page-top">
@@ -48,7 +48,7 @@
 
 {{ @View/partials/modal|include }}
 {{ @View/partials/footer|include }}
-
+@section(script)
 </body>
 </html>
 

@@ -13,12 +13,21 @@ html {
 }
 
 
-body, html{
+#doc{
   margin: 0;
   padding: 0;
   font-family: $lato;
   font-weight: 300;
   background: linear-gradient(135deg, rgba(85,239,203,1) 0%,rgba(30,87,153,1) 0%,rgba(85,239,203,1) 0%,rgba(91,202,255,1) 100%);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
 }
 
 em{

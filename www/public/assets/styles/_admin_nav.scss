@@ -1,0 +1,10 @@
+nav {
+  display: flex;
+
+  &.navbar{
+    background: $background;
+    min-height: 100vh;
+    width: 30%;
+    margin-left: auto;
+  }
+}

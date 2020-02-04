@@ -6,7 +6,8 @@
     <title>Title</title>
     <link rel="stylesheet" href="assets/styles/main.css">
 </head>
-<body>
+<body id="doc">
+
 <section class="container">
     <h1>Lorem ipsum dolor sit amet</h1>
     <h2>Lorem ipsum dolor sit amet</h2>

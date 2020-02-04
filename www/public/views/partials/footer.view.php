@@ -1,26 +1,11 @@
 <!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
-
-
-<!-- Bootstrap core JavaScript-->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Core plugin JavaScript-->
+<button class="scroll-to-top rounded" data-target="#page-top">
+    <i class="fa fa-angle-up"></i>
+</button>
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-<!-- Custom scripts for all pages-->
-<script src="assets//scripts/sb-admin-2.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
 
-<!-- Page level plugins -->
-<script src="vendor/chart.js/Chart.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="assets/scripts/demo/chart-area-demo.js"></script>
-<script src="assets/scripts/demo/chart-pie-demo.js"></script>
-
-</body>
-
-</html>
+<script src="assets/scripts/global.js"></script>
+<script src="assets/dist/fontawesome/js/all.min.js"></script>

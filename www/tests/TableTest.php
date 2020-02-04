@@ -18,6 +18,7 @@ class TableTest extends TestCase{
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
         ]);
+
         $pdo->exec('CREATE TABLE test (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name VARCHAR(255),
@@ -27,7 +28,7 @@ class TableTest extends TestCase{
         $this->table = new Table($pdo);
         $this->table->from("test");
         $reflection = new \ReflectionClass($this->table);
-        $property = $reflection->getProperty('table');
+        $property = $reflection->getProperty('from');
         $property->setAccessible(true);
         $property->setValue($this->table, 'test');
     }

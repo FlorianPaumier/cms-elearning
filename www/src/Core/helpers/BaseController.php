@@ -4,13 +4,13 @@ namespace App\Core\Interfaces;
 use App\Core\Database\QueryBuilder;
 use App\Core\Database\Table;
 use App\Core\Form\Form;
-use App\Core\Kernel\Kernel;
 use App\Core\Renderer\RenderView;
 use App\Core\request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Core\Security\UserManager;
 use App\Core\Session\PHPSession;
 use App\Core\Validator\Validator;
+use App\Core\Kernel\Kernel;
 
 abstract class BaseController
 {
@@ -20,7 +20,7 @@ abstract class BaseController
     protected $renderer;
 
     /**
-     * @var QueryBuilder
+     * @var Table
      */
     protected $entityManager;
 
@@ -45,7 +45,7 @@ abstract class BaseController
     protected $redirect;
 
     /**
-     * @var Form $form
+     * @var Form $form 
      */
     protected $form;
 
@@ -59,7 +59,7 @@ abstract class BaseController
     public function __construct()
     {
         $this->renderer = new RenderView();
-        //$this->entityManager = Kernel::get("entityManager");
+        $this->entityManager = Kernel::get("entityManager");
         $this->repository = Kernel::get('repository');
         $this->userManager = Kernel::get("userManager");
         $this->query = Kernel::get("request");
@@ -73,4 +73,8 @@ abstract class BaseController
         return new Validator($this->query->getRequest());
     }
 
+    public function __destruct()
+    {
+        $this->renderer->compile();
+    }
 }

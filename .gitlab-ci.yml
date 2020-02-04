@@ -1,0 +1,14 @@
+image: php:7.2
+
+before_script:
+  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  - php composer-setup.php
+  - php -r "unlink('composer-setup.php');"
+  - mv composer.phar /usr/local/bin/composer
+  - bash ci/docker_install.sh > /dev/null
+  - cp docker/php/php.ini /usr/local/etc/php/php.ini-development
+  - cp docker/php/php.ini /usr/local/etc/php/php.ini-production
+
+test:app:
+  script:
+    - phpunit --configuration www/phpunit_cms.xml

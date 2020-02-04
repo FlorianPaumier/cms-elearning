@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Core\Interfaces\BaseController;
+use App\Core\renderer\Nodes\CaptchaNode;
 
 class DefaultController extends BaseController
 {

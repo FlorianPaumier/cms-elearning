@@ -7,14 +7,7 @@ use PDO;
 
 class Table extends QueryBuilder
 {
-
-    /**
-     * Nom de la table en BDD
-     *
-     * @var string
-     */
-    protected $table;
-
+    
     /**
      * Entité à utiliser
      *
@@ -30,8 +23,8 @@ class Table extends QueryBuilder
     /**
      * Pagine des éléments
      *
-     * @param int $perPage
-     * @param int $currentPage
+     * @param  int $perPage
+     * @param  int $currentPage
      * @return Pagerfanta
      */
     public function findPaginated(int $perPage, int $currentPage): PagerFanta
@@ -39,7 +32,7 @@ class Table extends QueryBuilder
         $query = new PaginatedQuery(
             $this->pdo,
             $this->paginationQuery(),
-            "SELECT COUNT(id) FROM {$this->table}",
+            "SELECT COUNT(id) FROM {$this->from}",
             $this->entity
         );
         return (new Pagerfanta($query))
@@ -49,7 +42,7 @@ class Table extends QueryBuilder
 
     protected function paginationQuery()
     {
-        return "SELECT * FROM {$this->table}";
+        return "SELECT * FROM {$this->from}";
     }
 
     /**
@@ -58,7 +51,7 @@ class Table extends QueryBuilder
     public function findList(): array
     {
         $results = $this->pdo
-            ->query("SELECT id, name FROM {$this->table}")
+            ->query("SELECT id, name FROM {$this->from}")
             ->fetchAll(\PDO::FETCH_NUM);
         $list = [];
         foreach ($results as $result) {
@@ -74,7 +67,7 @@ class Table extends QueryBuilder
      */
     public function findAll(): array
     {
-        $query = $this->pdo->query("SELECT * FROM {$this->table}");
+        $query = $this->pdo->query("SELECT * FROM {$this->from}");
         if ($this->entity) {
             $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
         } else {
@@ -86,13 +79,13 @@ class Table extends QueryBuilder
     /**
      * Récupère une ligne par rapport à un champs
      *
-     * @param array $params
+     * @param  array $params
      * @return mixed|false
      * @throws NoRecordException
      */
     public function findBy(array $params)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE ";
+        $sql = "SELECT * FROM {$this->from} WHERE ";
         $sql .= $this->buildWhereFieldQuery($params);
 
         return $this->fetchOrFail($sql, $params);
@@ -113,13 +106,13 @@ class Table extends QueryBuilder
     /**
      * Récupère un élément à partir de son ID
      *
-     * @param int $id
+     * @param  int $id
      * @return mixed
      * @throws NoRecordException
      */
     public function find(int $id)
     {
-        $this->from($this->table)
+        $this->from($this->from)
             ->where("id = :id");
 
         $this->setParam("id", $id);
@@ -129,14 +122,16 @@ class Table extends QueryBuilder
     /**
      * Crée un nouvel enregistrement
      *
-     * @param array $params
+     * @param  array $params
      * @return bool
      */
     public function insert(array $params): bool
     {
-        $query = $this->pdo->prepare("INSERT INTO {$this->table} ("
+        $query = $this->pdo->prepare(
+            "INSERT INTO {$this->from} ("
             . join(', ', array_keys($params)) .
-            ") VALUES (" . $this->buildFieldQuery($params) . ")");
+            ") VALUES (" . $this->buildFieldQuery($params) . ")"
+        );
 
 
         if (!($result = $query->execute($params))) {
@@ -164,30 +159,34 @@ class Table extends QueryBuilder
     /**
      * Supprime un enregistrment
      *
-     * @param int $id
+     * @param  int $id
      * @return bool
      */
     public function delete(int $id): bool
     {
-        $query = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = :id");
+        $query = $this->pdo->prepare("DELETE FROM {$this->from} WHERE id = :id");
         return $query->execute(["id" => $id]);
     }
 
     /**
      * Met à jour un enregistrement au niveau de la base de données
      *
-     * @param int $id
-     * @param array $params
+     * @param  int   $id
+     * @param  array $params
      * @return bool
      */
     public function update(int $id, array $params): bool
     {
-        $fieldQuery = implode(',', array_map(function ($param) {
-            return $param . "=:" . $param;
-        }, array_keys($params)));
+        $fieldQuery = implode(
+            ',', array_map(
+                function ($param) {
+                    return $param . "=:" . $param;
+                }, array_keys($params)
+            )
+        );
 
         $params["id"] = $id;
-        $query = $this->pdo->prepare("UPDATE {$this->table} SET {$fieldQuery} WHERE id = :id");
+        $query = $this->pdo->prepare("UPDATE {$this->from} SET {$fieldQuery} WHERE id = :id");
         $query->execute($params);
         return $query->fetchObject();
     }
@@ -205,7 +204,7 @@ class Table extends QueryBuilder
      */
     public function getTable(): string
     {
-        return $this->table;
+        return $this->from;
     }
 
     /**
@@ -216,7 +215,7 @@ class Table extends QueryBuilder
      */
     public function exists($id): bool
     {
-        $query = $this->pdo->prepare("SELECT id FROM {$this->table} WHERE id = :id");
+        $query = $this->pdo->prepare("SELECT id FROM {$this->from} WHERE id = :id");
         $query->execute(["id" => $id]);
         return $query->fetchColumn() !== false;
     }
@@ -245,8 +244,8 @@ class Table extends QueryBuilder
     /**
      * Récupère la première colonne
      *
-     * @param string $query
-     * @param array $params
+     * @param  string $query
+     * @param  array  $params
      * @return mixed
      */
     private function fetchColumn(string $query, array $params = [])

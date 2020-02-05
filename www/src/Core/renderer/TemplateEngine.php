@@ -28,6 +28,7 @@ class TemplateEngine
     private $fieldEntries;
 
     private $methodEntries;
+    private $extendMethod;
 
     private $extandEntries = null;
 
@@ -37,9 +38,15 @@ class TemplateEngine
 
     private $viewParser;
 
+    private $cacheDir;
+
+    /** @var bool */
+    private $rendering;
+
     public function __construct()
     {
         $this->viewParser = new ParseView();
+        $this->cacheDir = dirname(__DIR__, 3) . "/app/cache/views/";
     }
 
     public function setFormTemplateFile(string $templateFile)
@@ -52,12 +59,16 @@ class TemplateEngine
         return $this->templateFile;
     }
 
+    public function getContent(){
+        return $this->templateContent;
+    }
+
     public function setTemplateFile(string $templateFile)
     {
         foreach (self::TPL_EXT as $ext) {
             if (file_exists(DEFAULT_VIEW_DIR . DIRECTORY_SEPARATOR . $templateFile . $ext)) {
                 $this->templateFile = DEFAULT_VIEW_DIR . DIRECTORY_SEPARATOR . $templateFile . $ext;
-            }elseif(file_exists($templateFile . $ext)){
+            } elseif (file_exists($templateFile . $ext)) {
                 $this->templateFile = $templateFile . $ext;
             }
         }
@@ -70,8 +81,12 @@ class TemplateEngine
 
     public function generate_markup($extra = [])
     {
-        $this->_load_template();
-        $this->_extendFile();
+        if (!file_exists($this->cacheDir . md5($this->templateFile) . ".php")) {
+            $this->_load_template();
+            $this->_extendFile();
+        } else {
+            $this->templateContent = file_get_contents($this->cacheDir . md5($this->templateFile) . ".php");
+        }
     }
 
     private function _load_template()
@@ -83,7 +98,7 @@ class TemplateEngine
 
     private function _parseTemplate()
     {
-        preg_match_all("/{{(\w+)}}/m", $this->templateContent, $this->fieldEntries, PREG_SET_ORDER, 0);
+        preg_match_all("/{{\s?(\w+)\s?}}/m", $this->templateContent, $this->fieldEntries, PREG_SET_ORDER, 0);
         preg_match_all("/{{ (@?[\w+\/?]+)\|(\w+) }}/m", $this->templateContent, $this->methodEntries, PREG_SET_ORDER, 0);
     }
 
@@ -95,38 +110,70 @@ class TemplateEngine
      */
     public function renderHtmlElement(string $type)
     {
-        preg_match_all("/.*{%\ block ${type} %}((?s:.+?)){%\ endblock.*?%}.*/m", $this->templateContent, $this->blockEntries, PREG_SET_ORDER, 0);
+        if($type == "errors"){
+            dump($this->templateContent, "Template Content");
+        }
+        preg_match_all("/.*{%\s?block\s${type}\s?%}((?s:.+?)){%\s?endblock\s?%}.*/m", $this->templateContent, $this->blockEntries, PREG_SET_ORDER, 0);
+        if($type == "errors"){
+            dump($this->blockEntries, "Block Entries");
+        }
         $this->templateContent = $this->blockEntries[0][1] ?? "";
-        $this->_parseTemplate();
+        $debug = $type == "errors" ? true : false;
+        $this->_compileForm($debug);
+        return $this->templateContent;
     }
 
     public function compile(bool $tags = true)
     {
         $this->_parseTemplate();
-        $this->_parseFunctions();
+
+        if (count($this->methodEntries) > 0) {
+            $this->_parseFunctions();
+        }
 
         foreach ($this->functions as $regex => $html) {
             $this->templateContent = preg_replace("/$regex/", $html, $this->templateContent);
         }
 
-        #TODO : Caching the skeleton
-        if($tags){
-            $this->_parseTags();
+        if ($tags) {
+
+            $temp = tmpfile();
+            fwrite($temp, $this->templateContent);
+            $cacheFile = md5($this->templateFile) . ".php";
+
+            if($_SERVER["APP_ENV"] != 'dev'){
+                copy(stream_get_meta_data($temp)['uri'], $this->cacheDir . $cacheFile);
+            }
+
+            if (count($this->fieldEntries) > 0) {
+                $this->_parseTags();
+                $this->_parseTemplate();
+
+                if (count($this->methodEntries) > 0) {
+                    $this->_parseFunctions($this);
+                }
+            }
         }
 
-        $temp = tmpfile();
-        fwrite($temp, $this->templateContent);
-        include stream_get_meta_data($temp)['uri'];
+        if(isset($this->data["render"]) && $this->data["render"]){
+            return $this->templateContent;
+        }
+
+        $tmp = tmpfile();
+        fwrite($tmp, $this->templateContent);
+        include stream_get_meta_data($tmp)['uri'];
+
     }
 
     private function _extendFile()
     {
-        preg_match_all("/{{ (@?[\w+\/?]+)\|(extend) }}/m", $this->templateContent, $this->methodEntries, PREG_SET_ORDER, 0);
+        preg_match_all("/{{ (@?[\w+\/?]+)\|(extend) }}/m", $this->templateContent, $this->extendMethod, PREG_SET_ORDER, 0);
 
-        if(is_null($this->methodEntries))
+        if (is_null($this->extendMethod)) {
             return "";
+        }
 
-        foreach ($this->methodEntries as $tag) {
+        foreach ($this->extendMethod as $tag) {
             $template = $tag[2];
             $value = $tag[1];
             $html = null;
@@ -141,13 +188,19 @@ class TemplateEngine
         }
     }
 
-    private function _parseFunctions()
+    private function _parseFunctions(TemplateEngine $engine = null)
     {
-        $this->functions = $this->viewParser->parseFunction($this->data, $this->methodEntries);
+        $this->functions = $this->viewParser->parseFunction($this->data, $this->methodEntries, $engine);
     }
 
     private function _parseTags()
     {
         $this->templateContent = $this->viewParser->parseTags($this->templateContent, $this->data, $this->fieldEntries);
+    }
+
+    private function _compileForm(bool $debug = false)
+    {
+        $this->_parseTemplate();
+        $this->_parseTags();
     }
 }

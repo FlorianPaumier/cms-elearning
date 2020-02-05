@@ -470,6 +470,12 @@
   }
 }
 
+.scroll-to-top {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
 @keyframes jittery {
   5%,
   50% {

@@ -224,7 +224,7 @@ class Router
         $userManager = kernel::get("userManager");
 
         if (!$userManager->isAllowed($route)) {
-            (new redirect())
+            (new RedirectionHandler())
                 ->redirectToRoute("app_user_login");
         }
 

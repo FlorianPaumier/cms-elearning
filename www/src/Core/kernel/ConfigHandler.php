@@ -37,7 +37,7 @@ class ConfigHandler
     }
 
     /**
-     * Return an array of the parsed yml
+     * Return an array of data from the cache if it's valid
      *
      * @param  string $key
      * @return bool|mixed
@@ -61,13 +61,39 @@ class ConfigHandler
         $this->getConfig();
         $this->getRouting();
 
+        /**
+         * Objet Request of server
+         * Todo Delete this and use autowiring
+         */
         Kernel::bind("request", Request::createFromGlobals());
+
+        /**
+         * Object to store the session of the current user
+         */
         Kernel::bind("session", new PHPSession());
+
+        /**
+         * Init the handler exception to catch and show the fail
+         */
         Kernel::bind("exception", new ExceptionHandler());
+
+        /**
+         * Object to interact with the bdd
+         * Todo Delete this and use autowiring
+         */
         Kernel::bind("repository", new Table());
         Kernel::bind("entityManager", new QueryBuilder());
+
         //Kernel::bind("container", new DependencyInjection());
+
+        /**
+         * Object to manage the user information
+         */
         Kernel::bind("userManager", new UserManager());
+
+        /**
+         * Give router to move in the application
+         */
         Kernel::bind("router", new Router());
 
     }
@@ -82,7 +108,8 @@ class ConfigHandler
     }
 
     /**
-     * Get the configuration and making cache
+     * Get information from the configuration loading
+     * Try to get the file from the cache or create it and return the data
      *
      * @param  string $key
      * @param  array  $data
@@ -105,7 +132,7 @@ class ConfigHandler
     }
 
     /**
-     * Get the data from the configuration in the config dir
+     * Get the data configuration from the config dir and insert it into the kernel container
      */
     private function getConfig()
     {
@@ -118,7 +145,7 @@ class ConfigHandler
     }
 
     /**
-     * Get the data from the routing dir in the routing dir
+     * Get the data from the routing dir and insert it into the kernel container
      */
     private function getRouting()
     {

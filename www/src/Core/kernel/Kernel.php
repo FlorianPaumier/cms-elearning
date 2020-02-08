@@ -10,6 +10,9 @@ class Kernel
      */
     protected static $registry = [];
 
+    /**
+     * Set Default env variable and include core helpers
+     */
     public function __construct(string $env, bool $debug = false)
     {
         $_SERVER["APP_ENV"] = $env;
@@ -39,10 +42,11 @@ class Kernel
     /**
      * Entry of the application
      *
-     * @return show the result of the application
+     * show the result of the application
      */
     public static function resolve()
     {
+        //Get the object router from the container
         self::$registry["router"]->isMatch();
     }
 

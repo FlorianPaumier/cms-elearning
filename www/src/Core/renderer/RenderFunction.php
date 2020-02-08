@@ -14,6 +14,7 @@ class RenderFunction
         $value = str_replace("@View", $dir, $value);
         return RenderView::include($value, $data);
     }
+
     public static function extend(string $value, string $view  = ""){
         $dir = ROOT_DIR . "/public/views";
         $value = str_replace("@View", $dir, $value);
@@ -34,6 +35,7 @@ class RenderFunction
 
         return $template;
     }
+
     public static function loop(){}
 
     public static function getErrorFeedback(array $errors, TemplateEngine $engine){

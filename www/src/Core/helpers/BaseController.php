@@ -12,6 +12,11 @@ use App\Core\Session\PHPSession;
 use App\Core\Validator\Validator;
 use App\Core\Kernel\Kernel;
 
+/**
+ * Class BaseController
+ * @package App\Core\Interfaces
+ * Object with basic element for the controller
+ */
 abstract class BaseController
 {
     /**
@@ -54,8 +59,13 @@ abstract class BaseController
      */
     protected $session;
 
+    /** @var Validator */
     protected $validator;
 
+    /*
+     * Retrieve all the object needed for a controller
+     * Todo : Change some element to autowiring
+     */
     public function __construct()
     {
         $this->renderer = new RenderView();
@@ -68,11 +78,18 @@ abstract class BaseController
 
     }
 
+    /**
+     * Create a new Form Validator
+     * @return Validator
+     */
     protected function getValidator()
     {
         return new Validator($this->query->getRequest());
     }
 
+    /*
+     * At the end, render the view
+     */
     public function __destruct()
     {
         $this->renderer->compile();

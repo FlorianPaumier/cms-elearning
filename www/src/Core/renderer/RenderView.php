@@ -13,8 +13,14 @@ class RenderView
      */
     private $session;
 
+    /**
+     * @var array
+     */
     private $defaultData = [];
 
+    /**
+     * @var TemplateEngine
+     */
     private $templateEngine;
 
     public function __construct()
@@ -23,6 +29,13 @@ class RenderView
         $this->defaultData["session"] = [];//Kernel::get("session");
     }
 
+    /**
+     * @param string $template
+     * @param array $param
+     * @return false|string
+     * @throws \Exception
+     * Todo : Delete Ob_start
+     */
     public static function include(string $template, array $param = [])
     {
         $defaultData = [
@@ -53,12 +66,20 @@ class RenderView
 
     }
 
+    /**
+     * @param string $template file name
+     * @param array $param to send to the view
+     * @throws \Exception
+     */
     public function render(string $template, array $param = [])
     {
         $this->templateEngine->setTemplateFile($template);
 
+        // Test if the template file exist
         if(!is_null($this->templateEngine->getTemplateFile())) {
             $this->templateEngine->setData(["parameter" => $param, "config" => $this->defaultData]);
+
+            // Generate the skeleton of the view
             $this->templateEngine->generate_markup();
 
             Kernel::get("session")->set("app.flash", null);
@@ -69,6 +90,9 @@ class RenderView
         return;
     }
 
+    /*
+     * Create a html element
+     */
     public function getHtmlElement(string $type, array $options)
     {
         $elements = file_get_contents(dirname(__DIR__)."/form/form.tpl.php");

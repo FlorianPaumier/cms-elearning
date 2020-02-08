@@ -16,8 +16,14 @@ class TemplateEngine
      */
     private $templateFile;
 
+    /**
+     * @var string
+     */
     private $templateContent;
 
+    /**
+     * @var string
+     */
     private $extendsContent;
 
     /**
@@ -25,19 +31,41 @@ class TemplateEngine
      */
     private $data;
 
+    /**
+     * @var array
+     */
     private $fieldEntries;
 
+    /**
+     * @var array
+     */
     private $methodEntries;
+
+    /**
+     * @var array
+     */
     private $extendMethod;
 
     private $extandEntries = null;
 
+    /**
+     * @var array
+     */
     private $blockEntries;
 
+    /**
+     * @var array
+     */
     private $functions = [];
 
+    /**
+     * @var ParseView
+     */
     private $viewParser;
 
+    /**
+     * @var string
+     */
     private $cacheDir;
 
     public function __construct()
@@ -67,32 +95,23 @@ class TemplateEngine
         }
     }
 
-    public function setData(array $data = [])
+    public function setData(array $data)
     {
         $this->data = $data;
     }
 
-    public function generate_markup($extra = [])
+    public function generate_markup($extra = []): void
     {
+        // Try to get the skeleton in the cache or create it
         if (!file_exists($this->cacheDir . md5($this->templateFile) . ".php")) {
+            // Get the content of the view
             $this->_load_template();
+            // Try to include an extending view
             $this->_extendFile();
         } else {
+            // Get the content of the view in the cache
             $this->templateContent = file_get_contents($this->cacheDir . md5($this->templateFile) . ".php");
         }
-    }
-
-    private function _load_template()
-    {
-        if (file_exists($this->templateFile) && is_readable($this->templateFile)) {
-            $this->templateContent = file_get_contents($this->templateFile);
-        }
-    }
-
-    private function _parseTemplate()
-    {
-        preg_match_all("/{{\s?(\w+)\s?}}/m", $this->templateContent, $this->fieldEntries, PREG_SET_ORDER, 0);
-        preg_match_all("/{{ (@?[\w+\/?]+)\|(\w+) }}/m", $this->templateContent, $this->methodEntries, PREG_SET_ORDER, 0);
     }
 
     /**
@@ -101,8 +120,11 @@ class TemplateEngine
      * @param string $type
      * @return string
      */
-    public function renderHtmlElement(string $type)
+    public function renderHtmlElement(string $type): void
     {
+        /**
+         * Get all the content between block and endblock
+         */
         preg_match_all("/.*{%\ block ${type} %}((?s:.+?)){%\ endblock.*?%}.*/m", $this->templateContent, $this->blockEntries, PREG_SET_ORDER, 0);
         $this->templateContent = $this->blockEntries[0][1] ?? "";
         $this->_parseTemplate();
@@ -135,8 +157,30 @@ class TemplateEngine
 
     }
 
+
+    /**
+     * Test to retrieve the view file
+     */
+    private function _load_template(): void
+    {
+        if (file_exists($this->templateFile) && is_readable($this->templateFile)) {
+            $this->templateContent = file_get_contents($this->templateFile);
+        }
+    }
+
+    private function _parseTemplate()
+    {
+        preg_match_all("/{{\s?(\w+)\s?}}/m", $this->templateContent, $this->fieldEntries, PREG_SET_ORDER, 0);
+        preg_match_all("/{{ (@?[\w+\/?]+)\|(\w+) }}/m", $this->templateContent, $this->methodEntries, PREG_SET_ORDER, 0);
+    }
+
+
+    /**
+     * @return string
+     */
     private function _extendFile()
     {
+        // Get the path to the view to extend
         preg_match_all("/{{ (@?[\w+\/?]+)\|(extend) }}/m", $this->templateContent, $this->extendMethod, PREG_SET_ORDER, 0);
 
         if (is_null($this->extendMethod)) {
@@ -147,7 +191,7 @@ class TemplateEngine
             $template = $tag[2];
             $value = $tag[1];
             $html = null;
-
+            // Todo transform to a simple if
             switch ($template) {
                 case "extend":
                     $this->templateContent = RenderFunction::extend($value, $this->templateContent);

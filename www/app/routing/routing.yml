@@ -7,3 +7,7 @@ app_doc:
   path: "/doc"
   controller: App\Controllers\Default:doc
   method: [GET]
+
+app_article:
+  path: "/article"
+  controller: App\Controllers\Default:article

@@ -29,7 +29,8 @@ html, body {
 
 body {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
+  flex-direction: column;
   &#doc{
     display: block;
   }
@@ -82,4 +83,9 @@ li {
   align-items: center;
   justify-content: center;
   vertical-align: center;
+}
+
+img {
+  max-width: 200px;
+  max-height: 100px;
 }

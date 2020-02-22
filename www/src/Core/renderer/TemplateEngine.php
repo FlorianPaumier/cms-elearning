@@ -114,9 +114,11 @@ class TemplateEngine
             dump($this->templateContent, "Template Content");
         }
         preg_match_all("/.*{%\s?block\s${type}\s?%}((?s:.+?)){%\s?endblock\s?%}.*/m", $this->templateContent, $this->blockEntries, PREG_SET_ORDER, 0);
+
         if($type == "errors"){
             dump($this->blockEntries, "Block Entries");
         }
+
         $this->templateContent = $this->blockEntries[0][1] ?? "";
         $debug = $type == "errors" ? true : false;
         $this->_compileForm($debug);
@@ -138,7 +140,8 @@ class TemplateEngine
         if ($tags) {
 
             $temp = tmpfile();
-            fwrite($temp, $this->templateContent);
+            fwrite($temp, $this
+                ->templateContent);
             $cacheFile = md5($this->templateFile) . ".php";
 
             if($_SERVER["APP_ENV"] != 'dev'){

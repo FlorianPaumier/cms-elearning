@@ -214,12 +214,7 @@ class QueryBuilder
         if (!empty($this->order)) {
             $this->sql .= " ORDER BY " . implode(', ', $this->order);
         }
-        if ($this->limit > 0) {
-            $this->sql .= " LIMIT " . $this->limit;
-        }
-        if ($this->offset !== null) {
-            $this->sql .= " OFFSET " . $this->offset;
-        }
+
 
         return $this->sql;
     }

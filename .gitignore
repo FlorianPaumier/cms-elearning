@@ -114,6 +114,5 @@ www/app/cache
 www/src/Core/assets/fonts
 db_data
 docker/postgres/data
-
 .vscode/
 .phpunit.*

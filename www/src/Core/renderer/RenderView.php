@@ -62,6 +62,7 @@ class RenderView
             $this->templateEngine->generate_markup();
 
             Kernel::get("session")->set("app.flash", null);
+
             if($display){
                 return $this->templateEngine->compile();
             }
@@ -74,7 +75,7 @@ class RenderView
 
     public function getHtmlElement(string $type, array $options)
     {
-        $elements = file_get_contents(dirname(__DIR__)."/form/form.tpl.php");
+        $elements = file_get_contents();
 
         $options["prefix"] = "app_form";
 

@@ -1,52 +1,147 @@
 @import "jumbotron";
 
-.header{
+%form-header {
+  form {
+    flex-direction: row;
+    display: flex;
+
+    input.input-search {
+      width: 100%;
+      height: 30px;
+      color: #333333;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 15px;
+      outline: none !important;
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+.header {
   width: 100vw;
   height: 120px;
   padding: 1%;
   display: flex;
   flex-direction: row;
   align-items: center;
-  background: #EDF8FF;
+  background: $blue;
   justify-content: space-evenly;
 
-  nav {
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    max-width: 80vw;
-    min-width: 50vw;
+  @media all and (min-width: 800px){
+    .hamburger{
+      display: none;
+    }
+  }
+  &-mobile {
+    width: 100vw;
+    height: calc(100vh - 120px);
+    display: none;
+    background-color: $dark-blue;
 
-    form{
-      flex-direction: row;
-      display: flex;
+    .nav-header-mobile {
+      width: 100vw;
+    }
 
-      input.input-search {
-        width: 100%;
-        height: 30px;
-        color: #333333;
-        padding: 10px;
-        border-radius: 5px;
-        font-size: 15px;
-        outline: none !important;
-        border: 1px solid rgba(0, 0, 0, 0.3);
-        box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2);
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        display: flex;
+        @extend %form-header;
+        &.search-form {
+          height: 80px;
+          justify-content: center;
+        }
+        &.nav-link {
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          height: 60px;
+          border-top: $blue 1px solid;
+
+          a{
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: 900;
+            font-size: 20px;
+            line-height: 23px;
+            text-decoration: none;
+            color: $white;
+          }
+
+          &:last-child {
+            border-bottom: $blue 1px solid;
+          }
+        }
+      }
+
+      .footer-header {
+        background-color: $blue;
+        position: fixed;
+        bottom: 0;
+        display: flex;
+        flex-direction: row;
+
+        .btn-signin {
+          width: 148px;
+          height: 56px;
+          background-color: #fff;
+          color: #364885;
+          font-family: Roboto;
+          font-style: normal;
+          font-weight: bold;
+          line-height: 35px;
+          border: 2px solid #364885;
+          box-sizing: border-box;
+          box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+          border-radius: 10px;
+        }
       }
     }
 
-    ul{
+    &.is-open {
+      display: flex;
+    }
+  }
+
+  nav {
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    max-width: 80vw;
+    min-width: 50vw;
+
+    &.nav-header {
+      display: none;
+    }
+
+    @media screen and (min-width: 1024px) {
+      &.nav-header {
+        display: flex;
+      }
+      .header-hamburger {
+        display: none;
+      }
+    }
+
+    @extend %form-header;
+
+    ul {
       display: flex;
       flex-direction: row;
       list-style: none;
       justify-content: space-around;
 
-      li{
+      li {
         .separator {
           border-left: 1px black solid;
         }
 
-        .nav-link{
+        .nav-link {
           min-width: 76px;
           text-decoration: none;
-          color : $gray;
+          color: $gray;
           font-family: Roboto;
           font-style: normal;
           font-weight: 500;
@@ -60,20 +155,50 @@
 
 main {
   .container-accueil {
-    background-color: $blue;
+    background-color: $dark-blue;
     display: flex;
     flex-direction: column;
     align-items: center;
 
+    h1 {
+      text-align: center;
+    }
+
     a {
       text-decoration: none;
-      &.btn-more{
+
+      &.btn-more {
         padding: 0 0.7rem;
-      background-color: white;
-      border-radius: 30px;
-      width: 126px;
-      height: 30px;
-      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+        background-color: white;
+        border-radius: 30px;
+        width: 126px;
+        height: 30px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
+
+  .home-contact {
+    background-color: $light-blue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: $dark-blue;
+
+    h1 {
+      text-align: center;
+    }
+
+    a {
+      text-decoration: none;
+
+      &.btn-contact {
+        padding: 0 0.7rem;
+        background-color: $dark-blue;
+        border-radius: 30px;
+        width: 126px;
+        height: 30px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
       }
     }
   }
@@ -82,9 +207,54 @@ main {
     p {
       display: inline;
     }
-    img {
-      max-width: 200px;
-      max-height: 100px;
+  }
+
+  .testimonies {
+    .jumbutron {
+      display: none;
+
+      &.active {
+        display: flex;
+      }
+    }
+  }
+
+
+  .home-news {
+    background-color: $dark-blue;
+    color: $white;
+    text-align: center;
+
+    h2 {
+      margin: 1% 0;
+    }
+
+    #flux-rss {
+      overflow-y: scroll;
+      max-height: 150px;
+
+      article {
+        margin: 0;
+        color: $dark-blue;
+
+        h1 {
+          margin: 0;
+          text-align: left;
+        }
+
+        .row {
+          justify-content: space-between;
+        }
+
+        .know-more {
+          text-decoration: none;
+        }
+
+        .date {
+          font-size: 0.75rem;
+          font-style: italic;
+        }
+      }
     }
   }
 }

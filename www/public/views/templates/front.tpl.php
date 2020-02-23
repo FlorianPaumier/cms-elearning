@@ -36,7 +36,7 @@
 
     <!-- Custom styles for this template-->
     <link href="assets/styles/front_main.css" rel="stylesheet">
-
+    @section(style)
 </head>
 
 <body id="page-top">
@@ -50,6 +50,8 @@
 {{ @View/partials/modal|include }}
 {{ @View/partials/footer|include }}
 
+<script src="/assets/scripts/header.js"></script>
+@section(javascript)
 </body>
 </html>
 

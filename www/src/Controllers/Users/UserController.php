@@ -18,7 +18,7 @@ class UserController extends BaseController
         $form = (new UserLoginForm())->buildForm();
 
         $this->renderer->render(
-            "/security/login", [
+            "/security/frontend/login", [
                 "form" => $form->createView(),
                 "errors" => [],
             ]
@@ -49,7 +49,7 @@ class UserController extends BaseController
         }
 
         $this->renderer->render(
-            ROOT_DIR . "/public/views/security/register", [
+            ROOT_DIR . "/public/views/security/frontend/register", [
                 "form" => $this->form->createView(),
             ]
         );
@@ -80,6 +80,6 @@ class UserController extends BaseController
 
     public function forgotpassword()
     {
-        $this->renderer->render("security/forget_password");
+        $this->renderer->render("security/frontend/forget_password");
     }
 }

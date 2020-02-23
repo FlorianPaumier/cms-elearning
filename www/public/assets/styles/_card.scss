@@ -113,3 +113,79 @@ img {
   }
 }
 
+* {
+  background-color: grey;
+}
+
+.cards {
+  margin: 0;
+
+  * {
+    width: 100%;
+  }
+
+  .card {
+    border-radius: 15px;
+    margin: 1%;
+    &-dashboard{
+      background-color: white;
+      &-content {
+        background-color: white;
+        &-title {
+          background-color: white;
+          color: black;
+        }
+        &-text {
+          background-color: white;
+          color: black;
+        }
+      }
+    }
+
+    &-multicards {
+      background-color: white;
+      &-content {
+        background-color: white;
+        width: 90%;
+        &-title {
+          background-color: white;
+          color: black;
+        }
+        &-text {
+          background-color: white;
+          color: black;
+
+        }
+      }
+    }
+
+    &-activities {
+      background-color: white;
+      &-content {
+        background-color: white;
+        height: 100%;
+        &-title {
+          background-color: white;
+          color: black;
+        }
+        &-user {
+          background-color: white;
+          color: blue;
+          text-decoration: none;
+        }
+        &-time {
+          background-color: white;
+          color: black;
+        }
+        &-text {
+          background-color: white;
+          color: black;
+        }
+        &-description {
+          background-color: white;
+          color: black;
+        }
+      }
+    }
+  }
+}

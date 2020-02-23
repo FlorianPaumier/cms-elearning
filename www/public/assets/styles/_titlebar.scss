@@ -1,0 +1,29 @@
+$title-barSize: 50px;
+
+.title-bar {
+  background-color: red;
+  height: $title-barSize;
+  h2 {
+    margin-left: 20px;
+    display: inline-block;
+    line-height: $title-barSize;
+    vertical-align: top;
+  }
+
+  .title-underline {
+    height: 5px;
+    width: 50px;
+    background-color: green;
+    transform: translateY(-10px);
+  }
+
+  .search-button {
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    background-color: #1e5799;
+    border-radius: 3px;
+    margin: 10px;
+    right: 0;
+  }
+}

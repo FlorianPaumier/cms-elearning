@@ -2135,6 +2135,78 @@ img {
   margin-bottom: 1.25rem;
 }
 
+* {
+  background-color: grey;
+}
+
+.cards {
+  margin: 0;
+}
+.cards * {
+  width: 100%;
+}
+.cards .card {
+  border-radius: 15px;
+  margin: 1%;
+}
+.cards .card-dashboard {
+  background-color: white;
+}
+.cards .card-dashboard-content {
+  background-color: white;
+}
+.cards .card-dashboard-content-title {
+  background-color: white;
+  color: black;
+}
+.cards .card-dashboard-content-text {
+  background-color: white;
+  color: black;
+}
+.cards .card-multicards {
+  background-color: white;
+}
+.cards .card-multicards-content {
+  background-color: white;
+  width: 90%;
+}
+.cards .card-multicards-content-title {
+  background-color: white;
+  color: black;
+}
+.cards .card-multicards-content-text {
+  background-color: white;
+  color: black;
+}
+.cards .card-activities {
+  background-color: white;
+}
+.cards .card-activities-content {
+  background-color: white;
+  height: 100%;
+}
+.cards .card-activities-content-title {
+  background-color: white;
+  color: black;
+}
+.cards .card-activities-content-user {
+  background-color: white;
+  color: blue;
+  text-decoration: none;
+}
+.cards .card-activities-content-time {
+  background-color: white;
+  color: black;
+}
+.cards .card-activities-content-text {
+  background-color: white;
+  color: black;
+}
+.cards .card-activities-content-description {
+  background-color: white;
+  color: black;
+}
+
 .modal {
   display: none;
 }

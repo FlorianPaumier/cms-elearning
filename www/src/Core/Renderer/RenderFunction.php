@@ -10,12 +10,12 @@ class RenderFunction
 {
 
     public static function include(string $value, array $data){
-        $dir = ROOT_DIR . "/public/views";
+        $dir = ROOT_PATH . "/public/views";
         $value = str_replace("@View", $dir, $value);
         return RenderView::include($value, $data);
     }
     public static function extend(string $value, string $view  = ""){
-        $dir = ROOT_DIR . "/public/views";
+        $dir = ROOT_PATH . "/public/views";
         $value = str_replace("@View", $dir, $value);
 
         if(file_exists($value . ".tpl.php")) {

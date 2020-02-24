@@ -65,10 +65,6 @@ class Kernel
      */
     public function init()
     {
-        define("PATH_STYLE", ROOT_DIR. "/public/styles");
-        define("PATH_SCRIPT", ROOT_DIR . "/public/scripts");
-        define("PATH_LIBRARY", ROOT_DIR . "/node_modules");
-
         (new ConfigHandler())->init();
     }
 }

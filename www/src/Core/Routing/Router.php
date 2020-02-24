@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Router;
+namespace App\Core\Routing;
 
 use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Kernel\Kernel;

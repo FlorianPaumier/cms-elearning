@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Core\cache;
+namespace App\Core\Cache;
 
 
 use App\Core\Database\QueryBuilder;
@@ -29,10 +29,18 @@ class ConfigHandler
          * @var array path
          */
         $this->path = [
-            "routing" => ROOT_DIR . "/app/routing",
-            "config" => ROOT_DIR . "/app/config",
+            "routing" => ROOT_PATH . "/app/routing",
+            "config" => ROOT_PATH . "/app/config",
             "cache" => dirname(__DIR__, 2)."/app/cache",
         ];
+
+        define("VIEW_PATH", dirname(__DIR__, 3)."/public/views");
+        define("CACHE_PATH",ROOT_PATH."/var/cache");
+        define("CONFIG_PATH",ROOT_PATH."/config");
+        define("PATH_STYLE", ROOT_PATH. "/public/styles");
+        define("PATH_SCRIPT", ROOT_PATH . "/public/scripts");
+        define("PATH_LIBRARY", ROOT_PATH . "/node_modules");
+
     }
 
     /**
@@ -97,7 +105,7 @@ class ConfigHandler
         /**
          * Create a php file cache with an array
          */
-        $file = ROOT_DIR."/app/cache/{$key}Cache.php";
+        $file = ROOT_PATH."/app/cache/{$key}Cache.php";
         file_put_contents($file, "<?php \n\r return " .var_export($data, true).";");
 
         return $data;

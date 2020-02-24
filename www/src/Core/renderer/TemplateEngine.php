@@ -3,6 +3,7 @@
 
 namespace App\Core\Renderer;
 
+use App\Core\renderer\ParseView;
 
 class TemplateEngine
 {

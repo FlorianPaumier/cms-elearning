@@ -225,4 +225,33 @@ class Form
             "action"  => $this->action,
         ], true);
     }
+
+    public function handler($entity){
+        /**
+         * recuperer les parametres de l'entité
+         * recuperer les valeurs qui sont danns le formulaire
+         * recuperer le hidrator
+         * retourner l'objet have fun
+         */
+
+        $objectVars = get_object_vars($entity);
+        dump($objectVars);
+        $classVars = get_class_vars(get_class());
+        $columsData = array_diff_key($objectVars, $classVars);
+        $colums = array_keys($columsData);
+
+        if (!is_numeric($this->id)) {
+            //INSERT
+            $sql = "INSERT INTO ".$this->table." (".implode(",", $colums).") VALUES (:".implode(",:", $colums).");";
+        } else {
+            //UPDATE
+            foreach ($colums as $colum) {
+                $sqlUpdate[] =  $colum."=:".$colum;
+            }
+            $sql = "UPDATE ".$this->table." SET ".implode(",", $sqlUpdate)." WHERE id=:id;";
+        }
+
+        $queryPrepared = $this->pdo->prepare($sql);
+        $queryPrepared->execute($columsData);
+    }
 }

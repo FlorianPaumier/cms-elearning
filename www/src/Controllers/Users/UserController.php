@@ -17,6 +17,22 @@ class UserController extends BaseController
 
         $form = (new UserLoginForm())->buildForm();
 
+        $form->handler(User::class);
+        if ($this->query->getMethod() == "POST") {
+            $validator = $this->getValidator()->buildValidator(UserLoginForm::getConstraint());
+
+            if ($validator->isValid()) {
+
+                if (($response = $this->userManager->connectUser($username, $password)) !== true) {
+                    $this->session->set("app.flash", ["error" => [$response]]);
+                } else {
+                    $this->redirect->redirectToRoute("views/home.view.php");
+                }
+            } else {
+                $this->session->set("app.flash", ["error" => $validator->getErrors()]);
+            }
+        }
+
         $this->renderer->render(
             "/security/login", [
                 "form" => $form->createView(),

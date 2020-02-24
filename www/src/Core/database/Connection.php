@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Core\Database;
 
 use App\Core\Kernel\Kernel;
@@ -13,6 +14,8 @@ abstract class Connection
      */
     public static function instance()
     {
+
+        return null;
         if(self::$connection === null ) {
             // Late static binding (PHP 5.3+)
             $config = Kernel::get("config")["database"];

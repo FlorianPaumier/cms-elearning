@@ -2113,16 +2113,6 @@ img {
   display: flex;
   padding: 1rem;
 }
-@media (min-width: 40rem) {
-  .cards__item {
-    width: 50%;
-  }
-}
-@media (min-width: 56rem) {
-  .cards__item {
-    width: 33.3333%;
-  }
-}
 .cards .card {
   background-color: white;
   border-radius: 0.25rem;

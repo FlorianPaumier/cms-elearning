@@ -3,6 +3,10 @@
     <i class="fa fa-angle-up"></i>
 </button>
 
+<footer>
+
+</footer>
+
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
 <!-- Core plugin JavaScript-->

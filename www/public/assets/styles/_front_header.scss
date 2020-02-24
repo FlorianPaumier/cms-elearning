@@ -14,7 +14,7 @@
       font-size: 15px;
       outline: none !important;
       border: 1px solid rgba(0, 0, 0, 0.3);
-      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2);
+      box-shadow: $shadow;
     }
   }
 }
@@ -141,12 +141,12 @@
         .nav-link {
           min-width: 76px;
           text-decoration: none;
-          color: $gray;
           font-family: Roboto;
           font-style: normal;
           font-weight: 500;
           font-size: 25px;
           line-height: 35px;
+          color: $white;
         }
       }
     }
@@ -154,6 +154,8 @@
 }
 
 main {
+  @extend %form-header;
+
   .container-accueil {
     background-color: $dark-blue;
     display: flex;
@@ -173,7 +175,7 @@ main {
         border-radius: 30px;
         width: 126px;
         height: 30px;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+        box-shadow: $shadow;
       }
     }
   }
@@ -198,7 +200,7 @@ main {
         border-radius: 30px;
         width: 126px;
         height: 30px;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+        box-shadow: $shadow;
       }
     }
   }
@@ -229,13 +231,25 @@ main {
       margin: 1% 0;
     }
 
+    @media all and (min-width: 800px){
+      max-width: 40vw;
+      display: flex;
+      flex-direction: column;
+    }
+
     #flux-rss {
       overflow-y: scroll;
       max-height: 150px;
 
+
       article {
         margin: 0;
         color: $dark-blue;
+
+        @media all and (min-width: 800px){
+          display: flex;
+          flex-direction: column;
+        }
 
         h1 {
           margin: 0;
@@ -257,4 +271,42 @@ main {
       }
     }
   }
+}
+
+.pagination {
+  display: flex;
+  border: 1px solid black;
+  border-radius: 10px;
+  justify-content: center;
+  margin-bottom: 10px;
+
+  ul {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    width: 50%;
+    justify-content: space-between;
+    padding-left: 0;
+
+    li {
+
+      a {
+        color: $dark-blue;
+        text-decoration: none;
+
+        &.is-active {
+          padding: 5px;
+          border-radius: 10px;
+          border:  1px solid black;
+          background-color: $blue;
+          box-shadow: $shadow;
+        }
+      }
+    }
+  }
+}
+
+footer {
+  min-height: 50px;
+  background-color: $blue;
 }

@@ -8,7 +8,7 @@ use App\Core\Database\QueryBuilder;
 use App\Core\Database\Table;
 use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Request\Request;
-use App\Core\Router\Router;
+use App\Core\Routing\Router;
 use App\Core\Security\UserManager;
 use App\Core\Session\PHPSession;
 use App\Core\Kernel\Kernel;
@@ -30,8 +30,8 @@ class ConfigHandler
          * @var array path
          */
         $this->path = [
-            "routing" => ROOT_DIR . "/app/routing",
-            "config" => ROOT_DIR . "/app/config",
+            "routing" => ROOT_PATH . "/app/routing",
+            "config" => ROOT_PATH . "/app/config",
             "cache" => dirname(__DIR__, 2)."/app/cache",
         ];
     }
@@ -98,7 +98,7 @@ class ConfigHandler
         /**
          * Create a php file cache with an array
          */
-        $file = ROOT_DIR."/app/cache/{$key}Cache.php";
+        $file = ROOT_PATH."/app/cache/{$key}Cache.php";
         file_put_contents($file, "<?php \n\r return " .var_export($data, true).";");
 
         return $data;

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Core\routing;
+namespace App\Core\Routing;
 
 
 use App\Core\Kernel\Kernel;

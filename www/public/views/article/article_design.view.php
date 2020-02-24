@@ -8,30 +8,34 @@
 </head>
 <body>
 <section>
+    <h1>Formulaire</h1>
     <div class="form">
-        <h1>Formulaire</h1>
         <form action="#">
-            <label for="input_text">Input Text</label><br>
-            <input type="text" name="input_text"><br>
+            <input type="file" class="btn" accept="image/*"><br>
 
-            <label for="input_textarea">Input Date</label><br>
-            <input type="date" name="input_date"><br>
+            <label for="input_text">
+                <input type="text" name="input_text" placeholder="Title...">
+            </label><br>
+            <label for="input_date">
+                <input type="date" name="input_date">
+            </label><br>
 
-            <label for="input_textarea">Select</label><br>
-            <select>
-                <option>1</option>
-                <option>2</option>
-            </select><br>
-
-            <label for="input_radio">Input Radio</label><br>
-            <input type="radio" name="input_radio_one">
-            <label for="input_radio_one">One</label><br>
-            <input type="radio" name="input_radio_two">
-            <label for="input_radio_two">Two</label><br>
-
-            <label for="input_checkbox">Input Checkbox</label><br>
-            <input type="checkbox" name="input_checkbox"><br>
-            <input type="submit">submit</input>
+            <label for="input_textarea">
+                <select>
+                    <option class="default">Catégorie...</option>
+                    <option>1</option>
+                    <option>2</option>
+                </select>
+            </label><br>
+            <label for="input_radio">
+                <input type="radio" name="input_radio">
+                <input type="radio" name="input_radio">
+            </label><br>
+            <label for="input_checkbox">
+                <input type="checkbox" name="input_checkbox"><br>
+            </label><br>
+            <input type="file" class="btn" accept="video/*">
+            <input class="btn" type="submit">
         </form>
     </div>
 

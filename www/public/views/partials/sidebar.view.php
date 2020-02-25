@@ -7,7 +7,7 @@
         <ul>
             <li class="item">
                 <img alt="logo"/>
-                <span>Section name</span>
+                <span>Tableau de bord</span>
                 <ul class="submenu">
                     <a href="#"><li>Menu item</li></a>
                     <a href="#"><li>Menu item</li></a>
@@ -16,7 +16,70 @@
             </li>
             <li class="item">
                 <img alt="logo"/>
-                <span>Section name</span>
+                <span>Page</span>
+                <ul class="submenu">
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                </ul>
+            </li>
+            <li class="item">
+                <img alt="logo"/>
+                <span>Article</span>
+                <ul class="submenu">
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                </ul>
+            </li>
+            <li class="item">
+                <img alt="logo"/>
+                <span>Cours</span>
+                <ul class="submenu">
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                </ul>
+            </li>
+            <li class="item">
+                <img alt="logo"/>
+                <span>évenements</span>
+                <ul class="submenu">
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                </ul>
+            </li>
+            <li class="item">
+                <img alt="logo"/>
+                <span>FAQ</span>
+                <ul class="submenu">
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                </ul>
+            </li>
+            <li class="item">
+                <img alt="logo"/>
+                <span>Sondage</span>
+                <ul class="submenu">
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                </ul>
+            </li>
+            <li class="item">
+                <img alt="logo"/>
+                <span>Utilisateurs</span>
+                <ul class="submenu">
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                </ul>
+            </li>
+            <li class="item">
+                <img alt="logo"/>
+                <span>Newsletter</span>
                 <ul class="submenu">
                     <a href="#"><li>Menu item</li></a>
                     <a href="#"><li>Menu item</li></a>

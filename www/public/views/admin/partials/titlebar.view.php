@@ -1,8 +1,9 @@
 <div class="title-bar">
     <h2>
-        Title
+        Tableau de bord
         <div class="title-underline"/>
     </h2>
-    <div class="search-button">
-    </div>
+    <button class="search-button">
+        <i class="fas fa-search search-button-icon"></i>
+    </button>
 </div>

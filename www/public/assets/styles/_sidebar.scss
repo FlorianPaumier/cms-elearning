@@ -40,11 +40,10 @@ body {
         background-color: $colorBlue;
       }
 
-      img {
+      i {
         display: inline-block;
         height: $buttonSize;
         background-color: #364885;
-
       }
 
       ul {
@@ -90,7 +89,7 @@ body {
 
   .additonal-list {
     position: absolute;
-    bottom: 0;
+    bottom: 2px;
     width: 100%;
 
     &-button {
@@ -125,4 +124,9 @@ body {
       }
     }
   }
+}
+
+.icon {
+  height: $buttonSize;
+  padding: 0 3%;
 }

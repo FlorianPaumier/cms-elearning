@@ -6,8 +6,8 @@
     <nav>
         <ul>
             <li class="item">
-                <img alt="logo"/>
-                <span>Section name</span>
+                <i class="fas fa-home icon"></i>
+                <span>Tableau de bord</span>
                 <ul class="submenu">
                     <a href="#"><li>Menu item</li></a>
                     <a href="#"><li>Menu item</li></a>
@@ -15,8 +15,70 @@
                 </ul>
             </li>
             <li class="item">
-                <img alt="logo"/>
-                <span>Section name</span>
+                <i class="fas fa-file icon"></i>
+                <span>Page</span>
+                <ul class="submenu">
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                </ul>
+            </li>
+            <li class="item">
+                <span>Article</span>
+                <ul class="submenu">
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                </ul>
+            </li>
+            <li class="item">
+                <i class="fas fa-books icon"></i>
+                <span>Cours</span>
+                <ul class="submenu">
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                </ul>
+            </li>
+            <li class="item">
+                <i class="fas fa-calendar-alt icon"></i>
+                <span>évenements</span>
+                <ul class="submenu">
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                </ul>
+            </li>
+            <li class="item">
+                <i class="fas fa-thumbtack icon"></i>
+                <span>FAQ</span>
+                <ul class="submenu">
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                </ul>
+            </li>
+            <li class="item">
+                <i class="fas fa-question icon"></i>
+                <span>Sondage</span>
+                <ul class="submenu">
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                </ul>
+            </li>
+            <li class="item">
+                <i class="fas fa-thumbtack icon"></i>
+                <span>Utilisateurs</span>
+                <ul class="submenu">
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                    <a href="#"><li>Menu item</li></a>
+                </ul>
+            </li>
+            <li class="item">
+                <i class="fas fa-envelope icon"></i>
+                <span>Newsletter</span>
                 <ul class="submenu">
                     <a href="#"><li>Menu item</li></a>
                     <a href="#"><li>Menu item</li></a>
@@ -27,13 +89,13 @@
     </nav>
     <div class="additonal-list">
         <a href="#" class="additonal-list-button">
-            <img alt="logo"/>
+            <i class="far fa-cogs icon"></i>
             <span>
                 Configuration
             </span>
         </a>
         <a href="#" class="additonal-list-button">
-            <img alt="logo"/>
+            <i class="fas fa-sign-out-alt icon"></i>
             <span>
                 Déconnexion
             </span>

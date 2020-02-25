@@ -1,0 +1,149 @@
+main {
+  @extend %form-header;
+
+  .container-accueil {
+    background-color: $dark-blue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h1 {
+      text-align: center;
+    }
+
+    a {
+      text-decoration: none;
+
+      &.btn-more {
+        padding: 0 0.7rem;
+        background-color: white;
+        border-radius: 30px;
+        width: 126px;
+        height: 30px;
+        box-shadow: $shadow;
+      }
+    }
+  }
+
+  .home-contact {
+    background-color: $light-blue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: $dark-blue;
+
+    h1 {
+      text-align: center;
+    }
+
+    a {
+      text-decoration: none;
+
+      &.btn-contact {
+        padding: 0 0.7rem;
+        background-color: $dark-blue;
+        border-radius: 30px;
+        width: 126px;
+        height: 30px;
+        box-shadow: $shadow;
+      }
+    }
+  }
+
+  .description {
+    p {
+      display: inline;
+    }
+  }
+
+  .testimonies {
+    .jumbutron {
+      display: none;
+
+      img{
+        padding-right: 3%;
+      }
+      &.active {
+        display: flex;
+        transition: all 0.4s ease;
+
+        &::before {
+          animation: fadein 2s;
+        }
+        &::after {
+          animation: fadeout 2s;
+        }
+      }
+    }
+  }
+
+
+  .home-news {
+    background-color: $dark-blue;
+    color: $white;
+    text-align: center;
+
+    h2 {
+      margin: 1% 0;
+    }
+
+    #flux-rss {
+      overflow-y: scroll;
+      max-height: 150px;
+      display: flex;
+      flex-direction: column;
+
+      article {
+        margin: 0;
+        color: $dark-blue;
+        border-bottom: 1px dashed $blue;
+
+        &:last-child{
+          border-bottom: none;
+        }
+        @media all and (min-width: 800px){
+          display: flex;
+          flex-direction: column;
+        }
+
+        h1 {
+          margin: 0;
+          text-align: left;
+        }
+
+        .row {
+          justify-content: space-between;
+        }
+
+        .know-more {
+          text-decoration: none;
+        }
+
+        .date {
+          font-size: 0.75rem;
+          font-style: italic;
+        }
+      }
+    }
+
+    @media all and (min-width: 800px){
+      max-width: 40vw;
+      display: flex;
+      flex-direction: column;
+
+      #flux-rss {
+        min-height: 90%;
+      }
+    }
+  }
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeout {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}

@@ -1,0 +1,20 @@
+@import "variables";
+@import "fonts";
+@import "buttons";
+@import "grid";
+@import "checkbox";
+@import "alert";
+@import "sidebar";
+@import "titlebar";
+@import "card";
+@import "table";
+
+.activity {
+
+  .cercle {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background: green;
+  }
+}

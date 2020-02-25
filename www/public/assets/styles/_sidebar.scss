@@ -1,0 +1,132 @@
+@import "variables";
+
+* {
+  margin: 0;
+}
+
+body {
+  padding-left: $sidebarSize;
+}
+
+.sidebar {
+  width: $sidebarSize;
+  height: 100%;
+  position: fixed;
+  color: white;
+  background-color: #364885;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+
+  .logo {
+    height: $buttonSize;
+    text-align: center;
+    img {
+      height: $buttonSize;
+      width: 100%;
+    }
+  }
+
+  ul {
+    padding-left: 0;
+
+    li {
+      text-align: left;
+      vertical-align: middle;
+      background-color: #364885;
+
+      &:hover {
+        background-color: $colorBlue;
+      }
+
+      i {
+        display: inline-block;
+        height: $buttonSize;
+        background-color: #364885;
+      }
+
+      ul {
+        display: none;
+        line-height: $buttonSize;
+        li {
+          text-align: center;
+          &:hover {
+            background-color: $colorLightBlue;
+          }
+        }
+
+        a {
+          text-decoration: none;
+        }
+      }
+
+      span {
+        display: inline-block;
+        vertical-align: top;
+        line-height: $buttonSize;
+        background-color: rgba(0,0,0,0);
+
+      }
+    }
+  }
+
+  ul {
+
+
+    li {
+      list-style: none;
+      color: white;
+
+      &:hover {
+        .submenu {
+          display: block;
+          background-color: #87b7ff;
+        }
+      }
+    }
+  }
+
+  .additonal-list {
+    position: absolute;
+    bottom: 2px;
+    width: 100%;
+
+    &-button {
+      display: block;
+      height: $buttonSize;
+      text-align: left;
+      line-height: $buttonSize;
+      color: white;
+      text-decoration: none;
+      background-color: #364885;
+
+      &:active {
+        color: white;
+      }
+
+      img {
+        display: inline-block;
+        height: $buttonSize;
+        background-color: rgba(0,0,0,0);
+
+      }
+
+      span {
+        display: inline-block;
+        line-height: 50px;
+        vertical-align: top;
+        background-color: rgba(0,0,0,0);
+      }
+
+      &:hover{
+        background-color: $colorBlue;
+      }
+    }
+  }
+}
+
+.icon {
+  height: $buttonSize;
+  padding: 0 3%;
+}

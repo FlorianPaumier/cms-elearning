@@ -2180,6 +2180,153 @@ img {
   margin-bottom: 1.25rem;
 }
 
+.cards {
+  margin: 0;
+}
+.cards * {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.cards .card {
+  border-radius: 15px;
+  margin: 5px;
+  padding: 0;
+}
+.cards .card-dashboard {
+  background-color: white;
+  padding: 0;
+}
+.cards .card-dashboard-content {
+  margin: 0;
+  height: 300px;
+  background-color: white;
+  width: 98.5%;
+}
+.cards .card-dashboard-content-text {
+  background-color: white;
+  color: black;
+  margin: 0;
+}
+.cards .card-dashboard-content-price {
+  font-size: 1.5em;
+  margin: 0;
+}
+.cards .card-dashboard-content .time {
+  border-bottom: 1px solid #9c9c9c;
+  width: 97.5%;
+}
+.cards .card-dashboard-content .time li {
+  list-style: none;
+  display: inline-block;
+  width: 10%;
+}
+.cards .card-dashboard-content .time button {
+  border: none;
+}
+.cards .card-dashboard-content .time div {
+  width: 90%;
+}
+.cards .card-welcome-content {
+  color: white;
+  background-color: #364885;
+  width: 98.5%;
+}
+.cards .card-welcome-content-title {
+  background-color: #364885;
+  color: white;
+}
+.cards .card-welcome-content-text {
+  background-color: #364885;
+  color: white;
+}
+.cards .card-multicards {
+  vertical-align: bottom;
+  background-color: #edf8ff;
+  margin: 10px;
+}
+.cards .card-multicards-content {
+  background-color: #edf8ff;
+  width: 90%;
+}
+.cards .card-multicards-content-title {
+  text-align: center;
+  background-color: #edf8ff;
+  color: black;
+  font-size: 0.7em;
+  font-weight: bold;
+}
+.cards .card-multicards-content-text {
+  text-align: center;
+  background-color: #edf8ff;
+  color: black;
+  margin: 10% 0;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+.cards .card-activities {
+  background-color: white;
+}
+.cards .card-activities-content {
+  background-color: #edf8ff;
+  width: 87%;
+  height: 600px;
+}
+.cards .card-activities-content-image {
+  display: inline-block;
+}
+.cards .card-activities-content-title {
+  text-align: center;
+  background-color: #edf8ff;
+  color: darkgrey;
+  margin-bottom: 3%;
+  font-size: 0.8em;
+}
+.cards .card-activities-content-user {
+  display: inline-block;
+  background-color: #edf8ff;
+  color: blue;
+  text-decoration: none;
+  width: 10px;
+  vertical-align: top;
+  font-size: 0.8em;
+}
+.cards .card-activities-content-time {
+  display: inline-block;
+  position: absolute;
+  background-color: #edf8ff;
+  color: darkgrey;
+  width: 40px;
+  vertical-align: top;
+  right: 50px;
+  font-size: 0.8em;
+}
+.cards .card-activities-content-text {
+  background-color: #edf8ff;
+  color: black;
+}
+.cards .card-activities-content-description {
+  display: inline-block;
+  color: black;
+  width: 120px;
+  font-size: 0.8em;
+  right: 10px;
+}
+
+.active {
+  background-color: #364885;
+}
+
+.activities-content {
+  display: inline-block;
+  width: 20%;
+}
+
+.activities-image {
+  display: inline-block;
+  width: 20%;
+}
+
 .modal {
   display: none;
 }

@@ -67,7 +67,7 @@ class UserLoginForm extends FormBuilder implements FormTypeInterface
                 "submit", [
                     'label' => "Se connecter",
                     "type" => "submit",
-                    "class" => "btn btn-primary btn-user btn-block"
+                    "class" => "btn btn-primary"
                 ]
             );
 

@@ -2,8 +2,8 @@
 
 
 namespace App\Core\request;
-
-use App\Core\Kernels\Kernel;
+use App\Core\Cache\CacheHandler;
+use App\Core\Cache\ConfigHandler;
 
 class RedirectionHandler
 {
@@ -26,7 +26,11 @@ class RedirectionHandler
      */
     public function redirectToRoute(string $name)
     {
-        $route = Kernel::get("routing")[$name];
+        $route = CacheHandler::get("routing")[$name];
+
+        if(is_null($route)){
+            throw new \Exception("La route $name n'a pas été trouvé");
+        }
         $this->redirectTo($route["path"]);
     }
 

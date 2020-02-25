@@ -6,39 +6,47 @@
     transform: rotateZ(359deg);
   }
 }
-.wrapper {
+section.wrapper {
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
   width: 100%;
+  height: calc(100vh - 240px);
   min-height: 100%;
   padding: 20px;
   background: rgba(4, 40, 68, 0.85);
 }
-
-.login {
+section.wrapper .login {
   border-radius: 2px 2px 5px 5px;
   padding: 10px 20px 20px 20px;
   width: 90%;
   max-width: 320px;
   background: #ffffff;
   position: relative;
-  padding-bottom: 80px;
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
 }
-.login.loading button {
+section.wrapper .login form {
+  display: flex;
+  flex-direction: column;
+}
+section.wrapper .login form .tg-list-item {
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+section.wrapper .login.loading button {
   max-height: 100%;
   padding-top: 50px;
 }
-.login.loading button .spinner {
+section.wrapper .login.loading button .spinner {
   opacity: 1;
   top: 40%;
 }
-.login.ok button {
+section.wrapper .login.ok button {
   background-color: #8bc34a;
 }
-.login.ok button .spinner {
+section.wrapper .login.ok button .spinner {
   border-radius: 0;
   border-top-color: transparent;
   border-right-color: transparent;
@@ -46,7 +54,7 @@
   animation: none;
   transform: rotateZ(-45deg);
 }
-.login input {
+section.wrapper .login input {
   padding: 15px 10px;
   margin-bottom: 10px;
   width: 100%;
@@ -55,7 +63,7 @@
   border-radius: 2px;
   color: #ccc;
 }
-.login input + i.fa {
+section.wrapper .login input + i.fa {
   color: #fff;
   font-size: 1em;
   position: absolute;
@@ -64,23 +72,23 @@
   left: 0;
   transition: all 0.1s ease-in;
 }
-.login input:focus {
+section.wrapper .login input:focus {
   outline: none;
   color: #444;
   border-color: #2196F3;
   border-left-width: 35px;
 }
-.login input:focus + i.fa {
+section.wrapper .login input:focus + i.fa {
   opacity: 1;
   left: 30px;
   transition: all 0.25s ease-out;
 }
-.login a {
+section.wrapper .login a {
   font-size: 0.8em;
   color: #2196F3;
   text-decoration: none;
 }
-.login .title {
+section.wrapper .login .title {
   color: #444;
   font-size: 1.2em;
   font-weight: bold;
@@ -88,16 +96,14 @@
   border-bottom: 1px solid #eee;
   padding-bottom: 20px;
 }
-.login button {
-  width: 100%;
+section.wrapper .login button {
   height: 100%;
   padding: 10px 10px;
   background: #2196F3;
   color: #fff;
   display: block;
-  border: none;
   margin-top: 20px;
-  position: absolute;
+  position: relative;
   left: 0;
   bottom: 0;
   max-height: 60px;
@@ -107,7 +113,7 @@
   transition: all 0.1s ease-out;
   border-bottom-width: 7px;
 }
-.login button + .spinner {
+section.wrapper .login button + .spinner {
   display: block;
   width: 40px;
   height: 40px;
@@ -124,10 +130,10 @@
   transition: top 0.3s 0.3s ease, opacity 0.3s 0.3s ease, border-radius 0.3s ease;
   box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
 }
-.login:not(.loading) button:hover {
+section.wrapper .login:not(.loading) button:hover {
   box-shadow: 0px 1px 3px #2196F3;
 }
-.login:not(.loading) button:focus {
+section.wrapper .login:not(.loading) button:focus {
   border-bottom-width: 4px;
 }
 

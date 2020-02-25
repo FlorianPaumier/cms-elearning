@@ -4,9 +4,8 @@ namespace App\Core\Interfaces;
 
 use App\Core\Cache\ConfigHandler;
 use App\Core\Database\Table;
-use App\Core\Form\Form;
 use App\Core\Form\FormBuilder;
-use App\Core\Form\Validator;
+use App\Core\Validator\Validator;
 use App\Core\Render\RenderView;
 use App\Core\request\RedirectionHandler;
 use App\Core\Request\Request;
@@ -66,7 +65,7 @@ abstract class BaseController
         $this->query = ConfigHandler::get("request");
         $this->form = new FormBuilder();
         $this->session = ConfigHandler::get("session");
-
+        $this->redirect = new RedirectionHandler();
     }
 
     protected function getValidator(FormTypeInterface $formType)

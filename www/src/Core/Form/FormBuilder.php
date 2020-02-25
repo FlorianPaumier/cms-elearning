@@ -190,7 +190,6 @@ class FormBuilder
 
     public function createView()
     {
-        dump("Create View");
         $html =  implode(
             "", array_map(
                 function ($input) {
@@ -199,11 +198,13 @@ class FormBuilder
             )
         );
 
-        return $this->render->render("form", [
+        $form = $this->render->render(__DIR__."/form.view.php", [
             "form_view" => $html,
             "method" => "POST",
             "action"  => $this->action,
         ], true);
+
+        return $form;
     }
 
     public function getInputs(){

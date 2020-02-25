@@ -30,7 +30,7 @@ class DependencyInjection
             foreach ($functionParams->getParameters() as $parameter) {
                 $name = $parameter->getName();
 
-                if (($var = ConfigHandler::get($parameter->getName())) !== false) {
+                if (!is_null($var = ConfigHandler::get($parameter->getName()))) {
                     array_splice($parameters, $parameter->getPosition(), 0, [$var]);
                 } else {
                     try {

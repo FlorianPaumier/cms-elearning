@@ -55,8 +55,8 @@ class UserManager
         if($q !== false){
             $response = true;
             $this->session->set("app.user", [
-                "user" => $q["email"],
-                "roles" => $q["roles"],
+                "user" => $q->email,
+                "roles" => $q->roles,
                 "timestamp" => time() + 2*60*60,
             ]);
         }

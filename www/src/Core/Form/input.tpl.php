@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block checkbox %}
-<div class="form-group tg-list">
+<div class="form-group">
     <ul class="tg-list">
         <li class="tg-list-item row">
             <span>{{label}}</span>

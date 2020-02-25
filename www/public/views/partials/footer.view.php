@@ -1,7 +1,12 @@
 <!-- Scroll to Top Button-->
-<button class="scroll-to-top rounded" data-target="#page-top">
+<button class="scroll-to-top btn-jelly" data-target="#page-top">
     <i class="fa fa-angle-up"></i>
 </button>
+
+<footer>
+
+</footer>
+
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
 <!-- Core plugin JavaScript-->

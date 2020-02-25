@@ -85,7 +85,6 @@ class RenderView
             ConfigHandler::get("session")->set("app.flash", null);
 
             if($display){
-                dump("Render View");
                 return $this->templateEngine->compile($display);
             }
 
@@ -100,8 +99,11 @@ class RenderView
         $options["prefix"] = "app_form";
 
         $this->templateEngine->setData(["parameter" => $options]);
-        $this->templateEngine->setView(FORM_PATH."/input.tpl.php");
-        return $this->templateEngine->renderHtmlElement($type);
+        if($this->templateEngine->setView(FORM_PATH."/input.tpl.php")){
+            return $this->templateEngine->renderHtmlElement($type);
+        };
+
+        throw new \Exception("View Not found");
     }
 
     public function compile(){

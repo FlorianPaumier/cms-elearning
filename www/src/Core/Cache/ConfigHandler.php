@@ -85,7 +85,7 @@ class ConfigHandler
             return self::$container[$key];
         }
 
-        throw new \Exception("Key $key not found");
+        return null;
     }
 
     /**

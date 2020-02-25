@@ -107,6 +107,8 @@ class TemplateEngine
      */
     public function renderHtmlElement(string $type)
     {
+        $this->_load_template();
+
         if($type == "errors"){
             dump($this->content, "Template Content");
         }

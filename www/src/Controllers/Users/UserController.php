@@ -3,6 +3,7 @@ namespace App\Controllers\Users;
 
 use App\Core\Interfaces\BaseController;
 use App\Core\request\RedirectionHandler;
+use App\Core\Request\Request;
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
 
@@ -19,7 +20,7 @@ class UserController extends BaseController
         $form = (new UserLoginForm())->buildForm();
 
         return $this->renderer->render(
-            "security/login", [
+            "security/frontend/login", [
                 "form" => $form->createView(),
                 "errors" => [],
             ]
@@ -50,15 +51,15 @@ class UserController extends BaseController
         }
 
         $this->renderer->render(
-            ROOT_PATH . "/public/views/security/register", [
+            ROOT_DIR . "/public/views/security/register", [
                 "form" => $this->form->createView(),
             ]
         );
     }
 
-    public function loginCheck()
+    public function loginCheck(Request $request, UserLoginForm $form)
     {
-        $validator = $this->getValidator()->buildValidator(UserLoginForm::getConstraint());
+        $validator = $this->getValidator($form)->buildValidator($request);
 
         if ($validator->isValid()) {
             if ($this->userManager->connectUser($this->query->getRequest()->get("username"), $this->query->getRequest()->get("password"))) {
@@ -81,6 +82,6 @@ class UserController extends BaseController
 
     public function forgotpassword()
     {
-        $this->renderer->render("security/forget_password");
+        $this->renderer->render("security/frontend/forget_password");
     }
 }

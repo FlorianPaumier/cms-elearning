@@ -1,15 +1,15 @@
 <?php
 
 
-namespace App\Core\Form;
+namespace App\Core\Validator;
 
 
+use App\Core\Cache\ConfigHandler;
 use App\Core\Database\Table;
 use App\Core\Interfaces\FormTypeInterface;
-use App\Core\Kernel\Kernel;
 use App\Core\Request\ParameterBag;
 use App\Core\Request\Request;
-use App\Core\Form\ValidationError;
+use App\Core\Validator\ValidationError;
 
 class Validator
 {
@@ -38,7 +38,7 @@ class Validator
     public function __construct(FormTypeInterface $form)
     {
         $this->form = $form;
-        $this->entityManager = Kernel::get("repository");
+        $this->entityManager = ConfigHandler::get("repository");
     }
 
     /**
@@ -49,7 +49,7 @@ class Validator
      */
     public function buildValidator(Request $request)
     {
-        $this->request = $request->get("request");
+        $this->request = $request->getRequest();
         foreach ($this->form::getConstraint() as $input => $constraint) {
             foreach ($constraint as $param => $value) {
                 switch ($param) {
@@ -90,7 +90,6 @@ class Validator
 
     public function isValid(): bool
     {
-        dump($this->errors);
         return empty($this->errors);
     }
 
@@ -214,6 +213,11 @@ class Validator
     private function addError(string $key, string $rule, array $attributes = []): void
     {
         $this->errors[$key] = new ValidationError($key, $rule, $attributes);
+    }
+
+    private function regex(int $input)
+    {
+
     }
 
 }

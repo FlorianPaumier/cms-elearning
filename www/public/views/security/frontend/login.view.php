@@ -1,7 +1,7 @@
-@extend(templates/back)
+@extend(templates/front)
 
 @section(style)
-<link rel="stylesheet" href="assets/styles/login.css">
+<link rel="stylesheet" href="assets/styles/admin/login.css">
 @endsection
 
 @section(body)

@@ -16,11 +16,12 @@
   padding: 0.375rem 0.75rem;
   margin: 1rem;
   font-size: 1rem;
-  line-height: 1.5;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 35px;
   color: white;
   text-decoration: none;
-  background-color: hsl(var(--hue), 100%, 41%);
-  border: 1px solid hsl(var(--hue), 100%, 41%);
   border-radius: 3px;
   outline: transparent;
   overflow: hidden;
@@ -28,10 +29,6 @@
   user-select: none;
   white-space: nowrap;
   transition: 0.25s;
-
-  &:hover {
-    background: hsl(var(--hue), 100%, 31%);
-  }
 
   &-primary {
     --hue: 171;
@@ -468,12 +465,51 @@
       }
     }
   }
+
+  &-signin{
+    width: 148px;
+    height: 56px;
+    background-color: $blue;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+
+  &-login{
+    width: 148px;
+    height: 56px;
+    background-color: #fff;
+    color: #364885;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 35px;
+    border: 2px solid #364885;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+
+  &-append {
+    margin: 0;
+    padding: 1px 5px 1px 5px;
+    height: 30px;
+    font-size: 20px;
+  }
 }
 
 .scroll-to-top {
-  position: absolute;
-  bottom: 0;
-  right: 0;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  font-size: 1.5rem;
 }
 
 @keyframes jittery {

@@ -8,4 +8,9 @@ $(document).ready(function () {
         $("nav.sidebar-nav").toggleClass("is-active");
         $(this).toggleClass("is-active");
     });
+
+    $(".footer-title").click(function() {
+        let parent = $(this).parent()[0];
+        parent.classList.toggle("is-active");
+    })
 });

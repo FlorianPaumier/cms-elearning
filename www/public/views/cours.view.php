@@ -27,9 +27,9 @@
     <section class="pagination">
         <ul>
             <li><a class="pagination-prev" href="#">Précedent</a></li>
-            <li><a href="#" class="is-active">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
+            <?php for($i=1; $i < 4; $i++): ?>
+            <li><a href="?page=<?= $i ?>" class="<?php if($_GET["page"] == $i) { echo 'is-active'; } ?>"><?= $i ?></a></li>
+            <? endfor; ?>
             <li><a class="pagination-next" href="#">Suivant</a></li>
         </ul>
     </section>
@@ -37,4 +37,5 @@
 @endsection
 
 @section(javascript)
+
 @endsection

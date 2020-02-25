@@ -4,7 +4,37 @@
 </button>
 
 <footer>
-
+    <ul class="footer-list">
+        <li>
+            <ul>
+                <li class="footer-title is-active">L'entreprise <i class="fa fa-chevron-down"></i></li>
+                <li class="footer--item">Lorem Ipsum</li>
+                <li class="footer--item">Lorem Ipsum</li>
+                <li class="footer--item">Lorem Ipsum</li>
+            </ul>
+        </li>
+        <li>
+            <ul>
+                <li class="footer-title">L'entreprise <i class="fa fa-chevron-down"></i></li>
+                <li class="footer--item">Lorem Ipsum</li>
+                <li class="footer--item">Lorem Ipsum</li>
+                <li class="footer--item">Lorem Ipsum</li>
+            </ul>
+        </li>
+        <li>
+            <ul class="network-links">
+                <li class="footer-title">Réseaux Sociaux</li>
+                <li>
+                    <ul class="row">
+                        <li class="col-3"><a href="#"><i class="fab fa-twitter-square"></i></a></li>
+                        <li class="col-3"><a href="#"><i class="fab fa-facebook-square"></i></a></li>
+                        <li class="col-3"><a href="#"><i class="fab fa-youtube-square"></i></a></li>
+                        <li class="col-3"><a href="#"><i class="fab fa-instagram-square"></i></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
 </footer>
 
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>

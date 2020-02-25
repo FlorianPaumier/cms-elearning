@@ -2,6 +2,8 @@
 
 namespace App\Core\Database;
 
+use App\Core\Cache\CacheHandler;
+use App\Core\Cache\ConfigHandler;
 use App\Core\Kernel\Kernel;
 
 abstract class Connection
@@ -15,7 +17,7 @@ abstract class Connection
     {
         if(self::$connection === null ) {
             // Late static binding (PHP 5.3+)
-            $config = Kernel::get("config")["database"];
+            $config = CacheHandler::get("config")["database"];
             $dsn = "${config['driver']}:host=${config['host']};dbname=${config['dbname']}";
 
             try{

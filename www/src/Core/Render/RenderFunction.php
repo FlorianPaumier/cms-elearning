@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Core\renderer;
+namespace App\Core\Render;
 
 
 use App\Core\Exceptions\ExceptionHandler;
@@ -10,19 +10,15 @@ class RenderFunction
 {
 
     public static function include(string $value, array $data){
-        $dir = ROOT_PATH . "/public/views";
-        $value = str_replace("@View", $dir, $value);
-        return RenderView::include($value, $data);
-    }
-    public static function extend(string $value, string $view  = ""){
-        $dir = ROOT_PATH . "/public/views";
-        $value = str_replace("@View", $dir, $value);
 
-        if(file_exists($value . ".tpl.php")) {
-            $template = file_get_contents($value . ".tpl.php");
+        $content = RenderView::include(VIEW_PATH."/$value", $data);
+        return $content;
+    }
+    public static function extend(string $value, string $view = ""){
+        if(file_exists(VIEW_PATH."/$value.tpl.php")) {
+            $template = file_get_contents(VIEW_PATH."/$value.tpl.php");
         }else{
-            ExceptionHandler::defaultRequestHandler();
-            exit;
+            throw new \Exception("Page not found", 404);
         }
 
         preg_match_all("#^\s*?@section\((\w+)\)$#m", $template, $sections);

@@ -7,7 +7,8 @@ abstract class CacheHandler
     public static function set(string $key, $data)
     {
         $cacheFile = CACHE_PATH."/".md5($key)."Cache.php";
-        if($_SERVER["APP_ENV"] == "dev" || !in_array($key, ["config", "routes"])){
+
+        if($_SERVER["APP_ENV"] == "dev" && !in_array($key, ["config", "routing", "security"])){
             return null;
         }
 
@@ -31,6 +32,11 @@ abstract class CacheHandler
         }
 
         return null;
+    }
+
+    public static function exist(string $key)
+    {
+        return file_exists(CACHE_PATH."/".md5($key)."Cache.php");
     }
 
     public function clear(){}

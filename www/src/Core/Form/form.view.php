@@ -1,5 +1,3 @@
-<?php
-if(isset($form)) {
-    echo html_entity_decode($form, ENT_HTML5, "UTF_8");
-}
-?>
+<form class="form-container" action="{{ action }}" method="{{ method }}">
+    {{ form_view }}
+</form>

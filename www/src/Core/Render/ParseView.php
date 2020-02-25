@@ -1,9 +1,10 @@
 <?php
 
 
-namespace App\Core\renderer;
+namespace App\Core\Render;
 
 
+use App\Core\Cache\ConfigHandler;
 use App\Core\Kernel\Kernel;
 
 class ParseView
@@ -29,12 +30,8 @@ class ParseView
             $html = null;
 
             switch ($template) {
-                case "include":
-                case "require":
-                    $html = RenderFunction::include($value, $data);
-                    break;
                 case "path":
-                    $html = Kernel::get("router")->getPath($value);
+                    $html = ConfigHandler::get("router")->getPath($value);
                     break;
                 case "isRequired":
                     $html = isset($data["required"]) ? 'required="required"' : "";
@@ -47,11 +44,6 @@ class ParseView
                     break;
                 case "errorFeedback":
                     $html = RenderFunction::getErrorFeedback($data["errors"] ?? [], $engine);
-                    break;
-                default:
-                    if (function_exists("include")) {
-                        $html = RenderFunction::include($value, $data);
-                    }
                     break;
             }
 

@@ -1,16 +1,17 @@
 <?php
+
 namespace App\Core\Interfaces;
 
-use App\Core\Database\QueryBuilder;
+use App\Core\Cache\ConfigHandler;
 use App\Core\Database\Table;
 use App\Core\Form\Form;
-use App\Core\Renderer\RenderView;
+use App\Core\Form\FormBuilder;
+use App\Core\Form\Validator;
+use App\Core\Render\RenderView;
 use App\Core\request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Core\Security\UserManager;
 use App\Core\Session\PHPSession;
-use App\Core\Validator\Validator;
-use App\Core\Kernel\Kernel;
 
 abstract class BaseController
 {
@@ -45,7 +46,7 @@ abstract class BaseController
     protected $redirect;
 
     /**
-     * @var Form $form 
+     * @var FormBuilder $form
      */
     protected $form;
 
@@ -59,22 +60,17 @@ abstract class BaseController
     public function __construct()
     {
         $this->renderer = new RenderView();
-        $this->entityManager = Kernel::get("entityManager");
-        $this->repository = Kernel::get('repository');
-        $this->userManager = Kernel::get("userManager");
-        $this->query = Kernel::get("request");
-        $this->form = new Form();
-        $this->session = Kernel::get("session");
+        $this->entityManager = ConfigHandler::get("entityManager");
+        $this->repository = ConfigHandler::get('repository');
+        $this->userManager = ConfigHandler::get("userManager");
+        $this->query = ConfigHandler::get("request");
+        $this->form = new FormBuilder();
+        $this->session = ConfigHandler::get("session");
 
     }
 
-    protected function getValidator()
+    protected function getValidator(FormTypeInterface $formType)
     {
-        return new Validator($this->query->getRequest());
-    }
-
-    public function __destruct()
-    {
-        $this->renderer->compile();
+        return new Validator($formType);
     }
 }

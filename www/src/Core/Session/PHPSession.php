@@ -2,8 +2,18 @@
 
 namespace App\Core\Session;
 
+use App\Core\Cache\CacheHandler;
+use App\Core\Cache\ConfigHandler;
+
 class PHPSession implements SessionInterface, \ArrayAccess
 {
+
+    private $session;
+
+    public function __construct()
+    {
+        $this->session = ConfigHandler::get("request")->getSession();
+    }
 
     /**
      * Assure que la Session est démarrée
@@ -25,8 +35,8 @@ class PHPSession implements SessionInterface, \ArrayAccess
     public function get(string $key, $default = null)
     {
         $this->ensureStarted();
-        if (array_key_exists($key, $_SESSION)) {
-            return $_SESSION[$key];
+        if (array_key_exists($key, $this->session)) {
+            return $this->session[$key];
         }
         return $default;
     }
@@ -41,7 +51,7 @@ class PHPSession implements SessionInterface, \ArrayAccess
     public function set(string $key, $value): void
     {
         $this->ensureStarted();
-        $_SESSION[$key] = $value;
+        $this->session[$key] = $value;
     }
 
     /**
@@ -52,7 +62,7 @@ class PHPSession implements SessionInterface, \ArrayAccess
     public function delete(string $key): void
     {
         $this->ensureStarted();
-        unset($_SESSION[$key]);
+        unset($this->session[$key]);
     }
 
     /**
@@ -71,7 +81,7 @@ class PHPSession implements SessionInterface, \ArrayAccess
     public function offsetExists($offset)
     {
         $this->ensureStarted();
-        return array_key_exists($offset, $_SESSION);
+        return array_key_exists($offset, $this->session);
     }
 
     /**

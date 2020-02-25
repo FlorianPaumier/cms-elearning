@@ -1,9 +1,10 @@
 <?php
 
 
-namespace App\Core\Routing;
+namespace App\Core\Router;
 
 
+use App\Core\Cache\ConfigHandler;
 use App\Core\Kernel\Kernel;
 
 class DependencyInjection
@@ -18,16 +19,18 @@ class DependencyInjection
         $this->action = $action;
     }
 
-    public function getParameters(array $parameters)
+    public function getParameters(?array $parameters)
     {
+        if(is_null($parameters)){
+            $parameters = [];
+        }
 
         try {
             $functionParams = new \ReflectionMethod($this->controller, $this->action);
-
             foreach ($functionParams->getParameters() as $parameter) {
                 $name = $parameter->getName();
 
-                if (($var = Kernel::get($parameter->getName(), true)) !== false) {
+                if (($var = ConfigHandler::get($parameter->getName())) !== false) {
                     array_splice($parameters, $parameter->getPosition(), 0, [$var]);
                 } else {
                     try {
@@ -38,8 +41,6 @@ class DependencyInjection
                         dump($e->getMessage(), "Error");
                     }
                 };
-
-
             }
         } catch (\Exception $e) {
             dump($e->getMessage(), "Error");

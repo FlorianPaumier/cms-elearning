@@ -2,6 +2,7 @@
 namespace App\Controllers\Users;
 
 use App\Core\Interfaces\BaseController;
+use App\Core\request\RedirectionHandler;
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
 
@@ -17,8 +18,8 @@ class UserController extends BaseController
 
         $form = (new UserLoginForm())->buildForm();
 
-        $this->renderer->render(
-            "/security/login", [
+        return $this->renderer->render(
+            "security/login", [
                 "form" => $form->createView(),
                 "errors" => [],
             ]

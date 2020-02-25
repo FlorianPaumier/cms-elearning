@@ -32,18 +32,20 @@
 
 <body id="page-top">
 
-{{ @View/partials/header|include }}
+@include(partials/header.view.php)
 
 <?php
     if($session["user"]):
 ?>
-        {{ @View/partials/sidebar|include }}
+        @include(partials/sidebar.view.php)
 <?php endif; ?>
 
 @section(body)
 
-{{ @View/partials/modal|include }}
-{{ @View/partials/footer|include }}
+
+@include(partials/modal.view.php)
+@include(partials/footer.view.php)
+
 @section(script)
 </body>
 </html>

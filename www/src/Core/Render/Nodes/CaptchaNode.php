@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Core\renderer\Nodes;
+namespace App\Core\Render\Nodes;
 
 
 use App\Core\Exceptions\ExceptionHandler;
-use App\Core\Renderer\RenderView;
+use App\Core\Render\RenderView;
 
 class CaptchaNode
 {

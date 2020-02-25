@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Core\renderer;
+namespace App\Core\Render;
 
 
 class LoopExtension

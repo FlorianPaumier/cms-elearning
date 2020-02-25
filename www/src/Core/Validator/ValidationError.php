@@ -1,5 +1,5 @@
 <?php
-namespace App\Core\Validator;
+namespace App\Core\Form;
 
 class ValidationError
 {

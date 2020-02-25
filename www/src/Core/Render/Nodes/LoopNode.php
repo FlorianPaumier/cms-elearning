@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Core\Renderer\Nodes;
+namespace App\Core\Render\Nodes;
 
 
 class LoopNode

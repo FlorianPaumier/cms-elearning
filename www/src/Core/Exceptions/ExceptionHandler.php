@@ -4,7 +4,7 @@
 namespace App\Core\Exceptions;
 
 
-use App\Core\Renderer\RenderView;
+use App\Core\Render\RenderView;
 use App\Core\request\RedirectionHandler;
 use App\Core\Request\Request;
 

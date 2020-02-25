@@ -3,12 +3,13 @@
 namespace App\Core\Kernel;
 
 
+use App\Core\Cache\CacheHandler;
+use App\Core\Cache\ConfigHandler;
+use App\Core\Render\RenderView;
+use PHPUnit\Util\Exception;
+
 class Kernel
 {
-    /*
-     * The container application
-     */
-    protected static $registry = [];
 
     public function __construct(string $env, bool $debug = false)
     {
@@ -20,45 +21,24 @@ class Kernel
         include_once dirname(__DIR__)."/helpers/basicFunction.php";
     }
 
-    /**
-     * Get instance of the key in the container
-     *
-     * @param  string $key
-     * @return mixed
-     * @throws \Exception
-     */
-    public static function get(string $key, bool $injection = false)
-    {
-        if (!key_exists($key, self::$registry)) {
-            if($injection){
-                return false;
-            }
-            throw new \Exception("Key '${key}' don't exist");
+
+    public function resolve(){
+        $matched = ConfigHandler::get("router")->match();
+
+        if($matched === false){
+            throw new Exception("Route not Found", 404);
         }
 
-        return self::$registry[$key];
+        /** @var RenderView $response */
+        $response = ConfigHandler::get("router")->exec();
+
+        if($response){
+            $response->compile();
+        }else{
+            throw new \Exception("La méthode doit retourne une valeur", 500);
+        }
     }
 
-    /**
-     * Entry of the application
-     *
-     * @return show the result of the application
-     */
-    public static function resolve()
-    {
-        self::$registry["router"]->isMatch();
-    }
-
-    /**
-     * Set the value in the container
-     *
-     * @param string $key
-     * @param $value
-     */
-    public static function bind(string $key, $value)
-    {
-        self::$registry[$key] = $value;
-    }
 
     /**
      * Set the working configuration

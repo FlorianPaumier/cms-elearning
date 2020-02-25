@@ -2,8 +2,8 @@
 namespace App\Controllers;
 
 use App\Core\Interfaces\BaseController;
-use App\Core\renderer\Nodes\CaptchaNode;
-use App\Core\Renderer\RenderView;
+use App\Core\Render\Nodes\CaptchaNode;
+use App\Core\Render\RenderView;
 use App\Core\Request\Request;
 
 class DefaultController extends BaseController

@@ -1,92 +1,65 @@
 <?php
 
+
 namespace App\Core\Form;
 
-use App\Core\Kernel\Kernel;
-use App\Core\Renderer\RenderView;
 
-class Form
+
+use App\Core\Render\RenderView;
+
+class FormBuilder
 {
-    /**
-     * @var FormType
-     */
-    private $formType;
 
-    /**
-     * @var array|object
-     */
-    private $data;
+    /** @var string  */
+    protected $prefix = "app";
 
-    /**
-     * @var array
-     */
-    private $errors;
+    /** @var array */
+    private $fields = [];
 
-    /**
-     * @var array
-     */
-    private $form;
+    /** @var string  */
+    private $action = "";
 
-    /**
-     * @var string
-     */
-    private $prefix;
-
-    /**
-     * @var RenderView $render 
-     */
+    /** @var RenderView */
     private $render;
 
-    /**
-     * @var array
-     */
-    private $fields;
+    /** @var array */
+    private $form;
 
-    /** @var string */
-    private $action;
+    /** @var array */
+    private $data = [];
+
+    /** @var array */
+    private $errors = [];
+
+    /** @var array */
+    protected $inputs = [];
 
     public function __construct()
     {
-        $this->data = [];
-        $this->errors = [];
         $this->render = new RenderView();
+        define("FORM_PATH", __DIR__);
     }
 
-    public function buildForm(string $form)
+    public function setAction(string $action): self
     {
-        $this->formType = new $form();
+        $this->action = $action;
         return $this;
     }
 
-    public function input(string $key, array $options = [])
+    public function input(string $key, array $args): self
     {
         $value = $this->getValue($key);
 
-        $options = array_merge(
-            $options, [
+        $args = array_merge($args,[
             "value" => $value,
             "key" => $key,
             "errors" => $this->errors,
-            ]
-        );
+            "prefix" => $this->prefix
+        ]);
 
-        $this->form[$key] = $this->render->getHtmlElement("input",  $options);
-        return $this;
-    }
+        $input[] = $key;
 
-    public function checkbox(string $key, array $options = [])
-    {
-        $value = $this->getValue($key);
-
-        $options = array_merge(
-            $options, [
-            "value" => $value,
-            "key" => $key,
-            "errors" => $this->errors,
-            ]
-        );
-
-        $this->form[$key] = $this->render->getHtmlElement("checkbox",  $options);
+        $this->form[$key] = $this->render->renderHtmlElement("input", $args);
         return $this;
     }
 
@@ -95,12 +68,29 @@ class Form
         if (is_array($this->data)) {
             return $this->data[$key] ?? null;
         }
+
         $method = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
         $value = $this->data->$method();
         if ($value instanceof \DateTimeInterface) {
             return $value->format('Y-m-d H:i:s');
         }
         return $value;
+    }
+
+    public function checkbox(string $key, array $options = [])
+    {
+        $value = $this->getValue($key);
+
+        $options = array_merge(
+            $options, [
+                "value" => $value,
+                "key" => $key,
+                "errors" => $this->errors,
+            ]
+        );
+
+        $this->form[$key] = $this->render->renderHtmlElement("checkbox",  $options);
+        return $this;
     }
 
     private function getInputClass(string $key, array $options = []): string
@@ -153,7 +143,7 @@ class Form
             ]
         );
 
-        $this->form[$key] = $this->render->getHtmlElement("button", $options);
+        $this->form[$key] = $this->render->renderHtmlElement("button", $options);
         return $this;
     }
 
@@ -198,31 +188,25 @@ class Form
         return $this->form;
     }
 
-    /**
-     * @param string $action
-     * @return Form
-     */
-    public function setAction(string $action): Form
-    {
-        $this->action = $action;
-        return $this;
-    }
-
-
     public function createView()
     {
+        dump("Create View");
         $html =  implode(
             "", array_map(
                 function ($input) {
                     return html_entity_decode($input);
-                }, $this->getForm()
+                }, $this->form
             )
         );
 
-        return $this->render->render("templates/form", [
+        return $this->render->render("form", [
             "form_view" => $html,
             "method" => "POST",
             "action"  => $this->action,
         ], true);
+    }
+
+    public function getInputs(){
+        return $this->inputs;
     }
 }

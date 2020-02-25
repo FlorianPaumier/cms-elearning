@@ -16,6 +16,7 @@ class RequestHandler
     protected $cookie;
     protected $file;
     protected $server;
+    protected $session;
     protected $header;
     protected $content;
     protected $contentType;
@@ -41,7 +42,6 @@ class RequestHandler
         $this->cookies = $cookies;
         $this->files = $files;
         $this->server = $server;
-
         $this->content = $content;
         $this->languages = null;
         $this->charsets = null;
@@ -62,8 +62,8 @@ class RequestHandler
         array $cookies = [],
         array $files = [],
         array $server = [],
-        $content =
-        null
+        $content = null,
+        array $session = []
     ) {
         $this->query = new ParameterBag($query);
         $this->request = new ParameterBag($request);
@@ -73,6 +73,7 @@ class RequestHandler
         $this->server = $server;
         $this->content = $content;
         $this->contentType = isset($this->server["CONTENT_TYPE"]) ?: null;
+        $this->session = $session;
 
         return $this;
     }

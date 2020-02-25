@@ -2,13 +2,14 @@
 
 namespace App\Core\Security;
 
+use App\Core\Cache\CacheHandler;
+use App\Core\Cache\ConfigHandler;
 use App\Core\database\Hydrator;
 use App\Core\Database\QueryBuilder;
 use App\Core\Database\Table;
 use App\Entity\User;
 use App\Core\Request\Request;
 use App\Core\Session\PHPSession;
-use App\Core\Kernel\Kernel;
 
 class UserManager
 {
@@ -31,10 +32,10 @@ class UserManager
 
     public function __construct()
     {
-        $this->entityManager = Kernel::get("entityManager");
-        $this->repository = Kernel::get('repository');
-        $this->session  = Kernel::get("session");
-        $this->security  = Kernel::get("security");
+        $this->entityManager = ConfigHandler::get("entityManager");
+        $this->repository = ConfigHandler::get('repository');
+        $this->session  = ConfigHandler::get("session");
+        $this->security  = CacheHandler::get("security");
 
     }
 

@@ -59,7 +59,6 @@ abstract class BaseController
     public function __construct()
     {
         $this->renderer = new RenderView();
-        $this->entityManager = ConfigHandler::get("entityManager");
         $this->repository = ConfigHandler::get('repository');
         $this->userManager = ConfigHandler::get("userManager");
         $this->query = ConfigHandler::get("request");

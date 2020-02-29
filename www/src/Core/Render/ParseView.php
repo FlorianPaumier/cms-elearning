@@ -25,8 +25,8 @@ class ParseView
     public function parseFunction(array $data, array $methodEntries, TemplateEngine $engine = null){
         $functions = [];
         foreach ($methodEntries as $tag) {
-            $template = $tag[2];
-            $value = $tag[1];
+            $template = $tag[1];
+            $value = $tag[2];
             $html = null;
 
             switch ($template) {
@@ -48,11 +48,11 @@ class ParseView
             }
 
             if (!is_null($html)) {
-                $regex = addcslashes($tag[0], "/|");
+                $regex = addcslashes($tag[0], "/|()");
                 $functions[$regex] = $html;
             }
         }
-        
+
         return $functions;
     }
 }

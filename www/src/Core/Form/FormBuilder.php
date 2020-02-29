@@ -5,6 +5,7 @@ namespace App\Core\Form;
 
 
 
+use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Render\RenderView;
 
 class FormBuilder
@@ -34,18 +35,31 @@ class FormBuilder
     /** @var array */
     protected $inputs = [];
 
+    /**
+     * FormBuilder constructor.
+     */
     public function __construct()
     {
         $this->render = new RenderView();
         define("FORM_PATH", __DIR__);
     }
 
+    /**
+     * @param string $action
+     * @return $this
+     */
     public function setAction(string $action): self
     {
         $this->action = $action;
         return $this;
     }
 
+    /**
+     * @param string $key
+     * @param array $args
+     * @return $this
+     * @throws \Exception
+     */
     public function input(string $key, array $args): self
     {
         $value = $this->getValue($key);
@@ -57,12 +71,20 @@ class FormBuilder
             "prefix" => $this->prefix
         ]);
 
+        if(empty($args["type"])){
+            $args["type"] = "text";
+        }
+
         $input[] = $key;
 
         $this->form[$key] = $this->render->renderHtmlElement("input", $args);
         return $this;
     }
 
+    /**
+     * @param string $key
+     * @return mixed|string|null
+     */
     private function getValue(string $key)
     {
         if (is_array($this->data)) {
@@ -77,6 +99,12 @@ class FormBuilder
         return $value;
     }
 
+    /**
+     * @param string $key
+     * @param array $options
+     * @return $this
+     * @throws \Exception
+     */
     public function checkbox(string $key, array $options = [])
     {
         $value = $this->getValue($key);
@@ -88,6 +116,8 @@ class FormBuilder
                 "errors" => $this->errors,
             ]
         );
+
+        $input[] = $key;
 
         $this->form[$key] = $this->render->renderHtmlElement("checkbox",  $options);
         return $this;
@@ -126,14 +156,36 @@ class FormBuilder
         return '';
     }
 
-    public function textarea(string $key, string $label, bool $require = true)
+    /**
+     * @param string $key
+     * @param array $args
+     * @return $this
+     * @throws \Exception
+     */
+    public function textarea(string $key, array $args)
     {
         $value = $this->getValue($key);
-        $required = $require ? "required" : null;
-        $this->form[$key] = "";
+
+        $args = array_merge(
+            $args, [
+                "value" => $value,
+                "key" => $key,
+                "errors" => $this->errors,
+            ]
+        );
+
+        $input[] = $key;
+
+        $this->form[$key] = $this->render->renderHtmlElement("textarea",  $args);
         return $this;
     }
 
+    /**
+     * @param string $key
+     * @param array $options
+     * @return $this
+     * @throws \Exception
+     */
     public function button(string $key, array $options = [])
     {
         $options = array_merge(
@@ -147,24 +199,51 @@ class FormBuilder
         return $this;
     }
 
-    public function select(string $key, string $label, array $options = [], bool $require = true, bool $multiple = false)
+    /**
+     * @param string $key
+     * @param array $args
+     * @return $this
+     * @throws \Exception
+     */
+    public function select(string $key, array $args = [])
     {
-        $optionsHTML = [];
         $value = $this->getValue($key);
-        foreach ($options as $k => $v) {
-            $selected = in_array($k, $value) ? " selected" : "";
-            $optionsHTML[] = "";
-        }
-        $optionsHTML = implode('', $optionsHTML);
 
-        $multi = null;
-        $required = $require ? "required" : null;
+        $args = array_merge(
+            $args, [
+                "value" => $value,
+                "key" => $key,
+                "errors" => $this->errors,
+            ]
+        );
 
-        if ($multiple) {
-            $multi = "multiple";
-        }
+        $input[] = $key;
 
-        $this->form[$key] = "";
+        $this->form[$key] = $this->render->renderHtmlElement("select", $args);
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @param string $class
+     * @param array $args
+     * @return $this
+     * @throws \Exception
+     */
+    public function collection(string $key, string $class, array $args){
+        if(!class_exists($class)) throw new \Exception("Class $class not found", 404);
+
+
+        /** @var FormTypeInterface $form */
+        $form = (new $class)->buildForm();
+
+        $view = htmlentities($form->createView(true));
+        $html = '<ul id="collection_'.$key.'" data-prototype="'.$view.'" class="fd-c collection container mb-5"></ul>
+<button id="add-'.$key.'" data-target="collection_'.$key.'" type="button" class="add-element" data-index="0">Nouvel Element '.$key.'</button>';
+
+        $this->inputs[] = $form->getInputs();
+
+        $this->form[$key] = htmlentities($html);
         return $this;
     }
 
@@ -173,6 +252,10 @@ class FormBuilder
         $this->data = $data;
     }
 
+    /**
+     * @param string $key
+     * @param string $error
+     */
     public function addError(string $key, string $error)
     {
         $this->errors[$key] = $error;
@@ -188,7 +271,10 @@ class FormBuilder
         return $this->form;
     }
 
-    public function createView()
+    /**
+     * @return RenderView|string|string[]|null
+     */
+    public function createView(bool $prototype = false)
     {
         $html =  implode(
             "", array_map(
@@ -197,6 +283,10 @@ class FormBuilder
                 }, $this->form
             )
         );
+
+        if($prototype){
+            return $html;
+        }
 
         $form = $this->render->render(__DIR__."/form.view.php", [
             "form_view" => $html,

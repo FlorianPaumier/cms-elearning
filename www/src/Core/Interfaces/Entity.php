@@ -58,4 +58,16 @@ Trait Entity
 
         return $vars;
     }
+
+    protected function removeElement(array $target, $needle): array
+    {
+        foreach ($target as $key => $value){
+            if($value === $needle){
+                $target = array_slice($target, $key, 1);
+                break;
+            }
+        }
+
+        return $target;
+    }
 }

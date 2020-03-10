@@ -1,4 +1,4 @@
-{{ @View/templates/back|extend }}
+@extend(templates/back)
 
 @section(body)
 <section class="wrapper">

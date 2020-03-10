@@ -2,12 +2,13 @@
 
 namespace App\Form;
 
-use App\Core\Form\FormType;
+use App\Core\Form\FormBuilder;
+use App\Core\Interfaces\FormTypeInterface;
 
-class UserRegisterForm extends FormType
+class UserRegisterForm extends FormBuilder implements FormTypeInterface
 {
 
-    public static function getConstraint()
+    public static function getConstraint(): array
     {
         return
             [
@@ -37,19 +38,27 @@ class UserRegisterForm extends FormType
             ;
     }
 
-    public function buildForm()
+    public function buildForm(): FormBuilder
     {
-        $this->formBuilder
-            ->input("username", "username", true)
-            ->input("email", "email", true)
-            ->input("password", "password", true)
-            ->input("password_confirm", "Confirmation", true);
+        $this
+            ->input("username", [])
+            ->input("email", [])
+            ->input("password", [])
+            ->input("password_confirm", []);
 
-        return $this->formBuilder;
+        return $this;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
-        $this->formBuilder->setPrefix("app_register");
+        return $this->prefix;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setBlockPrefix(): void
+    {
+        $this->prefix = "app_register";
     }
 }

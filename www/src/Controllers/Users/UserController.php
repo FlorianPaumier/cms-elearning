@@ -1,7 +1,13 @@
 <?php
 namespace App\Controllers\Users;
 
+<<<<<<< HEAD
 use App\Core\helpers\BaseController;
+=======
+use App\Core\Interfaces\BaseController;
+use App\Core\request\RedirectionHandler;
+use App\Core\Request\Request;
+>>>>>>> e881ede0f36dd95b53201673b4a386a88f13c4c6
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
 
@@ -17,6 +23,7 @@ class UserController extends BaseController
 
         $form = (new UserLoginForm())->buildForm();
 
+<<<<<<< HEAD
         $form->handler(User::class);
         if ($this->query->getMethod() == "POST") {
             $validator = $this->getValidator()->buildValidator(UserLoginForm::getConstraint());
@@ -35,6 +42,10 @@ class UserController extends BaseController
 
         $this->renderer->render(
             "/security/login", [
+=======
+        return $this->renderer->render(
+            "security/frontend/login", [
+>>>>>>> e881ede0f36dd95b53201673b4a386a88f13c4c6
                 "form" => $form->createView(),
                 "errors" => [],
             ]
@@ -71,9 +82,9 @@ class UserController extends BaseController
         );
     }
 
-    public function loginCheck()
+    public function loginCheck(Request $request, UserLoginForm $form)
     {
-        $validator = $this->getValidator()->buildValidator(UserLoginForm::getConstraint());
+        $validator = $this->getValidator($form)->buildValidator($request);
 
         if ($validator->isValid()) {
             if ($this->userManager->connectUser($this->query->getRequest()->get("username"), $this->query->getRequest()->get("password"))) {
@@ -96,6 +107,6 @@ class UserController extends BaseController
 
     public function forgotpassword()
     {
-        $this->renderer->render("security/forget_password");
+        $this->renderer->render("security/frontend/forget_password");
     }
 }

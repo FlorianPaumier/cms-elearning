@@ -1,6 +1,8 @@
 <?php
 namespace App\Controllers;
 
+use App\Core\Cache\ConfigHandler;
+use App\Core\Events\EventEmmiter;
 use App\Core\Interfaces\BaseController;
 use App\Core\Render\Nodes\CaptchaNode;
 use App\Core\Render\RenderView;
@@ -10,6 +12,7 @@ class DefaultController extends BaseController
 {
     public function index(Request $request)
     {
+
         return $this->renderer->render("home", [
             "method" => $request->getMethod(),
         ]);

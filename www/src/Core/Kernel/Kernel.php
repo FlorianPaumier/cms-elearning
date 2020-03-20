@@ -6,7 +6,7 @@ namespace App\Core\Kernel;
 use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Render\RenderView;
-use PHPUnit\Util\Exception;
+use Exception;
 
 class Kernel
 {
@@ -17,26 +17,23 @@ class Kernel
         $_SERVER["APP_DEBUG"] = $debug;
 
 
-        include_once dirname(__DIR__)."/helpers/VarDumper.php";
-        include_once dirname(__DIR__)."/helpers/basicFunction.php";
+        include_once dirname(__DIR__) . "/Helpers/VarDumper.php";
+        include_once dirname(__DIR__) . "/Helpers/basicFunction.php";
     }
 
 
-    public function resolve(){
+    public function resolve()
+    {
         $matched = ConfigHandler::get("router")->match();
 
-        if($matched === false){
-            throw new Exception("Route not Found", 404);
-        }
+        if ($matched === false) throw new Exception("Route not Found", 404);
 
         /** @var RenderView $response */
         $response = ConfigHandler::get("router")->exec();
 
-        if($response){
-            $response->compile();
-        }else{
-            throw new \Exception("La méthode doit retourne une valeur", 500);
-        }
+        if (!$response) throw new \Exception("La méthode doit retourne une valeur", 500);
+
+        $response->compile();
     }
 
 

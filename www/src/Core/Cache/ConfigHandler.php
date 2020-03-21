@@ -32,6 +32,7 @@ class ConfigHandler
     public function __construct()
     {
         define("VIEW_PATH", ROOT_PATH."/public/views");
+        define("FORM_PATH", ROOT_PATH."/src/Core/Form");
         define("CACHE_PATH",ROOT_PATH."/app/cache");
         define("CONFIG_PATH",ROOT_PATH."/app/config");
         define("ROUTING_PATH",ROOT_PATH."/app/routing");

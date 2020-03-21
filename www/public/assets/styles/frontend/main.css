@@ -580,6 +580,10 @@ img {
   height: 10px;
 }
 
+.fd-c {
+  flex-direction: column;
+}
+
 .col-1 {
   padding: 0 10px;
   flex-basis: 8.3333333333%;

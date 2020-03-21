@@ -4,11 +4,13 @@ namespace App\Core\Cache;
 abstract class CacheHandler
 {
 
+    private static $configFile = ["config", "routing", "security", "subscriber"];
+
     public static function set(string $key, $data)
     {
         $cacheFile = CACHE_PATH."/".md5($key)."Cache.php";
 
-        if($_SERVER["APP_ENV"] == "dev" && !in_array($key, ["config", "routing", "security"])){
+        if($_SERVER["APP_ENV"] == "dev" && !in_array($key, self::$configFile)){
             return null;
         }
 

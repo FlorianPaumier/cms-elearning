@@ -19,6 +19,10 @@
   height: 10px;
 }
 
+.fd-c{
+  flex-direction: column;
+}
+
 @for $i from 1 through $colset {
   .col-{
     &#{$i} {

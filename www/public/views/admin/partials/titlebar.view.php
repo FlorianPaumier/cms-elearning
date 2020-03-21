@@ -1,6 +1,6 @@
 <div class="title-bar">
     <h2>
-        Tableau de bord
+        {{ title }}
         <div class="title-underline"/>
     </h2>
     <button class="search-button">

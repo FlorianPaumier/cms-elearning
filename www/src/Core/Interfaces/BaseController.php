@@ -7,7 +7,7 @@ use App\Core\Database\Table;
 use App\Core\Form\FormBuilder;
 use App\Core\Validator\Validator;
 use App\Core\Render\RenderView;
-use App\Core\request\RedirectionHandler;
+use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Core\Security\UserManager;
 use App\Core\Session\PHPSession;
@@ -59,7 +59,6 @@ abstract class BaseController
     public function __construct()
     {
         $this->renderer = new RenderView();
-        $this->entityManager = ConfigHandler::get("entityManager");
         $this->repository = ConfigHandler::get('repository');
         $this->userManager = ConfigHandler::get("userManager");
         $this->query = ConfigHandler::get("request");

@@ -51,8 +51,8 @@ class TemplateEngine
     public function setView(string $view)
     {
         foreach (self::TPL_EXT as $ext) {
-            if (file_exists(DEFAULT_VIEW_DIR . DIRECTORY_SEPARATOR . $view . $ext)) {
-                $this->view = DEFAULT_VIEW_DIR . DIRECTORY_SEPARATOR . $view . $ext;
+            if (file_exists(VIEW_PATH . DIRECTORY_SEPARATOR . $view . $ext)) {
+                $this->view = VIEW_PATH . DIRECTORY_SEPARATOR . $view . $ext;
             } elseif (file_exists($view . $ext)) {
                 $this->view = $view . $ext;
             }elseif (file_exists(FORM_PATH. "/$view$ext")) {

@@ -1,4 +1,4 @@
-<?php require(DEFAULT_VIEW_DIR . "/partials/header.view.php");  ?>
+<?php require(VIEW_PATH . "/partials/header.view.php");  ?>
 
     <h2>User List</h2>
     <table>
@@ -28,4 +28,4 @@
         </tbody>
     </table>
 
-<?php require(DEFAULT_VIEW_DIR . "/partials/footer.view.php") ?>
+<?php require(VIEW_PATH . "/partials/footer.view.php") ?>

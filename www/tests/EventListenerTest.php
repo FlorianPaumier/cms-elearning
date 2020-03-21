@@ -17,6 +17,33 @@ class EventListenerTest extends TestCase
 
     protected function setUp(): void
     {
+        if(!defined("ROOT_PATH")){
+            define("ROOT_PATH", dirname(__DIR__));
+        }
+
+        if(!defined("FORM_PATH")){
+            define("FORM_PATH", ROOT_PATH."/src/Core/Form");
+        }
+
+        if(!defined("CONFIG_PATH")){
+            define("CONFIG_PATH",ROOT_PATH."/app/config");
+        }
+
+        if(!defined("CACHE_PATH")){
+            define("CACHE_PATH",ROOT_PATH."/app/cache");
+        }
+
+        if(!defined("ROUTING_PATH")){
+            define("ROUTING_PATH",ROOT_PATH."/app/routing");
+        }
+
+        if(!defined("VIEW_PATH")){
+            define("VIEW_PATH", ROOT_PATH."/public/views");
+        }
+
+        $_SERVER["APP_ENV"] = "dev";
+        $_SERVER["APP_DEBUG"] = true;
+
         $this->emmiter = EventEmmiter::getInstance();
     }
 

@@ -41,7 +41,6 @@ class FormBuilder
     public function __construct()
     {
         $this->render = new RenderView();
-        define("FORM_PATH", __DIR__);
     }
 
     /**

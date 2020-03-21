@@ -24,7 +24,7 @@ class EventEmmiter
     public static function getInstance(): EventEmmiter
     {
         if (!self::$_instance) {
-            self::$_instance = new self();
+            self::$_instance = new self;
         }
 
         if(($subscribers = CacheHandler::get("subscriber"))){

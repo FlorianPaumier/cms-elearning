@@ -82,7 +82,9 @@ class RenderView
             $this->templateEngine->setData(["parameter" => $param, "config" => $this->defaultData, "render" => $display]);
             $this->templateEngine->generate_markup();
 
-            ConfigHandler::get("session")->set("app.flash", null);
+            if(ConfigHandler::get("session")){
+                ConfigHandler::get("session")->set("app.flash", null);
+            }
 
             if($display){
                 return $this->templateEngine->compile($display);

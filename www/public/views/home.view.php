@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 {{ @View/templates/back|extend }}
 
-=======
-@extend(templates/front)
->>>>>>> e881ede0f36dd95b53201673b4a386a88f13c4c6
 
 @section(body)
 <section class="container-accueil">
@@ -23,12 +19,12 @@
             <h2>Témoignage</h2>
             <div class="testimonies-carousel row col-md-5">
                 <?php for ($i = 0; $i < 3; $i++): ?>
-                    <article class="jumbutron <?php if ($i == 0): ?> active <?php endif; ?>">
+                    <article class="jumbutron <?php if ($i == 0): ?> active <?php endif;?>">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/WordPress_blue_logo.svg/1200px-WordPress_blue_logo.svg.png" alt="logo">
-                        <p> <?= $i*70 ?>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
+                        <p> <?=$i * 70?>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
                             inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut </p>
                     </article>
-                <?php endfor; ?>
+                <?php endfor;?>
             </div>
         </section>
         <section class="home-contact jumbutron">
@@ -48,7 +44,7 @@
                     <span class="date">10/02/2020</span>
                 </span>
             </article>
-            <?php endfor; ?>
+            <?php endfor;?>
         </div>
     </section>
     </div>

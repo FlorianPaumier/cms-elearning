@@ -7,6 +7,7 @@ namespace App\Core\Cache;
 use App\Core\Cache\CacheHandler;
 use App\Core\Database\QueryBuilder;
 use App\Core\Database\Table;
+use App\Core\Events\EventEmmiter;
 use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Request\Request;
 use App\Core\Router\Router;
@@ -30,7 +31,8 @@ class ConfigHandler
 
     public function __construct()
     {
-        define("VIEW_PATH", dirname(__DIR__, 3)."/public/views");
+        define("VIEW_PATH", ROOT_PATH."/public/views");
+        define("FORM_PATH", ROOT_PATH."/src/Core/Form");
         define("CACHE_PATH",ROOT_PATH."/app/cache");
         define("CONFIG_PATH",ROOT_PATH."/app/config");
         define("ROUTING_PATH",ROOT_PATH."/app/routing");
@@ -58,6 +60,7 @@ class ConfigHandler
         //self::bind("container", new DependencyInjection());
         self::bind("userManager", new UserManager());
         self::bind("router", new Router());
+        self::bind("eventEmmiter", EventEmmiter::getInstance());
 
     }
 

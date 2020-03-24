@@ -1,6 +1,10 @@
 <?php
 namespace App\Core\Request;
 
+/**
+ * Class Request
+ * @package App\Core\Request
+ */
 class Request extends RequestHandler
 {
 
@@ -109,7 +113,9 @@ class Request extends RequestHandler
         return $this;
     }
 
-
+    /**
+     * @return string
+     */
     public function getMethod()
     {
         return $this->server["REQUEST_METHOD"] ?: "GET";

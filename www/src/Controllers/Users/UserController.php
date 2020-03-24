@@ -51,7 +51,7 @@ class UserController extends BaseController
         }
 
         $this->renderer->render(
-            ROOT_DIR . "/public/views/security/register", [
+            ROOT_DIR . "/public/views.md/security/register", [
                 "form" => $this->form->createView(),
             ]
         );

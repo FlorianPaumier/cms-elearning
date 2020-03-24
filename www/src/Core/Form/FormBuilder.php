@@ -136,6 +136,10 @@ class FormBuilder
         return $inputClass;
     }
 
+    /**
+     * @param string $key
+     * @return string
+     */
     private function getErrorFeedback(string $key): string
     {
         if (isset($this->errors[$key])) {

@@ -194,7 +194,7 @@ class QueryBuilder
     }
 
     /**
-     * @return void
+     * @return string
      */
     public function toSQL(): string
     {
@@ -238,10 +238,7 @@ class QueryBuilder
     /**
      * Permet d'éxécuter une requête et de récupérer le premier résultat
      *
-     * @param  string $query
-     * @param  array  $params
      * @return mixed|false
-     * @throws NoRecordException
      */
     public function fetchOrFail()
     {
@@ -259,12 +256,11 @@ class QueryBuilder
     }
 
     /**
-     * @param  PDO $pdo
      * @return int
      */
     public function count(): int
     {
-        $q = (clone $this)->select('COUNT(id) count')->fetchOrFail('count');
+        $q = (clone $this)->select('COUNT(id) count')->fetchOrFail();
 
         if(is_array($q)) {
              $count = (int)$q["count"];

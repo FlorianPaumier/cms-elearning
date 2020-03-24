@@ -14,8 +14,10 @@ class RenderView
      */
     private $session;
 
+    /** @var array */
     private $defaultData = [];
 
+    /** @var TemplateEngine  */
     private $templateEngine;
 
     public function __construct()
@@ -24,35 +26,48 @@ class RenderView
         $this->defaultData["session"] = [];//ConfigHandler::get("session");
     }
 
-    public static function include(string $template, array $param = [])
-    {
-        $defaultData = [
-            "session" => ConfigHandler::get("session")->offsetGet("app.user") ? ["connected" => true, "roles" => null] : ["connected" => false, "roles" => null],
-            "flash" => ConfigHandler::get("session")->get("app.flash") ?? "",
-        ];
-
-        ob_start();
-
-        extract($param, EXTR_OVERWRITE);
-        extract($defaultData, EXTR_SKIP);
-
-        $includeEngine = new TemplateEngine();
-
-        if($includeEngine->setView($template)) {
-            $includeEngine->setData(["parameter" => $param, "config" => $param]);
-            $includeEngine->generate_markup();
-            $includeEngine->compile(false);
-        }else{
-            ExceptionHandler::defaultRequestHandler("View Not Found");
-        }
-
-        $ret = ob_get_contents();
-        ob_end_clean();
-
-        return $ret;
-
-    }
     /**
+     * @param string $template
+     * @param array $param
+     * @return false|string
+     */
+//    public static function include(string $template, array $param = [])
+//    {
+//        $defaultData = [
+//            "session" => ConfigHandler::get("session")->offsetGet("app.user") ? ["connected" => true, "roles" => null] : ["connected" => false, "roles" => null],
+//            "flash" => ConfigHandler::get("session")->get("app.flash") ?? "",
+//        ];
+//
+//        ob_start();
+//
+//        extract($param, EXTR_OVERWRITE);
+//        extract($defaultData, EXTR_SKIP);
+//
+//        $includeEngine = new TemplateEngine();
+//
+//        if($includeEngine->setView($template)) {
+//            $includeEngine->setData(["parameter" => $param, "config" => $param]);
+//            $includeEngine->generate_markup();
+//            $includeEngine->compile(false);
+//        }else{
+//            ExceptionHandler::defaultRequestHandler("View Not Found");
+//        }
+//
+//        $ret = ob_get_contents();
+//        ob_end_clean();
+//
+//        return $ret;
+//
+//    }
+//
+
+    /**
+     * Parse and Include the file
+     * @param string $template
+     * @param array $args
+     * @return string|string[]|null
+     * @throws \Exception
+     */
     public static function include(string $template, array $args = [])
     {
         $defaultData = [
@@ -71,10 +86,18 @@ class RenderView
             $includeEngine->generate_markup();
             return $includeEngine->compile(false);
         }else{
-            ExceptionHandler::defaultRequestHandler("View Not Found");
+            ConfigHandler::get("eventEmmiter")->emit("error.404","View Not Found");
         }
     }
-*/
+
+    /**
+     * Parse the content and create the skeleton
+     * @param string $template
+     * @param array $param
+     * @param bool $display
+     * @return $this|string|string[]|null
+     * @throws \Exception
+     */
     public function render(string $template, array $param = [], bool $display = false)
     {
 
@@ -93,9 +116,16 @@ class RenderView
             return $this;
         }
 
-        ExceptionHandler::defaultRequestHandler("View Not Found");
+        ConfigHandler::get("eventEmmiter")->emit("error.404");
     }
 
+    /**
+     * Create a html element
+     * @param string $type
+     * @param array $options
+     * @return string
+     * @throws \Exception
+     */
     public function renderHtmlElement(string $type, array $options)
     {
         $options["prefix"] = "app_form";
@@ -105,9 +135,14 @@ class RenderView
             return $this->templateEngine->renderHtmlElement($type);
         };
 
-        throw new \Exception("View Not found");
+        ConfigHandler::get("eventEmmiter")->emit("error.404","View Not Found");
     }
 
+    /**
+     * Compile the data and the view
+     * @return string|string[]|null
+     * @throws \Exception
+     */
     public function compile(){
         return $this->templateEngine->compile();
     }

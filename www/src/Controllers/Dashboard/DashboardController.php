@@ -8,16 +8,16 @@ class DashboardController extends BaseController
 {
     public function index()
     {
-        return $this->renderer->render(ROOT_DIR . "/public/views.md/admin/dashboard/dashboard");
+        return $this->renderer->render("admin/dashboard/dashboard");
     }
 
     public function sidebar()
     {
-        return $this->renderer->render(ROOT_DIR . "/public/views.md/partials/sidebar");
+        return $this->renderer->render(ROOT_DIR . "/public/views/partials/sidebar");
     }
 
     public function design()
     {
-        return $this->renderer->render(ROOT_DIR . "/public/views.md/admin/dashboard/dashboard_design");
+        return $this->renderer->render(ROOT_DIR . "/public/views/admin/dashboard/dashboard_design");
     }
 }

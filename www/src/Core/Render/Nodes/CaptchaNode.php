@@ -81,7 +81,7 @@ class CaptchaNode
         imagefilter($imageHandler, IMG_FILTER_CONTRAST, 10);
         $this->generatePolygon($imageHandler);
 
-        #echo RenderView::include("views.md/partials/captcha", ["image" => $imageHandler]);
+        #echo RenderView::include("views/partials/captcha", ["image" => $imageHandler]);
 
         return $imageHandler;
     }

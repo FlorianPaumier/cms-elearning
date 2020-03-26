@@ -6580,7 +6580,7 @@ eye:
       - seen
       - show
       - sight
-      - views.md
+      - views
       - visible
   styles:
     - solid
@@ -6618,7 +6618,7 @@ eye-slash:
       - show
       - toggle
       - unseen
-      - views.md
+      - views
       - visible
       - visiblity
   styles:

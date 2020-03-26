@@ -38,7 +38,7 @@ class EventListenerTest extends TestCase
         }
 
         if(!defined("VIEW_PATH")){
-            define("VIEW_PATH", ROOT_PATH."/public/views.md");
+            define("VIEW_PATH", ROOT_PATH."/public/views");
         }
 
         $_SERVER["APP_ENV"] = "dev";

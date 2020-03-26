@@ -4,7 +4,7 @@ namespace App\Core\Cache;
 abstract class CacheHandler
 {
 
-    private static $configFile = ["config", "routing", "security", "subscriber"];
+    private static $configFile = ["config", "routing", "security", "subscriber", "dashboard"];
 
     public static function set(string $key, $data)
     {

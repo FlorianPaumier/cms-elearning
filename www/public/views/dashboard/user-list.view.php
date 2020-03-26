@@ -1,4 +1,5 @@
-<?php require(VIEW_PATH . "/partials/header.view.php");  ?>
+@extend(template/back)
+@section(body)
 
     <h2>User List</h2>
     <table>
@@ -27,5 +28,4 @@
 
         </tbody>
     </table>
-
-<?php require(VIEW_PATH . "/partials/footer.view.php") ?>
+@endsection

@@ -97,6 +97,7 @@ class TemplateEngine
     /**
      * Parse the view and insert or extend the views
      * @param array $extra
+     * @throws \Exception
      */
     public function generate_markup($extra = [])
     {
@@ -189,11 +190,12 @@ class TemplateEngine
             return $this->content;
         }
 
-
+        CacheHandler::set("dashboard", $this->content);
         if (!is_null($this->view)) {
             $tmp = tmpfile();
             fwrite($tmp, $this->content);
             extract($this->data["parameter"]);
+            file_put_contents("test.php", file_get_contents(stream_get_meta_data($tmp)['uri']));
             include stream_get_meta_data($tmp)['uri'];
         }
     }
@@ -206,7 +208,7 @@ class TemplateEngine
     private function _extendFile()
     {
         // Get the path to the view to extend
-        preg_match_all("#^@extend\(([\w+\/?]+)\)$#m", $this->content, $this->extendMethod, PREG_SET_ORDER, 0);
+        preg_match_all("#@extend\(([^)]*)\)#m", $this->content, $this->extendMethod, PREG_SET_ORDER, 0);
 
         if (is_null($this->extendMethod)) {
             return "";
@@ -239,11 +241,12 @@ class TemplateEngine
     /**
      * Insert the content of the fil in the current view
      * @return string
+     * @throws \Exception
      */
     private function _includedFile()
     {
         // Get the path to the view to extend
-        preg_match_all("#^@include\(([\w+\/?]+.\w+.\w+)\)$#m", $this->content, $includeMethod, PREG_SET_ORDER, 0);
+        preg_match_all("#@include\(([^)]*)\)#m", $this->content, $includeMethod, PREG_SET_ORDER, 0);
 
         if (is_null($includeMethod)) {
             return "";
@@ -253,7 +256,7 @@ class TemplateEngine
             $value = $tag[1];
             $html = null;
             $include = RenderFunction::include($value, $this->data);
-            $this->content = preg_replace("#^@include\($value\)$#m", $include, $this->content);
+            $this->content = preg_replace("#@include\($value\)#m", $include, $this->content);
         }
     }
 

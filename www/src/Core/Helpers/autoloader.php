@@ -9,7 +9,10 @@ function autoloader($className)
     array_shift($classNameParts);
     array_unshift($classNameParts, ROOT_PATH . "/src");
     //Include the class.
-    include implode("/", $classNameParts) . '.php';
+    $file = implode("/", $classNameParts) . '.php';
+    if(file_exists($file)){
+        include $file;
+    }
 }
 
 //Tell PHP what our autoloading function is.

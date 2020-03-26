@@ -82,7 +82,6 @@ class Router
      */
     public function exec()
     {
-
         $controllerParam = explode(":", $this->matchRoute["controller"]);
         #TODO : denied access with wrong role
         $class = "$controllerParam[0]Controller";

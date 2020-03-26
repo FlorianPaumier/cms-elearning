@@ -34,11 +34,12 @@ abstract class RenderFunction
             ConfigHandler::get("eventEmmiter")->emit("error.404", "Page not found");
         }
 
-        preg_match_all("#^\s*?@section\((\w+)\)$#m", $template, $sections);
+        preg_match_all("#@section\(([^)]*)\)#m", $template, $sections);
 
         foreach ($sections[1] as $key => $value){
-            preg_match("#^\s*?@section\($value\)([\s\S]*)@endsection$#mU", $view, $sectionsValue);
-            $template = preg_replace("#^\s*?@section\($value\)$#m", $sectionsValue[1], $template);
+            preg_match("#^\s*?@section\($value\)([\s\S]*)@endsection#mU", $view, $sectionsValue);
+           // dump($sectionsValue);
+            $template = preg_replace("#@section\($value\)#mU", $sectionsValue[1], $template);
         }
 
         return $template;

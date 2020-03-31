@@ -1,61 +1,60 @@
 main {
-  @extend %form-header;
+  #main-section {
+    height: 100vh;
+    .background {
+      display: flex;
+      flex-direction: column;
+      background-color: $gray;
+      height: 80%;
+      min-height: 80%;
+      color: white;
+      padding-top: 10%;
+      padding-left: 10%;
+      h1 {
+        font-size: 50px;
+        line-height: 70px;
+      }
 
-  .container-accueil {
-    background-color: $dark-blue;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    h1 {
-      text-align: center;
-    }
-
-    a {
-      text-decoration: none;
-
-      &.btn-more {
-        padding: 0 0.7rem;
-        background-color: white;
-        border-radius: 30px;
-        width: 126px;
-        height: 30px;
-        box-shadow: $shadow;
+      p {
+        font-size: 20px;
+        line-height: 29px;
+        font-style: italic;
+        width: 50%;
       }
     }
   }
 
-  .home-contact {
-    background-color: $light-blue;
+  .section-doc {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: $dark-blue;
+    flex-direction: row;
+    justify-content: space-around;
 
-    h1 {
-      text-align: center;
-    }
+    article {
+      width: 430px;
+      padding: 3%;
+      height: 350px;
+      background: #FFFFFF;
+      border: 1px solid #000000;
+      border-radius: 15px;
 
-    a {
-      text-decoration: none;
+      .icon {
+        color: #5777EA;
+        font-size: 40px;
+      }
 
-      &.btn-contact {
-        padding: 0 0.7rem;
-        background-color: $dark-blue;
-        border-radius: 30px;
-        width: 126px;
-        height: 30px;
-        box-shadow: $shadow;
+      h1 {
+        font-size: 25px;
+        line-height: 56px;
+        color: #5777EA;
+      }
+
+      p {
+        font-style: italic;
+        font-size: 18px;
+        line-height: 21px;
       }
     }
   }
-
-  .description {
-    p {
-      display: inline;
-    }
-  }
-
   .testimonies {
     .jumbutron {
       display: none;
@@ -73,66 +72,6 @@ main {
         &::after {
           animation: fadeout 2s;
         }
-      }
-    }
-  }
-
-
-  .home-news {
-    background-color: $dark-blue;
-    color: $white;
-    text-align: center;
-
-    h2 {
-      margin: 1% 0;
-    }
-
-    #flux-rss {
-      overflow-y: scroll;
-      max-height: 150px;
-      display: flex;
-      flex-direction: column;
-
-      article {
-        margin: 0;
-        color: $dark-blue;
-        border-bottom: 1px dashed $blue;
-
-        &:last-child{
-          border-bottom: none;
-        }
-        @media all and (min-width: 800px){
-          display: flex;
-          flex-direction: column;
-        }
-
-        h1 {
-          margin: 0;
-          text-align: left;
-        }
-
-        .row {
-          justify-content: space-between;
-        }
-
-        .know-more {
-          text-decoration: none;
-        }
-
-        .date {
-          font-size: 0.75rem;
-          font-style: italic;
-        }
-      }
-    }
-
-    @media all and (min-width: 800px){
-      max-width: 40vw;
-      display: flex;
-      flex-direction: column;
-
-      #flux-rss {
-        min-height: 90%;
       }
     }
   }

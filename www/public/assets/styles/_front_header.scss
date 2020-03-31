@@ -1,24 +1,3 @@
-@import "jumbotron";
-
-%form-header {
-  form {
-    flex-direction: row;
-    display: flex;
-
-    input.input-search {
-      width: 100%;
-      height: 30px;
-      color: #333333;
-      padding: 10px;
-      border-radius: 5px;
-      font-size: 15px;
-      outline: none !important;
-      border: 1px solid rgba(0, 0, 0, 0.3);
-      box-shadow: $shadow;
-    }
-  }
-}
-
 #header {
   width: 100vw;
   display: flex;

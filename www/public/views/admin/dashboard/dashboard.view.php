@@ -1,8 +1,5 @@
 @extend(templates/back)
 
-@include(admin/partials/sidebar)
-@include(admin/partials/titlebar)
-
 <div class="card">
     <div class="left-side">
         <div>
@@ -105,7 +102,7 @@
     </div>
 </div>
 
-
+@section(javascripts)
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
 <!-- Core plugin JavaScript-->
@@ -224,3 +221,4 @@
     });
 
 </script>
+@endsection

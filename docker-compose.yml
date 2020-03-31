@@ -49,7 +49,7 @@ services:
     restart: always
     environment:
       PMA_HOST: postgres
-      PMA_PORT: 5432
+      PMA_PORT: 5433
     ports:
       - 281:8080
     depends_on:

@@ -26,6 +26,9 @@ class Router
     /** @var Request */
     private $request;
 
+    /**
+     * Router constructor.
+     */
     public function __construct()
     {
         $this->routes = CacheHandler::get("routing");
@@ -35,6 +38,7 @@ class Router
     /**
      * Try to match with some route in the configuration
      * @return bool
+     * @throws \Exception
      */
     public function match(): bool
     {
@@ -44,24 +48,26 @@ class Router
          */
         $this->formatUrl();
 
-        foreach ($this->routes as $route){
+        foreach ($this->routes as $route) {
             if ($this->hadParams($route["path"])) {
-                if($this->matchComplexRoute($route)){
+                if ($this->matchComplexRoute($route)) {
                     break;
                 };
-            } else if($this->uri === $route["path"]) {
-                $this->matchRoute = $route;
-                break;
+            } else {
+                if ($this->uri === $route["path"]) {
+                    $this->matchRoute = $route;
+                    break;
+                }
             }
         }
 
         if (!isset($this->matchRoute["method"]) || in_array($this->request->getMethod(), $this->matchRoute["method"])) {
             $match = true;
-        }else{
+        } else {
             throw new \Exception("Method not allowed", 405);
         }
 
-        if(!$match){
+        if (!$match) {
             throw new \Exception("Page Not Found", 404);
         }
 
@@ -69,32 +75,45 @@ class Router
 
     }
 
-    public function exec(){
+    /**
+     * Execute the controller in the configuration of the matched route
+     * @return mixed
+     * @throws \Exception
+     */
+    public function exec()
+    {
         $controllerParam = explode(":", $this->matchRoute["controller"]);
         #TODO : denied access with wrong role
         $class = "$controllerParam[0]Controller";
 
-        if(class_exists($class)){
+        if (class_exists($class)) {
             $controller = new $class;
-            $action =  $controllerParam[1];
+            $action = $controllerParam[1];
 
-            #TODO : Gérer l'injection de paramètre
-            if(is_callable([$controller,$action])){
+            if (is_callable([$controller, $action])) {
                 $methodParameters = (new DependencyInjection($class, $action))->getParameters($this->matchRoute["params"]);
-                return !empty($methodParameters) ? call_user_func_array([$controller,$action], $methodParameters) : $controller->$action();
-            }else{
-                throw new \Exception("Action $action not found", 404);
+                return !empty($methodParameters) ? call_user_func_array([$controller, $action], $methodParameters) : $controller->$action();
+            } else {
+                ConfigHandler::get("eventEmmiter")->emit("error.404", "Action $action not found");
             }
-        }else{
-            throw new \Exception("Class $class not found", 404);
+        } else {
+            ConfigHandler::get("eventEmmiter")->emit("error.404","Class $class not found");
         }
     }
 
+    /**
+     * Récupération du chemin dans la config s'il existe
+     * @param string $route
+     * @return string|null
+     */
     public function getPath(string $route): ?string
     {
         return key_exists($route, $this->routes) ? $this->routes[$route]["path"] : null;
     }
 
+    /**
+     * Get the url and return an useable string
+     */
     private function formatUrl(): void
     {
         $requestUri = rtrim($_SERVER["REQUEST_URI"], "/");
@@ -120,10 +139,16 @@ class Router
         return strpos($params, "{") === false ? false : true;
     }
 
+    /**
+     * Test if the current route contain some parameters
+     * @param $route
+     * @return bool
+     * @throws \Exception
+     */
     private function matchComplexRoute($route): bool
     {
         $match = false;
-        $tabUrl = explode("/",$route["path"]);
+        $tabUrl = explode("/", $route["path"]);
         $this->uriArray = explode("/", $this->uri);
 
         // If the uri don't have the same amount of element, stop
@@ -154,8 +179,9 @@ class Router
     /**
      * Create the right regex then exec a regex on the value
      *
-     * @param  $str
+     * @param string $str
      * @return mixed
+     * @throws \Exception
      */
     private function matchParams(string $str): ?array
     {
@@ -170,9 +196,9 @@ class Router
         // Test if the parameters had regex rule and test it
         if (isset($pregParameters[2][0]) && isset($pregParameters[1][0])) {
             $reg = $pregParameters[2][0];
-            if(preg_match("/${reg}/", $params)){
-                return  [$pregParameters[1][0] => $params];
-            }else{
+            if (preg_match("/${reg}/", $params)) {
+                return [$pregParameters[1][0] => $params];
+            } else {
                 throw new \Exception("Parameter is not in the correct type");
             }
         }

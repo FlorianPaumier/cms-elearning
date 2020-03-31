@@ -13,13 +13,17 @@ use App\Core\Kernel\Kernel;
 class EventEmmiter
 {
 
+    /** @var self */
     private static $_instance;
 
     /** @var EventListener[][] */
     private $listeners = [];
 
+    private function __construct(){}
+
     /**
      * @return EventEmmiter
+     * @throws DoubleEventException
      */
     public static function getInstance(): EventEmmiter
     {
@@ -102,6 +106,10 @@ class EventEmmiter
         $this->listeners[$event][] = $callable;
     }
 
+    /**
+     * @param SubscriberInterface $subscriber
+     * @throws DoubleEventException
+     */
     public function addSubscriber(SubscriberInterface $subscriber){
         $events = $subscriber->getEvents();
 

@@ -31,12 +31,12 @@ class ConfigHandler
 
     public function __construct()
     {
-        define("VIEW_PATH", ROOT_PATH."/public/views");
-        define("FORM_PATH", ROOT_PATH."/src/Core/Form");
-        define("CACHE_PATH",ROOT_PATH."/app/cache");
-        define("CONFIG_PATH",ROOT_PATH."/app/config");
-        define("ROUTING_PATH",ROOT_PATH."/app/routing");
-        define("PATH_STYLE", ROOT_PATH. "/public/styles");
+        define("VIEW_PATH", ROOT_PATH . "/public/views");
+        define("FORM_PATH", ROOT_PATH . "/src/Core/Form");
+        define("CACHE_PATH", ROOT_PATH . "/app/cache");
+        define("CONFIG_PATH", ROOT_PATH . "/app/config");
+        define("ROUTING_PATH", ROOT_PATH . "/app/routing");
+        define("PATH_STYLE", ROOT_PATH . "/public/styles");
         define("PATH_SCRIPT", ROOT_PATH . "/public/scripts");
         define("PATH_LIBRARY", ROOT_PATH . "/node_modules");
     }
@@ -64,7 +64,6 @@ class ConfigHandler
 
     }
 
-
     /**
      * Set the value in the container
      *
@@ -80,11 +79,11 @@ class ConfigHandler
      * Get the value from the container
      *
      * @param string $key
-     * @param $value
+     * @return mixed|null
      */
     public static function get(string $key)
     {
-        if(key_exists($key, self::$container)){
+        if (key_exists($key, self::$container)) {
             return self::$container[$key];
         }
 
@@ -97,7 +96,7 @@ class ConfigHandler
      */
     public function minimal()
     {
-        self::bind("config", CacheHandler::set("config", yaml_parse_file($this->path["config"]."/config.yml")));
+        self::bind("config", CacheHandler::set("config", yaml_parse_file($this->path["config"] . "/config.yml")));
     }
 
     /**
@@ -107,9 +106,9 @@ class ConfigHandler
     {
         $config = dirToArray(CONFIG_PATH);
 
-        foreach ($config as $file){
+        foreach ($config as $file) {
             $name = explode(".", $file)[0];
-            CacheHandler::set($name, yaml_parse_file(CONFIG_PATH."/".$file));
+            CacheHandler::set($name, yaml_parse_file(CONFIG_PATH . "/" . $file));
         }
     }
 
@@ -123,21 +122,22 @@ class ConfigHandler
 
         foreach (dirToArray(ROUTING_PATH) as $key => $file) {
             $table = [];
-            if(is_int($key)) {
-                $table = yaml_parse_file(ROUTING_PATH."/$file");
-            }else{
-                foreach ($file as $route){
-                    $dir = dirToArray(ROUTING_PATH."/$key");
+            if (is_int($key)) {
+                $table = yaml_parse_file(ROUTING_PATH . "/$file");
+            } else {
+                foreach ($file as $route) {
+                    $dir = dirToArray(ROUTING_PATH . "/$key");
                     foreach ($dir as $dirFile) {
-                        $table = array_merge($table, yaml_parse_file(ROUTING_PATH."/$key/$dirFile"));
+                        $table = array_merge($table, yaml_parse_file(ROUTING_PATH . "/$key/$dirFile"));
                     }
                 }
             }
-            if(!is_null($table)) {$routing = array_merge($routing, $table);
+            if (!is_null($table)) {
+                $routing = array_merge($routing, $table);
             };
         };
 
-        CacheHandler::set("routing",  $routing);
+        CacheHandler::set("routing", $routing);
     }
 
 }

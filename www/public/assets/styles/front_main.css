@@ -2583,20 +2583,98 @@ main .section-doc article p {
   font-size: 18px;
   line-height: 21px;
 }
-main .testimonies .jumbutron {
+main #section-lesson {
+  margin-top: 20vh;
+}
+main #section-lesson h2 {
+  font-size: 30px;
+  line-height: 47px;
+  color: #5777EA;
+}
+main #section-lesson h2.text-center {
+  text-align: center;
+}
+main #section-lesson #lessons {
+  display: flex;
+  flex-direction: row;
+  padding: 0 44px;
+  justify-content: space-between;
+}
+main #section-lesson #lessons button {
+  background-color: transparent;
+  border: none;
+  font-size: 5vw;
+}
+main #section-lesson #lessons article {
+  display: none;
+  width: 70vw;
+  height: 30vh;
+}
+main #section-lesson #lessons article h2 {
+  margin: 0;
+  font-size: 25px;
+  line-height: 47px;
+}
+main #section-lesson #lessons article.active {
+  display: flex;
+  background: #FFFFFF;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  overflow: hidden;
+}
+main #section-lesson #lessons article img {
+  width: 100%;
+  min-height: 100%;
+}
+main #section-lesson #lessons article .content {
+  padding-left: 5%;
+  display: flex;
+  flex-direction: column;
+  font-style: italic;
+  font-size: 12px;
+  line-height: 19px;
+}
+main #section-lesson #lessons article .content p {
+  padding-right: 2%;
+}
+main #section-lesson #lessons article .content .btn {
+  background-color: #87B7FF;
+  border-radius: 15px;
+  width: 10vw;
+  text-align: center;
+  margin-left: auto;
+}
+main #home-news {
+  display: flex;
+  flex-direction: row;
+}
+main #home-news .testimonies {
+  width: 100%;
+}
+main #home-news .testimonies article {
   display: none;
 }
-main .testimonies .jumbutron img {
+main #home-news .testimonies article.active {
+  display: flex;
+  background: #FFFFFF;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  overflow: hidden;
+}
+main #home-news .testimonies .jumbutron {
+  display: none;
+}
+main #home-news .testimonies .jumbutron img {
   padding-right: 3%;
 }
-main .testimonies .jumbutron.active {
+main #home-news .testimonies .jumbutron.active {
   display: flex;
   transition: all 0.4s ease;
 }
-main .testimonies .jumbutron.active::before {
+main #home-news .testimonies .jumbutron.active::before {
   animation: fadein 2s;
 }
-main .testimonies .jumbutron.active::after {
+main #home-news .testimonies .jumbutron.active::after {
   animation: fadeout 2s;
 }
 

@@ -3,15 +3,18 @@
 namespace App\Form;
 
 
+use App\Core\Cache\ConfigHandler;
+use App\Core\Form\FormBuilder;
 use App\Core\Form\FormType;
+use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Kernel\Kernel;
 
-class UserLoginForm extends FormType
+class UserLoginForm extends FormBuilder implements FormTypeInterface
 {
     /**
      * @return array|void
      */
-    public static function getConstraint()
+    public static function getConstraint(): array
     {
         return [
             [
@@ -31,10 +34,10 @@ class UserLoginForm extends FormType
         ];
     }
 
-    public function buildForm()
+    public function buildForm(): FormBuilder
     {
-        $this->formBuilder
-            ->setAction(Kernel::get("router")->getPath("app_user_login_check"))
+        $this
+            ->setAction(ConfigHandler::get("router")->getPath("app_user_login_check"))
             ->input(
                 "username", [
                     'type' => 'text',
@@ -64,15 +67,23 @@ class UserLoginForm extends FormType
                 "submit", [
                     'label' => "Se connecter",
                     "type" => "submit",
-                    "class" => "btn btn-primary btn-user btn-block"
+                    "class" => "btn btn-primary"
                 ]
             );
 
-        return $this->formBuilder;
+        return $this;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
-        $this->prefix = "app_login";
+        return $this->prefix;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setBlockPrefix(): void
+    {
+        $this->prefix = "app_user";
     }
 }

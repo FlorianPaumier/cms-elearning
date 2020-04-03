@@ -1,4 +1,4 @@
-{{ @View/templates/front|extend }}
+@extend(templates/front)
 
 
 @section(body)

@@ -1,7 +1,5 @@
-{{ @View/admin/partials/sidebar|include }}
-{{ @View/admin/partials/titlebar|include }}
-<link rel="stylesheet" href="../../../assets/styles/dashboard.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+@extend(templates/back)
+
 <div class="card">
     <div class="left-side">
         <div>
@@ -104,7 +102,7 @@
     </div>
 </div>
 
-
+@section(javascripts)
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
 <!-- Core plugin JavaScript-->
@@ -223,3 +221,4 @@
     });
 
 </script>
+@endsection

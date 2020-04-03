@@ -1,6 +1,7 @@
-{{ @View/templates/front|extend }}
+@extend(templates/back)
+
 @section(style)
-<link rel="stylesheet" href="assets/styles/login.css">
+<link rel="stylesheet" href="assets/styles/admin/login.css">
 @endsection
 
 @section(body)

@@ -250,11 +250,11 @@ img {
       }
     }
   }
+  .active {
+    background-color: $colorDarkBlue;
+  }
 }
 
-.active {
-  background-color: $colorDarkBlue;
-}
 
 .activities-content {
   display: inline-block;

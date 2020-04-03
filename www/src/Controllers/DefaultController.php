@@ -12,7 +12,6 @@ class DefaultController extends BaseController
 {
     public function index(Request $request)
     {
-        ConfigHandler::get("logger")->emergency("Emergency");
         return $this->renderer->render("home", [
             "method" => $request->getMethod(),
         ]);

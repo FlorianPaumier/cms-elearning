@@ -2316,8 +2316,7 @@ img {
   font-size: 0.8em;
   right: 10px;
 }
-
-.active {
+.cards .active {
   background-color: #364885;
 }
 
@@ -2385,6 +2384,89 @@ img {
 }
 #header #menu nav > ul li.profile .icon i {
   width: 25px;
+}
+#header #menu nav > ul li.profile.acilir {
+  position: relative;
+}
+#header #menu nav > ul li.profile.acilir:last-child {
+  margin-right: 0;
+}
+#header #menu nav > ul li.profile.acilir:hover > .login-menu {
+  transition: all 0.3s;
+  visibility: visible;
+  opacity: 1;
+  top: 6vh;
+}
+#header #menu nav > ul li.profile.acilir a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #333333;
+  font-size: 14px;
+}
+#header #menu nav > ul li.profile.acilir a > i {
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+#header #menu nav > ul li.profile.acilir:hover > a {
+  color: #87B7FF;
+}
+#header #menu nav > ul li.profile.acilir .login-menu {
+  position: absolute;
+  width: 180px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #d6d6d6;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-80%);
+  visibility: hidden;
+  opacity: 0;
+  z-index: 999;
+  background-color: #FFF;
+}
+#header #menu nav > ul li.profile.acilir .login-menu:before, #header #menu nav > ul li.profile.acilir .login-menu:after {
+  content: "";
+  position: absolute;
+  right: 5%;
+  transform: translateX(-50%);
+  border-style: solid;
+  border-width: 0 14px 14px 14px;
+}
+#header #menu nav > ul li.profile.acilir .login-menu:before {
+  border-color: transparent transparent #d6d6d6 transparent;
+  top: -14px;
+}
+#header #menu nav > ul li.profile.acilir .login-menu:after {
+  border-color: transparent transparent #fff transparent;
+  top: -13px;
+}
+#header #menu nav > ul li.profile.acilir .login-menu > a {
+  display: block;
+  text-align: center;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+#header #menu nav > ul li.profile.acilir .login-menu > a:first-child {
+  background-color: #87B7FF;
+  color: #FFF;
+  margin-bottom: 10px;
+  border: 1px solid #87B7FF;
+}
+#header #menu nav > ul li.profile.acilir .login-menu > a:hover:first-child {
+  background-color: #364885;
+  border: 1px solid #364885;
+}
+#header #menu nav > ul li.profile.acilir .login-menu > a:last-child {
+  color: #666;
+  border: 1px solid #d6d6d6;
+}
+#header #menu nav > ul li.profile.acilir .login-menu > a:hover:last-child {
+  color: #87B7FF;
+  border: 1px solid #87B7FF;
 }
 #header #search {
   width: 45vw;
@@ -2542,35 +2624,95 @@ main #section-lesson #lessons article .content .btn {
 main #home-news {
   display: flex;
   flex-direction: row;
+  margin-top: 10%;
 }
-main #home-news .testimonies {
-  width: 100%;
-}
-main #home-news .testimonies article {
+main #home-news article {
   display: none;
 }
-main #home-news .testimonies article.active {
-  display: flex;
-  background: #FFFFFF;
+main #home-news #testimonies article {
+  width: 300px;
+  height: 300px;
+  border-radius: 100%;
+  margin: auto;
+  justify-content: center;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
-  border-radius: 15px;
+  background-color: #D0EDFF;
+}
+main #home-news #testimonies article.active {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  overflow: hidden;
+  text-align: center;
+}
+main #home-news #testimonies article.active p {
+  padding: 0 4%;
+}
+main #home-news #flux-rss h2 {
+  color: #5777EA;
+  margin: 0;
+  font-size: 25px;
+  line-height: 47px;
+  padding-left: 10px;
+}
+main #home-news #flux-rss article {
+  width: 500px;
+  height: 300px;
+}
+main #home-news #flux-rss article * {
+  padding: 10px 0;
+}
+main #home-news #flux-rss article h1 {
+  margin: 0;
+}
+main #home-news #flux-rss article.active {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
-main #home-news .testimonies .jumbutron {
-  display: none;
+main #home-news #flux-rss article.active .date {
+  font-size: 12px;
+  line-height: 14px;
+  color: #555;
 }
-main #home-news .testimonies .jumbutron img {
-  padding-right: 3%;
+main #home-news #flux-rss article.active p {
+  font-style: italic;
 }
-main #home-news .testimonies .jumbutron.active {
+main #home-news #flux-rss article.active a {
+  color: black;
+}
+main #newsletter {
+  height: 250px;
+  background-color: #415D86;
+  padding: 3%;
+  justify-content: space-around;
+  color: white;
   display: flex;
-  transition: all 0.4s ease;
+  flex-direction: row;
 }
-main #home-news .testimonies .jumbutron.active::before {
-  animation: fadein 2s;
+main #newsletter div {
+  justify-content: space-between;
+  align-items: center;
+  vertical-align: center;
+  width: 75%;
+  flex-direction: row;
+  display: flex;
 }
-main #home-news .testimonies .jumbutron.active::after {
-  animation: fadeout 2s;
+main #newsletter div input {
+  width: 700px;
+  height: 50px;
+  border: none;
+  font-size: 15px;
+  font-style: italic;
+  padding-left: 5%;
+}
+main #newsletter div .btn {
+  background-color: #87B7FF;
+  height: 50px;
+  border-radius: 15px;
+  width: 10vw;
+  text-align: center;
+  margin-left: auto;
 }
 
 @keyframes fadein {

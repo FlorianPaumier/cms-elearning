@@ -24,7 +24,6 @@
                         <a href="">Login</a>
                         <a href="">Sign Up</a>
                     </div>
-                    </dropdown>
                 </li>
             </ul>
         </nav>

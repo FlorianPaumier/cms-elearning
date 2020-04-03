@@ -20,7 +20,7 @@ class Kernel
     public function __construct(string $env, ?bool $debug = false)
     {
         /** Set Serveur var */
-        $_SERVER["APP_ENV"] = "prod";
+        $_SERVER["APP_ENV"] = $env;
         $_SERVER["APP_DEBUG"] = $debug;
 
         /** Récupération des éléments de base */

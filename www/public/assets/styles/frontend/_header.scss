@@ -55,11 +55,111 @@
                 width: 25px;
               }
             }
+
+            &.acilir {
+              position: relative;
+
+              &:last-child {
+                margin-right: 0;
+              }
+
+              &:hover > .login-menu {
+                transition: all .3s;
+                visibility: visible;
+                opacity: 1;
+                top: 6vh;
+              }
+
+              a {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                color: #333333;
+                font-size: 14px;
+
+                > i {
+                  margin-bottom: 5px;
+                  font-size: 20px;
+                }
+              }
+
+              &:hover > a {
+                color: $blue;
+              }
+
+              .login-menu {
+                position: absolute;
+                width: 180px;
+                padding: 15px;
+                display: flex;
+                flex-direction: column;
+                border: 1px solid #d6d6d6;
+                top: 70px;
+                left: 50%;
+                transform: translateX(-80%);
+                visibility: hidden;
+                opacity: 0;
+                z-index: 999;
+                background-color: #FFF;
+
+                &:before, &:after {
+                  content: '';
+                  position: absolute;
+                  right: 5%;
+                  transform: translateX(-50%);
+                  border-style: solid;
+                  border-width: 0 14px 14px 14px;
+
+                }
+
+                &:before {
+                  border-color: transparent transparent #d6d6d6 transparent;
+                  top: -14px;
+                }
+
+                &:after {
+                  border-color: transparent transparent #fff transparent;
+                  top: -13px;
+                }
+
+                > a {
+                  display: block;
+                  text-align: center;
+                  padding-top: 8px;
+                  padding-bottom: 8px;
+                  font-size: 14px;
+                  font-weight: 600;
+
+                  &:first-child {
+                    background-color: $blue;
+                    color: #FFF;
+                    margin-bottom: 10px;
+                    border: 1px solid $blue;
+                  }
+
+                  &:hover:first-child {
+                    background-color: $dark-blue;
+                    border: 1px solid $dark-blue;
+                  }
+
+                  &:last-child {
+                    color: #666;
+                    border: 1px solid #d6d6d6;
+                  }
+
+                  &:hover:last-child {
+                    color: $blue;
+                    border: 1px solid $blue;
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
   }
+
 
   #search {
     width: 45vw;
@@ -108,4 +208,5 @@
       }
     }
   }
+
 }

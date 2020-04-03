@@ -1,5 +1,7 @@
 $(document).ready(function () {
-    setInterval(showTestimonies, 3000);
+    if(false === true){
+        //setInterval(showTestimonies, 3000);
+    }
 });
 
 function showTestimonies() {
@@ -27,7 +29,5 @@ function showTestimonies() {
     };
 
     $(testimonies[indexTestimony + 1])[0].classList.add("active");
-
-
 
 }

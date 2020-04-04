@@ -28,7 +28,7 @@ deploy:preprod:
     - develop
   when: manual
 
-.tests: &test
+.tests: &tests
   image: php:7.3
   stage: test
   before_script:
@@ -43,4 +43,4 @@ deploy:preprod:
     - phpunit --configuration www/phpunit_cms.xml
 
 tests:
-  <<: *test
+  <<: *tests

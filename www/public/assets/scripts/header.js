@@ -1,6 +1,5 @@
 $(document).ready(function () {
 
-
     $(".hamburger").click(function () {
         if (this.classList.contains("is-active")) {
             $(".header-mobile")[0].classList.add("is-open")

@@ -1,149 +1,268 @@
 main {
-  @extend %form-header;
+  #main-section {
+    height: 100vh;
 
-  .container-accueil {
-    background-color: $dark-blue;
+    .background {
+      display: flex;
+      flex-direction: column;
+      background-color: $gray;
+      height: 80%;
+      min-height: 80%;
+      color: white;
+      padding-top: 10%;
+      padding-left: 10%;
+
+      h1 {
+        font-size: 50px;
+        line-height: 70px;
+      }
+
+      p {
+        font-size: 20px;
+        line-height: 29px;
+        font-style: italic;
+        width: 50%;
+      }
+    }
+  }
+
+  .section-doc {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
 
-    h1 {
-      text-align: center;
-    }
+    article {
+      width: 430px;
+      padding: 3%;
+      height: 350px;
+      background: #FFFFFF;
+      border: 1px solid #000000;
+      border-radius: 15px;
 
-    a {
-      text-decoration: none;
+      .icon {
+        color: #5777EA;
+        font-size: 40px;
+      }
 
-      &.btn-more {
-        padding: 0 0.7rem;
-        background-color: white;
-        border-radius: 30px;
-        width: 126px;
-        height: 30px;
-        box-shadow: $shadow;
+      h1 {
+        font-size: 25px;
+        line-height: 56px;
+        color: #5777EA;
+      }
+
+      p {
+        font-style: italic;
+        font-size: 18px;
+        line-height: 21px;
       }
     }
   }
 
-  .home-contact {
-    background-color: $light-blue;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: $dark-blue;
+  #section-lesson {
 
-    h1 {
-      text-align: center;
-    }
-
-    a {
-      text-decoration: none;
-
-      &.btn-contact {
-        padding: 0 0.7rem;
-        background-color: $dark-blue;
-        border-radius: 30px;
-        width: 126px;
-        height: 30px;
-        box-shadow: $shadow;
-      }
-    }
-  }
-
-  .description {
-    p {
-      display: inline;
-    }
-  }
-
-  .testimonies {
-    .jumbutron {
-      display: none;
-
-      img{
-        padding-right: 3%;
-      }
-      &.active {
-        display: flex;
-        transition: all 0.4s ease;
-
-        &::before {
-          animation: fadein 2s;
-        }
-        &::after {
-          animation: fadeout 2s;
-        }
-      }
-    }
-  }
-
-
-  .home-news {
-    background-color: $dark-blue;
-    color: $white;
-    text-align: center;
+    margin-top: 20vh;
 
     h2 {
-      margin: 1% 0;
+      &.text-center {
+        text-align: center;
+      }
+
+      font-size: 30px;
+      line-height: 47px;
+      color: #5777EA;
+    }
+
+    #lessons {
+      display: flex;
+      flex-direction: row;
+      padding: 0 44px;
+      justify-content: space-between;
+
+      button {
+        background-color: transparent;
+        border: none;
+        font-size: 5vw;
+      }
+
+      article {
+        display: none;
+        width: 70vw;
+        height: 30vh;
+
+        h2 {
+          margin: 0;
+          font-size: 25px;
+          line-height: 47px;
+        }
+
+        &.active {
+          display: flex;
+          background: #FFFFFF;
+          box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+          border-radius: 15px;
+          overflow: hidden;
+        }
+
+        img {
+          width: 100%;
+          min-height: 100%;
+        }
+
+        .content {
+          padding-left: 5%;
+          display: flex;
+          flex-direction: column;
+          font-style: italic;
+          font-size: 12px;
+          line-height: 19px;
+
+          p {
+            padding-right: 2%;
+          }
+
+          .btn {
+            background-color: $blue;
+            border-radius: 15px;
+            width: 10vw;
+            text-align: center;
+            margin-left: auto;
+          }
+        }
+      }
+    }
+  }
+
+  #home-news {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10%;
+
+    article {
+      display: none;
+    }
+
+    #testimonies {
+      article {
+        width: 300px;
+        height: 300px;
+        border-radius: 100%;
+        margin: auto;
+        justify-content: center;
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+        background-color: $light-blue;
+
+        &.active {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          overflow: hidden;
+          text-align: center;
+
+          p {
+            padding: 0 4%;
+          }
+        }
+      }
     }
 
     #flux-rss {
-      overflow-y: scroll;
-      max-height: 150px;
-      display: flex;
-      flex-direction: column;
+
+      h2 {
+        color: #5777EA;
+        margin: 0;
+        font-size: 25px;
+        line-height: 47px;
+        padding-left: 10px;
+      }
 
       article {
-        margin: 0;
-        color: $dark-blue;
-        border-bottom: 1px dashed $blue;
+        width: 500px;
+        height: 300px;
 
-        &:last-child{
-          border-bottom: none;
-        }
-        @media all and (min-width: 800px){
-          display: flex;
-          flex-direction: column;
+        * {
+          padding: 10px 0;
         }
 
         h1 {
           margin: 0;
-          text-align: left;
         }
 
-        .row {
-          justify-content: space-between;
-        }
+        &.active {
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
 
-        .know-more {
-          text-decoration: none;
-        }
+          .date {
+            font-size: 12px;
+            line-height: 14px;
+            color: #555;
+          }
 
-        .date {
-          font-size: 0.75rem;
-          font-style: italic;
+          p {
+            font-style: italic;
+          }
+
+          a {
+            color: black;
+          }
         }
       }
     }
+  }
 
-    @media all and (min-width: 800px){
-      max-width: 40vw;
+  #newsletter {
+    height: 250px;
+    background-color: #415D86;
+    padding: 3%;
+    justify-content: space-around;
+    color: white;
+    display: flex;
+    flex-direction: row;
+
+    div {
+      justify-content: space-between;
+      align-items: center;
+      vertical-align: center;
+      width: 75%;
+      flex-direction: row;
       display: flex;
-      flex-direction: column;
 
-      #flux-rss {
-        min-height: 90%;
+      input {
+        width: 700px;
+        height: 50px;
+        border: none;
+        font-size: 15px;
+        font-style: italic;
+        padding-left: 5%;
+
+      }
+
+      .btn {
+        background-color: $blue;
+        height: 50px;
+        border-radius: 15px;
+        width: 10vw;
+        text-align: center;
+        margin-left: auto;
       }
     }
   }
 }
 
 @keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeout {
-  from { opacity: 1; }
-  to   { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

@@ -3,9 +3,14 @@ stages:
   - tests
   - deploy
 
-.deploy: &deploy
+deploy:preprod:
   image: ruby:latest
   stage: deploy
+  variables:
+    env: preprod
+    url: http://cms.portfoliofpaumier.fr/
+  only:
+    - develop
   environment:
     name: $env
     url: $url
@@ -18,17 +23,9 @@ stages:
     - bundle install --path vendor/bundle
   script:
     - bundle exec cap $env deploy
-
-deploy:preprod:
-  <<: *deploy
-  variables:
-    env: preprod
-    url: http://cms.portfoliofpaumier.fr/
-  only:
-    - develop
   when: manual
 
-.tests: &tests
+tests:
   image: php:7.3
   stage: test
   before_script:
@@ -41,6 +38,3 @@ deploy:preprod:
     - cp docker/php/php.ini /usr/local/etc/php/php.ini-production
   script:
     - phpunit --configuration www/phpunit_cms.xml
-
-tests:
-  <<: *tests

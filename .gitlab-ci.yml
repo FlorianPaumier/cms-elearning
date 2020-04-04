@@ -26,6 +26,7 @@ deploy:preprod:
     url: http://cms.portfoliofpaumier.fr/
   only:
     - develop
+  when: manual
 
 .test: &test
   image: php:7.3

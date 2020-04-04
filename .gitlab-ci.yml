@@ -42,5 +42,5 @@ deploy:preprod:
   script:
     - phpunit --configuration www/phpunit_cms.xml
 
-tests:app:
+tests:
   <<: *test

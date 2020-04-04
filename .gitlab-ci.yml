@@ -1,13 +1,43 @@
-image: php:7.3
+stages:
+  - install
+  - tests
+  - deploy
 
-before_script:
-  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-  - php composer-setup.php
-  - php -r "unlink('composer-setup.php');"
-  - mv composer.phar /usr/local/bin/composer
-  - bash ci/docker_install.sh > /dev/null
-  - cp docker/php/php.ini /usr/local/etc/php/php.ini-development
-  - cp docker/php/php.ini /usr/local/etc/php/php.ini-production
+.deploy: &deploy
+  image: ruby:latest
+  stage: deploy
+  environment:
+    name: $env
+    url: $url
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$DEPLOYMENT_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - bundle install --path vendor/bundle
+  script:
+    - bundle exec cap $env deploy
+
+deploy:preprod:
+  <<: *deploy
+  variables:
+    env: preprod
+    url: http://cms.portfoliofpaumier.fr/
+  only:
+    - develop
+
+.test: &test
+  image: php:7.3
+  stage: test
+  before_script:
+    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - php composer-setup.php
+    - php -r "unlink('composer-setup.php');"
+    - mv composer.phar /usr/local/bin/composer
+    - bash ci/docker_install.sh > /dev/null
+    - cp docker/php/php.ini /usr/local/etc/php/php.ini-development
+    - cp docker/php/php.ini /usr/local/etc/php/php.ini-production
 
 test:app:
   script:

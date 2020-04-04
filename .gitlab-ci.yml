@@ -28,7 +28,7 @@ deploy:preprod:
     - develop
   when: manual
 
-.test: &test
+.tests: &test
   image: php:7.3
   stage: test
   before_script:

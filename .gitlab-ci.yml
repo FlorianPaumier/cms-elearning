@@ -24,15 +24,14 @@ tests:
     - ssh-add <(echo "$DEPLOYMENT_PRIVATE_KEY")
     - mkdir -p ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - bundle install --path vendor/bundle
   script:
-    - bundle exec cap $env deploy
+    - ssh deployer-agent@$url "cd /var/www/cms/ && git checkout $env && git pull origin $env && exit"
 
 deploy:preprod:
   <<: *deploy
   variables:
-    env: preprod
-    url: https://portfoliofpaumier.fr/
+    env: develop
+    url: https://portfoliofpaumier.fr
   only:
-    - dev_ci
+    - develop
   when: manual

@@ -34,4 +34,5 @@ deploy:preprod:
     url: https://portfoliofpaumier.fr
   only:
     - develop
+    - dev_ci
   when: manual

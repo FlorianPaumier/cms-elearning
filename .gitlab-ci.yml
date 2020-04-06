@@ -32,6 +32,6 @@ deploy:preprod:
   <<: *deploy
   variables:
     env: preprod
-    url: https://preprod.troopers.agency
+    url: https://portfoliofpaumier.fr/
   only:
     - develop

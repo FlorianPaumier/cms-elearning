@@ -31,7 +31,7 @@ deploy:preprod:
   <<: *deploy
   variables:
     env: develop
-    url: https://portfoliofpaumier.fr
+    url: 92.222.66.238
   only:
     - develop
     - dev_ci

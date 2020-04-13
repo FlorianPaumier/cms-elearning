@@ -1,17 +1,13 @@
-{{ @View/templates/back|extend }}
-@section(style)
-<link rel="stylesheet" href="assets/styles/login.css">
-@endsection
+@extend(templates/back)
 
 @section(body)
-<section class="wrapper">
-    <div class="login">
-        <p class="title">Log in</p>
-        {{ form }}
-    </div>
-</section>
+<div class="container">
+
+    {{ form }}
+
+</div>
 @endsection
 
-@section(script)
+@section(javascripts)
 <script type="javascript" src="assets/scripts/login.js"></script>
 @endsection

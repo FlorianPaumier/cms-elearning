@@ -7,7 +7,7 @@ namespace App\Form;
 use App\Core\Form\FormBuilder;
 use App\Core\Interfaces\FormTypeInterface;
 
-class LessonForm extends FormBuilder implements FormTypeInterface
+class LessonForm implements FormTypeInterface
 {
 
     /**
@@ -36,7 +36,7 @@ class LessonForm extends FormBuilder implements FormTypeInterface
     /**
      * @inheritDoc
      */
-    public function buildForm(): FormBuilder
+    public function buildForm(FormBuilder $builder): FormBuilder
     {
         return $this
             ->input("title", [
@@ -56,20 +56,22 @@ class LessonForm extends FormBuilder implements FormTypeInterface
             ])
             ->button("valider", [
                 "label" => "Valider",
-                "class" => "btn btn-submit",
+                "class" => "btn-submit",
             ]);
+    }
+
+
+
+    public function getBlockPrefix(): string
+    {
+        return $this->prefix;
     }
 
     /**
      * @inheritDoc
      */
-    public function setBlockPrefix(): void
+    public function setBlockPrefix(string $prefix = null): void
     {
-        $this->prefix = "admin_lesson";
-    }
-
-    public function getBlockPrefix(): string
-    {
-        return $this->prefix;
+        $this->prefix = $prefix ?? "admin_lesson";
     }
 }

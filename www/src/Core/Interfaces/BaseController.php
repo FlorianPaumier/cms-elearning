@@ -45,11 +45,6 @@ abstract class BaseController
     protected $redirect;
 
     /**
-     * @var FormBuilder $form
-     */
-    protected $form;
-
-    /**
      * @var PHPSession
      */
     protected $session;
@@ -70,5 +65,13 @@ abstract class BaseController
     protected function getValidator(FormTypeInterface $formType)
     {
         return new Validator($formType);
+    }
+
+    /**
+     * Creates and returns a Form instance from the type of the form.
+     */
+    protected function create(string $type, $data = null, array $options = []): FormInterface
+    {
+        return  ConfigHandler::get('form.factory')->create($type, $data, $options);
     }
 }

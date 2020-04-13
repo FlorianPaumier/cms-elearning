@@ -8,6 +8,7 @@ use App\Core\Cache\CacheHandler;
 use App\Core\Database\QueryBuilder;
 use App\Core\Database\Table;
 use App\Core\Exceptions\ExceptionHandler;
+use App\Core\form\FormFactory;
 use App\Core\Request\Request;
 use App\Core\Router\Router;
 use App\Core\Security\UserManager;
@@ -37,6 +38,7 @@ class ConfigHandler
         define("PATH_STYLE", ROOT_PATH. "/public/styles");
         define("PATH_SCRIPT", ROOT_PATH . "/public/scripts");
         define("PATH_LIBRARY", ROOT_PATH . "/node_modules");
+        define("PATH_FORM", ROOT_PATH . "/src/Core/Form/Templates");
     }
 
 
@@ -58,6 +60,7 @@ class ConfigHandler
         //self::bind("container", new DependencyInjection());
         self::bind("userManager", new UserManager());
         self::bind("router", new Router());
+        self::bind("form.factory", new FormFactory());
 
     }
 

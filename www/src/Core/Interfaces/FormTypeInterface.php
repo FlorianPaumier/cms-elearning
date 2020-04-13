@@ -17,12 +17,13 @@ interface FormTypeInterface
      * @return mixed
      * Create the input to show
      */
-    public function buildForm(): FormBuilder;
+    public function buildForm(FormBuilder $builder): FormBuilder;
 
     /**
      * Set prefix for input
+     * @param string $prefix
      */
-    public function setBlockPrefix(): void;
+    public function setBlockPrefix(string $prefix): void;
 
     public function getBlockPrefix(): string;
 

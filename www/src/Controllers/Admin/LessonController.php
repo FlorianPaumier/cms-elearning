@@ -22,9 +22,10 @@ class LessonController extends BaseController
     }
 
     public function new(Request $request){
-        $form = (new LessonForm())->buildForm();
+        $form = $this->createForm(LessonForm::class);
 
-        dump($request->getRequest());die;
+        if($request->getMethod() == "POST") dump($request->getRequest());
+
         return $this->renderer->render("admin/lessons/new", [
             "form" => $form->createView(),
             'title' => "Création d'un Cour"

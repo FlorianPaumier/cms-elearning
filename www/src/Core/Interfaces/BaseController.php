@@ -1,20 +1,15 @@
 <?php
-<<<<<<< HEAD:www/src/Core/helpers/BaseController.php
 namespace App\Core\helpers;
-=======
-
-namespace App\Core\Interfaces;
->>>>>>> e881ede0f36dd95b53201673b4a386a88f13c4c6:www/src/Core/Interfaces/BaseController.php
 
 use App\Core\Cache\ConfigHandler;
 use App\Core\Database\Table;
 use App\Core\Form\FormBuilder;
-use App\Core\Validator\Validator;
 use App\Core\Render\RenderView;
 use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Core\Security\UserManager;
 use App\Core\Session\PHPSession;
+use App\Core\Validator\Validator;
 
 /**
  * Class BaseController

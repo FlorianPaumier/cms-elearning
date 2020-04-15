@@ -17,7 +17,7 @@ class UserController extends BaseController
                 ->redirectToRoute("app_home");
         }
 
-        $form = (new UserLoginForm())->buildForm();
+        $form = $this->createForm(UserLoginForm::class);
 
         return $this->renderer->render(
             "security/frontend/login", [

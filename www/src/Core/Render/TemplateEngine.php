@@ -5,6 +5,7 @@ namespace App\Core\Render;
 
 
 use App\Core\Cache\CacheHandler;
+use App\Core\form\Fields\FieldsInterface;
 
 class TemplateEngine
 {
@@ -105,14 +106,21 @@ class TemplateEngine
      * @param string $type
      * @return string
      */
-    public function renderHtmlElement(string $type)
+    public function renderHtmlElement($type)
     {
+        if($type instanceof FieldsInterface){
+            $block = $type::getBlockName();
+        }else{
+            $block = $type;
+        }
+
         $this->_load_template();
 
         if($type == "errors"){
             dump($this->content, "Template Content");
         }
-        preg_match_all("/.*{%\s?block\s${type}\s?%}((?s:.+?)){%\s?endblock\s?%}.*/m", $this->content, $this->blockEntries, PREG_SET_ORDER, 0);
+
+        preg_match_all("/^{%\s?block\s$block\s?%}((?s:.+?)){%\s?endblock\s?%}$/m", $this->content, $this->blockEntries, PREG_SET_ORDER, 0);
 
         if($type == "errors"){
             dump($this->blockEntries, "Block Entries");

@@ -4,12 +4,13 @@ namespace App\Form;
 
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\form\Fields\TextType;
 use App\Core\Form\FormBuilder;
 use App\Core\Form\FormType;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Kernel\Kernel;
 
-class UserLoginForm extends FormBuilder implements FormTypeInterface
+class UserLoginForm implements FormTypeInterface
 {
     /**
      * @return array|void
@@ -34,56 +35,25 @@ class UserLoginForm extends FormBuilder implements FormTypeInterface
         ];
     }
 
-    public function buildForm(): FormBuilder
+    public function buildForm(FormBuilder $builder): FormBuilder
     {
-        $this
+        return $builder
             ->setAction(ConfigHandler::get("router")->getPath("app_user_login_check"))
-            ->input(
-                "username", [
+            ->add(
+                "username",TextType::class, [
                     'type' => 'text',
                     'required' => true,
                     'label' => 'Username',
                     "class" => "form-control form-control-user"
                 ]
-            )
-            ->input(
-                "password",  [
-                    'type' => 'password',
-                    'required' => true,
-                    'label' => 'Password',
-                    "class" => "form-control form-control-user",
-                    "before" => "<i class=\"fa fa-key\"></i>"
-                ]
-            )
-            ->checkbox(
-                "remember_me",  [
-                    'required' => true,
-                    'label' => 'Ce souvenir de moi',
-                    "type" => "checkbox",
-                    "class" => "col-1"
-                ]
-            )
-            ->button(
-                "submit", [
-                    'label' => "Se connecter",
-                    "type" => "submit",
-                    "class" => "btn btn-primary"
-                ]
             );
-
-        return $this;
-    }
-
-    public function getBlockPrefix(): string
-    {
-        return $this->prefix;
     }
 
     /**
      * @inheritDoc
      */
-    public function setBlockPrefix(): void
+    public function getBlockPrefix(): string
     {
-        $this->prefix = "app_user";
+        return $this->prefix = "app_user";
     }
 }

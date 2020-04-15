@@ -19,12 +19,6 @@ interface FormTypeInterface
      */
     public function buildForm(FormBuilder $builder): FormBuilder;
 
-    /**
-     * Set prefix for input
-     * @param string $prefix
-     */
-    public function setBlockPrefix(string $prefix): void;
-
     public function getBlockPrefix(): string;
 
 }

@@ -94,12 +94,19 @@ class RenderView
         ExceptionHandler::defaultRequestHandler("View Not Found");
     }
 
-    public function renderHtmlElement(string $type, array $options)
+    public function renderHtmlElement($type, array $options)
     {
+        if(!gettype($type) == "object"){
+            if(class_exists($type)){
+                $type = new $type;
+            }
+        }
+
+        $view = gettype($type) == "object" ? $type::getTemplate() : FORM_PATH."/input.tpl.php";
         $options["prefix"] = "app_form";
 
         $this->templateEngine->setData(["parameter" => $options]);
-        if($this->templateEngine->setView(FORM_PATH."/input.tpl.php")){
+        if($this->templateEngine->setView($view)){
             return $this->templateEngine->renderHtmlElement($type);
         };
 

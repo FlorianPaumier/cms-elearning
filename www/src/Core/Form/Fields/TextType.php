@@ -4,27 +4,15 @@
 namespace App\Core\form\Fields;
 
 
-class TextType extends AbstractType implements FieldsInterface
+class TextType extends AbstractType
 {
 
-    function getTemplate()
+    public static function getTemplate()
     {
         return PATH_FORM."/TextType.tpl.php";
     }
 
-    function getAllAttributes()
-    {
-        // TODO: Implement getAllAttributes() method.
+    public function getBlockName(){
+        return "input";
     }
-
-    public function getBlockPrefix()
-    {
-        // TODO: Implement getBlockPrefix() method.
-    }
-
-    function generatePrototype(FormField $field)
-    {
-        // TODO: Implement generatePrototype() method.
-    }
-
 }

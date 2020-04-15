@@ -4,13 +4,17 @@
 namespace App\Core\form\Fields;
 
 
+use App\Core\Interfaces\FormTypeInterface;
+
 interface FieldsInterface
 {
-    function getTemplate();
+    public static function getTemplate();
 
-    function getAllAttributes();
+    public function getParent();
 
-    function getBlockPrefix();
+    public function setOptions(string $key, array $args);
 
-    function generatePrototype(FormField $field);
+    public function generatePrototype(FormTypeInterface $field);
+
+    public function setParent(string $parent);
 }

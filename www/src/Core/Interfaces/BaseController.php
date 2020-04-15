@@ -70,8 +70,14 @@ abstract class BaseController
     /**
      * Creates and returns a Form instance from the type of the form.
      */
-    protected function create(string $type, $data = null, array $options = []): FormInterface
+    protected function createForm(string $type, $data = null, array $options = []): FormBuilder
     {
-        return  ConfigHandler::get('form.factory')->create($type, $data, $options);
+        if(!class_exists($type)) throw new \Exception();
+
+        $form = (new $type);
+        $formBuilder = (new FormBuilder())->setParent($type);
+        $build = $form->buildForm($formBuilder);
+        dump($build);
+        return $build;
     }
 }

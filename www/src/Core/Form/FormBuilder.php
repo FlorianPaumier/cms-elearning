@@ -27,6 +27,7 @@ class FormBuilder
     private $data = [];
     /** @var array */
     private $errors = [];
+    private $parent;
 
     /**
      * FormBuilder constructor.
@@ -47,8 +48,25 @@ class FormBuilder
         return $this;
     }
 
-    public function add(string $key, FieldsInterface $field, array $args){
+    public function add(string $key, string $field, array $args)
+    {
+        if(!class_exists($field)) throw new \Exception();
+        $this->form[$key] = $this->createType(new $field, $key, $args);
+        return $this;
+    }
 
+    private function createType(FieldsInterface $field, string $key, array $args)
+    {
+        $value = $this->getValue($key);
+
+        $args["value"] = $value;
+        if(!is_null($this->parent) && class_exists($this->parent)) {
+            $field->setParent(new $this->parent);
+        }
+
+        $field->setOptions($key, $args);
+
+        return $field->renderElement($args);
     }
 
     /**
@@ -161,6 +179,24 @@ class FormBuilder
         return $this;
     }
 
+    private function setOptions(string $key, array $args)
+    {
+        $options = [
+            "require" => true,
+            "label" => $key,
+            "name" => $key,
+            'compound' => false,
+        ];
+
+        return array_merge(
+            $args, [
+                "key" => $key,
+                "errors" => $this->errors,
+                "type" => $args[$key],
+            ]
+        );
+    }
+
     /**
      * @param string $key
      * @param array $args
@@ -202,12 +238,12 @@ class FormBuilder
         $form = (new $class)->buildForm();
 
         $name = $args["prototype_name"] ?? "__NAME__";
-        $form->setBlockPrefix($form->getBlockPrefix()."[".$name."]");
+        $form->setBlockPrefix($form->getBlockPrefix() . "[" . $name . "]");
 
         $args["name"] = $form->getBlockPrefix();
 
         $view = htmlentities($form->createView(true));
-        $html = '<ul id="collection_' . $key . '" data-prototype="' . $view . '" data-key="'.$name.'" class="fd-c collection container mb-5"></ul>
+        $html = '<ul id="collection_' . $key . '" data-prototype="' . $view . '" data-key="' . $name . '" class="fd-c collection container mb-5"></ul>
 <button id="add-' . $key . '" data-target="collection_' . $key . '" type="button" class="add-element" data-index="0">Nouvel Element ' . $key . '</button>';
 
         $this->inputs[] = $form->getInputs();
@@ -240,6 +276,14 @@ class FormBuilder
         return $this->form;
     }
 
+    /**
+     * @param mixed $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+        return $this;
+    }
     /**
      * @return RenderView|string|string[]|null
      */
@@ -302,16 +346,5 @@ class FormBuilder
             return '';
         }
         return '';
-    }
-
-    private function setOptions(string $key, array $args)
-    {
-        return array_merge(
-            $args, [
-                "key" => $key,
-                "errors" => $this->errors,
-                "type"  => $options[$key] ?? "button",
-            ]
-        );
     }
 }

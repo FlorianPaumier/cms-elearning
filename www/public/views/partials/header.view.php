@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <section class="header">
     <div class="col-sm-10">
         <a href="/">
@@ -51,14 +52,45 @@
                 </li>
                 <li>
                     <a class="btn btn-login" href="/login">Se connecter</a>
+=======
+<section id="header">
+    <section id="search">
+        <div>
+            <img src="https://i1.wp.com/s1.wp.com/wp-content/themes/h4/landing/marketing/pages/_common/components/vip-pitch/media/vip-logo.png?ssl=1" alt="">
+        </div>
+        <form action="" method="post" class="input-group search">
+            <input type="text" placeholder="Chercher dans le site" class="input-search">
+            <button class="btn-search">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </section>
+    <section id="menu">
+        <nav>
+            <ul>
+                <li class="link"><a href="#">Cours</a></li>
+                <li class="link"><a href="#">Article</a></li>
+                <li class="link"><a href="#">Evenements</a></li>
+                <li class="link"><a href="#">Contact</a></li>
+                <li class="link"><a href="#">Recherche</a></li>
+                <li class="profile user-menu acilir">
+                    <span class="icon"><i class="fa fa-user"></i></span>
+                    <div class="login-menu">
+                        <a href="">Login</a>
+                        <a href="">Sign Up</a>
+                    </div>
+>>>>>>> c2c8168034ad98f6dfb83177a77dd9b994b5556c
                 </li>
             </ul>
-        </ul>
-    </nav>
+        </nav>
+    </section>
 </section>
 
+<<<<<<< HEAD
 
 >>>>>>> e881ede0f36dd95b53201673b4a386a88f13c4c6
+=======
+>>>>>>> c2c8168034ad98f6dfb83177a77dd9b994b5556c
 <?php
 
 if(isset($session))

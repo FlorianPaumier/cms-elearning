@@ -5,6 +5,11 @@ namespace App\Core\Database;
 use App\Core\Exception\NoRecordException;
 use PDO;
 
+/**
+ * Class Table
+ * Gestion des fonctions récurantes
+ * @package App\Core\Database
+ */
 class Table extends QueryBuilder
 {
     
@@ -15,6 +20,10 @@ class Table extends QueryBuilder
      */
     protected $entity;
 
+    /**
+     * Récupération de l'instance de PDO
+     * @param PDO|null $pdo
+     */
     public function __construct(PDO $pdo = null)
     {
         parent::__construct($pdo);
@@ -25,19 +34,22 @@ class Table extends QueryBuilder
      *
      * @param  int $perPage
      * @param  int $currentPage
-     * @return Pagerfanta
+     * @return array
      */
-    public function findPaginated(int $perPage, int $currentPage): PagerFanta
+    public function findPaginated(int $perPage, int $currentPage): ?array
     {
-        $query = new PaginatedQuery(
-            $this->pdo,
-            $this->paginationQuery(),
-            "SELECT COUNT(id) FROM {$this->from}",
-            $this->entity
-        );
-        return (new Pagerfanta($query))
-            ->setMaxPerPage($perPage)
-            ->setCurrentPage($currentPage);
+        #Todo : Création d'un paginateur
+//        $query = new PaginatedQuery(
+//            $this->pdo,
+//            $this->paginationQuery(),
+//            "SELECT COUNT(id) FROM {$this->from}",
+//            $this->entity
+//        );
+//        return (new Pagerfanta($query))
+//            ->setMaxPerPage($perPage)
+//            ->setCurrentPage($currentPage);
+
+        return [];
     }
 
     protected function paginationQuery()
@@ -145,6 +157,11 @@ class Table extends QueryBuilder
 
     }
 
+    /**
+     * Formatage de collone pour les données
+     * @param array $params
+     * @return string
+     */
     private function buildFieldQuery(array $params)
     {
         return join(
@@ -192,6 +209,7 @@ class Table extends QueryBuilder
     }
 
     /**
+     * Retourne l'entité utilisé
      * @return mixed
      */
     public function getEntity(): string
@@ -200,6 +218,7 @@ class Table extends QueryBuilder
     }
 
     /**
+     * Retourne la table visée
      * @return string
      */
     public function getTable(): string
@@ -221,6 +240,7 @@ class Table extends QueryBuilder
     }
 
     /**
+     * Retourne l'instance PDO courante
      * @return \PDO
      */
     public function getPdo(): \PDO
@@ -228,17 +248,15 @@ class Table extends QueryBuilder
         return $this->pdo;
     }
 
-    public function hydrate($object, $data)
+    /**
+     * Insert les données trouvé dans l'objet souhaité
+     * @param $object
+     * @param $data
+     * @return mixed
+     */
+    public function hydrate($object, array $data)
     {
-        foreach ($data as $key => $value) {
-            $method = "set" . ucfirst($key);
-            if (is_callable([$object, $method])) {
-                $object->$method($value);
-                $values[$key] = $value;
-            }
-        }
-
-        return $object;
+        return Hydrator::hydrate($data,$object);
     }
 
     /**

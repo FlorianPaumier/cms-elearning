@@ -14,6 +14,7 @@
     <meta lang="fr">
 
     <!-- Custom fonts for this template-->
+<<<<<<< HEAD
     <link rel="stylesheet" href="assets/dist/fontawesome/css/all.css">
 <<<<<<< HEAD
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -30,8 +31,14 @@
     <!-- Custom styles for this template-->
     <link href="/assets/styles/admin/main.css" rel="stylesheet" type="text/css">
 >>>>>>> e881ede0f36dd95b53201673b4a386a88f13c4c6
+=======
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-    @section(styles)
+    <!-- Custom styles for this template-->
+    <link href="assets/styles/css/sb-admin-2.min.css" rel="stylesheet">
+>>>>>>> c2c8168034ad98f6dfb83177a77dd9b994b5556c
+
 </head>
 
 <body id="page-top">
@@ -56,8 +63,7 @@
 @section(body)
 
 
-@include(partials/modal.view.php)
-@include(admin/partials/footer.view.php)
+@include(partials/modal)
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
@@ -66,7 +72,12 @@
 <script  src="/assets/scripts/core/observer.js"></script>
 
 @section(javascripts)
+<<<<<<< HEAD
 >>>>>>> e881ede0f36dd95b53201673b4a386a88f13c4c6
+=======
+
+@include(admin/partials/footer)
+>>>>>>> c2c8168034ad98f6dfb83177a77dd9b994b5556c
 </body>
 </html>
 

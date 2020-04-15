@@ -1,10 +1,14 @@
 <?php
 
-
 namespace App\Core\request;
+
 use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 
+/**
+ * Class RedirectionHandler
+ * @package App\Core\request
+ */
 class RedirectionHandler
 {
     /**
@@ -15,7 +19,7 @@ class RedirectionHandler
     public function redirectTo(string $path)
     {
         header('Status: 301 Moved Permanently', false, 301);
-        header("Location: ".$path);
+        header("Location: " . $path);
         exit();
     }
 
@@ -23,12 +27,13 @@ class RedirectionHandler
      * Redirect the to the route reffered to the route name
      *
      * @param string $name
+     * @throws \Exception
      */
     public function redirectToRoute(string $name)
     {
         $route = CacheHandler::get("routing")[$name];
 
-        if(is_null($route)){
+        if (is_null($route)) {
             throw new \Exception("La route $name n'a pas été trouvé");
         }
         $this->redirectTo($route["path"]);

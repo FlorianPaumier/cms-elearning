@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Core\Interfaces;
 
 use App\Core\Cache\ConfigHandler;

@@ -65,6 +65,7 @@ class TemplateEngine
      */
     public function setView(string $view)
     {
+
         foreach (self::TPL_EXT as $ext) {
             if (file_exists(VIEW_PATH . DIRECTORY_SEPARATOR . $view . $ext)) {
                 $this->view = VIEW_PATH . DIRECTORY_SEPARATOR . $view . $ext;
@@ -190,12 +191,10 @@ class TemplateEngine
             return $this->content;
         }
 
-        CacheHandler::set("dashboard", $this->content);
         if (!is_null($this->view)) {
             $tmp = tmpfile();
             fwrite($tmp, $this->content);
             extract($this->data["parameter"]);
-            file_put_contents("test.php", file_get_contents(stream_get_meta_data($tmp)['uri']));
             include stream_get_meta_data($tmp)['uri'];
         }
     }

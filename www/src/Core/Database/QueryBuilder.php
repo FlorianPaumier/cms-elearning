@@ -34,17 +34,17 @@ class QueryBuilder
     protected $order = [];
 
     /**
-     * @var
+     * @var int
      */
     protected $limit;
 
     /**
-     * @var
+     * @var int
      */
     protected $offset;
 
     /**
-     * @var
+     * @var string
      */
     protected $where;
 
@@ -213,6 +213,14 @@ class QueryBuilder
 
         if (!empty($this->order)) {
             $this->sql .= " ORDER BY " . implode(', ', $this->order);
+        }
+
+        if (!empty($this->limit)) {
+            $this->sql .= " LIMIT " . $this->limit;
+        }
+
+        if (!is_null($this->offset)) {
+            $this->sql .= " OFFSET " . $this->offset;
         }
 
 

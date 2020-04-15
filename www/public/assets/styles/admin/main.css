@@ -109,6 +109,10 @@ img {
   max-height: 100px;
 }
 
+.border-bottom {
+  border-bottom: 1px black solid;
+}
+
 .buttons {
   display: flex;
   height: 100vh;
@@ -143,7 +147,7 @@ img {
   --hue: 171;
 }
 .btn-info {
-  background-color: #EDF8FF;
+  background-color: #D0EDFF;
 }
 .btn-danger {
   background-color: #F00;
@@ -2316,8 +2320,7 @@ img {
   font-size: 0.8em;
   right: 10px;
 }
-
-.active {
+.cards .active {
   background-color: #364885;
 }
 
@@ -2344,7 +2347,7 @@ img {
   padding: 30px;
   display: inline-flex;
   justify-content: space-between;
-  background-color: #EDF8FF;
+  background-color: #D0EDFF;
   border-radius: 10px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }

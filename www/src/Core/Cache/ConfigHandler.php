@@ -61,7 +61,6 @@ class ConfigHandler
         self::bind("userManager", new UserManager());
         self::bind("router", new Router());
         self::bind("eventEmmiter", EventEmmiter::getInstance());
-
     }
 
     /**

@@ -4,7 +4,6 @@ namespace App\Controllers\Users;
 use App\Core\Interfaces\BaseController;
 use App\Core\request\RedirectionHandler;
 use App\Core\Request\Request;
-use App\Entity\User;
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
 

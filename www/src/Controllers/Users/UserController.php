@@ -1,14 +1,17 @@
 <?php
 namespace App\Controllers\Users;
 
-use App\Core\helpers\BaseController;
+use App\Core\Interfaces\BaseController;
+use App\Core\request\RedirectionHandler;
+use App\Core\Request\Request;
+use App\Entity\User;
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
 
 class UserController extends BaseController
 {
 
-    public function login()
+    public function login(Request $request)
     {
         if ($this->userManager->isConnected()) {
             (new RedirectionHandler())
@@ -17,24 +20,24 @@ class UserController extends BaseController
 
         $form = (new UserLoginForm())->buildForm();
 
-        $form->handler(User::class);
         if ($this->query->getMethod() == "POST") {
-            $validator = $this->getValidator()->buildValidator(UserLoginForm::getConstraint());
+            $validator = $this->getValidator(new UserLoginForm())->buildValidator($request);
 
             if ($validator->isValid()) {
-
+                $username = "";
+                $password = "";
                 if (($response = $this->userManager->connectUser($username, $password)) !== true) {
                     $this->session->set("app.flash", ["error" => [$response]]);
                 } else {
-                    $this->redirect->redirectToRoute("views/home.view.php");
+                    $this->redirect->redirectToRoute("app_home");
                 }
             } else {
                 $this->session->set("app.flash", ["error" => $validator->getErrors()]);
             }
         }
 
-        $this->renderer->render(
-            "/security/login", [
+        return $this->renderer->render(
+            "security/login", [
                 "form" => $form->createView(),
                 "errors" => [],
             ]

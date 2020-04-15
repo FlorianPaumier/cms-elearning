@@ -63,7 +63,6 @@ class ConfigHandler
         self::bind("router", new Router());
         self::bind("logger", AbstractLogger::getInstance());
         self::bind("eventEmmiter", EventEmmiter::getInstance());
-
     }
 
     /**

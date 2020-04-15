@@ -1,5 +1,5 @@
 <?php
-namespace App\Core\helpers;
+namespace App\Core\Interfaces;
 
 use App\Core\Cache\ConfigHandler;
 use App\Core\Database\Table;

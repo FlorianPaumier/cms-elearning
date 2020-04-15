@@ -14,6 +14,6 @@ class DefaultController extends BaseController
     }
     public function doc()
     {
-        $this->renderer->render("doc");
+        return $this->renderer->render("doc");
     }
 }

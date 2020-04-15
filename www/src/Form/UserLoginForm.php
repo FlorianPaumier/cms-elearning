@@ -2,6 +2,8 @@
 
 namespace App\Form;
 
+use App\Core\Cache\ConfigHandler;
+use App\Core\Form\FormBuilder;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Kernel\Kernel;
 
@@ -10,7 +12,7 @@ class UserLoginForm extends FormBuilder implements FormTypeInterface
     /**
      * @return array|void
      */
-    public static function getConstraint() /** Pour permettre la validation du formulaire */
+    public static function getConstraint(): array /** Pour permettre la validation du formulaire */
     {
         return [
             [
@@ -33,10 +35,10 @@ class UserLoginForm extends FormBuilder implements FormTypeInterface
     /** Pour créer nos inputs form
      * chaque input a une clé pour pouvoir savoir dire c'est quoi dans notre entité
      */
-    public function buildForm()
+    public function buildForm(): FormBuilder
     {
-        $this->formBuilder
-            ->setAction(Kernel::get("router")->getPath("app_user_login_check")) // fonction non obligatoire, permettant de donné une url différente à l'url actuelle du formulaire
+       return $this
+            ->setAction(ConfigHandler::get("router")->getPath("app_user_login_check")) // fonction non obligatoire, permettant de donné une url différente à l'url actuelle du formulaire
             ->input(
                 "username", [
                     'type' => 'text',
@@ -71,12 +73,18 @@ class UserLoginForm extends FormBuilder implements FormTypeInterface
                     "after" => "<i class=\"spinner\"></i>",
                 ]
             );
-
-        return $this;
     }
 
-    public function getBlockPrefix() /** Pour permettre la récuperation du données du formulaire avec les préfixes */
+    public function getBlockPrefix(): string /** Pour permettre la récuperation du données du formulaire avec les préfixes */
     {
         $this->prefix = "app_user";
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setBlockPrefix(): void
+    {
+        // TODO: Implement setBlockPrefix() method.
     }
 }

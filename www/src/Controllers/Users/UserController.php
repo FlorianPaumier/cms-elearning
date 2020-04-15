@@ -1,13 +1,7 @@
 <?php
 namespace App\Controllers\Users;
 
-<<<<<<< HEAD
 use App\Core\helpers\BaseController;
-=======
-use App\Core\Interfaces\BaseController;
-use App\Core\request\RedirectionHandler;
-use App\Core\Request\Request;
->>>>>>> e881ede0f36dd95b53201673b4a386a88f13c4c6
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
 
@@ -23,7 +17,6 @@ class UserController extends BaseController
 
         $form = (new UserLoginForm())->buildForm();
 
-<<<<<<< HEAD
         $form->handler(User::class);
         if ($this->query->getMethod() == "POST") {
             $validator = $this->getValidator()->buildValidator(UserLoginForm::getConstraint());
@@ -42,10 +35,6 @@ class UserController extends BaseController
 
         $this->renderer->render(
             "/security/login", [
-=======
-        return $this->renderer->render(
-            "security/frontend/login", [
->>>>>>> e881ede0f36dd95b53201673b4a386a88f13c4c6
                 "form" => $form->createView(),
                 "errors" => [],
             ]
@@ -55,7 +44,7 @@ class UserController extends BaseController
     public function register()
     {
         /*if($this->userManager->isConnected()){
-            $this->redirect->redirectToRoute("app_home");
+        $this->redirect->redirectToRoute("app_home");
         }*/
 
         $form = (new UserRegisterForm())->buildForm();

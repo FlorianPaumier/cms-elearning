@@ -37,6 +37,7 @@ class ParseView
      * @return array
      */
     public function parseFunction(array $data, array $methodEntries, TemplateEngine $engine = null){
+
         $functions = [];
         foreach ($methodEntries as $tag) {
             $template = $tag[1];
@@ -45,7 +46,8 @@ class ParseView
 
             switch ($template) {
                 case "path":
-                    $html = ConfigHandler::get("router")->getPath($value);
+                    $path = ConfigHandler::get("router")->getPath($value);
+                    $html = $path ?? "";
                     break;
                 case "isRequired":
                     $html = isset($data["required"]) ? 'required="required"' : "";

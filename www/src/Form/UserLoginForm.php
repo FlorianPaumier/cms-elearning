@@ -11,6 +11,7 @@ use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Kernel\Kernel;
+use App\Entity\User;
 
 class UserLoginForm implements FormTypeInterface
 {
@@ -52,6 +53,8 @@ class UserLoginForm implements FormTypeInterface
             ->add(
                 "password",EntityType::class, [
                     'required' => true,
+                    'entry_type' => User::class,
+                    'choice_label' => "name",
                     'label' => 'Mot de passe',
                     "class" => "form-control form-control-user"
                 ]

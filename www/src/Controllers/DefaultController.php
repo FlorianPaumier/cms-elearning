@@ -1,6 +1,8 @@
 <?php
 namespace App\Controllers;
 
+use App\Core\Cache\ConfigHandler;
+use App\Core\Events\EventEmmiter;
 use App\Core\Interfaces\BaseController;
 use App\Core\Render\Nodes\CaptchaNode;
 use App\Core\Render\RenderView;
@@ -16,6 +18,6 @@ class DefaultController extends BaseController
     }
     public function doc()
     {
-        $this->renderer->render("doc");
+        return $this->renderer->render("doc");
     }
 }

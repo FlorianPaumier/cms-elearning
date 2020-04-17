@@ -5,6 +5,10 @@ namespace App\Core\Request;
 use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 
+/**
+ * Class RedirectionHandler
+ * @package App\Core\request
+ */
 class RedirectionHandler
 {
     /**
@@ -23,12 +27,13 @@ class RedirectionHandler
      * Redirect the to the route reffered to the route name
      *
      * @param string $name
+     * @throws \Exception
      */
     public function redirectToRoute(string $name)
     {
         $route = CacheHandler::get("routing")[$name];
 
-        if(is_null($route)){
+        if (is_null($route)) {
             throw new \Exception("La route $name n'a pas été trouvé");
         }
         $this->redirectTo($route["path"]);

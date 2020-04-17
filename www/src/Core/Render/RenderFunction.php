@@ -3,36 +3,58 @@
 
 namespace App\Core\Render;
 
+use App\Core\Cache\ConfigHandler;
 
-use App\Core\Exceptions\ExceptionHandler;
-
-class RenderFunction
+/**
+ * Class RenderFunction
+ * @package App\Core\Render
+ */
+abstract class RenderFunction
 {
-
+    /**
+     * @param string $value
+     * @param array $data
+     * @return string|string[]|null
+     * @throws \Exception
+     */
     public static function include(string $value, array $data){
-
-        $content = RenderView::include(VIEW_PATH."/$value", $data);
-        return $content;
+        return RenderView::include(VIEW_PATH."/$value", $data);
     }
+
+    /**
+     * @param string $value
+     * @param string $view
+     * @return false|string|string[]|null
+     * @throws \Exception
+     */
     public static function extend(string $value, string $view = ""){
         if(file_exists(VIEW_PATH."/$value.tpl.php")) {
             $template = file_get_contents(VIEW_PATH."/$value.tpl.php");
         }else{
-            throw new \Exception("Page not found", 404);
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "Page not found");
         }
 
-        preg_match_all("#^\s*?@section\((\w+)\)$#m", $template, $sections);
+        preg_match_all("#@section\(([^)]*)\)#m", $template, $sections);
 
         foreach ($sections[1] as $key => $value){
-            preg_match("#^\s*?@section\($value\)([\s\S]*)@endsection$#mU", $view, $sectionsValue);
-            $template = preg_replace("#^\s*?@section\($value\)$#m", $sectionsValue[1], $template);
+            preg_match("#^\s*?@section\($value\)([\s\S]*)@endsection#mU", $view, $sectionsValue);
+           // dump($sectionsValue);
+            $template = preg_replace("#@section\($value\)#mU", $sectionsValue[1], $template);
         }
 
         return $template;
     }
 
+    /**
+     *
+     */
     public static function loop(){}
 
+    /**
+     * @param array $errors
+     * @param TemplateEngine $engine
+     * @return string|string[]|null
+     */
     public static function getErrorFeedback(array $errors, TemplateEngine $engine){
 
         $engine->setData(["parameter" => $errors]);

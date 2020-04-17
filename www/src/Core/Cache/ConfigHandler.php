@@ -7,8 +7,10 @@ namespace App\Core\Cache;
 use App\Core\Cache\CacheHandler;
 use App\Core\Database\QueryBuilder;
 use App\Core\Database\Table;
+use App\Core\Events\EventEmmiter;
 use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Form\FormFactory;
+use App\Core\Logger\AbstractLogger;
 use App\Core\Request\Request;
 use App\Core\Router\Router;
 use App\Core\Security\UserManager;
@@ -31,11 +33,12 @@ class ConfigHandler
 
     public function __construct()
     {
-        define("VIEW_PATH", dirname(__DIR__, 3)."/public/views");
-        define("CACHE_PATH",ROOT_PATH."/app/cache");
-        define("CONFIG_PATH",ROOT_PATH."/app/config");
-        define("ROUTING_PATH",ROOT_PATH."/app/routing");
-        define("PATH_STYLE", ROOT_PATH. "/public/styles");
+        define("VIEW_PATH", ROOT_PATH . "/public/views");
+        define("FORM_PATH", ROOT_PATH . "/src/Core/Form");
+        define("CACHE_PATH", ROOT_PATH . "/app/cache");
+        define("CONFIG_PATH", ROOT_PATH . "/app/config");
+        define("ROUTING_PATH", ROOT_PATH . "/app/routing");
+        define("PATH_STYLE", ROOT_PATH . "/public/styles");
         define("PATH_SCRIPT", ROOT_PATH . "/public/scripts");
         define("PATH_LIBRARY", ROOT_PATH . "/node_modules");
         define("PATH_FORM", ROOT_PATH . "/src/Core/Form/Templates");
@@ -60,6 +63,8 @@ class ConfigHandler
         //self::bind("container", new DependencyInjection());
         self::bind("userManager", new UserManager());
         self::bind("router", new Router());
+        self::bind("logger", AbstractLogger::getInstance());
+        self::bind("eventEmmiter", EventEmmiter::getInstance());
         self::bind("form.factory", new FormFactory());
 
     }

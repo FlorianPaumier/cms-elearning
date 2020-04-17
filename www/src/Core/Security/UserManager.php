@@ -36,7 +36,6 @@ class UserManager
         $this->repository = ConfigHandler::get('repository');
         $this->session  = ConfigHandler::get("session");
         $this->security  = CacheHandler::get("security");
-
     }
 
     /**
@@ -94,6 +93,11 @@ class UserManager
 
     }
 
+    /**
+     * Get the current user if login
+     * @return mixed
+     * @throws \App\Core\Exception\NoRecordException
+     */
     public function getUser(){
         $session = $this->session->offsetGet("app.user");
         $user = $this->repository->from('user')->findBy(["email" => $session["user"]]);

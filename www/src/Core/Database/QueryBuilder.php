@@ -34,17 +34,17 @@ class QueryBuilder
     protected $order = [];
 
     /**
-     * @var
+     * @var int
      */
     protected $limit;
 
     /**
-     * @var
+     * @var int
      */
     protected $offset;
 
     /**
-     * @var
+     * @var string
      */
     protected $where;
 
@@ -194,7 +194,7 @@ class QueryBuilder
     }
 
     /**
-     * @return void
+     * @return string
      */
     public function toSQL(): string
     {
@@ -214,12 +214,15 @@ class QueryBuilder
         if (!empty($this->order)) {
             $this->sql .= " ORDER BY " . implode(', ', $this->order);
         }
-        if ($this->limit > 0) {
+
+        if (!empty($this->limit)) {
             $this->sql .= " LIMIT " . $this->limit;
         }
-        if ($this->offset !== null) {
+
+        if (!is_null($this->offset)) {
             $this->sql .= " OFFSET " . $this->offset;
         }
+
 
         return $this->sql;
     }
@@ -243,10 +246,7 @@ class QueryBuilder
     /**
      * Permet d'éxécuter une requête et de récupérer le premier résultat
      *
-     * @param  string $query
-     * @param  array  $params
      * @return mixed|false
-     * @throws NoRecordException
      */
     public function fetchOrFail()
     {
@@ -255,21 +255,21 @@ class QueryBuilder
         $query->execute($this->params);
 
         if (isset($this->entity)) {
-            $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
+            $record = $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
+        }else{
+            $record =$query->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        $record = $query->fetchObject();
 
         return $record !== false ? $record : null;
     }
 
     /**
-     * @param  PDO $pdo
      * @return int
      */
     public function count(): int
     {
-        $q = (clone $this)->select('COUNT(id) count')->fetchOrFail('count');
+        $q = (clone $this)->select('COUNT(id) count')->fetchOrFail();
 
         if(is_array($q)) {
              $count = (int)$q["count"];

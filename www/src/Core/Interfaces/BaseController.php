@@ -12,17 +12,16 @@ use App\Core\Request\Request;
 use App\Core\Security\UserManager;
 use App\Core\Session\PHPSession;
 
+/**
+ * Class BaseController
+ * @package App\Core\Interfaces
+ */
 abstract class BaseController
 {
     /**
      * @var RenderView
      */
     protected $renderer;
-
-    /**
-     * @var Table
-     */
-    protected $entityManager;
 
     /**
      * @var Table
@@ -62,6 +61,11 @@ abstract class BaseController
         $this->redirect = new RedirectionHandler();
     }
 
+    /**
+     * Return une instance d'un validator pour le form donner
+     * @param FormTypeInterface $formType
+     * @return Validator
+     */
     protected function getValidator(FormTypeInterface $formType)
     {
         return new Validator($formType);

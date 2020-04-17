@@ -6,10 +6,16 @@ use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Kernel\Kernel;
 
+/**
+ * Singleton Connection
+ * @package App\Core\Database
+ */
 abstract class Connection
 {
 
+    /** @var \PDO */
     private static $connection;
+
     /**
      * Call this method to get singleton
      */

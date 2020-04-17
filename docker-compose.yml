@@ -23,7 +23,7 @@ services:
       POSTGRES_USER: utilisateur
       POSTGRES_DB: project_cms
     volumes:
-      - ./docker/postgres/data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgres
     ports:
       - 5432:5432
   php:
@@ -49,8 +49,10 @@ services:
     restart: always
     environment:
       PMA_HOST: postgres
-      PMA_PORT: 5432
+      PMA_PORT: 5433
     ports:
       - 281:8080
     depends_on:
       - postgres
+volumes:
+  db_data: {}

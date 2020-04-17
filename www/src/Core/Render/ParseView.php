@@ -9,7 +9,14 @@ use App\Core\Kernel\Kernel;
 
 class ParseView
 {
-    
+
+    /**
+     * Replace the tags in template by the value
+     * @param string $content
+     * @param array $data
+     * @param array $fieldEntries
+     * @return string|string[]|null
+     */
     public function parseTags(string $content, array $data, array $fieldEntries){
         foreach ($data["parameter"] as $key => $value) {
             foreach ($fieldEntries as $tag) {
@@ -22,7 +29,15 @@ class ParseView
         return $content;
     }
 
+    /**
+     * Replace the function tags by the result of the function
+     * @param array $data
+     * @param array $methodEntries
+     * @param TemplateEngine|null $engine
+     * @return array
+     */
     public function parseFunction(array $data, array $methodEntries, TemplateEngine $engine = null){
+
         $functions = [];
         foreach ($methodEntries as $tag) {
             $template = $tag[1];
@@ -31,7 +46,8 @@ class ParseView
 
             switch ($template) {
                 case "path":
-                    $html = ConfigHandler::get("router")->getPath($value);
+                    $path = ConfigHandler::get("router")->getPath($value);
+                    $html = $path ?? "";
                     break;
                 case "isRequired":
                     $html = isset($data["required"]) ? 'required="required"' : "";

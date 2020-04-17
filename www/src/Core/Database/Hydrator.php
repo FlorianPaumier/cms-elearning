@@ -37,11 +37,21 @@ class Hydrator
         return $instance;
     }
 
+    /**
+     * format function set
+     * @param string $fieldName
+     * @return string
+     */
     private static function getSetter(string $fieldName): string
     {
         return 'set' . self::getProperty($fieldName);
     }
 
+    /**
+     * Format the field Name
+     * @param string $fieldName
+     * @return string
+     */
     private static function getProperty(string $fieldName): string
     {
         return join('', array_map('ucfirst', explode('_', $fieldName)));

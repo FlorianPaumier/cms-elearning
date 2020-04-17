@@ -16,13 +16,4 @@ class EntityType extends AbstractType
         return "select";
     }
 
-    /**
-     * @return mixed
-     */
-    public function __invoke()
-    {
-       dump("hello");
-    }
-
-
 }

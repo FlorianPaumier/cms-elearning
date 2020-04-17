@@ -24,6 +24,8 @@ abstract class AbstractType implements FieldsInterface
 
     private $value;
 
+    private $args = [];
+
     private $parent;
 
     public function __construct()
@@ -66,11 +68,21 @@ abstract class AbstractType implements FieldsInterface
         $options = [
             "require" => true,
             "label" => $key,
-            "name" => $parent->getBlockPrefix()."_".$key,
+            "name" => method_exists($parent, "getBlockPrefix") ? $parent->getBlockPrefix() ."_".$key : "option_".$key,
             'compound' => false,
         ];
 
         $this->constraints = array_merge($options, $args);
+    }
+
+    public function addData(string $key, $value)
+    {
+        $this->args[$key] = $value;
+    }
+
+    public function addArgs(array $data)
+    {
+        $this->args = array_merge($this->args, $data);
     }
 
     /**
@@ -102,6 +114,11 @@ abstract class AbstractType implements FieldsInterface
 
     public function renderElement(array $args = [])
     {
-        return $this->render->renderHtmlElement($this, $args);
+        if (!empty($args))
+        {
+            $this->args = array_merge($args, $this->args);
+        }
+
+        return $this->render->renderHtmlElement($this, $this->args);
     }
 }

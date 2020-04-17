@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Core\form;
+namespace App\Core\Form;
 
 
 class FormFactory

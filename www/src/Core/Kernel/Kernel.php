@@ -6,7 +6,6 @@ namespace App\Core\Kernel;
 use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Render\RenderView;
-use PHPUnit\Util\Exception;
 
 class Kernel
 {
@@ -17,8 +16,8 @@ class Kernel
         $_SERVER["APP_DEBUG"] = $debug;
 
 
-        include_once dirname(__DIR__)."/helpers/VarDumper.php";
-        include_once dirname(__DIR__)."/helpers/basicFunction.php";
+        include_once dirname(__DIR__)."/Helpers/VarDumper.php";
+        include_once dirname(__DIR__)."/Helpers/basicFunction.php";
     }
 
 

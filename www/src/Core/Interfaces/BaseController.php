@@ -7,7 +7,7 @@ use App\Core\Database\Table;
 use App\Core\Form\FormBuilder;
 use App\Core\Validator\Validator;
 use App\Core\Render\RenderView;
-use App\Core\request\RedirectionHandler;
+use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Core\Security\UserManager;
 use App\Core\Session\PHPSession;
@@ -77,7 +77,7 @@ abstract class BaseController
         $form = (new $type);
         $formBuilder = (new FormBuilder())->setParent($type);
         $build = $form->buildForm($formBuilder);
-        dump($build);
+
         return $build;
     }
 }

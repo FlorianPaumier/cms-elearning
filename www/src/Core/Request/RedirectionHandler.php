@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Core\request;
+namespace App\Core\Request;
 use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 

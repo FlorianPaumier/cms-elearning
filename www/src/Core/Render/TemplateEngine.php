@@ -5,7 +5,7 @@ namespace App\Core\Render;
 
 
 use App\Core\Cache\CacheHandler;
-use App\Core\form\Fields\FieldsInterface;
+use App\Core\Form\Fields\FieldsInterface;
 
 class TemplateEngine
 {
@@ -120,7 +120,7 @@ class TemplateEngine
             dump($this->content, "Template Content");
         }
 
-        preg_match_all("/^{%\s?block\s$block\s?%}((?s:.+?)){%\s?endblock\s?%}$/m", $this->content, $this->blockEntries, PREG_SET_ORDER, 0);
+        preg_match_all("#^\s*?@block\($block\)(.*?)@endsection$#mU", $this->content, $this->blockEntries, PREG_SET_ORDER, 0);
 
         if($type == "errors"){
             dump($this->blockEntries, "Block Entries");

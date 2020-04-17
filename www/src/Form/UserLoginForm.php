@@ -4,9 +4,11 @@ namespace App\Form;
 
 
 use App\Core\Cache\ConfigHandler;
-use App\Core\form\Fields\TextType;
+use App\Core\Form\Fields\ButtonType;
+use App\Core\Form\Fields\EntityType;
+use App\Core\Form\Fields\PasswordType;
+use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
-use App\Core\Form\FormType;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Kernel\Kernel;
 
@@ -45,6 +47,20 @@ class UserLoginForm implements FormTypeInterface
                     'required' => true,
                     'label' => 'Username',
                     "class" => "form-control form-control-user"
+                ]
+            )
+            ->add(
+                "password",EntityType::class, [
+                    'required' => true,
+                    'label' => 'Mot de passe',
+                    "class" => "form-control form-control-user"
+                ]
+            )
+            ->add(
+                "submit",ButtonType::class, [
+                    'type' => 'submit',
+                    'label' => "S'inscrire",
+                    "class" => "btn"
                 ]
             );
     }

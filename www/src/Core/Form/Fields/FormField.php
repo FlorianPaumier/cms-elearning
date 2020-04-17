@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Core\form\Fields;
+namespace App\Core\Form\Fields;
 
 
 class FormField

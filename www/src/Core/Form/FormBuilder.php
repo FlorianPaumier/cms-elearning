@@ -4,7 +4,8 @@
 namespace App\Core\Form;
 
 
-use App\Core\form\Fields\FieldsInterface;
+use App\Core\Form\Fields\ChoiceType;
+use App\Core\Form\Fields\FieldsInterface;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Render\RenderView;
 
@@ -50,7 +51,10 @@ class FormBuilder
 
     public function add(string $key, string $field, array $args)
     {
-        if(!class_exists($field)) throw new \Exception();
+        if (!class_exists($field)) {
+            throw new \Exception();
+        }
+
         $this->form[$key] = $this->createType(new $field, $key, $args);
         return $this;
     }
@@ -60,7 +64,17 @@ class FormBuilder
         $value = $this->getValue($key);
 
         $args["value"] = $value;
-        if(!is_null($this->parent) && class_exists($this->parent)) {
+
+        if($field instanceof ChoiceType){
+            $options = [
+                "multiple" => $args["multiple"] ?? false,
+                "expanded" => $args["expanded"] ?? false,
+            ];
+
+            $field->translate($options);
+        }
+
+        if (!is_null($this->parent) && class_exists($this->parent)) {
             $field->setParent(new $this->parent);
         }
 
@@ -284,6 +298,7 @@ class FormBuilder
         $this->parent = $parent;
         return $this;
     }
+
     /**
      * @return RenderView|string|string[]|null
      */

@@ -8,7 +8,7 @@ use App\Core\Cache\CacheHandler;
 use App\Core\Database\QueryBuilder;
 use App\Core\Database\Table;
 use App\Core\Exceptions\ExceptionHandler;
-use App\Core\form\FormFactory;
+use App\Core\Form\FormFactory;
 use App\Core\Request\Request;
 use App\Core\Router\Router;
 use App\Core\Security\UserManager;

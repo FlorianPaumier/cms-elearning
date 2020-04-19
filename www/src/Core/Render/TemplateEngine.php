@@ -195,7 +195,7 @@ class TemplateEngine
             $tmp = tmpfile();
             fwrite($tmp, $this->content);
             extract($this->data["parameter"]);
-            file_put_contents("test.php", file_get_contents(stream_get_meta_data($tmp)['uri']));
+           
             include stream_get_meta_data($tmp)['uri'];
         }
     }

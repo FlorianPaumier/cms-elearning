@@ -5,7 +5,7 @@ namespace App\Core\Interfaces;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Database\Table;
 use App\Core\Form\FormBuilder;
-use App\Core\Validator\Validator;
+use App\Core\Form\Validator\Validator;
 use App\Core\Render\RenderView;
 use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
@@ -56,7 +56,6 @@ abstract class BaseController
         $this->repository = ConfigHandler::get('repository');
         $this->userManager = ConfigHandler::get("userManager");
         $this->query = ConfigHandler::get("request");
-        $this->form = new FormBuilder();
         $this->session = ConfigHandler::get("session");
         $this->redirect = new RedirectionHandler();
     }
@@ -74,12 +73,12 @@ abstract class BaseController
     /**
      * Creates and returns a Form instance from the type of the form.
      */
-    protected function createForm(string $type, $data = null, array $options = []): FormBuilder
+    protected function createForm(string $type, &$data = null, array $options = []): FormBuilder
     {
         if(!class_exists($type)) throw new \Exception();
 
         $form = (new $type);
-        $formBuilder = (new FormBuilder())->setParent($type);
+        $formBuilder = (new FormBuilder($data))->setParent($type);
         $build = $form->buildForm($formBuilder);
 
         return $build;

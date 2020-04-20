@@ -149,6 +149,7 @@ class TemplateEngine
         if($type == "errors"){
             dump($this->content, "Template Content");
         }
+
         preg_match_all("#.*@block\($block\)((?s:.+?))@endblock.*#m", $this->content, $this->blockEntries, PREG_SET_ORDER, 0);
 
         if($type == "errors"){

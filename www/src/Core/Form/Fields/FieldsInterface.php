@@ -17,4 +17,8 @@ interface FieldsInterface
     public function generatePrototype(FormTypeInterface $field);
 
     public function setParent(string $parent);
+
+    public function getBlockPrefix();
+
+    public function getConstraintOffset(string $key);
 }

@@ -28,6 +28,8 @@ abstract class AbstractType implements FieldsInterface
 
     private $parent;
 
+    protected $entity;
+
     public function __construct()
     {
         $this->render = new RenderView();
@@ -48,8 +50,6 @@ abstract class AbstractType implements FieldsInterface
         $html = '<ul id="collection_' . $key . '" data-prototype="' . $view . '" data-key="' . $name . '" class="fd-c collection container mb-5"></ul>
 <button id="add-' . $key . '" data-target="collection_' . $key . '" type="button" class="add-element" data-index="0">Nouvel Element ' . $key . '</button>';
 
-        $this->inputs[] = $form->getInputs();
-
         $this->form[$key] = htmlentities($html);
     }
 
@@ -61,18 +61,26 @@ abstract class AbstractType implements FieldsInterface
     public function setOptions(string $key, array $args)
     {
         $this->name = $key;
-
         /** @var FormTypeInterface $parent */
         $parent = $this->getParent();
 
         $options = [
+            "key" => $key,
             "require" => true,
             "label" => $key,
-            "name" => method_exists($parent, "getBlockPrefix") ? $parent->getBlockPrefix() ."_".$key : "option_".$key,
+            "name" => method_exists($parent, "getBlockPrefix") ? $parent->getBlockPrefix() . "_" . $key : "option_" . $key,
             'compound' => false,
         ];
 
         $this->constraints = array_merge($options, $args);
+    }
+
+    public function getConstraintOffset(string $key)
+    {
+        if (key_exists($key, $this->constraints)) {
+            return $this->constraints[$key];
+        }
+        return null;
     }
 
     public function addData(string $key, $value)
@@ -112,13 +120,17 @@ abstract class AbstractType implements FieldsInterface
         return $this;
     }
 
-    public function renderElement(array $args = [])
+    public function renderElement()
     {
-        if (!empty($args))
-        {
-            $this->args = array_merge($args, $this->args);
-        }
-
-        return $this->render->renderHtmlElement($this, $this->args);
+        return $this->render->renderHtmlElement($this, $this->constraints);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getBlockPrefix()
+    {
+    }
+
+
 }

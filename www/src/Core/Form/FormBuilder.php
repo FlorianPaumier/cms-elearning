@@ -12,18 +12,19 @@ use App\Core\Form\Fields\FieldsInterface;
 use App\Core\Form\Fields\OptionType;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Render\RenderView;
+use App\Core\Request\Request;
 
 class FormBuilder
 {
 
-    /** @var string  */
+    /** @var string */
     protected $prefix = "app";
     /** @var array */
     protected $inputs = [];
     /** @var array */
     private $fields = [];
 
-    /** @var string  */
+    /** @var string */
     private $action = "";
 
     /** @var RenderView */
@@ -37,13 +38,22 @@ class FormBuilder
 
     /** @var array */
     private $errors = [];
+
+    /** @var AbstractForm */
     private $parent;
+
+    private $entity;
+
+    /** @var FormTypeInterface */
+    private $formType;
+    private $configurationType;
 
     /**
      * FormBuilder constructor.
      */
-    public function __construct()
+    public function __construct(object $entity = null)
     {
+        $this->entity = $entity;
         $this->render = new RenderView();
         define("FORM_PATH", __DIR__);
     }
@@ -64,15 +74,22 @@ class FormBuilder
             throw new \Exception();
         }
 
-        $this->form[$key] = $this->createType(new $field, $key, $args);
+        $this->createType(new $field, $key, $args);
         return $this;
     }
 
     private function createType(FieldsInterface $field, string $key, array $args)
     {
+        if (!$this->fieldExist($key)) {
+            ConfigHandler::get("eventEmmiter")->emit("error.500", "Field $key don't exist");
+        }
+
+        #Todo : Get data from Request ou Entity
         $value = $this->getValue($key);
 
         $args["value"] = $value;
+
+        $args["type"] = $args["type"] ?? $field->getBlockPrefix();
 
         $field = $this->translateField($field, $args);
 
@@ -81,8 +98,35 @@ class FormBuilder
         }
 
         $field->setOptions($key, $args);
+        $this->form[$field->getConstraintOffset("name")] = $field->renderElement();
+        $this->fields[$field->getConstraintOffset("name")] = $key;
 
-        return $field->renderElement($args);
+        return $this->form[$key];
+    }
+
+    public function handleRequest(Request $request)
+    {
+        $keysForm = array_keys($this->form);
+
+        foreach ($keysForm as $key) {
+            if (key_exists($key, $request->getQuery()->all())) {
+                $value =  $request->getQuery()->get($key);
+            } else {
+                if (key_exists($key, $request->getRequest()->all())) {
+                    $value = $request->getRequest()->get($key);
+                }
+            }
+
+            if(is_null($value)) break;
+
+            #TODO : Transforme les Entity / Collection Type
+            if(is_null($this->entity) || is_array($this->entity)){
+                $this->entity[$key] = $value;
+            }else if (is_object($this->entity)) {
+                $method = "set".ucfirst($this->fields[$key]);
+                if(method_exists($this->entity, $method)) $this->entity->$method($value);
+            }
+        }
     }
 
     /**
@@ -95,14 +139,14 @@ class FormBuilder
     {
         $value = $this->getValue($key);
 
-        $args = array_merge($args,[
+        $args = array_merge($args, [
             "value" => $value,
             "key" => $key,
             "errors" => $this->errors,
             "prefix" => $this->prefix
         ]);
 
-        if(empty($args["type"])){
+        if (empty($args["type"])) {
             $args["type"] = "text";
         }
 
@@ -150,7 +194,7 @@ class FormBuilder
 
         $input[] = $key;
 
-        $this->form[$key] = $this->render->renderHtmlElement("checkbox",  $options);
+        $this->form[$key] = $this->render->renderHtmlElement("checkbox", $options);
         return $this;
     }
 
@@ -161,8 +205,8 @@ class FormBuilder
             $inputClass .= ' is-invalid';
         }
 
-        if(isset($options["class"])) {
-            $inputClass .= ' '.$options["class"];
+        if (isset($options["class"])) {
+            $inputClass .= ' ' . $options["class"];
         }
 
         return $inputClass;
@@ -207,7 +251,7 @@ class FormBuilder
 
         $input[] = $key;
 
-        $this->form[$key] = $this->render->renderHtmlElement("textarea",  $args);
+        $this->form[$key] = $this->render->renderHtmlElement("textarea", $args);
         return $this;
     }
 
@@ -275,8 +319,11 @@ class FormBuilder
      * @return $this
      * @throws \Exception
      */
-    public function collection(string $key, string $class, array $args){
-        if(!class_exists($class)) throw new \Exception("Class $class not found", 404);
+    public function collection(string $key, string $class, array $args)
+    {
+        if (!class_exists($class)) {
+            throw new \Exception("Class $class not found", 404);
+        }
 
 
         /** @var FormTypeInterface $form */
@@ -288,10 +335,8 @@ class FormBuilder
         $args["name"] = $form->getBlockPrefix();
 
         $view = htmlentities($form->createView(true));
-        $html = '<ul id="collection_'.$key.'" data-prototype="'.$view.'" class="fd-c collection container mb-5"></ul>
-<button id="add-'.$key.'" data-target="collection_'.$key.'" type="button" class="add-element" data-index="0">Nouvel Element '.$key.'</button>';
-
-        $this->inputs[] = $form->getInputs();
+        $html = '<ul id="collection_' . $key . '" data-prototype="' . $view . '" class="fd-c collection container mb-5"></ul>
+<button id="add-' . $key . '" data-target="collection_' . $key . '" type="button" class="add-element" data-index="0">Nouvel Element ' . $key . '</button>';
 
         $this->form[$key] = htmlentities($html);
         return $this;
@@ -335,7 +380,7 @@ class FormBuilder
      */
     public function createView(bool $prototype = false)
     {
-        $html =  implode(
+        $html = implode(
             "", array_map(
                 function ($input) {
                     return html_entity_decode($input);
@@ -343,58 +388,83 @@ class FormBuilder
             )
         );
 
-        if($prototype){
+        if ($prototype) {
             return $html;
         }
 
-        $form = $this->render->render(__DIR__."/form.view.php", [
+        return $this->render->render(__DIR__ . "/form.view.php", [
             "form_view" => $html,
             "method" => "POST",
-            "action"  => $this->action,
+            "action" => $this->action,
         ], true);
-
-        return $form;
     }
 
-    public function getInputs(){
+    public function getInputs()
+    {
         return $this->inputs;
     }
 
     private function translateField(FieldsInterface $field, array $args)
     {
-        if($field instanceof ChoiceType){
+        if ($field instanceof ChoiceType) {
             $options = [
                 "multiple" => $args["multiple"] ?? false,
                 "expanded" => $args["expanded"] ?? false,
             ];
 
             $field->translate($options);
-        }else if($field instanceof EntityType){
+        } else {
+            if ($field instanceof EntityType) {
 
-            if(!isset($args["entry_type"])){
-                ConfigHandler::get("eventEmmiter")->emit("error.500", "the key entry_type must be not null");
+                if (!isset($args["entry_type"])) {
+                    ConfigHandler::get("eventEmmiter")->emit("error.500", "the key entry_type must be not null");
+                }
+
+                /** @var Table $repository */
+                $repository = ConfigHandler::get('repository');
+                $class = explode("/", $args["entry_type"]);
+                $table = strtolower(array_pop($class));
+                $items = $repository->from("user")->findAll();
+                $options = [];
+                foreach ($items as $item) {
+                    $type = new OptionType();
+                    $type->setParent($field);
+                    $type->addArgs([
+                        "value" => $item[$args["choice_label"]] ?? $item["id"],
+                        "key" => $item["id"]
+                    ]);
+
+                    $options[] = $type->renderElement();
+                }
+
+                $field->addData("optionsHTML", implode("", $options));
             }
-
-            /** @var Table $repository */
-            $repository = ConfigHandler::get('repository');
-            $class = explode("/", $args["entry_type"]);
-            $table = strtolower(array_pop($class));
-            $items = $repository->from("user")->findAll();
-            $options = [];
-            foreach ($items as $item){
-                $type = new OptionType();
-                $type->setParent($field);
-                $type->addArgs([
-                    "value" => $item[$args["choice_label"]] ?? $item["id"],
-                    "key" => $item["id"]
-                ]);
-
-                $options[] = $type->renderElement();
-            }
-
-            $field->addData("optionsHTML", implode("", $options));
         }
 
         return $field;
+    }
+
+    private function fieldExist(string $key)
+    {
+        $options = (new $this->parent)->getOptions();
+        if (key_exists("data_class", $options)) {
+            return true;
+        }
+
+        $entity = $options["data_class"];
+        if(!class_exists($entity)){
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "the $entity don't exist");
+        }
+
+        $methods = ["get", 'set', 'is'];
+
+        foreach ($methods as $method) {
+            $assesseur = $method . ucfirst($key);
+            if (method_exists($entity, $assesseur)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

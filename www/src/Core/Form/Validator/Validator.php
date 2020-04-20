@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Core\Validator;
+namespace App\Core\Form\Validator;
 
 
 use App\Core\Cache\ConfigHandler;
@@ -34,6 +34,7 @@ class Validator
 
     /**
      * Validator constructor.
+     * @param FormTypeInterface $form
      */
     public function __construct(FormTypeInterface $form)
     {

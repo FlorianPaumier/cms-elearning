@@ -15,4 +15,12 @@ class ButtonType extends AbstractType
     public function getBlockName(){
         return "button";
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'button';
+    }
 }

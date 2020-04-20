@@ -139,7 +139,8 @@ class RenderView
 
         $this->templateEngine->setData(["parameter" => $options]);
         if($this->templateEngine->setView($view)){
-            return $this->templateEngine->renderHtmlElement($type);
+            $html = $this->templateEngine->renderHtmlElement($type);
+            return $html;
         };
 
         ConfigHandler::get("eventEmmiter")->emit("error.404","View Not Found");

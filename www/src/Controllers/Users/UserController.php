@@ -66,9 +66,9 @@ class UserController extends BaseController
             }
         }
 
-        $this->renderer->render(
-            ROOT_DIR . "/public/views/security/register", [
-                "form" => $this->form->createView(),
+        return $this->renderer->render(
+            ROOT_PATH . "/public/views/security/frontend/register", [
+                "form" => $form->createView(),
             ]
         );
     }
@@ -96,8 +96,31 @@ class UserController extends BaseController
         $this->redirect->redirectToRoute("app_home");
     }
 
-    public function forgotpassword()
+    public function forgetPassword()
     {
-        $this->renderer->render("security/frontend/forget_password");
+        $form = (new UserLoginForm())->buildForm();
+
+        if ($this->query->getMethod() == "POST") {
+            $validator = $this->getValidator(new UserForgetpasswordForm())->buildValidator($request);
+
+            if ($validator->isValid()) {
+                $email = "";
+                if (($response = $this->userManager->forgetPassword($email)) !== true) {
+                    $this->session->set("app.flash", ["error" => [$response]]);
+                } else {
+                    $this->redirect->redirectToRoute("app_home");
+                }
+            } else {
+                $this->session->set("app.flash", ["error" => $validator->getErrors()]);
+            }
+        }
+
+        return $this->renderer->render(
+            "security/frontend/forget_password", [
+                "form" => $form->createView(),
+                "errors" => [],
+            ]
+        );
+
     }
 }

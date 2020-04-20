@@ -12,41 +12,41 @@ class UserRegisterForm extends FormBuilder implements FormTypeInterface
     {
         return
             [
-                "username" => [
-                    "empty" => false,
-                    "required" => true,
-                    "length" => [
-                        "min" => 4
-                    ],
-                    "unique" => [
-                        "table" => "user"
-                    ]
+            "username" => [
+                "empty" => false,
+                "required" => true,
+                "length" => [
+                    "min" => 4,
                 ],
-                "password" => [
-                    "empty" => false,
-                    "required" => true,
-                    "confirmation" => true,
-                    "length" => [
-                        "min" => 8
-                    ]
+                "unique" => [
+                    "table" => "user",
                 ],
-                "email" => [
-                    "required" => true,
-                    "empty" => false,
-                ]
-            ]
-            ;
+            ],
+            "password" => [
+                "empty" => false,
+                "required" => true,
+                "confirmation" => true,
+                "length" => [
+                    "min" => 8,
+                ],
+            ],
+            "email" => [
+                "required" => true,
+                "empty" => false,
+            ],
+        ]
+        ;
     }
 
     public function buildForm(): FormBuilder
     {
-        $this
+        return $this
             ->input("username", [])
             ->input("email", [])
             ->input("password", [])
-            ->input("password_confirm", []);
+            ->input("password_confirm", [])
+            ->button("submit", []);
 
-        return $this;
     }
 
     public function getBlockPrefix(): string

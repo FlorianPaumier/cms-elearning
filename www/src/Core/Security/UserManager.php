@@ -7,9 +7,9 @@ use App\Core\Cache\ConfigHandler;
 use App\Core\database\Hydrator;
 use App\Core\Database\QueryBuilder;
 use App\Core\Database\Table;
-use App\Entity\User;
 use App\Core\Request\Request;
 use App\Core\Session\PHPSession;
+use App\Entity\User;
 
 class UserManager
 {
@@ -34,8 +34,8 @@ class UserManager
     {
         $this->entityManager = ConfigHandler::get("entityManager");
         $this->repository = ConfigHandler::get('repository');
-        $this->session  = ConfigHandler::get("session");
-        $this->security  = CacheHandler::get("security");
+        $this->session = ConfigHandler::get("session");
+        $this->security = CacheHandler::get("security");
     }
 
     /**
@@ -47,16 +47,16 @@ class UserManager
             "username" => $username,
             "password" => md5($password),
             "enable" => true,
-            ]);
+        ]);
 
         $response = false;
 
-        if($q !== false){
+        if ($q !== false) {
             $response = true;
             $this->session->set("app.user", [
                 "user" => $q->email,
                 "roles" => $q->roles,
-                "timestamp" => time() + 2*60*60,
+                "timestamp" => time() + 2 * 60 * 60,
             ]);
         }
         return $response;
@@ -80,12 +80,12 @@ class UserManager
         }
 
         /*if (!isset($_SESSION['auth'])) {
-            throw new ForbiddenException();
+        throw new ForbiddenException();
         }*/
 
-        if($this->session->get("app.user")["timestamp"] < time()){
+        if ($this->session->get("app.user")["timestamp"] < time()) {
             $this->disconnectUser();
-        }else{
+        } else {
             return true;
         }
 
@@ -98,7 +98,8 @@ class UserManager
      * @return mixed
      * @throws \App\Core\Exception\NoRecordException
      */
-    public function getUser(){
+    public function getUser()
+    {
         $session = $this->session->offsetGet("app.user");
         $user = $this->repository->from('user')->findBy(["email" => $session["user"]]);
         return $this->repository->hydrate(new User(), $user);
@@ -109,16 +110,16 @@ class UserManager
     public function isAllowed(array $route)
     {
         foreach ($this->security["firewall"]["access_control"] as $firewall) {
-            $reg = str_replace("/", "\/",$firewall["path"]);
+            $reg = str_replace("/", "\/", $firewall["path"]);
 
-            if(preg_match("/${reg}/", $route["path"])){
-                if(!in_array("IS_AUTHENTICATED_ANONYMOUSLY",$firewall["roles"])){
-                    if(!$this->isConnected()){
+            if (preg_match("/${reg}/", $route["path"])) {
+                if (!in_array("IS_AUTHENTICATED_ANONYMOUSLY", $firewall["roles"])) {
+                    if (!$this->isConnected()) {
                         return false;
-                    }else{
+                    } else {
                         $haveRoles = false;
-                        foreach ($this->getUser()->getRoles() as $roles){
-                            if(in_array($roles, $firewall["roles"])){
+                        foreach ($this->getUser()->getRoles() as $roles) {
+                            if (in_array($roles, $firewall["roles"])) {
                                 $haveRoles = true;
                             };
                         }
@@ -147,11 +148,11 @@ class UserManager
 
         $error = [];
 
-        if($this->repository->from("user")->findBy(["email" => $value["email"]])){
+        if ($this->repository->from("user")->findBy(["email" => $value["email"]])) {
             return "Votre email exist déjà. Veuillez le modifier";
         }
 
-        if($this->repository->from("user")->insert($value)){
+        if ($this->repository->from("user")->insert($value)) {
             return true;
         }
 
@@ -163,5 +164,8 @@ class UserManager
      */
     public function forgetPassword(string $email)
     {
+        if ($this->repository->from("user")->findBy(["email" => $value["email"]])) {
+            return "un mail a été envoyé";
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Controllers\Users;
 use App\Core\Interfaces\BaseController;
 use App\Core\request\RedirectionHandler;
 use App\Core\Request\Request;
+use App\Form\UserForgetpasswordForm;
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
 
@@ -98,7 +99,7 @@ class UserController extends BaseController
 
     public function forgetPassword()
     {
-        $form = (new UserLoginForm())->buildForm();
+        $form = (new UserForgetpasswordForm())->buildForm();
 
         if ($this->query->getMethod() == "POST") {
             $validator = $this->getValidator(new UserForgetpasswordForm())->buildValidator($request);
@@ -116,9 +117,8 @@ class UserController extends BaseController
         }
 
         return $this->renderer->render(
-            "security/frontend/forget_password", [
+            ROOT_PATH . "security/frontend/forget_password", [
                 "form" => $form->createView(),
-                "errors" => [],
             ]
         );
 

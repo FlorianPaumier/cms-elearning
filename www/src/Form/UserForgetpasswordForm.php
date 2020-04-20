@@ -38,6 +38,6 @@ class UserForgetpasswordForm extends FormBuilder implements FormTypeInterface
      */
     public function setBlockPrefix(): void
     {
-        $this->prefix = "app_forgotpassword";
+        $this->prefix = "app_forget_password";
     }
 }

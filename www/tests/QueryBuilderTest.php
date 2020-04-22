@@ -17,7 +17,7 @@ final class QueryBuilderTest extends TestCase
     public function getPDO(): PDO
     {
         $pdo = new PDO("sqlite::memory:");
-        $pdo->query('CREATE TABLE products (
+        $pdo->query('CREATE Table products (
     id INTEGER CONSTRAINT products_pk primary key autoincrement,
     name TEXT,
     address TEXT,
@@ -30,7 +30,7 @@ final class QueryBuilderTest extends TestCase
 
     public function getBuilder(PDO $pdo): Table
     {
-        return new Table($pdo);
+        return (new Table($pdo))->setEntity(\StdClass::class);
     }
 
     public function testSimpleQuery()
@@ -131,6 +131,14 @@ final class QueryBuilderTest extends TestCase
             ->select("id", "name", "product")
             ->from("users");
         $this->assertEquals('SELECT id, name, product FROM "users"', $q->toSQL());
+    }
+
+    public function testSelectWithAlias()
+    {
+        $q = $this->queryBuilder
+            ->select("id", "name", "product")
+            ->from("users", "u");
+        $this->assertEquals('SELECT u.id, u.name, u.product FROM "users u"', $q->toSQL());
     }
 
     public function testSelectMultiple()

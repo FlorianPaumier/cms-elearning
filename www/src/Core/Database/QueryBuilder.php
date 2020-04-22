@@ -2,93 +2,90 @@
 
 namespace App\Core\Database;
 
-use App\Core\Exception\NoRecordException;
-use PDO;
-
-/**
- * Class QueryBuilder
- *
- * @package App\Core\Database
- */
 class QueryBuilder
 {
-
-    /**
-     * @var
-     */
-    protected $from;
-
+    /** @var \PDO */
+    protected $pdo;
     /**
      * @var string
      */
-    protected $alias;
-
+    protected $from;
     /**
-     * @var String 
+     * @var string|null
      */
-    protected $method =  "SELECT";
+    protected $alias;
+    /**
+     * @var string
+     */
+    protected $method = "SELECT";
 
+    protected $fields = ["*"];
     /**
      * @var array
      */
-    protected $order = [];
-
+    protected $order;
     /**
      * @var int
      */
     protected $limit;
-
     /**
      * @var int
      */
     protected $offset;
-
     /**
      * @var string
      */
     protected $where;
-
     /**
      * @var array
      */
     protected $andWhere = [];
-
-    /**
-     * @var array
-     */
-    protected $fields = ["*"];
-
-    /**
-     * @var array
-     */
-    protected $params = [];
-
     /**
      * @var string
      */
     protected $sql;
-
     /**
-     * @var \PDOStatement
+     * @var array
      */
-    protected $query;
-
+    protected $group;
     /**
-     * @var PDO
+     * @var array
      */
-    protected $pdo;
+    protected $data;
 
-    public function __construct(PDO $pdo = null)
+    protected $params = [];
+
+    public function __construct(\PDO $pdo = null)
     {
-        if(is_null($pdo)) {
-            $pdo = Connection::instance();
+        if (is_null($pdo)) {
+            $pdo = DbConnection::instance();
         }
+
         $this->pdo = $pdo;
     }
 
     /**
-     * @param  string      $table
-     * @param  string|null $alias
+     * @param mixed ...$fields
+     * @return $this
+     */
+    public function select(...$fields): self
+    {
+        $this->method = "SELECT";
+
+        if (is_array($fields[0])) {
+            $fields = $fields[0];
+        }
+        if ($this->fields === ['*']) {
+            $this->fields = $fields;
+        } else {
+            $this->fields = array_merge($this->fields, $fields);
+        }
+        return $this;
+    }
+
+    /**
+     * @param string $table
+     * @param string|null $alias
      * @return $this
      */
     public function from(string $table, string $alias = null): self
@@ -99,8 +96,8 @@ class QueryBuilder
     }
 
     /**
-     * @param  string $key
-     * @param  string $direction
+     * @param string $key
+     * @param string $direction
      * @return $this
      */
     public function orderBy(string $key, string $direction): self
@@ -115,7 +112,18 @@ class QueryBuilder
     }
 
     /**
-     * @param  int $limit
+     * @param string $key
+     * @param string $direction
+     * @return $this
+     */
+    public function groupBy(string $field): self
+    {
+        $this->group[] = $field;
+        return $this;
+    }
+
+    /**
+     * @param int $limit
      * @return $this
      */
     public function limit(int $limit): self
@@ -125,7 +133,7 @@ class QueryBuilder
     }
 
     /**
-     * @param  int $offset
+     * @param int $offset
      * @return $this
      */
     public function offset(int $offset): self
@@ -135,7 +143,7 @@ class QueryBuilder
     }
 
     /**
-     * @param  int $page
+     * @param int $page
      * @return $this
      */
     public function page(int $page): self
@@ -144,7 +152,7 @@ class QueryBuilder
     }
 
     /**
-     * @param  string $where
+     * @param string $where
      * @return $this
      */
     public function where(string $where): self
@@ -154,7 +162,7 @@ class QueryBuilder
     }
 
     /**
-     * @param  string $where
+     * @param string $where
      * @return $this
      */
     public function andWhere(string $where): self
@@ -164,7 +172,23 @@ class QueryBuilder
     }
 
     /**
-     * @param  string $key
+     * @return int
+     */
+    public function count(): int
+    {
+        $q = (clone $this)->select('COUNT(id) count')->fetchOrFail();
+
+        if (is_array($q)) {
+            $count = (int)$q[0]["count"];
+        } else {
+            $count = (int)$q->count;
+        }
+
+        return $count;
+    }
+
+    /**
+     * @param string $key
      * @param  $value
      * @return $this
      */
@@ -175,21 +199,12 @@ class QueryBuilder
     }
 
     /**
-     * @param  mixed ...$fields
+     * @param  $value
      * @return $this
      */
-    public function select(...$fields): self
+    public function setParams(array $values): self
     {
-        $this->method = "SELECT";
-        
-        if (is_array($fields[0])) {
-            $fields = $fields[0];
-        }
-        if ($this->fields === ['*']) {
-            $this->fields = $fields;
-        } else {
-            $this->fields = array_merge($this->fields, $fields);
-        }
+        $this->params = array_merge($this->params, $values);
         return $this;
     }
 
@@ -198,21 +213,30 @@ class QueryBuilder
      */
     public function toSQL(): string
     {
-
-        $fields = implode(', ', $this->fields);
-        $this->sql = "$this->method $fields FROM \"{$this->from}\"";
-        if ($this->where) {
-            $this->sql .= " WHERE " . $this->where;
+        if (!is_null($this->alias)) {
+            $fields = $this->fields !== ["*"] ? $this->alias . "." .implode(', ' . $this->alias . ".", $this->fields) : implode(', ' . $this->alias . ".", $this->fields);
+        }else{
+            $fields = implode(', ', $this->fields);
         }
 
-        if (count($this->andWhere) > 0) {
-            foreach ($this->andWhere as $selector) {
-                $this->sql .= " AND WHERE " . $selector;
+        $this->sql = "$this->method $fields FROM \"{$this->from}\"";
+
+        if ($this->where) {
+            $this->sql .= " WHERE " . $this->where;
+
+            if (count($this->andWhere) > 0) {
+                foreach ($this->andWhere as $selector) {
+                    $this->sql .= " AND WHERE " . $selector;
+                }
             }
         }
 
         if (!empty($this->order)) {
             $this->sql .= " ORDER BY " . implode(', ', $this->order);
+        }
+
+        if (!empty($this->group)) {
+            $this->sql .= " GROUP BY " . implode(', ', $this->group);
         }
 
         if (!empty($this->limit)) {
@@ -223,24 +247,7 @@ class QueryBuilder
             $this->sql .= " OFFSET " . $this->offset;
         }
 
-
         return $this->sql;
-    }
-
-    /**
-     * @param  string $field
-     * @return string|null
-     */
-    public function fetch(string $field): ?string
-    {
-        $query = $this->pdo->prepare($this->toSQL());
-        $query->execute($this->params);
-
-        $result = $query->fetch();
-        if ($result === false) {
-            return null;
-        }
-        return $result[$field] ?? null;
     }
 
     /**
@@ -250,34 +257,23 @@ class QueryBuilder
      */
     public function fetchOrFail()
     {
-
         $query = $this->pdo->prepare($this->toSQL());
         $query->execute($this->params);
 
+        $this->params = [];
+
         if (isset($this->entity)) {
-            $record = $query->fetchAll(\PDO::FETCH_CLASS, $this->entity);
-        }else{
-            $record =$query->fetchAll(PDO::FETCH_ASSOC);
+            $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
+            $record = $query->fetchObject();
+        } else {
+            $record = $query->fetchAll(\PDO::FETCH_ASSOC);
         }
 
-        $this->entity = null;
         return $record !== false ? $record : null;
     }
 
-    /**
-     * @return int
-     */
-    public function count(): int
+    public function setData(array $data)
     {
-        $q = (clone $this)->select('COUNT(id) count')->fetchOrFail();
-
-        if(is_array($q)) {
-             $count = (int)$q["count"];
-        }else{
-            $count = (int)$q->count;
-        }
-
-        return $count;
+        $this->data = $data;
     }
-
 }

@@ -30,12 +30,18 @@ class UserLoginForm extends AbstractForm
                 ]
             )
             ->add(
-                "password",EntityType::class, [
+                "password",PasswordType::class, [
                     'required' => false,
-                    'entry_type' => User::class,
-                    'choice_label' => "username",
                     'label' => 'Mot de passe',
                     "class" => "form-control form-control-user"
+                ]
+            )
+            ->add(
+                "password_confirmation",PasswordType::class, [
+                    'required' => false,
+                    'label' => 'Mot de passe',
+                    "class" => "form-control form-control-user",
+                    "mapped" => false,
                 ]
             )
             ->add(

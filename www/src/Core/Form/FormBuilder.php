@@ -81,7 +81,7 @@ class FormBuilder
 
     private function createType(FieldsInterface $field, string $key, array $args)
     {
-        if (!$this->fieldExist($key, get_class($field))) {
+        if (!$this->fieldExist($key, get_class($field), $args)) {
             ConfigHandler::get("eventEmmiter")->emit("error.500", "Field $key don't exist");
         }
 
@@ -128,7 +128,7 @@ class FormBuilder
             } else {
                 if (is_object($this->entity)) {
                     $method = "set";
-                    if($this->fields[$key]["type"] == EntityType::class){
+                    if ($this->fields[$key]["type"] == EntityType::class) {
                         /** @var Table $repository */
                         $repository = ConfigHandler::get('repository');
                         $repository->getClass($this->fields[$key]["args"]["entry_type"]);
@@ -139,7 +139,7 @@ class FormBuilder
                     if (method_exists($this->entity, $method)) {
                         $mirrorMethod = new \ReflectionMethod($this->entity, $method);
 
-                        if($value instanceof $mirrorMethod->class){
+                        if ($value instanceof $mirrorMethod->class) {
                             $this->entity->$method($value);
                         }
                     }
@@ -305,11 +305,11 @@ class FormBuilder
         return $field;
     }
 
-    private function fieldExist(string $key, string $field)
+    private function fieldExist(string $key, string $field, array $args)
     {
         $options = (new $this->parent)->getOptions();
 
-        if (!key_exists("data_class", $options) || $field === ButtonType::class) {
+        if (!key_exists("data_class", $options) || $field === ButtonType::class || $args["mapped"] === false) {
             return true;
         }
 
@@ -322,7 +322,9 @@ class FormBuilder
         $methods = ["get", 'set', 'is'];
 
         foreach ($methods as $method) {
-            $assesseur = $method . ucfirst($key);
+
+            $assesseur = $method . str_replace('_', '', ucwords($key, '_'));;
+
             if (method_exists($entity, $assesseur)) {
                 return true;
             }

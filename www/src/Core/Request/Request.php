@@ -40,7 +40,12 @@ class Request extends RequestHandler
 
         return $request;
     }
-    
+
+    public function get(string $key){
+        if($this->query->get($key)) return $this->query->get($key);
+        if($this->request->get($key)) return $this->request->get($key);
+        return null;
+    }
     /**
      * @return mixed
      */

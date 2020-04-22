@@ -29,6 +29,11 @@ class Table extends QueryBuilder
         parent::__construct($pdo);
     }
 
+    public function setEntity(string $entity)
+    {
+        $this->entity = $entity;
+        return $this;
+    }
     /**
      * Pagine des éléments
      *
@@ -50,6 +55,13 @@ class Table extends QueryBuilder
 //            ->setCurrentPage($currentPage);
 
         return [];
+    }
+
+    public function getClass(string $entity)
+    {
+        $class = explode("\\", $entity);
+        $table = strtolower(array_pop($class));
+        $this->from($table);
     }
 
     protected function paginationQuery()
@@ -122,7 +134,12 @@ class Table extends QueryBuilder
             ->where("id = :id");
 
         $this->setParam("id", $id);
-        return $this->fetchOrFail();
+        $value = $this->fetchOrFail();
+
+        if($value){
+            return $value[0];
+        }
+        return $value;
     }
 
     /**

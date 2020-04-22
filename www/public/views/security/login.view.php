@@ -1,6 +1,7 @@
 @extend(templates/back)
 
 @section(body)
+
 <div class="container">
     <a href="#" id="link">Link</a>
     {{ form }}

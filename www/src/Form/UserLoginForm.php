@@ -4,6 +4,7 @@ namespace App\Form;
 
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\EntityType;
 use App\Core\Form\Fields\PasswordType;
@@ -13,30 +14,8 @@ use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Kernel\Kernel;
 use App\Entity\User;
 
-class UserLoginForm implements FormTypeInterface
+class UserLoginForm extends AbstractForm
 {
-    /**
-     * @return array|void
-     */
-    public static function getConstraint(): array
-    {
-        return [
-            [
-                "username" => [
-                    "empty" => false,
-                    "required" => true,
-                    "exists" => true,
-                ]
-            ],
-            [
-                "password" => [
-                    "empty" => false,
-                    "required" => true,
-                    "exists" => true,
-                ]
-            ]
-        ];
-    }
 
     public function buildForm(FormBuilder $builder): FormBuilder
     {
@@ -52,9 +31,9 @@ class UserLoginForm implements FormTypeInterface
             )
             ->add(
                 "password",EntityType::class, [
-                    'required' => true,
+                    'required' => false,
                     'entry_type' => User::class,
-                    'choice_label' => "name",
+                    'choice_label' => "username",
                     'label' => 'Mot de passe',
                     "class" => "form-control form-control-user"
                 ]
@@ -73,6 +52,17 @@ class UserLoginForm implements FormTypeInterface
      */
     public function getBlockPrefix(): string
     {
-        return $this->prefix = "app_user";
+        return "app_user";
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function configureOptions(){
+        $this->options = [
+            "data_class" => User::class
+        ];
+    }
+
+
 }

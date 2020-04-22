@@ -255,12 +255,12 @@ class QueryBuilder
         $query->execute($this->params);
 
         if (isset($this->entity)) {
-            $record = $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
+            $record = $query->fetchAll(\PDO::FETCH_CLASS, $this->entity);
         }else{
             $record =$query->fetchAll(PDO::FETCH_ASSOC);
         }
 
-
+        $this->entity = null;
         return $record !== false ? $record : null;
     }
 

@@ -23,7 +23,7 @@ class RenderView
     public function __construct()
     {
         $this->templateEngine = new TemplateEngine();
-        $this->defaultData["session"] = [];//ConfigHandler::get("session");
+        $this->defaultData["session"] = ConfigHandler::get("session");
     }
 
     /**
@@ -100,16 +100,14 @@ class RenderView
      */
     public function render(string $template, array $param = [], bool $display = false)
     {
-
         if($this->templateEngine->setView($template)) {
             $this->templateEngine->setData(["parameter" => $param, "config" => $this->defaultData, "render" => $display]);
             $this->templateEngine->generate_markup();
 
-            if(ConfigHandler::get("session")){
-                ConfigHandler::get("session")->set("app.flash", null);
-            }
-
             if($display){
+                if(ConfigHandler::get("session")){
+                    ConfigHandler::get("session")->set("app.flash", null);
+                }
                 return $this->templateEngine->compile($display);
             }
 

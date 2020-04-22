@@ -20,7 +20,7 @@ abstract class AbstractType implements FieldsInterface
     private $html;
 
     /** @var array */
-    private $constraints;
+    private $constraints = [];
 
     private $value;
 
@@ -29,6 +29,14 @@ abstract class AbstractType implements FieldsInterface
     private $parent;
 
     protected $entity;
+
+    private $defaultOptions = [
+        "require" => true,
+        'compound' => false,
+        'extended' => false,
+        'choice_label' => "id",
+        'multiple' => false,
+    ];
 
     public function __construct()
     {
@@ -64,15 +72,18 @@ abstract class AbstractType implements FieldsInterface
         /** @var FormTypeInterface $parent */
         $parent = $this->getParent();
 
-        $options = [
+        $this->defaultOptions = array_merge($this->defaultOptions, [
             "key" => $key,
             "require" => true,
-            "label" => $key,
+            "label" => $args["label"] ?? $key,
             "name" => method_exists($parent, "getBlockPrefix") ? $parent->getBlockPrefix() . "_" . $key : "option_" . $key,
-            'compound' => false,
-        ];
+        ]);
 
-        $this->constraints = array_merge($options, $args);
+        foreach ($args as $key => $arg){
+            $this->defaultOptions[$key] = $arg;
+        }
+
+        $this->addArgs($this->defaultOptions);
     }
 
     public function getConstraintOffset(string $key)
@@ -85,12 +96,14 @@ abstract class AbstractType implements FieldsInterface
 
     public function addData(string $key, $value)
     {
-        $this->args[$key] = $value;
+        $this->constraints[$key] = $value;
     }
 
     public function addArgs(array $data)
     {
-        $this->args = array_merge($this->args, $data);
+        foreach ($data as $key => $arg){
+            $this->addData($key,$arg);
+        }
     }
 
     /**

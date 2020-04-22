@@ -6,13 +6,20 @@ namespace App\Core\Form\Validator;
 
 use App\Core\Cache\ConfigHandler;
 use App\Core\Database\Table;
+use App\Core\Form\Fields\ButtonType;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Request\ParameterBag;
 use App\Core\Request\Request;
-use App\Core\Validator\ValidationError;
 
+/**
+ * Class Validator
+ * @package App\Core\Form\Validator
+ */
 class Validator
 {
+    /**
+     *
+     */
     private const MIME_TYPES = [
         'jpg' => 'image/jpeg',
         'png' => 'image/png',
@@ -27,32 +34,34 @@ class Validator
 
     /** @var array */
     private $errors;
+
     /**
-     * @var FormTypeInterface
+     * @var array
      */
     private $form;
 
     /**
      * Validator constructor.
-     * @param FormTypeInterface $form
+     * @param array
      */
-    public function __construct(FormTypeInterface $form)
+    public function __construct(array $form)
     {
         $this->form = $form;
         $this->entityManager = ConfigHandler::get("repository");
+        $this->request = ConfigHandler::get("request");
+
+        $this->buildValidator();
     }
 
     /**
      *  Take array of constraint and execute the validation
-     *
-     * @param array $constraint
      * @return Validator
      */
-    public function buildValidator(Request $request)
+    public function buildValidator()
     {
-        $this->request = $request->getRequest();
-        foreach ($this->form::getConstraint() as $input => $constraint) {
-            foreach ($constraint as $param => $value) {
+        foreach ($this->form as $input => $constraint) {
+            if($constraint["type"] == ButtonType::class) continue;
+            foreach ($constraint["args"] as $param => $value) {
                 switch ($param) {
                     case "length":
                         $this->length($input, $value["min"], isset($value["max"]) ?: null);
@@ -88,12 +97,17 @@ class Validator
         return $this;
     }
 
-
+    /**
+     * @return bool
+     */
     public function isValid(): bool
     {
         return empty($this->errors);
     }
 
+    /**
+     * @return array
+     */
     public function getFormData(){
         $values = [];
 
@@ -104,6 +118,12 @@ class Validator
         return $values;
     }
 
+    /**
+     * @param string $key
+     * @param int|null $min
+     * @param int|null $max
+     * @return $this
+     */
     private function length(string $key,?int $min,?int $max): self
     {
         $value = $this->getValue($key);
@@ -130,17 +150,25 @@ class Validator
         return $this;
     }
 
+    /**
+     * @param string ...$keys
+     * @return $this
+     */
     private function required(string ...$keys)
     {
         foreach ($keys as $key) {
             $value = $this->getValue($key);
-            if (is_null($value)) {
+            if (is_null($value) && empty($value)) {
                 $this->addError($key, 'required');
             }
         }
         return $this;
     }
 
+    /**
+     * @param string ...$keys
+     * @return $this
+     */
     private function notEmpty(string ...$keys)
     {
         foreach ($keys as $key) {
@@ -152,16 +180,28 @@ class Validator
         return $this;
     }
 
+    /**
+     * @param string $key
+     * @return mixed
+     */
     private function email(string $key)
     {
         $value = $this->getValue($key);
         return filter_var($value, FILTER_VALIDATE_EMAIL);
     }
 
+    /**
+     * @param int $input
+     * @param $value
+     */
     private function extension(int $input, $value)
     {
     }
 
+    /**
+     * @param string $key
+     * @return $this
+     */
     private function confirm(string $key)
     {
         $value = $this->getValue($key);
@@ -172,10 +212,20 @@ class Validator
         return $this;
     }
 
+    /**
+     * @param int $input
+     * @param $table
+     */
     private function exists(int $input, $table)
     {
     }
 
+    /**
+     * @param string $key
+     * @param string $target
+     * @param int|null $exclude
+     * @return $this
+     */
     private function unique(string $key,string $target, ?int $exclude = null)
     {
         $value = $this->getValue($key);
@@ -198,12 +248,19 @@ class Validator
         return $this;
     }
 
+    /**
+     * @param string $key
+     * @return string|null
+     */
     private function getValue(string $key)
     {
-        $prefix = $this->form->getBlockPrefix();
-        return $this->request->get($prefix."_".$key);
+        return $this->request->get($key);
     }
 
+    public function getErrors()
+    {
+        return $this->errors;
+    }
     /**
      * Ajoute une erreur
      *
@@ -213,9 +270,12 @@ class Validator
      */
     private function addError(string $key, string $rule, array $attributes = []): void
     {
-        $this->errors[$key] = new ValidationError($key, $rule, $attributes);
+        $this->errors[$key] = (new ValidationError($key, $rule, $attributes))->__toString();
     }
 
+    /**
+     * @param int $input
+     */
     private function regex(int $input)
     {
 

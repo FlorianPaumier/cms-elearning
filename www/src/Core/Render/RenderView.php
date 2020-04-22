@@ -23,7 +23,7 @@ class RenderView
     public function __construct()
     {
         $this->templateEngine = new TemplateEngine();
-        $this->defaultData["session"] = [];//ConfigHandler::get("session");
+        $this->defaultData["session"] = ConfigHandler::get("session");
     }
 
     /**
@@ -100,16 +100,14 @@ class RenderView
      */
     public function render(string $template, array $param = [], bool $display = false)
     {
-
         if($this->templateEngine->setView($template)) {
             $this->templateEngine->setData(["parameter" => $param, "config" => $this->defaultData, "render" => $display]);
             $this->templateEngine->generate_markup();
 
-            if(ConfigHandler::get("session")){
-                ConfigHandler::get("session")->set("app.flash", null);
-            }
-
             if($display){
+                if(ConfigHandler::get("session")){
+                    ConfigHandler::get("session")->set("app.flash", null);
+                }
                 return $this->templateEngine->compile($display);
             }
 
@@ -121,18 +119,26 @@ class RenderView
 
     /**
      * Create a html element
-     * @param string $type
+     * @param mixed $type
      * @param array $options
      * @return string
      * @throws \Exception
      */
-    public function renderHtmlElement(string $type, array $options)
+    public function renderHtmlElement($type, array $options)
     {
+        if(!gettype($type) == "object"){
+            if(class_exists($type)){
+                $type = new $type;
+            }
+        }
+
+        $view = gettype($type) == "object" ? $type::getTemplate() : FORM_PATH."/input.tpl.php";
         $options["prefix"] = "app_form";
 
         $this->templateEngine->setData(["parameter" => $options]);
-        if($this->templateEngine->setView(FORM_PATH."/input.tpl.php")){
-            return $this->templateEngine->renderHtmlElement($type);
+        if($this->templateEngine->setView($view)){
+            $html = $this->templateEngine->renderHtmlElement($type);
+            return $html;
         };
 
         ConfigHandler::get("eventEmmiter")->emit("error.404","View Not Found");

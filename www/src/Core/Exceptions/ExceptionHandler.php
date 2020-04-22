@@ -5,7 +5,7 @@ namespace App\Core\Exceptions;
 
 
 use App\Core\Render\RenderView;
-use App\Core\request\RedirectionHandler;
+use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 
 class ExceptionHandler

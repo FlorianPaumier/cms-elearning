@@ -6,6 +6,7 @@
 
 @section(body)
 <section class="wrapper">
+    <a href="#" id="link">Link</a>
     <div class="login">
         <p class="title">Log in</p>
         {{ form }}
@@ -13,6 +14,11 @@
 </section>
 @endsection
 
-@section(script)
+@section(javascript)
+<script>
+
+    let item = document.getElementById("link");
+    console.log(item.style);
+</script>
 <script type="javascript" src="assets/scripts/login.js"></script>
 @endsection

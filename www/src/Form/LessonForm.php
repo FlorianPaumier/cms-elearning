@@ -4,72 +4,52 @@
 namespace App\Form;
 
 
+use App\Core\Form\AbstractForm;
+use App\Core\Form\Fields\ButtonType;
+use App\Core\Form\Fields\TextAreaType;
+use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
 use App\Core\Interfaces\FormTypeInterface;
+use App\Entity\Lesson;
 
-class LessonForm extends FormBuilder implements FormTypeInterface
+class LessonForm extends AbstractForm
 {
 
     /**
      * @inheritDoc
      */
-    public static function getConstraint(): array
+    public function buildForm(FormBuilder $builder): FormBuilder
     {
-        return [
-            [
-                "title" => [
-                    "empty" => false,
-                    "required" => true,
-                    "exists" => true,
-                ]
-            ],
-            [
-                "description" => [
-                    "empty" => false,
-                    "required" => true,
-                    "exists" => true,
-                ]
-            ]
-        ];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function buildForm(): FormBuilder
-    {
-        return $this
-            ->input("title", [
+        return $builder
+            ->add("title", TextType::class, [
                 "label" => "Title",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->textarea("description", [
+            ->add("description", TextAreaType::class, [
                 "label" => "Description",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12 ckeditor",
             ])
-            ->collection("chapters", ChapterForm::class, [
-                "label" => "Chapitre",
-                "require" => false,
-                "class" => "col-md-6 col-lg-6 col-sm-12",
-            ])
-            ->button("valider", [
+            ->add("valider", ButtonType::class, [
                 "label" => "Valider",
-                "class" => "btn btn-submit",
+                "class" => "btn-submit",
+                "type" => "submit",
             ]);
+    }
+
+    public function getBlockPrefix(): string
+    {
+        return "admin_lesson";
     }
 
     /**
      * @inheritDoc
      */
-    public function setBlockPrefix(): void
-    {
-        $this->prefix = "admin_lesson";
+    public function configureOptions(){
+        $this->options = [
+            "data_class" => Lesson::class
+        ];
     }
 
-    public function getBlockPrefix(): string
-    {
-        return $this->prefix;
-    }
 }

@@ -60,9 +60,12 @@ class ChapterForm extends FormBuilder implements FormTypeInterface
     /**
      * @inheritDoc
      */
-    public function setBlockPrefix(): void
+    /**
+     * @inheritDoc
+     */
+    public function setBlockPrefix(string $prefix = null): void
     {
-        $this->prefix = "admin_lesson";
+        $this->prefix = $prefix ?? "admin_chapter";
     }
 
     public function getBlockPrefix(): string

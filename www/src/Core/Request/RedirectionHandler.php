@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Core\request;
 
+namespace App\Core\Request;
 use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 
@@ -19,7 +19,7 @@ class RedirectionHandler
     public function redirectTo(string $path)
     {
         header('Status: 301 Moved Permanently', false, 301);
-        header("Location: " . $path);
+        header("Location: ".$path);
         exit();
     }
 

@@ -117,7 +117,7 @@ class UserController extends BaseController
         }
 
         return $this->renderer->render(
-            ROOT_PATH . "security/frontend/forget_password", [
+            "security/frontend/forget_password", [
                 "form" => $form->createView(),
             ]
         );

@@ -45,7 +45,8 @@ class UserController extends BaseController
         $this->redirect->redirectToRoute("app_home");
         }*/
 
-        $form = (new UserRegisterForm())->buildForm();
+        $form = $this->createForm(UserRegisterForm::class);
+        $form->handleRequest($request);
 
         if ($this->query->getMethod() == "POST") {
             $validator = $this->getValidator()->buildValidator(UserRegisterForm::getConstraint());

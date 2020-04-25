@@ -1,4 +1,4 @@
-@extend(templates/back)
+@extend(templates/front)
 
 @section(body)
 

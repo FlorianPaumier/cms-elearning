@@ -2,16 +2,12 @@
 
 namespace App\Form;
 
-
 use App\Core\Cache\ConfigHandler;
 use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
-use App\Core\Form\Fields\EntityType;
 use App\Core\Form\Fields\PasswordType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
-use App\Core\Interfaces\FormTypeInterface;
-use App\Core\Kernel\Kernel;
 use App\Entity\User;
 
 class UserLoginForm extends AbstractForm
@@ -22,22 +18,23 @@ class UserLoginForm extends AbstractForm
         return $builder
             ->setAction(ConfigHandler::get("router")->getPath("app_user_login_check"))
             ->add(
-                "username",TextType::class, [
+                "username", TextType::class, [
                     'type' => 'text',
                     'required' => true,
                     'label' => 'Username',
-                    "class" => "form-control form-control-user"
+                    "class" => "form-control form-control-user",
+                    "before" => "<i class=\"fa fa-user\"></i>",
                 ]
             )
             ->add(
-                "password",PasswordType::class, [
+                "password", PasswordType::class, [
                     'required' => false,
                     'label' => 'Mot de passe',
-                    "class" => "form-control form-control-user"
+                    "class" => "form-control form-control-user",
                 ]
             )
             ->add(
-                "password_confirmation",PasswordType::class, [
+                "password_confirmation", PasswordType::class, [
                     'required' => false,
                     'label' => 'Mot de passe',
                     "class" => "form-control form-control-user",
@@ -45,10 +42,10 @@ class UserLoginForm extends AbstractForm
                 ]
             )
             ->add(
-                "submit",ButtonType::class, [
+                "submit", ButtonType::class, [
                     'type' => 'submit',
                     'label' => "S'inscrire",
-                    "class" => "btn"
+                    "class" => "btn",
                 ]
             );
     }
@@ -64,11 +61,11 @@ class UserLoginForm extends AbstractForm
     /**
      * @inheritDoc
      */
-    public function configureOptions(){
+    public function configureOptions()
+    {
         $this->options = [
-            "data_class" => User::class
+            "data_class" => User::class,
         ];
     }
-
 
 }

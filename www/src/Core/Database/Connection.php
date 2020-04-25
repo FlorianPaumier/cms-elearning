@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Core\Database;
 
 use App\Core\Cache\CacheHandler;
@@ -21,6 +22,8 @@ abstract class Connection
      */
     public static function instance()
     {
+
+        return null;
         if(self::$connection === null ) {
             // Late static binding (PHP 5.3+)
             $config = CacheHandler::get("config")["database"];

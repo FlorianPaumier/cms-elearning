@@ -66,6 +66,7 @@ class TemplateEngine
      */
     public function setView(string $view)
     {
+
         foreach (self::TPL_EXT as $ext) {
             if (file_exists(VIEW_PATH . DIRECTORY_SEPARATOR . $view . $ext)) {
                 $this->view = VIEW_PATH . DIRECTORY_SEPARATOR . $view . $ext;
@@ -197,7 +198,6 @@ class TemplateEngine
         if(isset($this->data["render"]) && $this->data["render"]){
             return $this->content;
         }
-
 
         if (!is_null($this->view)) {
             $tmp = tmpfile();

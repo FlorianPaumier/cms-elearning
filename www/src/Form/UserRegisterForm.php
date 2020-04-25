@@ -2,63 +2,68 @@
 
 namespace App\Form;
 
+use App\Core\Cache\ConfigHandler;
+use App\Core\Form\AbstractForm;
+use App\Core\Form\Fields\ButtonType;
+use App\Core\Form\Fields\PasswordType;
+use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
-use App\Core\Interfaces\FormTypeInterface;
+use App\Entity\User;
 
-class UserRegisterForm extends FormBuilder implements FormTypeInterface
+class UserRegisterForm extends AbstractForm
 {
 
-    public static function getConstraint(): array
+    public function buildForm(FormBuilder $builder): FormBuilder
     {
-        return
-            [
-            "username" => [
-                "empty" => false,
-                "required" => true,
-                "length" => [
-                    "min" => 4,
-                ],
-                "unique" => [
-                    "table" => "user",
-                ],
-            ],
-            "password" => [
-                "empty" => false,
-                "required" => true,
-                "confirmation" => true,
-                "length" => [
-                    "min" => 8,
-                ],
-            ],
-            "email" => [
-                "required" => true,
-                "empty" => false,
-            ],
-        ]
-        ;
+        return $builder
+            ->setAction(ConfigHandler::get("router")->getPath("app_user_login_check"))
+            ->add(
+                "username", TextType::class, [
+                    'type' => 'text',
+                    'required' => true,
+                    'label' => 'Username',
+                    "class" => "form-control form-control-user",
+                    "before" => "<i class=\"fa fa-user\"></i>",
+                ]
+            )
+            ->add(
+                "password", PasswordType::class, [
+                    'required' => false,
+                    'label' => 'Mot de passe',
+                    "class" => "form-control form-control-user",
+                ]
+            )
+            ->add(
+                "password_confirmation", PasswordType::class, [
+                    'required' => false,
+                    'label' => 'Mot de passe',
+                    "class" => "form-control form-control-user",
+                    "mapped" => false,
+                ]
+            )
+            ->add(
+                "submit", ButtonType::class, [
+                    'type' => 'submit',
+                    'label' => "S'inscrire",
+                    "class" => "btn",
+                ]
+            );
     }
-
-    public function buildForm(): FormBuilder
-    {
-        return $this
-            ->input("username", [])
-            ->input("email", [])
-            ->input("password", [])
-            ->input("password_confirm", [])
-            ->button("submit", []);
-
-    }
-
+/**
+ * @inheritDoc
+ */
     public function getBlockPrefix(): string
     {
-        return $this->prefix;
+        return "app_user";
     }
 
     /**
      * @inheritDoc
      */
-    public function setBlockPrefix(): void
+    public function configureOptions()
     {
-        $this->prefix = "app_register";
+        $this->options = [
+            "data_class" => User::class,
+        ];
     }
 }

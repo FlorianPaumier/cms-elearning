@@ -16,12 +16,21 @@ class UserRegisterForm extends AbstractForm
     public function buildForm(FormBuilder $builder): FormBuilder
     {
         return $builder
-            ->setAction(ConfigHandler::get("router")->getPath("app_user_login_check"))
+            ->setAction(ConfigHandler::get("router")->getPath("app_user_register"))
             ->add(
                 "username", TextType::class, [
                     'type' => 'text',
                     'required' => true,
                     'label' => 'Username',
+                    "class" => "form-control form-control-user",
+                    "before" => "<i class=\"fa fa-user\"></i>",
+                ]
+            )
+            ->add(
+                "email", TextType::class, [
+                    'type' => 'email',
+                    'required' => true,
+                    'label' => 'Email',
                     "class" => "form-control form-control-user",
                     "before" => "<i class=\"fa fa-user\"></i>",
                 ]
@@ -54,7 +63,7 @@ class UserRegisterForm extends AbstractForm
  */
     public function getBlockPrefix(): string
     {
-        return "app_user";
+        return "app_register";
     }
 
     /**

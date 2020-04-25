@@ -39,7 +39,7 @@ class UserController extends BaseController
         );
     }
 
-    public function register()
+    public function register(Request $request)
     {
         /*if($this->userManager->isConnected()){
         $this->redirect->redirectToRoute("app_home");
@@ -95,9 +95,10 @@ class UserController extends BaseController
         $this->redirect->redirectToRoute("app_home");
     }
 
-    public function forgetPassword()
+    public function forgetPassword(Request $request)
     {
-        $form = (new UserForgetpasswordForm())->buildForm();
+        $form = $this->createForm(UserForgetpasswordForm::class);
+        $form->handleRequest($request);
 
         if ($this->query->getMethod() == "POST") {
             $validator = $this->getValidator(new UserForgetpasswordForm())->buildValidator($request);

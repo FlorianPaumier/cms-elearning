@@ -2,42 +2,53 @@
 
 namespace App\Form;
 
+use App\Core\Cache\ConfigHandler;
+use App\Core\Form\AbstractForm;
+use App\Core\Form\Fields\ButtonType;
+use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
-use App\Core\Interfaces\FormTypeInterface;
+use App\Entity\User;
 
-class UserForgetpasswordForm extends FormBuilder implements FormTypeInterface
+class UserForgetpasswordForm extends AbstractForm
 {
 
-    public static function getConstraint(): array
+    public function buildForm(FormBuilder $builder): FormBuilder
     {
-        return
-            [
-            "email" => [
-                "required" => true,
-                "empty" => false,
-            ],
-        ]
-        ;
-    }
-
-    public function buildForm(): FormBuilder
-    {
-        return $this
-            ->input("email", [])
-            ->button("submit", []);
-
-    }
-
-    public function getBlockPrefix(): string
-    {
-        return $this->prefix;
+        return $builder
+            ->setAction(ConfigHandler::get("router")->getPath("app_user_forget_password"))
+            ->add(
+                "email", TextType::class, [
+                    'type' => 'email',
+                    'required' => true,
+                    'label' => 'Email',
+                    "class" => "form-control form-control-user",
+                    "before" => "<i class=\"fa fa-user\"></i>",
+                ]
+            )
+            ->add(
+                "submit", ButtonType::class, [
+                    'type' => 'submit',
+                    'label' => "Valider",
+                    "class" => "btn",
+                ]
+            );
     }
 
     /**
      * @inheritDoc
      */
-    public function setBlockPrefix(): void
+    public function getBlockPrefix(): string
     {
-        $this->prefix = "app_forget_password";
+        return "app_forget_password";
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function configureOptions()
+    {
+        $this->options = [
+            "data_class" => User::class,
+        ];
     }
 }

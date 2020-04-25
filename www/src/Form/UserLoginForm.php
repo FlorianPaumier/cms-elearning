@@ -55,7 +55,7 @@ class UserLoginForm extends AbstractForm
      */
     public function getBlockPrefix(): string
     {
-        return "app_user";
+        return "app_register";
     }
 
     /**

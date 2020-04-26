@@ -58,7 +58,7 @@ class QueryBuilder
     public function __construct(\PDO $pdo = null)
     {
         if (is_null($pdo)) {
-            $pdo = DbConnection::instance();
+            $pdo = Connection::instance();
         }
 
         $this->pdo = $pdo;

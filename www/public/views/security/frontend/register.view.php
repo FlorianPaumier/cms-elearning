@@ -27,7 +27,7 @@
                             </a>
                         <hr>
                         <div class="text-center">
-                            <a class="small" href="forget_password@path(app_forget_password)">Forgot Password?</a>
+                            <a class="small" href="forget_password@path(app_forget_password)">Forget Password?</a>
                         </div>
                         <div class="text-center">
                             <a class="small" href="login @path(app_login)">Already have an account? Login!</a>

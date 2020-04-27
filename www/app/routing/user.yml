@@ -23,6 +23,11 @@ app_user_forget_password:
   controller: App\Controllers\Users\User:forgetPassword
   method: [GET, POST]
 
+app_user_delete_user:
+  path: "/delete_user"
+  controller: App\Controllers\Users\User:deleteUser
+  method: [GET, POST]
+
 
 
 

@@ -5,6 +5,7 @@ use App\Core\Interfaces\BaseController;
 use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Entity\User;
+use App\Form\UserDeleteUserForm;
 use App\Form\UserForgetpasswordForm;
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
@@ -133,7 +134,7 @@ class UserController extends BaseController
 
             if ($validator->isValid()) {
                 $email = "";
-                if (($response = $this->userManager->forgetPassword($email)) !== true) {
+                if (($response = $this->userManager->delete($email)) !== true) {
                     $this->session->set("app.flash", ["error" => [$response]]);
                 } else {
                     $this->redirect->redirectToRoute("app_home");
@@ -144,7 +145,7 @@ class UserController extends BaseController
         }
 
         return $this->renderer->render(
-            "security/frontend/forget_password", [
+            "security/frontend/delete_user", [
                 "form" => $form->createView(),
             ]
         );

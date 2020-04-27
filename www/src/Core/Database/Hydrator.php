@@ -8,7 +8,7 @@ namespace App\Core\database;
 class Hydrator
 {
     /**
-     * Transforme un tableau en objet en utilisant les setters
+     * Transforme un tableau en objet en prenant les setters
      *
      * @param  array  $array
      * @param  $object
@@ -24,6 +24,7 @@ class Hydrator
         }
 
         $i = 0;
+
         foreach ($array as $key => $value) {
             if ($key == 'id') {
                 continue;

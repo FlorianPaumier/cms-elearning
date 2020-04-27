@@ -28,10 +28,10 @@
                                 </form>
                                 <hr>
                                 <div class="text-center">
-                                    <a class="small" href="{{ app_user_register|path }}">Create an Account!</a>
+                                    <a class="small" href="register @path(app_register)">Create an Account!</a>
                                 </div>
                                 <div class="text-center">
-                                    <a class="small" href="{{ app_user_login|path }}">Already have an account? Login!</a>
+                                    <a class="small" href="login @path(app_login)">Already have an account? Login!</a>
                                 </div>
                             </div>
                         </div>

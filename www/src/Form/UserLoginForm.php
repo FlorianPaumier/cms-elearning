@@ -34,17 +34,9 @@ class UserLoginForm extends AbstractForm
                 ]
             )
             ->add(
-                "password_confirmation", PasswordType::class, [
-                    'required' => false,
-                    'label' => 'Mot de passe',
-                    "class" => "form-control form-control-user",
-                    "mapped" => false,
-                ]
-            )
-            ->add(
                 "submit", ButtonType::class, [
                     'type' => 'submit',
-                    'label' => "S'inscrire",
+                    'label' => "Se connecter",
                     "class" => "btn",
                 ]
             );

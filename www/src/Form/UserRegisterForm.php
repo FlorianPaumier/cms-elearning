@@ -45,7 +45,7 @@ class UserRegisterForm extends AbstractForm
             ->add(
                 "password_confirmation", PasswordType::class, [
                     'required' => false,
-                    'label' => 'Mot de passe',
+                    'label' => 'Confirmation Mot de passe',
                     "class" => "form-control form-control-user",
                     "mapped" => false,
                 ]

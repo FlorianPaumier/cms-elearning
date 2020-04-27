@@ -122,4 +122,32 @@ class UserController extends BaseController
         );
 
     }
+
+    public function deleteUser(Request $request)
+    {
+        $form = $this->createForm(UserDeleteUserForm::class);
+        $form->handleRequest($request);
+
+        if ($this->query->getMethod() == "POST") {
+            $validator = $this->getValidator(new UserDeleteUserForm())->buildValidator($request);
+
+            if ($validator->isValid()) {
+                $email = "";
+                if (($response = $this->userManager->forgetPassword($email)) !== true) {
+                    $this->session->set("app.flash", ["error" => [$response]]);
+                } else {
+                    $this->redirect->redirectToRoute("app_home");
+                }
+            } else {
+                $this->session->set("app.flash", ["error" => $validator->getErrors()]);
+            }
+        }
+
+        return $this->renderer->render(
+            "security/frontend/forget_password", [
+                "form" => $form->createView(),
+            ]
+        );
+
+    }
 }

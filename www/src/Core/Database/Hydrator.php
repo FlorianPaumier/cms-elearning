@@ -16,6 +16,7 @@ class Hydrator
      */
     public static function hydrate($array, $object)
     {
+
         if (is_string($object)) {
             $instance = new $object();
         } else {
@@ -24,8 +25,10 @@ class Hydrator
 
         $i = 0;
         foreach ($array as $key => $value) {
-            if($key == 'id')
+            if ($key == 'id') {
                 continue;
+            }
+
             $method = self::getSetter($key);
 
             if (method_exists($instance, $method)) {

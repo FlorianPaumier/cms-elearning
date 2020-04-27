@@ -6,6 +6,7 @@ namespace App\Controllers\Admin;
 
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
+use App\Entity\Lesson;
 use App\Form\LessonForm;
 
 class LessonController extends BaseController
@@ -21,10 +22,18 @@ class LessonController extends BaseController
         ]);
     }
 
-    public function new(Request $request){
-        $form = (new LessonForm())->buildForm();
+    public function new(Request $request)
+    {
+        $lesson = new Lesson();
 
-        dump($request->getRequest());die;
+        $form = $this->createForm(LessonForm::class, $lesson);
+        $form->handleRequest($request);
+
+        if ($request->getMethod() == "POST") {
+            die;
+        }
+
+
         return $this->renderer->render("admin/lessons/new", [
             "form" => $form->createView(),
             'title' => "Création d'un Cour"

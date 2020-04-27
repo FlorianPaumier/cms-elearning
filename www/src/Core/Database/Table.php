@@ -103,6 +103,11 @@ class Table extends QueryBuilder
         return $this->fetchOrFail($sql, $params);
     }
 
+    public function getClass($entry_type)
+    {
+
+    }
+
     private function buildWhereFieldQuery(array $params)
     {
         return join(

@@ -130,6 +130,7 @@ class RenderView
     {
         $options["prefix"] = "app_form";
 
+
         $this->templateEngine->setData(["parameter" => $options]);
         if($this->templateEngine->setView(FORM_PATH."/input.tpl.php")){
             return $this->templateEngine->renderHtmlElement($type);

@@ -4,54 +4,36 @@
 namespace App\Form;
 
 
+use App\Core\Form\AbstractForm;
+use App\Core\Form\Fields\CollectionType;
+use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
 use App\Core\Interfaces\FormTypeInterface;
 
-class ChapterForm extends FormBuilder implements FormTypeInterface
+class ChapterForm extends AbstractForm
 {
 
     /**
      * @inheritDoc
      */
-    public static function getConstraint(): array
+    public function buildForm(FormBuilder $formBuilder): FormBuilder
     {
-        return [
-            [
-                "title" => [
-                    "empty" => false,
-                    "required" => true,
-                    "exists" => true,
-                ]
-            ],
-            [
-                "description" => [
-                    "empty" => false,
-                    "required" => true,
-                    "exists" => true,
-                ]
-            ]
-        ];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function buildForm(): FormBuilder
-    {
-        return $this
-            ->input("name", [
+        return $formBuilder
+            ->add("name", TextType::class, [
                 "label" => "Nom",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->input("position", [
+            ->add("position",TextType::class, [
                 "label" => "Chapitre",
                 "type" => "number",
                 "require" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->collection("blocks", ChapterBlockForm::class,  [
+            ->add("blocks", CollectionType::class,  [
                 "label" => "Contenu",
+                'entry_type' => ChapterBlockForm::class,
+                "prototype_name" => "__BLOCKS__",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ]);
@@ -60,13 +42,17 @@ class ChapterForm extends FormBuilder implements FormTypeInterface
     /**
      * @inheritDoc
      */
-    public function setBlockPrefix(): void
+    /**
+     * @inheritDoc
+     */
+    public function setBlockPrefix(string $prefix = null): void
     {
-        $this->prefix = "admin_lesson";
+        $this->prefix = $prefix ?? "admin_chapter";
     }
 
-    public function getBlockPrefix(): string
+    public function getBlockPrefix()
     {
-        return $this->prefix;
+        return "admin_chapter";
     }
+
 }

@@ -134,7 +134,7 @@ class UserController extends BaseController
 
             if ($validator->isValid()) {
                 $email = "";
-                if (($response = $this->userManager->delete($email)) !== true) {
+                if (($response = $this->userManager->deleteUser($email)) !== true) {
                     $this->session->set("app.flash", ["error" => [$response]]);
                 } else {
                     $this->redirect->redirectToRoute("app_home");

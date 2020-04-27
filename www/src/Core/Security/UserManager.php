@@ -168,4 +168,12 @@ class UserManager
             return "un mail a été envoyé";
         }
     }
+
+    /**
+     * delete user with email
+     */
+    public function deleteUser(string $email)
+    {
+
+    }
 }

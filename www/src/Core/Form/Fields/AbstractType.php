@@ -43,7 +43,7 @@ abstract class AbstractType implements FieldsInterface
         $this->render = new RenderView();
     }
 
-    public function generatePrototype(FormTypeInterface $field)
+    public function generatePrototype(string $key, FormTypeInterface $field, array $args)
     {
         /** @var FormBuilder $form */
         $form = (new $field)->buildForm(new FormBuilder());
@@ -59,7 +59,7 @@ abstract class AbstractType implements FieldsInterface
         $html = '<ul id="collection_' . $key . '" data-prototype="' . $view . '" data-key="' . $name . '" class="fd-c collection container mb-5"></ul>
 <button id="add-' . $key . '" data-target="collection_' . $key . '" type="button" class="add-element" data-index="0">Nouvel Element ' . $key . '</button>';
 
-        $this->form[$key] = htmlentities($html);
+        $this->html = htmlentities($html);
     }
 
     public function getParent()

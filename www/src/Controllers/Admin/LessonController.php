@@ -30,10 +30,6 @@ class LessonController extends BaseController
         $form->handleRequest($request);
 
         if ($request->getMethod() == "POST") {
-            dump($lesson);
-
-            dump($request);
-            dump($request->getRequest());
             die;
         }
 

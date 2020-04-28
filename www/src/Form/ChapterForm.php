@@ -4,10 +4,13 @@
 namespace App\Form;
 
 
+use App\Core\Form\AbstractForm;
+use App\Core\Form\Fields\CollectionType;
+use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
 use App\Core\Interfaces\FormTypeInterface;
 
-class ChapterForm extends FormBuilder implements FormTypeInterface
+class ChapterForm extends AbstractForm
 {
 
     /**
@@ -36,24 +39,25 @@ class ChapterForm extends FormBuilder implements FormTypeInterface
     /**
      * @inheritDoc
      */
-    public function buildForm(): FormBuilder
+    public function buildForm(FormBuilder $builder): FormBuilder
     {
-        return $this
-            ->input("name", [
+        return $builder
+            ->add("name", TextType::class,[
                 "label" => "Nom",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->input("position", [
-                "label" => "Chapitre",
+            ->add("position", TextType::class, [
+                "label" => "position",
                 "type" => "number",
                 "require" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->collection("blocks", ChapterBlockForm::class,  [
+            ->add("blocks", CollectionType::class,  [
                 "label" => "Contenu",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
+                "entry_type" => ChapterBlockForm::class,
             ]);
     }
 
@@ -65,11 +69,11 @@ class ChapterForm extends FormBuilder implements FormTypeInterface
      */
     public function setBlockPrefix(string $prefix = null): void
     {
-        $this->prefix = $prefix ?? "admin_chapter";
+        $this->prefix = $prefix;
     }
 
     public function getBlockPrefix(): string
     {
-        return $this->prefix;
+        return $this->prefix ?? "admin_chapter";
     }
 }

@@ -49,6 +49,10 @@ class FormBuilder
 
     /** @var FormTypeInterface */
     private $formType;
+    /**
+     * @var string
+     */
+    private $formParentType;
 
     /**
      * FormBuilder constructor.
@@ -91,8 +95,9 @@ class FormBuilder
 
         $args["value"] = $value;
 
-        $args["type"] = $args["type"] ?? $field->getBlockPrefix();
+        $args["type"] = $args["type"] ?? $field->getBlockType();
         $args["key"] = $key;
+
 
         $field = $this->translateField($field, $args);
 
@@ -100,6 +105,7 @@ class FormBuilder
             $field->setParent(new $this->parent);
         }
 
+        $args = $this->setName($field, $args);
         $field->setOptions($key, $args);
         $this->form[$field->getConstraintOffset("name")] = $field;
         $this->fields[$field->getConstraintOffset("name")] = ["key" => $key, "type" => get_class($field), "args" => $args];
@@ -152,33 +158,6 @@ class FormBuilder
 
     /**
      * @param string $key
-     * @param array $args
-     * @return $this
-     * @throws \Exception
-     */
-    public function input(string $key, array $args): self
-    {
-        $value = $this->getValue($key);
-
-        $args = array_merge($args, [
-            "value" => $value,
-            "key" => $key,
-            "errors" => $this->errors,
-            "prefix" => $this->prefix
-        ]);
-
-        if (empty($args["type"])) {
-            $args["type"] = "text";
-        }
-
-        $input[] = $key;
-
-        $this->form[$key] = $this->render->renderHtmlElement("input", $args);
-        return $this;
-    }
-
-    /**
-     * @param string $key
      * @return mixed|string|null
      */
     private function getValue(string $key)
@@ -203,6 +182,12 @@ class FormBuilder
         $this->errors = $validator->getErrors();
 
         return $validator->isValid();
+    }
+
+    public function setFormParentType(string $class)
+    {
+        $this->formParentType = $class;
+        return $this;
     }
 
     private function getInputClass(string $key, array $options = []): string
@@ -268,6 +253,7 @@ class FormBuilder
         $html = implode(
             "", array_map(
                 function ($input) {
+                    if(!is_null($input->getHtml())) return $input->getHtml();
                     return html_entity_decode($input->renderElement());
                 }, $this->form
             )
@@ -312,7 +298,8 @@ class FormBuilder
 
     private function fieldExist(string $key, string $field, array $args)
     {
-        $options = (new $this->parent)->getOptions();
+
+        $options = (new $this->formType)->getOptions();
 
         if (!key_exists("data_class", $options) || $field === ButtonType::class || $args["mapped"] === false) {
             return true;
@@ -365,7 +352,7 @@ class FormBuilder
         $field->addData("optionsHTML", implode("", $options));
     }
 
-    private function createCollectionType(CollectionType $field, array $args)
+    private function createCollectionType(CollectionType &$field, array $args)
     {
         if(!key_exists("entry_type", $args)){
             ConfigHandler::get("eventEmmiter")->emit("error.500", "The entry_type option must be not null");
@@ -377,17 +364,39 @@ class FormBuilder
             ConfigHandler::get("eventEmmiter")->emit("error.404", "The $class don't exist");
         }
 
+        /** @var FormTypeInterface $form */
+        $form = new $class;
+        $form->setParent($this->parent);
+        $form->setParentPrefix((new $this->parent)->getBlockPrefix());
+
         $field->setParent($this->parent);
-        $field->generatePrototype($args["key"], $field, $args);
+        $field->generatePrototype($args["key"], $form, $args);
     }
 
-    public function setParentType($class){
-        $this->parentType = $class;
+    /**
+     * @return FormTypeInterface
+     */
+    public function getFormType(): FormTypeInterface
+    {
+        return $this->formType;
+    }
+
+    /**
+     * @param FormTypeInterface $formType
+     */
+    public function setFormType(FormTypeInterface $formType)
+    {
+        $this->formType = $formType;
         return $this;
     }
 
-    public function getParentType(){
-        return $this->parentType;
+    private function setName(FieldsInterface $field, array $args): array
+    {
+        if (!is_null($this->formParentType)){
+            $args["name"] = $this->formType->getBlockPrefix() . "[".$args["key"]."]";
+        }
+
+        return $args;
     }
 
 }

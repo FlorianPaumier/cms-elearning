@@ -6,6 +6,7 @@ namespace App\Form;
 
 use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
+use App\Core\Form\Fields\CollectionType;
 use App\Core\Form\Fields\TextAreaType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
@@ -30,6 +31,12 @@ class LessonForm extends AbstractForm
                 "label" => "Description",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12 ckeditor",
+            ])
+            ->add("chapters", CollectionType::class, [
+                "label" => "Chapitres",
+                "required" => true,
+                "class" => "col-md-6 col-lg-6 col-sm-12 ckeditor",
+                "entry_type" => ChapterForm::class,
             ])
             ->add("valider", ButtonType::class, [
                 "label" => "Valider",

@@ -45,15 +45,19 @@ abstract class AbstractType implements FieldsInterface
 
     public function generatePrototype(string $key, FormTypeInterface $field, array $args)
     {
-        /** @var FormBuilder $form */
-        $form = (new $field)->buildForm(new FormBuilder());
 
         $name = $args["prototype_name"] ?? "__NAME__";
-        $form->setBlockPrefix($form->getBlockPrefix() . "[" . $name . "]");
 
-        $args["name"] = $form->getBlockPrefix();
+        $prefix = $this->getPrefix($field);
+        $field->setBlockPrefix($prefix . "[" . $name . "]");
 
-        $key = "";
+        $builder = (new FormBuilder())->setParent(get_class($field))->setFormType($field)->setFormParentType(CollectionType::class);
+
+        /** @var FormBuilder $form */
+        $form = $field->buildForm($builder);
+
+        $key = $args["key"];
+
         $view = htmlentities($form->createView(true));
         $html = '<ul id="collection_' . $key . '" data-prototype="' . $view . '" data-key="' . $name . '" class="fd-c collection container mb-5"></ul>
 <button id="add-' . $key . '" data-target="collection_' . $key . '" type="button" class="add-element" data-index="0">Nouvel Element ' . $key . '</button>';
@@ -107,6 +111,14 @@ abstract class AbstractType implements FieldsInterface
     }
 
     /**
+     * @return string
+     */
+    public function getHtml(): ?string
+    {
+        return $this->html ? html_entity_decode($this->html) : null;
+    }
+
+    /**
      * @return mixed
      */
     public function getValue()
@@ -141,8 +153,19 @@ abstract class AbstractType implements FieldsInterface
     /**
      * @return mixed
      */
-    public function getBlockPrefix()
+    public function getBlockType()
     {
+        return "";
+    }
+
+    private function getPrefix(FormTypeInterface &$field)
+    {
+        $parent = $field->getParent();
+        if(!is_null($parent)){
+            $prefix = (new $parent)->getBlockPrefix() ;
+        }
+
+        return isset($prefix) ? $prefix."[".$field->getBlockPrefix()."]" : $field->getBlockPrefix();
     }
 
 

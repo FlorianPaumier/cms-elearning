@@ -276,4 +276,13 @@ class QueryBuilder
     {
         $this->data = $data;
     }
+
+
+    public function getClass(string $class)
+    {
+        $classTab = explode("\\", $class);
+        $class  = array_pop($classTab);
+        $this->from = strtolower($class);
+        return $this->from;
+    }
 }

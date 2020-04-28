@@ -12,6 +12,10 @@ abstract class AbstractForm implements FormTypeInterface
 
     protected $options = [];
 
+    protected $parent;
+
+    protected $parentPrefix;
+
     public function __construct()
     {
         $this->configureOptions();
@@ -36,7 +40,9 @@ abstract class AbstractForm implements FormTypeInterface
     /**
      * @param string|null $prefix
      */
-    public function setBlockPrefix(string $prefix = null) {}
+    public function setBlockPrefix(string $prefix = null) {
+        $this->prefix = $prefix;
+    }
 
     /**
      * @return mixed
@@ -46,5 +52,27 @@ abstract class AbstractForm implements FormTypeInterface
     /**
      * @return mixed
      */
-    public function getParent(){}
+    public function getParent(){
+        return $this->parent;
+    }
+    /**
+     * @return mixed
+     */
+    public function setParent($parent){
+        $this->parent = $parent;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function setParentPrefix($parent){
+        $this->parentPrefix = $parent;
+        return $this;
+    }
+    /**
+     * @return mixed
+     */
+    public function getParentPrefix(){
+        return $this->parentPrefix;
+    }
 }

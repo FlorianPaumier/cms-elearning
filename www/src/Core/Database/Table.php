@@ -78,6 +78,7 @@ class Table extends QueryBuilder
         return $this->fetchOrFail();
     }
 
+
     private function buildWhereFieldQuery(array $params)
     {
         return join(

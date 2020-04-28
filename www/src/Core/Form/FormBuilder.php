@@ -181,10 +181,6 @@ class FormBuilder
      */
     private function getValue(string $key)
     {
-        if(is_null($this->data)){
-            return null;
-        }
-
         if (is_array($this->data)) {
             return $this->data[$key] ?? null;
         }

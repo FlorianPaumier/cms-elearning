@@ -2,44 +2,34 @@
 
 namespace App\Form;
 
+use App\Core\Form\AbstractForm;
+use App\Core\Form\Fields\AbstractType;
+use App\Core\Form\Fields\ButtonType;
+use App\Core\Form\Fields\CollectionType;
+use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
 use App\Core\Interfaces\FormTypeInterface;
 
-class ContactFormType extends FormBuilder implements FormTypeInterface
+class ContactFormType extends AbstractForm
 {
-    /**
-     * @inheritDoc
-     */
-    public static function getConstraint(): array
-    {
-        return [
-            [
-                'name' =>
-                    [
-                        'empty' => false,
-                        'required' => true,
-                        'exists' => true,
-                    ],
-            ]
-        ];
-    }
 
-    public function buildForm(): FormBuilder
+    public function buildForm(FormBuilder $builder): FormBuilder
     {
-        return $this
-            ->input('name', array(
+        return $builder
+            ->add('name', TextType::class, array(
                 'label' => 'Nom du formulaire',
                 'required' => true,
                 'class' => 'col-md-6 col-lg-6 col-sm-12',
             ))
-            ->textarea('description', array(
-                'label' => 'Description',
-                'required' => false,
+            ->add('fields', CollectionType::class, array(
+                'label' => 'Champs du formulaire',
+                'required' => true,
                 'class' => 'col-md-6 col-lg-6 col-sm-12',
+                'entry_type' => ContactFieldType::class,
             ))
-            ->button('submit', array(
+            ->add('submit',ButtonType::class, array(
                 'label' => 'Valider',
-                'required' => false,
+                'type' => 'submit',
                 'class' => 'col-md-6 col-lg-6 col-sm-12',
             ));
     }
@@ -48,15 +38,14 @@ class ContactFormType extends FormBuilder implements FormTypeInterface
     /**
      * @inheritDoc
      */
-    public function setBlockPrefix(): void
+    public function setBlockPrefix(string $prefix = null)
     {
-        $this->prefix = "contact_form";
+        $this->prefix = $prefix ?? "contact_form";
     }
 
     public function getBlockPrefix(): string
     {
-        return $this->prefix;
+        return "contact_form";
     }
-
 
 }

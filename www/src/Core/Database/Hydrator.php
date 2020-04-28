@@ -1,21 +1,25 @@
 <?php
 
-namespace App\Core\database;
+namespace App\Core\Database;
 
 /**
  * Transforme un tableau en objet en utilisant les setters
  */
 class Hydrator
 {
+
     /**
      * Transforme un tableau en objet en utilisant les setters
      *
-     * @param  array  $array
+     * @param array $array
      * @param  $object
      * @return mixed
      */
     public static function hydrate($array, $object)
     {
+        $instances = [];
+        $multiple = false;
+
         if (is_string($object)) {
             $instance = new $object();
         } else {
@@ -24,8 +28,12 @@ class Hydrator
 
         $i = 0;
         foreach ($array as $key => $value) {
-            if($key == 'id')
+            if (gettype($value) == "array") {
+                $multiple = true;
+                $instances[] = self::hydrate($value, $object);
                 continue;
+            }
+
             $method = self::getSetter($key);
 
             if (method_exists($instance, $method)) {
@@ -34,8 +42,11 @@ class Hydrator
             $i++;
         }
 
+        if($multiple) return $instances;
+
         return $instance;
     }
+
 
     /**
      * format function set

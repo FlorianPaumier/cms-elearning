@@ -54,6 +54,7 @@ abstract class AbstractType implements FieldsInterface
         $args["name"] = $form->getBlockPrefix();
 
         $key = "";
+        dump("Hello");
         $view = htmlentities($form->createView(true));
         $html = '<ul id="collection_' . $key . '" data-prototype="' . $view . '" data-key="' . $name . '" class="fd-c collection container mb-5"></ul>
 <button id="add-' . $key . '" data-target="collection_' . $key . '" type="button" class="add-element" data-index="0">Nouvel Element ' . $key . '</button>';

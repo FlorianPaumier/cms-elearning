@@ -7,7 +7,7 @@ use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Events\EventEmmiter;
 use App\Core\Render\RenderView;
-use Exception;
+use PHPUnit\Util\Exception;
 
 /**
  * Point d'entré et de sortie de notre appplication
@@ -17,9 +17,8 @@ use Exception;
 class Kernel
 {
 
-    public function __construct(string $env, ?bool $debug = false)
+    public function __construct(string $env, bool $debug = false)
     {
-        /** Set Serveur var */
         $_SERVER["APP_ENV"] = $env;
         $_SERVER["APP_DEBUG"] = $debug;
 

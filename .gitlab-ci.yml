@@ -24,14 +24,15 @@ tests:
     - ssh-add <(echo "$DEPLOYMENT_PRIVATE_KEY")
     - mkdir -p ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - bundle install --path vendor/bundle
   script:
-    - bundle exec cap $env deploy
+    - ssh deployer-agent@$url "cd /var/www/cms/ && git checkout $env && git pull origin $env && exit"
 
 deploy:preprod:
   <<: *deploy
   variables:
-    env: preprod
-    url: https://preprod.troopers.agency
+    env: develop
+    url: 92.222.66.238
   only:
     - develop
+    - dev_ci
+  when: manual

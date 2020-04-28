@@ -9,25 +9,39 @@ class User
 {
     use Entity;
 
-    protected $name;
+    protected $username;
+    protected $password;
 
     /**
      * @return mixed
      */
-    public function getName()
+    public function getUsername()
     {
-        return $this->name;
+        return $this->username;
     }
 
     /**
-     * @param mixed $name
-     * @return User
+     * @param mixed $username
      */
-    public function setName($name)
+    public function setUsername($username): void
     {
-        $this->name = $name;
-        return $this;
+        $this->username = $username;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param mixed $password
+     */
+    public function setPassword(User $password): void
+    {
+        $this->password = $password;
+    }
 
 }

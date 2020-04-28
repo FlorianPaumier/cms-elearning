@@ -14,7 +14,7 @@ interface FieldsInterface
 
     public function setOptions(string $key, array $args);
 
-    public function generatePrototype(FormTypeInterface $field);
+    public function generatePrototype(string $key, FormTypeInterface $field, array $args);
 
     public function setParent(string $parent);
 

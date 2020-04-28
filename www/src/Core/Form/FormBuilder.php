@@ -8,6 +8,7 @@ use App\Core\Cache\ConfigHandler;
 use App\Core\Database\Table;
 use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\ChoiceType;
+use App\Core\Form\Fields\CollectionType;
 use App\Core\Form\Fields\EntityType;
 use App\Core\Form\Fields\FieldsInterface;
 use App\Core\Form\Fields\OptionType;
@@ -91,6 +92,7 @@ class FormBuilder
         $args["value"] = $value;
 
         $args["type"] = $args["type"] ?? $field->getBlockPrefix();
+        $args["key"] = $key;
 
         $field = $this->translateField($field, $args);
 
@@ -300,6 +302,9 @@ class FormBuilder
             if ($field instanceof EntityType) {
                 $this->createEntityType($field, $args);
             }
+            if ($field instanceof CollectionType) {
+                $this->createCollectionType($field, $args);
+            }
         }
 
         return $field;
@@ -359,4 +364,30 @@ class FormBuilder
 
         $field->addData("optionsHTML", implode("", $options));
     }
+
+    private function createCollectionType(CollectionType $field, array $args)
+    {
+        if(!key_exists("entry_type", $args)){
+            ConfigHandler::get("eventEmmiter")->emit("error.500", "The entry_type option must be not null");
+        }
+
+        $class = $args["entry_type"];
+
+        if (!class_exists($class)) {
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "The $class don't exist");
+        }
+
+        $field->setParent($this->parent);
+        $field->generatePrototype($args["key"], $field, $args);
+    }
+
+    public function setParentType($class){
+        $this->parentType = $class;
+        return $this;
+    }
+
+    public function getParentType(){
+        return $this->parentType;
+    }
+
 }

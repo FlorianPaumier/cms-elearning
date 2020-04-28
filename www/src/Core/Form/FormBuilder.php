@@ -372,13 +372,15 @@ class FormBuilder
         }
 
         $class = $args["entry_type"];
-
         if (!class_exists($class)) {
             ConfigHandler::get("eventEmmiter")->emit("error.404", "The $class don't exist");
         }
 
+        /** @var FormTypeInterface $form */
+        $form = new $class;
+
         $field->setParent($this->parent);
-        $field->generatePrototype($args["key"], $field, $args);
+        $field->generatePrototype($args["key"],$form, $args);
     }
 
     public function setParentType($class){

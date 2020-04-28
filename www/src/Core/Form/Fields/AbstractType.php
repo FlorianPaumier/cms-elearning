@@ -45,8 +45,7 @@ abstract class AbstractType implements FieldsInterface
 
     public function generatePrototype(string $key, FormTypeInterface $field, array $args)
     {
-        /** @var FormBuilder $form */
-        $form = (new $field)->buildForm(new FormBuilder());
+        $form = $field->buildForm(new FormBuilder());
 
         $name = $args["prototype_name"] ?? "__NAME__";
         $form->setBlockPrefix($form->getBlockPrefix() . "[" . $name . "]");

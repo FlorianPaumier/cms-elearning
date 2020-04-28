@@ -5,6 +5,7 @@ namespace App\Core\Render;
 
 
 use App\Core\Cache\CacheHandler;
+use App\Core\Form\Fields\FieldsInterface;
 use App\Core\Cache\ConfigHandler;
 
 class TemplateEngine
@@ -132,17 +133,24 @@ class TemplateEngine
     /**
      * Render the html element to create a form
      *
-     * @param string $type
+     * @param mixed $type
      * @return string
      */
-    public function renderHtmlElement(string $type)
+    public function renderHtmlElement($type)
     {
+        if($type instanceof FieldsInterface){
+            $block = $type::getBlockName();
+        }else{
+            $block = $type;
+        }
+
         $this->_load_template();
 
         if($type == "errors"){
             dump($this->content, "Template Content");
         }
-        preg_match_all("/.*{%\s?block\s${type}\s?%}((?s:.+?)){%\s?endblock\s?%}.*/m", $this->content, $this->blockEntries, PREG_SET_ORDER, 0);
+
+        preg_match_all("#.*@block\($block\)((?s:.+?))@endblock.*#m", $this->content, $this->blockEntries, PREG_SET_ORDER, 0);
 
         if($type == "errors"){
             dump($this->blockEntries, "Block Entries");
@@ -190,12 +198,11 @@ class TemplateEngine
             return $this->content;
         }
 
-        CacheHandler::set("dashboard", $this->content);
+
         if (!is_null($this->view)) {
             $tmp = tmpfile();
             fwrite($tmp, $this->content);
             extract($this->data["parameter"]);
-            file_put_contents("test.php", file_get_contents(stream_get_meta_data($tmp)['uri']));
             include stream_get_meta_data($tmp)['uri'];
         }
     }

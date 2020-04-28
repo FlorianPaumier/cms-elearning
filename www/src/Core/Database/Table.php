@@ -12,7 +12,7 @@ use PDO;
  */
 class Table extends QueryBuilder
 {
-    
+
     /**
      * Entité à utiliser
      *
@@ -27,34 +27,6 @@ class Table extends QueryBuilder
     public function __construct(PDO $pdo = null)
     {
         parent::__construct($pdo);
-    }
-
-    /**
-     * Pagine des éléments
-     *
-     * @param  int $perPage
-     * @param  int $currentPage
-     * @return array
-     */
-    public function findPaginated(int $perPage, int $currentPage): ?array
-    {
-        #Todo : Création d'un paginateur
-//        $query = new PaginatedQuery(
-//            $this->pdo,
-//            $this->paginationQuery(),
-//            "SELECT COUNT(id) FROM {$this->from}",
-//            $this->entity
-//        );
-//        return (new Pagerfanta($query))
-//            ->setMaxPerPage($perPage)
-//            ->setCurrentPage($currentPage);
-
-        return [];
-    }
-
-    protected function paginationQuery()
-    {
-        return "SELECT * FROM {$this->from}";
     }
 
     /**
@@ -79,13 +51,9 @@ class Table extends QueryBuilder
      */
     public function findAll(): array
     {
-        $query = $this->pdo->query("SELECT * FROM {$this->from}");
-        if ($this->entity) {
-            $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
-        } else {
-            $query->setFetchMode(\PDO::FETCH_OBJ);
-        }
-        return $query->fetchAll();
+        $this->select("*");
+
+        return $this->fetchOrFail();
     }
 
     /**
@@ -95,12 +63,19 @@ class Table extends QueryBuilder
      * @return mixed|false
      * @throws NoRecordException
      */
+
     public function findBy(array $params)
     {
-        $sql = "SELECT * FROM {$this->from} WHERE ";
-        $sql .= $this->buildWhereFieldQuery($params);
+        foreach (array_keys($params) as $key => $param){
+            if($key > 0){
+                $this->andWhere("$param = :$param");
+            }else{
+                $this->where("$param = :$param");
+            }
+        }
 
-        return $this->fetchOrFail($sql, $params);
+        $this->setParams($params);
+        return $this->fetchOrFail();
     }
 
     public function getClass($entry_type)
@@ -125,14 +100,11 @@ class Table extends QueryBuilder
      *
      * @param  int $id
      * @return mixed
-     * @throws NoRecordException
      */
     public function find(int $id)
     {
-        $this->from($this->from)
-            ->where("id = :id");
-
-        $this->setParam("id", $id);
+        $this->where("id = :id");
+        $this->setParam("id" ,$id);
         return $this->fetchOrFail();
     }
 
@@ -223,6 +195,16 @@ class Table extends QueryBuilder
     }
 
     /**
+     * @param string|null $entity
+     * @return Table
+     */
+    public function setEntity(?string $entity): Table
+    {
+        $this->entity = $entity;
+        return $this;
+    }
+
+    /**
      * Retourne la table visée
      * @return string
      */
@@ -234,14 +216,14 @@ class Table extends QueryBuilder
     /**
      * Vérifie qu'un enregistrement existe
      *
-     * @param  $id
+     * @param array $search
      * @return bool
      */
-    public function exists($id): bool
+    public function exists(array $search): bool
     {
-        $query = $this->pdo->prepare("SELECT id FROM {$this->from} WHERE id = :id");
-        $query->execute(["id" => $id]);
-        return $query->fetchColumn() !== false;
+        $result = $this->findBy($search);
+
+        return !empty($result);
     }
 
     /**

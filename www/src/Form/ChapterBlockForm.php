@@ -34,9 +34,9 @@ class ChapterBlockForm extends AbstractForm
     /**
      * @inheritDoc
      */
-    public function setBlockPrefix(): void
+    public function setBlockPrefix(string $prefix = null): void
     {
-        $this->prefix = "admin_lesson";
+        $this->prefix = $prefix ?? "admin_chapter_block";
     }
 
     public function getBlockPrefix()

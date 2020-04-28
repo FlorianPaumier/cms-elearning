@@ -1,7 +1,9 @@
 <section id="header">
     <section id="search">
         <div>
-            <img src="https://i1.wp.com/s1.wp.com/wp-content/themes/h4/landing/marketing/pages/_common/components/vip-pitch/media/vip-logo.png?ssl=1" alt="">
+            <a href="@path(app_home)">
+                <img src="https://i1.wp.com/s1.wp.com/wp-content/themes/h4/landing/marketing/pages/_common/components/vip-pitch/media/vip-logo.png?ssl=1" alt="">
+            </a>
         </div>
         <form action="" method="post" class="input-group search">
             <input type="text" placeholder="Chercher dans le site" class="input-search">
@@ -13,7 +15,7 @@
     <section id="menu">
         <nav>
             <ul>
-                <li class="link"><a href="#">Cours</a></li>
+                <li class="link"><a href="@path(app_catalogue)">Cours</a></li>
                 <li class="link"><a href="#">Article</a></li>
                 <li class="link"><a href="#">Evenements</a></li>
                 <li class="link"><a href="#">Contact</a></li>

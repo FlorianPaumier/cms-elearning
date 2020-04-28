@@ -44,7 +44,9 @@
 <section id="header">
     <section id="search">
         <div>
-            <img src="https://i1.wp.com/s1.wp.com/wp-content/themes/h4/landing/marketing/pages/_common/components/vip-pitch/media/vip-logo.png?ssl=1" alt="">
+            <a href="/">
+                <img src="https://i1.wp.com/s1.wp.com/wp-content/themes/h4/landing/marketing/pages/_common/components/vip-pitch/media/vip-logo.png?ssl=1" alt="">
+            </a>
         </div>
         <form action="" method="post" class="input-group search">
             <input type="text" placeholder="Chercher dans le site" class="input-search">
@@ -56,7 +58,7 @@
     <section id="menu">
         <nav>
             <ul>
-                <li class="link"><a href="#">Cours</a></li>
+                <li class="link"><a href="/cours">Cours</a></li>
                 <li class="link"><a href="#">Article</a></li>
                 <li class="link"><a href="#">Evenements</a></li>
                 <li class="link"><a href="#">Contact</a></li>
@@ -94,89 +96,59 @@ if(isset($flash)){
 
 <main>
     
-<section id="main-section">
-    <div class="background">
-        <h1>Un site pour apprendre</h1>
-        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis
-            et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut </p>
-    </div>
+<section id="catalogue-search">
+    <form action="" method="get">
+        <select name="category" id="search_categories">
+            <option value="">Catégories</option>
+        </select>
+        <select name="themes" id="search_themes">
+            <option value="">Thèmes</option>
+        </select>
+        <select name="language" id="search_language">
+            <option value="">Langue</option>
+        </select>
+        <input type="text" class="input-search" placeholder="Nom du cours">
+        <button class="btn">Rechercher</button>
+    </form>
 </section>
-<section class="section-doc">
-    <article>
-        <i class="fa fa-cogs icon"></i>
-        <h1>Une nouvelle approche</h1>
-        <p>
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-        </p>
-    </article>
-    <article>
-        <i class="fa fa-cogs icon"></i>
-        <h1>Une nouvelle approche</h1>
-        <p>
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-        </p>
-    </article>
-    <article>
-        <i class="fa fa-cogs icon"></i>
-        <h1>Une nouvelle approche</h1>
-        <p>
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-        </p>
-    </article>
-</section>
-<section id="section-lesson">
-    <h2 class="text-center">les cours populaires</h2>
-    <div id="lessons">
-        <button><i class="fa fa-arrow-left"></i></button>
-        <?php for ($y = 0; $y < 3; $y++): ?>
-            <article class="lesson <?php if ($y === 0) echo 'active' ?>">
-                <section>
-                    <img src="https://unsplash.it/800/600?image=59" alt="lesson">
-                </section>
-                <section class="content">
-                    <h2>Salut</h2>
-                    <p>
-                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
-                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium ....
-                    </p>
-                    <a href="#" class="btn">Commencer</a>
-                </section>
-            </article>
+<section id="section-lessons" class="container">
+    <ul class="cards">
+        <?php for ($i = 0; $i < 10; $i++): ?>
+            <li class="lesson">
+                <article class="">
+                    <img src="https://unsplash.it/800/600?image=82" alt="lessons logo">
+                    <section class="content">
+                        <span>Type</span>
+                        <h1>Titre</h1>
+                        <span class="informations">
+                            <div class="times"><i class="far fa-hourglass"></i> 15 Heures</div>
+                            <div class="difficulty">
+                                <div class="mesure">
+                                    <img src="assets/images/levels.svg" alt="level">
+                                </div>
+                                <span>Facile</span>
+                            </div>
+                        </span>
+                        <p class="">This is the shorthand for flex-grow, flex-shrink and flex-basis combined. The second and third parameters (flex-shrink and flex-basis) are
+                            optional.
+                            Default is 0 1 auto. </p>
+                    </section>
+                </article>
+            </li>
         <?php endfor; ?>
-        <button><i class="fa fa-arrow-right"></i></button>
-    </div>
-</section>
-<section id="home-news" class="row">
-    <section id="testimonies" class="col-md-6">
-        <?php for ($y = 0; $y < 3; $y++): ?>
-            <article class="testimony <?php if ($y == 1) echo 'active' ?>">
-                <h2 class="text-center">Salut</h2>
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem</p>
-                <span class="date">10/02/2020</span>
-            </article>
-        <?php endfor; ?>
-    </section>
-    <section id="flux-rss" class="col-md-6 col-sm-12 col-lg-6">
-        <h2>Dernières actualités</h2>
-        <?php for ($y = 0; $y < 3; $y++): ?>
-            <article class="news col-md-6 col-sm-12 col-lg-6 <?php if ($y == 1) echo 'active' ?>">
-                <span class="date">10/02/2020</span>
-                <h1>Salut</h1>
-                <p>Sed ut perspiciatis unde omnis iste natus error sit
-                    voluptatem accusantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium ....
-                </p>
-                <a href="#" class="know-more">Voir la suite</a>
-            </article>
-        <?php endfor; ?>
-    </section>
-</section>
+    </ul>
 
-<section id="newsletter">
-    <h2>Newsletter</h2>
-    <div>
-        <input type="email" placeholder="Votre Email..." name="newsletter-email">
-        <button class="btn">M'inscrire</button>
-    </div>
+    <section class="pagination">
+        <ul>
+            <li><a class="pagination-prev" href="#">Précedent</a></li>
+            <?php for ($i = 1; $i < 4; $i++): ?>
+                <li><a href="?page=<?= $i ?>" class="<?php if ($_GET["page"] == $i) {
+                        echo 'is-active';
+                    } ?>"><?= $i ?></a></li>
+            <? endfor; ?>
+            <li><a class="pagination-next" href="#">Suivant</a></li>
+        </ul>
+    </section>
 </section>
 
 </main>
@@ -250,7 +222,7 @@ if(isset($flash)){
 
 <script src="/assets/scripts/header.js"></script>
 
-<script src="/assets/scripts/carrousel.js"></script>
+
 
 </body>
 </html>

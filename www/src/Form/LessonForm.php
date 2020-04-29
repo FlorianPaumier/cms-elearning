@@ -11,7 +11,6 @@ use App\Core\Form\Fields\TextAreaType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
 use App\Core\Interfaces\FormTypeInterface;
-use App\Entity\Chapter;
 use App\Entity\Lesson;
 
 class LessonForm extends AbstractForm
@@ -34,10 +33,10 @@ class LessonForm extends AbstractForm
                 "class" => "col-md-6 col-lg-6 col-sm-12 ckeditor",
             ])
             ->add("chapters", CollectionType::class, [
+                "label" => "Chapitres",
+                "required" => true,
+                "class" => "col-md-6 col-lg-6 col-sm-12 ckeditor",
                 "entry_type" => ChapterForm::class,
-                "allow_delete" => true,
-                "allow_add" => true,
-                "prototype" => true,
             ])
             ->add("valider", ButtonType::class, [
                 "label" => "Valider",

@@ -14,7 +14,8 @@ class LessonController extends BaseController
 
     public function index()
     {
-        $lessons = $this->repository->from("lesson")->findAll();
+        $this->repository->getClass(Lesson::class);
+        $lessons = $this->repository->findAll();
 
         return $this->renderer->render("admin/lessons/lesson", [
             "lessons" => $lessons,

@@ -11,6 +11,7 @@
         <tr>
             <th>Id</th>
             <th>title</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -19,10 +20,11 @@
             ?>
             <tr>
                 <td><?= $lesson->getId(); ?></td>
-                <td><?= $lesson->geTitle(); ?></td>
+                <td><?= $lesson->getTitle(); ?></td>
                 <td>
-                    <form action="/admin/lesson/delete<?= $lesson->getId() ?>">
-                        <button id="delete-lesson" class="btn btn-danger">Ajout</button>
+                    <a href="@path(admin_lesson_edit, <?= $lesson->getId() ?>)" class="btn btn-success">Modifier</a>
+                    <form action="/admin/lesson/delete/<?= $lesson->getId() ?>">
+                        <button id="delete-lesson" class="btn btn-danger">Delete</button>
                     </form></td>
             </tr>
         <?php

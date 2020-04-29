@@ -106,12 +106,20 @@ class Router
      * @param string $route
      * @return string|null
      */
-    public function getPath(string $route): ?string
+    public function getPath(string $route, string $param = null): ?string
     {
         $route = key_exists($route, $this->routes) ? $this->routes[$route]["path"] : null;
 
-        if(!is_null($route)){
-            dump($route);
+        if(!is_null($route) && !is_null($param)){
+            $routeTab = explode("/", $route);
+
+            foreach ($routeTab as $key => $value){
+                if(strpos('{', $value) !== false){
+                    $routeTab[$key] = $param;
+                }
+            }
+
+            $route = implode("/", $routeTab);
         }
 
         return $route;

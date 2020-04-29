@@ -23,9 +23,8 @@ class Hydrator
         }
 
         $i = 0;
+
         foreach ($array as $key => $value) {
-            if($key == 'id')
-                continue;
             $method = self::getSetter($key);
 
             if (method_exists($instance, $method)) {

@@ -261,12 +261,14 @@ class QueryBuilder
         $query->execute($this->params);
 
         $this->params = [];
+        $results = $query->fetchAll(\PDO::FETCH_ASSOC);
 
         if (isset($this->entity)) {
-            $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
-            $record = $query->fetchObject();
-        } else {
-            $record = $query->fetchAll(\PDO::FETCH_ASSOC);
+            foreach ($results as $result){
+                $record[] = Hydrator::hydrate($result, $this->entity);
+            }
+        }else{
+            $record = $results;
         }
 
         return $record !== false ? $record : null;
@@ -275,5 +277,15 @@ class QueryBuilder
     public function setData(array $data)
     {
         $this->data = $data;
+    }
+
+
+    public function getClass(string $class)
+    {
+        $this->entity = $class;
+        $classTab = explode("\\", $class);
+        $class  = array_pop($classTab);
+        $this->from = strtolower($class);
+        return $this->from;
     }
 }

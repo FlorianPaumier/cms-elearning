@@ -127,7 +127,7 @@ class TemplateEngine
     private function _parseTemplate()
     {
         preg_match_all("/{{\s?(\w+)\s?}}/m", $this->content, $this->fieldEntries, PREG_SET_ORDER, 0);
-        preg_match_all("/@(\w+)\((.*?)\)/m", $this->content, $this->methodEntries, PREG_SET_ORDER, 0);
+        preg_match_all("/@(\w+)\((.*?)(,(.*?))?\)/m", $this->content, $this->methodEntries, PREG_SET_ORDER, 0);
     }
 
     /**
@@ -200,11 +200,12 @@ class TemplateEngine
 
 
         if (!is_null($this->view)) {
-            $tmp = tmpfile();
-            fwrite($tmp, $this->content);
             extract($this->data["parameter"]);
-            include stream_get_meta_data($tmp)['uri'];
+            eval("?>".$this->content);
+            return true;
         }
+
+        return false;
     }
 
     /**

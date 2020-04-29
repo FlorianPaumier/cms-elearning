@@ -78,10 +78,6 @@ class Table extends QueryBuilder
         return $this->fetchOrFail();
     }
 
-    public function getClass($entry_type)
-    {
-
-    }
 
     private function buildWhereFieldQuery(array $params)
     {

@@ -108,10 +108,14 @@ vendor/
 www/public/vendor/
 
 www/app/config/config.yml
+.phpunit.result.cache
 www/package.json
 www/node_modules/*
 www/app/cache
+www/src/Core/assets/fonts
 db_data
+dist
 docker/postgres/data
-
 .vscode/
+.phpunit.*
+builds

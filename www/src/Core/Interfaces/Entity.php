@@ -30,7 +30,11 @@ Trait Entity
         if(is_null($id)){
             return $this;
         }
+        return $this;
+    }
 
+    public function getEntity(int $id)
+    {
         /** @var Table $table */
         $table = Kernel::get('repository');
         $entityNamespace = explode("\\", get_class());

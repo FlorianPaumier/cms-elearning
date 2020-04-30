@@ -110,19 +110,17 @@ class Router
     {
         $route = key_exists($route, $this->routes) ? $this->routes[$route]["path"] : null;
 
-        if(!is_null($route) && !is_null($param)){
-            $routeTab = explode("/", $route);
+        if(is_null($route)) return "";
 
-            foreach ($routeTab as $key => $value){
-                if(strpos('{', $value) !== false){
-                    $routeTab[$key] = $param;
-                }
+        $tab = explode("/", $route);
+
+        foreach ($tab as $key => $value){
+            if(preg_match("/\{(.*?)\}/m", $value)){
+                $tab[$key] = $param;
             }
-
-            $route = implode("/", $routeTab);
         }
 
-        return $route;
+        return implode("/", $tab);
     }
 
     /**

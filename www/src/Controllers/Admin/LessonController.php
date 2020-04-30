@@ -32,7 +32,6 @@ class LessonController extends BaseController
 
         if ($request->getMethod() == "POST") {
             dump($lesson);
-
             dump($request);
             dump($request->getRequest());
             die;
@@ -53,8 +52,7 @@ class LessonController extends BaseController
         if ($request->getMethod() == "POST") {
             die;
         }
-
-
+        
         return $this->renderer->render("admin/lessons/new", [
             "form" => $form->createView(),
             'title' => "Création d'un Cour"

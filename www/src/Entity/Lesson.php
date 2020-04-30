@@ -88,7 +88,7 @@ class Lesson
     /**
      * @return array
      */
-    public function getChapters(): array
+    public function getChapters(): ?array
     {
         return $this->chapters;
     }

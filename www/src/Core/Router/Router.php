@@ -188,7 +188,7 @@ class Router
         /**
          * Regex to extract the parameters name and is type
          */
-        preg_match_all('/{(\w+)<{1}(\\\\\w+\+)>{1}\??}/m', $str, $pregParameters);
+        preg_match_all('/{(\w+)<{1}(.*?)>{1}\??}/m', $str, $pregParameters);
 
         // Retrieve the entire match result
         $params = $this->getParameters($str);
@@ -196,6 +196,7 @@ class Router
         // Test if the parameters had regex rule and test it
         if (isset($pregParameters[2][0]) && isset($pregParameters[1][0])) {
             $reg = $pregParameters[2][0];
+            $reg = preg_replace('#\\\\#', "", $reg, 1);
             if (preg_match("/${reg}/", $params)) {
                 return [$pregParameters[1][0] => $params];
             } else {

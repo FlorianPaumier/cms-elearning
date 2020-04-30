@@ -1,0 +1,18 @@
+admin_lesson_chapter_chapter_list:
+  path: /admin/lesson_chapter
+  controller: App\Controllers\Admin\LessonChapter:index
+
+admin_lesson_chapter_new:
+  path: /admin/lesson_chapter/new
+  controller: App\Controllers\Admin\LessonChapter:new
+  method: [GET,POST]
+
+admin_lesson_chapter_edit:
+  path: /admin/lesson_chapter/edit/{id<\\d+>}
+  controller: App\Controllers\Admin\LessonChapter:edit
+  method: [GET,POST]
+
+admin_lesson_chapter_delete:
+  path: /admin/lesson_chapter/delete/{id<\\d+>}
+  controller: App\Controllers\Admin\LessonChapter:delete
+  method: [DELETE]

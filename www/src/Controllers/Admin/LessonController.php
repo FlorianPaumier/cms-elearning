@@ -44,4 +44,25 @@ class LessonController extends BaseController
             'title' => "Création d'un Cour"
         ]);
     }
+
+    public function edit(Request $request, Lesson $lesson)
+    {
+        $form = $this->createForm(LessonForm::class, $lesson);
+        $form->handleRequest($request);
+
+        if ($request->getMethod() == "POST") {
+            die;
+        }
+
+
+        return $this->renderer->render("admin/lessons/new", [
+            "form" => $form->createView(),
+            'title' => "Création d'un Cour"
+        ]);
+    }
+
+    public function delete(Request $request, Lesson $lesson){
+
+        $this->redirect->redirectToRoute("admin_lesson_index");
+    }
 }

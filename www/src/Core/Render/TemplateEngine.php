@@ -178,7 +178,7 @@ class TemplateEngine
         }
 
         if ($tags) {
-            CacheHandler::set($this->view, $this->content);
+//            CacheHandler::set($this->view, $this->content);
 
             if (count($this->fieldEntries) > 0) {
                 $this->_parseTags();

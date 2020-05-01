@@ -141,11 +141,7 @@ class FormBuilder
 
                     $method .= ucfirst($this->fields[$key]["key"]);
                     if (method_exists($this->entity, $method)) {
-                        $mirrorMethod = new \ReflectionMethod($this->entity, $method);
-
-                        if ($value instanceof $mirrorMethod->class) {
-                            $this->entity->$method($value);
-                        }
+                        $this->entity->$method($value);
                     }
                 }
             }

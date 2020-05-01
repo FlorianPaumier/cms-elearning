@@ -32,13 +32,12 @@ class LessonController extends BaseController
         $form = $this->createForm(LessonForm::class, $lesson);
         $form->handleRequest($request);
 
-        dump($lesson);
         if ($request->getMethod() == "POST" && $form->isValid()) {
             /** @var Table $em */
             $em = ConfigHandler::get("repository");
             $em->persist($lesson);
             $em->flush();
-            die;
+            $this->redirect->redirectToRoute("admin_lesson_list");
         }
 
 
@@ -53,8 +52,11 @@ class LessonController extends BaseController
         $form = $this->createForm(LessonForm::class, $lesson);
         $form->handleRequest($request);
 
-        if ($request->getMethod() == "POST") {
-            die;
+        if ($request->getMethod() == "POST" && $form->isValid()) {
+            $em = ConfigHandler::get("repository");
+            $em->persist($lesson);
+            $em->flush();
+            $this->redirect->redirectToRoute("admin_lesson_list");
         }
 
 

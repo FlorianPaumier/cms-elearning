@@ -46,7 +46,8 @@ class Hydrator
         foreach($class->getProperties() as $property){
             $name = $property->getName();
             $method = "get".ucfirst($name);
-            $params[$name] = $object->$method();
+            $value = $object->$method();
+            if(!is_null($value)) $params[$name] = $value;
         };
 
         return $params;

@@ -90,11 +90,9 @@ class Table extends QueryBuilder
         $method = is_null($params["id"]) ? "INSERT" : "UPDATE";
 
         if ($method == "INSERT"){
-            $query = $this->pdo->prepare(
-                "INSERT INTO {$this->from} ("
+            $query = "INSERT INTO {$this->from} ("
                 . join(', ', array_keys($params)) .
-                ") VALUES (" . $this->buildFieldQuery($params) . ")"
-            );
+                ") VALUES (" . $this->buildFieldQuery($params) . ")";
         }else{
             $fieldQuery = implode(
                 ',', array_map(
@@ -103,7 +101,7 @@ class Table extends QueryBuilder
                     }, array_keys($params)
                 )
             );
-            $query = $this->pdo->prepare("$method {$this->from} SET {$fieldQuery} WHERE id = :id");
+            $query = "$method {$this->from} SET {$fieldQuery} WHERE id = :id";
         }
 
         $this->queries[] = [
@@ -115,7 +113,8 @@ class Table extends QueryBuilder
     public function flush()
     {
         foreach ($this->queries as $query){
-            dump($query);
+            $sql = $this->pdo->prepare($query["sql"]);
+            $sql->execute($query["data"]);
         }
     }
 

@@ -91,13 +91,9 @@ class FormBuilder
         }
 
         #Todo : Get data from Request ou Entity
-        $value = $this->getValue($key);
-
-        $args["value"] = $value;
-
+        $args["value"] = $this->setValue($key);
         $args["type"] = $args["type"] ?? $field->getBlockType();
         $args["key"] = $key;
-
 
         $field = $this->translateField($field, $args);
 
@@ -397,6 +393,17 @@ class FormBuilder
         }
 
         return $args;
+    }
+
+    private function setValue(string $key)
+    {
+        $method = "get".ucfirst($key);
+
+        if(method_exists($this->entity, $method)){
+            return $this->entity->$method();
+        }
+
+        return "";
     }
 
 }

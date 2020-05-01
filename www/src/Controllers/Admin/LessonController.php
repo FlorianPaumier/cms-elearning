@@ -32,6 +32,7 @@ class LessonController extends BaseController
         $form = $this->createForm(LessonForm::class, $lesson);
         $form->handleRequest($request);
 
+        dump($lesson);
         if ($request->getMethod() == "POST" && $form->isValid()) {
             /** @var Table $em */
             $em = ConfigHandler::get("repository");
@@ -55,7 +56,8 @@ class LessonController extends BaseController
         if ($request->getMethod() == "POST") {
             die;
         }
-        
+
+
         return $this->renderer->render("admin/lessons/new", [
             "form" => $form->createView(),
             'title' => "Création d'un Cour"

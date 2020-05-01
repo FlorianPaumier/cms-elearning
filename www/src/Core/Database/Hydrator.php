@@ -36,6 +36,23 @@ class Hydrator
         return $instance;
     }
 
+    public static function getData(object $object): array {
+
+        $params = [];
+
+        $class = new \ReflectionClass(get_class($object));
+
+        /** @var \ReflectionProperty $property */
+        foreach($class->getProperties() as $property){
+            $name = $property->getName();
+            $method = "get".ucfirst($name);
+            $params[$name] = $object->$method();
+        };
+
+        return $params;
+
+    }
+
     /**
      * format function set
      * @param string $fieldName

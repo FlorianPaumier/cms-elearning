@@ -34,7 +34,7 @@ class Lesson
     /**
      * @return mixed
      */
-    public function getIdAuthor()
+    public function getIdAuthor(): ?int
     {
         return $this->idAuthor;
     }
@@ -52,7 +52,7 @@ class Lesson
     /**
      * @return string
      */
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -70,7 +70,7 @@ class Lesson
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -88,7 +88,7 @@ class Lesson
     /**
      * @return array
      */
-    public function getChapters(): array
+    public function getChapters(): ?array
     {
         return $this->chapters;
     }

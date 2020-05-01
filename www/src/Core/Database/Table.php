@@ -19,6 +19,10 @@ class Table extends QueryBuilder
      * @var string|null
      */
     protected $entity;
+    /**
+     * @var array
+     */
+    private $queries = [];
 
     /**
      * Récupération de l'instance de PDO
@@ -78,6 +82,42 @@ class Table extends QueryBuilder
         return $this->fetchOrFail();
     }
 
+    public function persist(object $objet): void
+    {
+        $this->getClass(get_class($objet));
+        $params = Hydrator::getData($objet);
+
+        $method = is_null($params["id"]) ? "INSERT" : "UPDATE";
+
+        if ($method == "INSERT"){
+            $query = $this->pdo->prepare(
+                "INSERT INTO {$this->from} ("
+                . join(', ', array_keys($params)) .
+                ") VALUES (" . $this->buildFieldQuery($params) . ")"
+            );
+        }else{
+            $fieldQuery = implode(
+                ',', array_map(
+                    function ($param) {
+                        return $param . "=:" . $param;
+                    }, array_keys($params)
+                )
+            );
+            $query = $this->pdo->prepare("$method {$this->from} SET {$fieldQuery} WHERE id = :id");
+        }
+
+        $this->queries[] = [
+            "sql" => $query,
+            "data" => $params,
+        ];
+    }
+
+    public function flush()
+    {
+        foreach ($this->queries as $query){
+            dump($query);
+        }
+    }
 
     private function buildWhereFieldQuery(array $params)
     {
@@ -240,6 +280,12 @@ class Table extends QueryBuilder
     public function hydrate($object, array $data)
     {
         return Hydrator::hydrate($data,$object);
+    }
+
+    public function getData(object $object)
+    {
+         $data = Hydrator::getData($object);
+         die;
     }
 
     /**

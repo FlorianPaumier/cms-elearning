@@ -4,6 +4,8 @@
 namespace App\Controllers\Admin;
 
 
+use App\Core\Cache\ConfigHandler;
+use App\Core\Database\Table;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
 use App\Entity\Lesson;
@@ -30,11 +32,11 @@ class LessonController extends BaseController
         $form = $this->createForm(LessonForm::class, $lesson);
         $form->handleRequest($request);
 
-        if ($request->getMethod() == "POST") {
-            dump($lesson);
-
-            dump($request);
-            dump($request->getRequest());
+        if ($request->getMethod() == "POST" && $form->isValid()) {
+            /** @var Table $em */
+            $em = ConfigHandler::get("repository");
+            $em->persist($lesson);
+            $em->flush();
             die;
         }
 
@@ -53,8 +55,7 @@ class LessonController extends BaseController
         if ($request->getMethod() == "POST") {
             die;
         }
-
-
+        
         return $this->renderer->render("admin/lessons/new", [
             "form" => $form->createView(),
             'title' => "Création d'un Cour"

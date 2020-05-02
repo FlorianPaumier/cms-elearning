@@ -7,3 +7,8 @@ app_doc:
   path: "/doc"
   controller: App\Controllers\Default:doc
   method: [GET]
+
+app_catalogue:
+  path: "/cours"
+  controller: App\Controllers\Cours:index
+  method: [GET]

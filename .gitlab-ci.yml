@@ -1,14 +1,38 @@
-image: php:7.2
-
-before_script:
-  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-  - php composer-setup.php
-  - php -r "unlink('composer-setup.php');"
-  - mv composer.phar /usr/local/bin/composer
-  - bash ci/docker_install.sh > /dev/null
-  - cp docker/php/php.ini /usr/local/etc/php/php.ini-development
-  - cp docker/php/php.ini /usr/local/etc/php/php.ini-production
-
-test:app:
+tests:
+  image: php:7.3
+  stage: test
+  before_script:
+    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - php composer-setup.php
+    - php -r "unlink('composer-setup.php');"
+    - mv composer.phar /usr/local/bin/composer
+    - bash ci/docker_install.sh > /dev/null
+    - cp docker/php/php.ini /usr/local/etc/php/php.ini-development
+    - cp docker/php/php.ini /usr/local/etc/php/php.ini-production
   script:
     - phpunit --configuration www/phpunit_cms.xml
+
+.deploy: &deploy
+  image: ruby:latest
+  stage: deploy
+  environment:
+    name: $env
+    url: $url
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$DEPLOYMENT_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  script:
+    - ssh deployer-agent@$url "cd /var/www/cms/ && git checkout $env && git pull origin $env && exit"
+
+deploy:preprod:
+  <<: *deploy
+  variables:
+    env: develop
+    url: 92.222.66.238
+  only:
+    - develop
+    - dev_ci
+  when: manual

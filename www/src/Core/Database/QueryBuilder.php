@@ -2,6 +2,8 @@
 
 namespace App\Core\Database;
 
+use App\Core\Helpers\StringTransformer;
+
 class QueryBuilder
 {
     /** @var \PDO */
@@ -270,6 +272,7 @@ class QueryBuilder
         }else{
             $record = $results;
         }
+        dump($record);die;
 
         return $record !== false ? $record : null;
     }
@@ -285,7 +288,7 @@ class QueryBuilder
         $this->entity = $class;
         $classTab = explode("\\", $class);
         $class  = array_pop($classTab);
-        $this->from = strtolower($class);
+        $this->from = strtolower(StringTransformer::PascalCaseToSnakeCase($class));
         return $this->from;
     }
 }

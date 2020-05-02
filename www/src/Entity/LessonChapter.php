@@ -6,18 +6,17 @@ namespace App\Entity;
 
 use App\Core\Interfaces\Entity;
 
-class Chapter
+class LessonChapter
 {
 
     use Entity;
 
-    /** @var int
-     * TODO : Implémenter la récupération de l'objet
+    /** @var Lesson
      */
-    protected $idLesson;
+    protected $lesson;
 
     /** @var string */
-    protected $name;
+    protected $title;
 
     /** @var array */
     protected $blocks;
@@ -28,52 +27,52 @@ class Chapter
     /**
      * @return int
      */
-    public function getIdLesson(): int
+    public function getLesson(): ?Lesson
     {
-        return $this->idLesson;
+        return $this->lesson;
     }
 
     /**
-     * @param int $idLesson
-     * @return Chapter
+     * @param Lesson $lesson
+     * @return LessonChapter
      */
-    public function setIdLesson(int $idLesson): Chapter
+    public function setLesson(Lesson $lesson): LessonChapter
     {
-        $this->idLesson = $idLesson;
+        $this->lessonId = $lesson;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getName(): string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
-     * @param string $name
-     * @return Chapter
+     * @param string $title
+     * @return LessonChapter
      */
-    public function setName(string $name): Chapter
+    public function setTitle(string $title): LessonChapter
     {
-        $this->name = $name;
+        $this->name = $title;
         return $this;
     }
 
     /**
      * @return array
      */
-    public function getBlocks(): array
+    public function getBlocks(): ?array
     {
         return $this->blocks;
     }
 
     /**
      * @param array $blocks
-     * @return Chapter
+     * @return LessonChapter
      */
-    public function setBlock(ChapterBlock $block): Chapter
+    public function setBlock(ChapterBlock $block): LessonChapter
     {
         $this->blocks = $block;
         return $this;
@@ -81,9 +80,9 @@ class Chapter
 
     /**
      * @param array $blocks
-     * @return Chapter
+     * @return LessonChapter
      */
-    public function removeBlock(ChapterBlock $block): Chapter
+    public function removeBlock(ChapterBlock $block): LessonChapter
     {
         $this->blocks = $this->removeElement($this->blocks, $block);
         return $this;
@@ -92,16 +91,16 @@ class Chapter
     /**
      * @return int
      */
-    public function getPosition(): int
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
     /**
      * @param int $position
-     * @return Chapter
+     * @return LessonChapter
      */
-    public function setPosition(int $position): Chapter
+    public function setPosition(int $position): LessonChapter
     {
         $this->position = $position;
         return $this;

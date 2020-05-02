@@ -97,18 +97,18 @@ class Lesson
      * @param array $chapters
      * @return Lesson
      */
-    public function addChapter(Chapter $chapters): Lesson
+    public function addChapter(LessonChapter $chapters): Lesson
     {
         $this->chapters[] = $chapters;
         return $this;
     }
 
     /**
-     * @param Chapter $chapter
+     * @param LessonChapter $chapter
      * @return Lesson
      * TODO : Implémenter un ArrayCollection
      */
-    public function removeChapter(Chapter $chapter): Lesson
+    public function removeChapter(LessonChapter $chapter): Lesson
     {
         $this->chapters = $this->removeElement($this->chapters, $chapter);
         return $this;

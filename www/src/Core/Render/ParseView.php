@@ -21,7 +21,7 @@ class ParseView
         foreach ($data["parameter"] as $key => $value) {
             foreach ($fieldEntries as $tag) {
                 if ($tag[1] == $key) {
-                    $content = preg_replace("/{{\s?($key)\s?}}/", $value, $content);
+                    $content = preg_replace("/{{\s?($key)\s?}}/m", $value, $content);
                 }
             }
         }
@@ -50,13 +50,13 @@ class ParseView
                     $html = $path ?? "";
                     break;
                 case "isRequired":
-                    $html = isset($data["required"]) ? 'required="required"' : "";
+                    $html = isset($data["parameters"]["required"]) ? 'required="required"' : "";
                     break;
                 case "isMultiple":
-                    $html = isset($data["multiple"]) ? 'multiple' : "";
+                    $html = "" ;#isset($data["parameters"]["multiple"]) ? 'multiple' : "";
                     break;
                 case "isSelected":
-                    $html = isset($data["selected"]) ? 'selected' : "";
+                    $html = $data["parameter"]["selected"];
                     break;
                 case "errorFeedback":
                     $html = RenderFunction::getErrorFeedback($data["errors"] ?? [], $engine);

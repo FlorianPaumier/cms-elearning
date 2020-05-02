@@ -103,6 +103,7 @@ class FormBuilder
 
         $args = $this->setName($field, $args);
         $field->setOptions($key, $args);
+
         $this->form[$field->getConstraintOffset("name")] = $field;
         $this->fields[$field->getConstraintOffset("name")] = ["key" => $key, "type" => get_class($field), "args" => $args];
 
@@ -139,8 +140,17 @@ class FormBuilder
                         $value = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->find($value);
                     }
 
-                    $method .= ucfirst($this->fields[$key]["key"]);
+                    $property = $this->fields[$key]["key"];
+                    $method .= ucfirst($property);
                     if (method_exists($this->entity, $method)) {
+//                        /** @var \ReflectionMethod $methodReflection */
+//                        $methodReflection = new \ReflectionMethod($this->entity, $method);
+//
+//                        /** @var \ReflectionParameter $parameter */
+//                        $parameter = $methodReflection->getParameters()[0];
+//                        $paramClass = $parameter->getClass()->getName();
+//                        if($value instanceof $paramClass) dump("Hello");
+
                         $this->entity->$method($value);
                     }
                 }
@@ -245,7 +255,9 @@ class FormBuilder
         $html = implode(
             "", array_map(
                 function ($input) {
-                    if(!is_null($input->getHtml())) return $input->getHtml();
+                    if (!is_null($input->getHtml())) {
+                        return $input->getHtml();
+                    }
                     return html_entity_decode($input->renderElement());
                 }, $this->form
             )
@@ -323,18 +335,30 @@ class FormBuilder
             ConfigHandler::get("eventEmmiter")->emit("error.500", "the key entry_type must be not null");
         }
 
+        $choiceLabel = $args["choice_label"] ? "get" . ucfirst($args["choice_label"]) : "getId";
         /** @var Table $repository */
         $repository = ConfigHandler::get('repository');
         $repository->getClass($args["entry_type"]);
         $items = $repository->findAll();
         $options = [];
 
+
         foreach ($items as $item) {
             $type = new OptionType();
             $type->setParent($field);
+
+            $select = "";
+
+            if (!is_null($args["value"])) {
+                if($args["value"]->getId() == $item->getId()){
+                    $select = "selected";
+                }
+            }
+
             $type->addArgs([
-                "value" => $item[$args["choice_label"]],
-                "key" => $item["id"]
+                "value" => $item->$choiceLabel(),
+                "key" => $item->getId(),
+                "selected" => $select,
             ]);
 
             $options[] = $type->renderElement();
@@ -346,7 +370,7 @@ class FormBuilder
 
     private function createCollectionType(CollectionType &$field, array $args)
     {
-        if(!key_exists("entry_type", $args)){
+        if (!key_exists("entry_type", $args)) {
             ConfigHandler::get("eventEmmiter")->emit("error.500", "The entry_type option must be not null");
         }
 
@@ -384,8 +408,8 @@ class FormBuilder
 
     private function setName(FieldsInterface $field, array $args): array
     {
-        if (!is_null($this->formParentType)){
-            $args["name"] = $this->formType->getBlockPrefix() . "[".$args["key"]."]";
+        if (!is_null($this->formParentType)) {
+            $args["name"] = $this->formType->getBlockPrefix() . "[" . $args["key"] . "]";
         }
 
         return $args;
@@ -393,9 +417,9 @@ class FormBuilder
 
     private function setValue(string $key)
     {
-        $method = "get".ucfirst($key);
+        $method = "get" . ucfirst($key);
 
-        if(method_exists($this->entity, $method)){
+        if (method_exists($this->entity, $method)) {
             return $this->entity->$method();
         }
 

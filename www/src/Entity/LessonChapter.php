@@ -38,7 +38,7 @@ class LessonChapter
      */
     public function setLesson(Lesson $lesson): LessonChapter
     {
-        $this->lessonId = $lesson;
+        $this->lesson = $lesson;
         return $this;
     }
 

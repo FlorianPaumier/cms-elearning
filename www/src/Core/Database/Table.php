@@ -18,11 +18,11 @@ class Table extends QueryBuilder
      *
      * @var string|null
      */
-    protected $entity;
+    protected $entity = null;
     /**
      * @var array
      */
-    private $queries = [];
+    protected $queries = [];
 
     /**
      * Récupération de l'instance de PDO
@@ -53,7 +53,7 @@ class Table extends QueryBuilder
      *
      * @return array
      */
-    public function findAll(): array
+    public function findAll(): ?array
     {
         $this->select("*");
 

@@ -57,6 +57,7 @@ class ExceptionHandler
      */
     public static  function defaultRequestHandler($message = "Ce que vous cherchez n'est pas ici <a href='/'>Retour</a>"): void
     {
+        http_response_code(404);
         //header("{$_SERVER["SERVER_PROTOCOL"]} 404 Not Found" . $message);
         (new RenderView())->render("Errors/404", ["message" => $message]);
         die();

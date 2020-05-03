@@ -22,12 +22,11 @@
                 <td><?= $lesson->getId(); ?></td>
                 <td><?= $lesson->getTitle(); ?></td>
                 <td>
-                    <a href="@path(admin_lesson_edit)">
-                        <button class="btn btn-succes">Modifier</button>
-                    </a>
-                    <form action="/admin/lesson/delete<?= $lesson->getId() ?>">
+                    <a href="<?= \App\Core\Cache\ConfigHandler::get("router")->getPath("admin_lesson_edit", $lesson->getId()); ?>" class="btn-success">Modifier</a>
+                    <form method="post" action="/admin/lesson/delete/<?= $lesson->getId() ?>">
                         <button id="delete-lesson" class="btn btn-danger">Delete</button>
-                    </form></td>
+                    </form>
+                </td>
             </tr>
         <?php
         endforeach;

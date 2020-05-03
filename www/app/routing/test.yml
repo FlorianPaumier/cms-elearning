@@ -1,0 +1,16 @@
+test_simple:
+    path: '/test'
+    controller: App\Controllers\Test:simpleRouting
+    method: [GET]
+test_error:
+    path: '/test/view'
+    controller: App\Controllers\Test:errorView
+    method: [GET]
+test_error_forbidden:
+    path: '/test/forbidden'
+    controller: App\Controllers\Test:forbidden
+    method: [GET]
+test_complex:
+    path: "/test/{id<\\d+>}"
+    controller: App\Controllers\Test:complexRouting
+    method: [GET]

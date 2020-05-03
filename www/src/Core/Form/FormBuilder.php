@@ -13,6 +13,7 @@ use App\Core\Form\Fields\EntityType;
 use App\Core\Form\Fields\FieldsInterface;
 use App\Core\Form\Fields\OptionType;
 use App\Core\Form\Validator\Validator;
+use App\Core\Helpers\ArrayCollection;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Render\RenderView;
 use App\Core\Request\Request;
@@ -115,11 +116,16 @@ class FormBuilder
         $keysForm = array_keys($this->form);
 
         foreach ($keysForm as $key) {
-            if (key_exists($key, $request->getQuery()->all())) {
-                $value = $request->getQuery()->get($key);
+            preg_match_all('~\[\]~m', $key, $matches, PREG_SET_ORDER, 0);
+            $requestKey = $key;
+            if (!empty($matches)) {
+                $requestKey = preg_replace('~\[\]~', "", $key);
+            }
+            if (key_exists($requestKey, $request->getQuery()->all())) {
+                $value = $request->getQuery()->get($requestKey);
             } else {
-                if (key_exists($key, $request->getRequest()->all())) {
-                    $value = $request->getRequest()->get($key);
+                if (key_exists($requestKey, $request->getRequest()->all())) {
+                    $value = $request->getRequest()->get($requestKey);
                 }
             }
 
@@ -132,12 +138,25 @@ class FormBuilder
                 $this->entity[$key] = $value;
             } else {
                 if (is_object($this->entity)) {
+
                     $method = "set";
+
                     if ($this->fields[$key]["type"] == EntityType::class) {
                         /** @var Table $repository */
                         $repository = ConfigHandler::get('repository');
-                        $repository->getClass($this->fields[$key]["args"]["entry_type"]);
-                        $value = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->find($value);
+
+                        if (gettype($value) == "array") {
+                            $method = "add";
+                            $items = [];
+                            foreach ($value as $id) {
+                                $result = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->find($id)[0];
+                                $items[] = $result;
+                            }
+                            $value = $items;
+                        } else {
+                            $value = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->find($value);
+                        }
+
                     }
 
                     $property = $this->fields[$key]["key"];
@@ -151,7 +170,13 @@ class FormBuilder
 //                        $paramClass = $parameter->getClass()->getName();
 //                        if($value instanceof $paramClass) dump("Hello");
 
-                        $this->entity->$method($value);
+                        if (gettype($value) == "array") {
+                            foreach ($value as $entity) {
+                                $this->entity->$method($entity);
+                            }
+                        } else {
+                            $this->entity->$method($value);
+                        }
                     }
                 }
             }
@@ -258,6 +283,7 @@ class FormBuilder
                     if (!is_null($input->getHtml())) {
                         return $input->getHtml();
                     }
+
                     return html_entity_decode($input->renderElement());
                 }, $this->form
             )
@@ -350,15 +376,27 @@ class FormBuilder
             $select = "";
 
             if (!is_null($args["value"])) {
-                if($args["value"]->getId() == $item->getId()){
-                    $select = "selected";
+                if (get_class($args["value"]) == ArrayCollection::class) {
+                    $elements = $args["value"]->toArray();
+                    if (!is_null($elements)) {
+                        foreach ($elements as $element) {
+                            if ($element->getId() == $item->getId()) {
+                                $select = "selected";
+                            }
+                        }
+                    }
+                } else {
+                    if ($args["value"]->getId() == $item->getId()) {
+                        $select = "selected";
+                    }
                 }
             }
 
+            $type->setOptions($item->getId(), $args);
             $type->addArgs([
                 "value" => $item->$choiceLabel(),
                 "key" => $item->getId(),
-                "selected" => $select,
+                "selected" => $select ?? "",
             ]);
 
             $options[] = $type->renderElement();
@@ -410,6 +448,12 @@ class FormBuilder
     {
         if (!is_null($this->formParentType)) {
             $args["name"] = $this->formType->getBlockPrefix() . "[" . $args["key"] . "]";
+        }
+
+        if ($args["multiple"]) {
+            $parent = new $this->parent;
+
+            $args["name"] = $parent->getBlockPrefix() . "_" . $args['key'] . "[]";
         }
 
         return $args;

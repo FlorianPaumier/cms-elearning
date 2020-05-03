@@ -4,6 +4,7 @@
 namespace App\Entity;
 
 
+use App\Core\Helpers\ArrayCollection;
 use App\Core\Interfaces\Entity;
 
 class Lesson
@@ -30,6 +31,11 @@ class Lesson
      * @var array
      */
     protected $chapters;
+
+    public function __construct(int $id = null)
+    {
+        $this->chapters = new ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -88,7 +94,7 @@ class Lesson
     /**
      * @return array
      */
-    public function getChapters(): ?array
+    public function getChapters(): ?ArrayCollection
     {
         return $this->chapters;
     }
@@ -97,9 +103,11 @@ class Lesson
      * @param array $chapters
      * @return Lesson
      */
-    public function addChapter(LessonChapter $chapters): Lesson
+    public function addChapters(LessonChapter $chapters): Lesson
     {
-        $this->chapters[] = $chapters;
+        if (!$this->chapters->contain($chapters)) {
+            $this->chapters->add($chapters);
+        }
         return $this;
     }
 
@@ -108,9 +116,11 @@ class Lesson
      * @return Lesson
      * TODO : Implémenter un ArrayCollection
      */
-    public function removeChapter(LessonChapter $chapter): Lesson
+    public function removeChapters(LessonChapter $chapter): Lesson
     {
-        $this->chapters = $this->removeElement($this->chapters, $chapter);
+        if ($this->chapters->contain($chapter)) {
+            $this->chapters->removeElement($chapter);
+        }
         return $this;
     }
 }

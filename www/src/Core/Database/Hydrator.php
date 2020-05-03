@@ -25,7 +25,6 @@ abstract class Hydrator
         } else {
             $instance = $object;
         }
-
         $i = 0;
 
         foreach ($array as $key => $value) {
@@ -50,9 +49,7 @@ abstract class Hydrator
                 $instance->$method($value);
             }
             $i++;
-
         }
-
 
         return $instance;
     }
@@ -69,6 +66,7 @@ abstract class Hydrator
             $name = $property->getName();
             $method = "get" . ucfirst($name);
             $value = $object->$method();
+
             if (!is_null($value)) {
                 $params[$name] = $value;
             }

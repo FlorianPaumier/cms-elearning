@@ -39,6 +39,7 @@ class ParseView
     public function parseFunction(array $data, array $methodEntries, TemplateEngine $engine = null){
 
         $functions = [];
+
         foreach ($methodEntries as $tag) {
             $template = $tag[1];
             $value = $tag[2];
@@ -53,7 +54,7 @@ class ParseView
                     $html = isset($data["parameters"]["required"]) ? 'required="required"' : "";
                     break;
                 case "isMultiple":
-                    $html = "" ;#isset($data["parameters"]["multiple"]) ? 'multiple' : "";
+                    $html = $tag[2] == true ? "multiple" : "";
                     break;
                 case "isSelected":
                     $html = $data["parameter"]["selected"];

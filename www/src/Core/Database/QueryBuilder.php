@@ -30,11 +30,11 @@ class QueryBuilder
     /**
      * @var int
      */
-    protected $limit;
+    protected $limit = null;
     /**
      * @var int
      */
-    protected $offset = 0;
+    protected $offset = null;
     /**
      * @var string
      */

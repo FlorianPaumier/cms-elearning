@@ -55,7 +55,7 @@ class Table extends QueryBuilder
      */
     public function findAll(): ?array
     {
-        $this->select("*");
+        $this->select("*")->orderBy("id", 'ASC');
 
         return $this->fetchOrFail();
     }
@@ -236,6 +236,7 @@ class Table extends QueryBuilder
     public function setEntity(?string $entity): Table
     {
         $this->entity = $entity;
+        $this->getClass($entity);
         return $this;
     }
 

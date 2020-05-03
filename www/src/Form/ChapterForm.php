@@ -6,9 +6,12 @@ namespace App\Form;
 
 use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\CollectionType;
+use App\Core\Form\Fields\EntityType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
 use App\Core\Interfaces\FormTypeInterface;
+use App\Entity\Lesson;
+use App\Entity\LessonChapter;
 
 class ChapterForm extends AbstractForm
 {
@@ -42,7 +45,7 @@ class ChapterForm extends AbstractForm
     public function buildForm(FormBuilder $builder): FormBuilder
     {
         return $builder
-            ->add("name", TextType::class,[
+            ->add("title", TextType::class,[
                 "label" => "Nom",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
@@ -52,6 +55,12 @@ class ChapterForm extends AbstractForm
                 "type" => "number",
                 "require" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
+            ])
+            ->add("lesson", EntityType::class, [
+                "label" => "Lesson",
+                "require" => true,
+                "class" => "col-md-6 col-lg-6 col-sm-12",
+                'entry_type' => Lesson::class,
             ])
             ->add("blocks", CollectionType::class,  [
                 "label" => "Contenu",
@@ -75,5 +84,14 @@ class ChapterForm extends AbstractForm
     public function getBlockPrefix(): string
     {
         return $this->prefix ?? "admin_chapter";
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function configureOptions(){
+        $this->options = [
+            "data_class" => LessonChapter::class
+        ];
     }
 }

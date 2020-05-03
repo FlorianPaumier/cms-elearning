@@ -4,6 +4,8 @@
 namespace App\Controllers\Admin;
 
 
+use App\Core\Cache\ConfigHandler;
+use App\Core\Database\Table;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
 use App\Entity\Lesson;
@@ -30,8 +32,12 @@ class LessonController extends BaseController
         $form = $this->createForm(LessonForm::class, $lesson);
         $form->handleRequest($request);
 
-        if ($request->getMethod() == "POST") {
-            die;
+        if ($request->getMethod() == "POST" && $form->isValid()) {
+            /** @var Table $em */
+            $em = ConfigHandler::get("repository");
+            $em->persist($lesson);
+            $em->flush();
+            $this->redirect->redirectToRoute("admin_lesson_list");
         }
 
 
@@ -39,5 +45,29 @@ class LessonController extends BaseController
             "form" => $form->createView(),
             'title' => "Création d'un Cour"
         ]);
+    }
+
+    public function edit(Request $request, Lesson $lesson)
+    {
+        $form = $this->createForm(LessonForm::class, $lesson);
+        $form->handleRequest($request);
+
+        if ($request->getMethod() == "POST" && $form->isValid()) {
+            $em = ConfigHandler::get("repository");
+            $em->persist($lesson);
+            $em->flush();
+            $this->redirect->redirectToRoute("admin_lesson_list");
+        }
+
+
+        return $this->renderer->render("admin/lessons/new", [
+            "form" => $form->createView(),
+            'title' => "Création d'un Cour"
+        ]);
+    }
+
+    public function delete(Request $request, Lesson $lesson){
+
+        $this->redirect->redirectToRoute("admin_lesson_index");
     }
 }

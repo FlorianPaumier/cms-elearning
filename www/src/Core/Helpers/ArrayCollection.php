@@ -1,12 +1,12 @@
 <?php
 
 
-namespace App\Core\helpers;
+namespace App\Core\Helpers;
 
 
 class ArrayCollection
 {
-    private $elements;
+    private $elements = [];
 
     public function contain($data){
         return in_array($data, $this->elements, true);

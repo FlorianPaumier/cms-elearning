@@ -2,18 +2,21 @@
 
 namespace App\Core\Database;
 
+use App\Core\Helpers\StringTransformer;
+
 class QueryBuilder
 {
     /** @var \PDO */
     protected $pdo;
+
     /**
      * @var string
      */
-    protected $from;
+    protected $from = "";
     /**
      * @var string|null
      */
-    protected $alias;
+    protected $alias = "";
     /**
      * @var string
      */
@@ -23,19 +26,19 @@ class QueryBuilder
     /**
      * @var array
      */
-    protected $order;
+    protected $order = [];
     /**
      * @var int
      */
-    protected $limit;
+    protected $limit = null;
     /**
      * @var int
      */
-    protected $offset;
+    protected $offset = null;
     /**
      * @var string
      */
-    protected $where;
+    protected $where = "";
     /**
      * @var array
      */
@@ -43,15 +46,15 @@ class QueryBuilder
     /**
      * @var string
      */
-    protected $sql;
+    protected $sql = "";
     /**
      * @var array
      */
-    protected $group;
+    protected $group = [];
     /**
      * @var array
      */
-    protected $data;
+    protected $data = [];
 
     protected $params = [];
 
@@ -214,8 +217,8 @@ class QueryBuilder
     public function toSQL(): string
     {
         if (!is_null($this->alias)) {
-            $fields = $this->fields !== ["*"] ? $this->alias . "." .implode(', ' . $this->alias . ".", $this->fields) : implode(', ' . $this->alias . ".", $this->fields);
-        }else{
+            $fields = $this->fields !== ["*"] ? $this->alias . "." . implode(', ' . $this->alias . ".", $this->fields) : implode(', ' . $this->alias . ".", $this->fields);
+        } else {
             $fields = implode(', ', $this->fields);
         }
 
@@ -271,6 +274,8 @@ class QueryBuilder
             $record = $results;
         }
 
+        $this->clear();
+
         return $record !== false ? $record : null;
     }
 
@@ -284,8 +289,22 @@ class QueryBuilder
     {
         $this->entity = $class;
         $classTab = explode("\\", $class);
-        $class  = array_pop($classTab);
-        $this->from = strtolower($class);
+        $class = array_pop($classTab);
+        $this->from = strtolower(StringTransformer::PascalCaseToSnakeCase($class));
         return $this->from;
+    }
+
+    private function clear()
+    {
+        /** @var \ReflectionClass $class */
+        $class = new \ReflectionClass($this);
+
+        foreach ($class->getDefaultProperties() as $key => $property) {
+            if(is_null($property)) continue;
+
+                if ($key !== "pdo") {
+                    $this->$key = $property;
+                }
+        };
     }
 }

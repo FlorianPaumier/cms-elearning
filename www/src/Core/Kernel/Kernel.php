@@ -25,6 +25,7 @@ class Kernel
         /** Récupération des éléments de base */
         include_once dirname(__DIR__) . "/Helpers/VarDumper.php";
         include_once dirname(__DIR__) . "/Helpers/basicFunction.php";
+
     }
 
     /**

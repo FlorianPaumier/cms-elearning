@@ -120,7 +120,7 @@ class Router
 
         if ($requestUri === "") {
             $this->uri = "/";
-        } elseif (strpos("?", $requestUri)) {
+        } elseif (strpos($requestUri, "?")) {
             $this->uri = explode("?", $requestUri)[0];
         } else {
             $this->uri = $requestUri;

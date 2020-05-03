@@ -4,6 +4,7 @@
 namespace App\Entity;
 
 
+use App\Core\Helpers\ArrayCollection;
 use App\Core\Interfaces\Entity;
 
 class Lesson
@@ -31,10 +32,15 @@ class Lesson
      */
     protected $chapters;
 
+    public function __construct(int $id = null)
+    {
+        $this->chapters = new ArrayCollection();
+    }
+
     /**
      * @return mixed
      */
-    public function getIdAuthor()
+    public function getIdAuthor(): ?int
     {
         return $this->idAuthor;
     }
@@ -52,7 +58,7 @@ class Lesson
     /**
      * @return string
      */
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -70,7 +76,7 @@ class Lesson
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -88,7 +94,7 @@ class Lesson
     /**
      * @return array
      */
-    public function getChapters(): array
+    public function getChapters(): ?ArrayCollection
     {
         return $this->chapters;
     }
@@ -97,20 +103,24 @@ class Lesson
      * @param array $chapters
      * @return Lesson
      */
-    public function addChapter(Chapter $chapters): Lesson
+    public function addChapters(LessonChapter $chapters): Lesson
     {
-        $this->chapters[] = $chapters;
+        if (!$this->chapters->contain($chapters)) {
+            $this->chapters->add($chapters);
+        }
         return $this;
     }
 
     /**
-     * @param Chapter $chapter
+     * @param LessonChapter $chapter
      * @return Lesson
      * TODO : Implémenter un ArrayCollection
      */
-    public function removeChapter(Chapter $chapter): Lesson
+    public function removeChapters(LessonChapter $chapter): Lesson
     {
-        $this->chapters = $this->removeElement($this->chapters, $chapter);
+        if ($this->chapters->contain($chapter)) {
+            $this->chapters->removeElement($chapter);
+        }
         return $this;
     }
 }

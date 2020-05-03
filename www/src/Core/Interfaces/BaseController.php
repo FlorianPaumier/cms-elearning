@@ -78,7 +78,7 @@ abstract class BaseController
         if(!class_exists($type)) throw new \Exception();
 
         $form = (new $type);
-        $formBuilder = (new FormBuilder($data))->setParent($type);
+        $formBuilder = (new FormBuilder($data))->setParent($type)->setFormType($form);
         $build = $form->buildForm($formBuilder);
 
         return $build;

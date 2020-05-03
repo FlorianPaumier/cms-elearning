@@ -18,7 +18,6 @@ interface FormTypeInterface
 
     /**
      * Retrieve the form prefix
-     * @return string
      */
     public function getBlockPrefix();
 

@@ -7,7 +7,7 @@ namespace App\Core\Form\Fields;
 class CollectionType extends AbstractType
 {
 
-    public function getTemplate()
+    public static function getTemplate()
     {
         return null;
     }

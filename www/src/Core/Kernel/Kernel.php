@@ -51,7 +51,7 @@ class Kernel
             ConfigHandler::get("eventEmmiter")->emit("error.500");
         };
 
-        $response->compile();
+        echo $response->compile();
     }
 
 

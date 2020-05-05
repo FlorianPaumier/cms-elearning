@@ -173,13 +173,10 @@ class TemplateEngine
     {
         $this->_parseTemplate();
 
-        if (count($this->methodEntries) > 0) {
-            $this->_parseFunctions($this);
-        }
-
         if ($tags) {
 //            CacheHandler::set($this->view, $this->content);
 
+            $this->content = $this->getParsePhpView($this->content, $this->data["parameter"]);
             if (count($this->fieldEntries) > 0) {
                 $this->_parseTags();
                 $this->_parseTemplate();
@@ -200,10 +197,7 @@ class TemplateEngine
 
 
         if (!is_null($this->view)) {
-            $tmp = tmpfile();
-            fwrite($tmp, $this->content);
-            extract($this->data["parameter"]);
-            include stream_get_meta_data($tmp)['uri'];
+            return $this->getParsePhpView($this->content, $this->data);
         }
     }
 
@@ -275,7 +269,6 @@ class TemplateEngine
     {
         $this->_parseTemplate();
         $this->_parseTags();
-
         $this->_parseTemplate();
 
         if (count($this->methodEntries) > 0) {
@@ -288,4 +281,13 @@ class TemplateEngine
         }
     }
 
+    private function getParsePhpView(string $content, array $data)
+    {
+        ob_start();
+        $tmp = tmpfile();
+        fwrite($tmp, $content);
+        extract($data);
+        require stream_get_meta_data($tmp)['uri'];
+        return ob_get_clean();
+    }
 }

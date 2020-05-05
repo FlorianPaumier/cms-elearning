@@ -22,7 +22,7 @@
                 <td><?= $lesson->getId(); ?></td>
                 <td><?= $lesson->getTitle(); ?></td>
                 <td>
-                    <a href="@path(admin_lesson_edit)">
+                    <a href="@path(admin_lesson_edit, <?= $lesson->getId(); ?>)">
                         <button class="btn btn-succes">Modifier</button>
                     </a>
                     <form action="/admin/lesson/delete<?= $lesson->getId() ?>">

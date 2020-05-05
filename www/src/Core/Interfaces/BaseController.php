@@ -20,6 +20,9 @@ abstract class BaseController
 {
     /**
      * @var RenderView
+     *
+     * @deprected use render function
+     *
      */
     protected $renderer;
 
@@ -53,10 +56,12 @@ abstract class BaseController
      */
     protected $session;
 
-    protected $validator;
 
     public function __construct()
     {
+        /**
+         * @deprected use render function
+         */
         $this->renderer = new RenderView();
         $this->repository = ConfigHandler::get('repository');
         $this->userManager = ConfigHandler::get("userManager");
@@ -75,9 +80,11 @@ abstract class BaseController
         if(!class_exists($type)) throw new \Exception();
 
         $form = (new $type);
-        $formBuilder = (new FormBuilder($data))->setParent($type);
-        $build = $form->buildForm($formBuilder);
+        $formBuilder = (new FormBuilder($data))->setParent($type)->setFormType($form);
+        return $form->buildForm($formBuilder);
+    }
 
-        return $build;
+    protected function render(string $view, array $data = []){
+        return (new RenderView())->render($view, $data);
     }
 }

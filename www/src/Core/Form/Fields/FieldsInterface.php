@@ -18,7 +18,7 @@ interface FieldsInterface
 
     public function setParent(string $parent);
 
-    public function getBlockPrefix();
+    public function getBlockType();
 
     public function getConstraintOffset(string $key);
 }

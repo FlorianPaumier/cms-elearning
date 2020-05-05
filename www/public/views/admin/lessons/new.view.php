@@ -17,4 +17,5 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/17.0.0/classic/ckeditor.js"></script>
 <script src="/assets/scripts/ckeditor.js"></script>
 <script  src="/assets/scripts/core/collection.js"></script>
+<script  src="/assets/scripts/core/select2.js"></script>
 @endsection

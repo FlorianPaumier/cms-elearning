@@ -25,6 +25,7 @@ class Kernel
         /** Récupération des éléments de base */
         include_once dirname(__DIR__) . "/Helpers/VarDumper.php";
         include_once dirname(__DIR__) . "/Helpers/basicFunction.php";
+
     }
 
     /**
@@ -50,7 +51,7 @@ class Kernel
             ConfigHandler::get("eventEmmiter")->emit("error.500", "Le controller doit retourner une Strin ou FormBuilder , Null retourner");
         };
 
-        $response->compile();
+        echo $response->compile();
     }
 
 

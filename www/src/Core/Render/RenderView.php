@@ -111,6 +111,7 @@ class RenderView
                 return $this->templateEngine->compile($display);
             }
 
+
             return $this;
         }
 
@@ -134,6 +135,7 @@ class RenderView
 
         $view = gettype($type) == "object" ? $type::getTemplate() : FORM_PATH."/input.tpl.php";
         $options["prefix"] = "app_form";
+
 
         $this->templateEngine->setData(["parameter" => $options]);
         if($this->templateEngine->setView($view)){

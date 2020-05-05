@@ -18,7 +18,6 @@ interface FormTypeInterface
 
     /**
      * Retrieve the form prefix
-     * @return string
      */
     public function getBlockPrefix();
 
@@ -39,4 +38,5 @@ interface FormTypeInterface
      * @return string|null The name of the parent type if any, null otherwise
      */
     public function getParent();
+
 }

@@ -3,26 +3,20 @@
 namespace App\Form;
 
 use App\Core\Form\FormBuilder;
-use App\Core\Interfaces\FormTypeInterface;
+use App\Core\Form\AbstractForm;
+<?php foreach ($usesType as  $useType): ?>
+use <?= $useType ?>;
+<?php endforeach; ?>
 
-class <?= $class_name ?> extends FormBuilder implements FormTypeInterface
+
+class <?= $class_name ?> extends AbstractForm
 {
-    /**
-    * @inheritDoc
-    */
-    public static function getConstraint(): array
+
+    public function buildForm(FormBuilder $builder): FormBuilder
     {
-        return <?= var_export($constraints, true) ?> ;
-    }
-    public function buildForm(): FormBuilder
-    {
-        return $this
+        return $builder
         <?php foreach ($form_fields as $form_field => $typeOptions): ?>
-            <?php if (null === $typeOptions['type'] && !$typeOptions['options_code']): ?>
-                ->input('<?= $form_field ?>', <?= var_export($typeOptions["parameters"], true) ?>)
-            <?php else: ?>
-                -><?= $typeOptions["type"] ?>('<?= $form_field ?>', <?= var_export($typeOptions["parameters"], true) ?>)
-            <?php endif; ?>
+                ->add('<?= $form_field ?>', <?= $typeOptions["type"] ?> , <?= var_export($typeOptions["parameters"]) ?>)
         <?php endforeach; ?>
         ;
     }
@@ -31,7 +25,7 @@ class <?= $class_name ?> extends FormBuilder implements FormTypeInterface
     /**
     * @inheritDoc
     */
-    public function setBlockPrefix(): void
+    public function setBlockPrefix(string $prefix = null)
     {
         $this->prefix = "<?= $prefix ?>";
     }

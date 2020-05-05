@@ -47,5 +47,4 @@ class ContactFormType extends AbstractForm
     {
         return "contact_form";
     }
-
 }

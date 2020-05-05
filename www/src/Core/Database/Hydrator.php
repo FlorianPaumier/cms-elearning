@@ -2,11 +2,14 @@
 
 namespace App\Core\Database;
 
+use App\Core\Cache\ConfigHandler;
+
 /**
  * Transforme un tableau en objet en utilisant les setters
  */
-class Hydrator
+abstract class Hydrator
 {
+    static $recursif = false;
 
     /**
      * Transforme un tableau en objet en utilisant les setters
@@ -17,36 +20,77 @@ class Hydrator
      */
     public static function hydrate($array, $object)
     {
-        $instances = [];
-        $multiple = false;
-
         if (is_string($object)) {
             $instance = new $object();
         } else {
             $instance = $object;
         }
-
         $i = 0;
-        foreach ($array as $key => $value) {
-            if (gettype($value) == "array") {
-                $multiple = true;
-                $instances[] = self::hydrate($value, $object);
-                continue;
-            }
 
+        foreach ($array as $key => $value) {
             $method = self::getSetter($key);
 
             if (method_exists($instance, $method)) {
+                $type = self::getParameterType($instance, $method);
+
+                if (!is_null($type) && !self::isRecursif()) {
+                    $class = $type->getName();
+                    if (!($value instanceof $class)) {
+                        if (gettype($value) == "integer") {
+                            self::$recursif = true;
+                            /** @var Table $repo */
+                            $repo = ConfigHandler::get("repository");
+                            $repo->getClass($class);
+                            $value = $repo->find($value)[0];
+                        }
+                    }
+                    self::$recursif = false;
+                }
                 $instance->$method($value);
             }
             $i++;
         }
 
-        if($multiple) return $instances;
-
         return $instance;
     }
 
+    public static function getData(object $object): array
+    {
+
+        $params = [];
+
+        $class = new \ReflectionClass(get_class($object));
+
+        /** @var \ReflectionProperty $property */
+        foreach ($class->getProperties() as $property) {
+            $name = $property->getName();
+            $method = "get" . ucfirst($name);
+            $value = $object->$method();
+
+            if (!is_null($value)) {
+                $params[$name] = $value;
+            }
+        };
+
+        return $params;
+
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isRecursif(): bool
+    {
+        return self::$recursif;
+    }
+
+    private static function getParameterType(object $instance, string $method)
+    {
+        $reflection = new \ReflectionMethod($instance, $method);
+
+        /** @var \ReflectionParameter $parameter */
+        return $reflection->getParameters()[0]->getClass();
+    }
 
     /**
      * format function set
@@ -65,6 +109,12 @@ class Hydrator
      */
     private static function getProperty(string $fieldName): string
     {
-        return join('', array_map('ucfirst', explode('_', $fieldName)));
+        $field = join('', array_map('ucfirst', explode('_', $fieldName)));
+
+        if (preg_match('/_id/m', $fieldName)) {
+            $field = str_replace("Id", "", $field);
+        }
+
+        return $field;
     }
 }

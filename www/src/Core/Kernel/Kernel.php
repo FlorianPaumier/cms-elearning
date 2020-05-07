@@ -51,9 +51,13 @@ class Kernel
             ConfigHandler::get("eventEmmiter")->emit("error.500");
         };
 
-        if(!$response->compile()){
+        $view = $response->compile();
+        
+        if(!$view){
             throw new \Exception();
         };
+
+        echo $view;
     }
 
 

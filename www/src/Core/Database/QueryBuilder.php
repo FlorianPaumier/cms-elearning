@@ -267,10 +267,10 @@ class QueryBuilder
         $results = $query->fetchAll(\PDO::FETCH_ASSOC);
 
         if (isset($this->entity)) {
-            foreach ($results as $result){
+            foreach ($results as $result) {
                 $record[] = Hydrator::hydrate($result, $this->entity);
             }
-        }else{
+        } else {
             $record = $results;
         }
 

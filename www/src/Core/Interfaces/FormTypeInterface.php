@@ -44,5 +44,5 @@ interface FormTypeInterface
      *
      * @return string|null The name of the parent type if any, null otherwise
      */
-    public function getParent();
+    public function setParent($parent);
 }

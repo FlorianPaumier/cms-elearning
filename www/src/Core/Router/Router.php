@@ -108,19 +108,26 @@ class Router
      */
     public function getPath(string $route, string $param = null): ?string
     {
-        $route = key_exists($route, $this->routes) ? $this->routes[$route]["path"] : null;
+        $path = key_exists($route, $this->routes) ? $this->routes[$route]["path"] : null;
 
-        if(is_null($route)) return "";
-
-        $tab = explode("/", $route);
-
-        foreach ($tab as $key => $value){
-            if(preg_match("/\{(.*?)\}/m", $value)){
-                $tab[$key] = $param;
-            }
+        if(is_null($path)){
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "La route $route n'exsite pas");
         }
 
-        return implode("/", $tab);
+        if(!is_null($param)){
+            $pathTab = explode("/", $path);
+            foreach ($pathTab as $key => $item) {
+                // If the uri the element don't math with the current route, stop
+                if ($this->hadParams($item)) {
+                    dump($param);
+                    $pathTab[$key] = trim($param);
+                }
+            }
+
+            $path = implode("/",$pathTab);
+        }
+
+        return $path;
     }
 
     /**

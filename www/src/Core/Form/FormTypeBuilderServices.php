@@ -66,12 +66,13 @@ class FormTypeBuilderServices
 
         $this->generateFile([
             "form_fields" => $this->fields,
-            "usesType" => $this->usesType,
+            "usesType" => array_unique($this->usesType),
             "class_name" => StringTransformer::toPascalCase($className)."Form",
             "prefix" => StringTransformer::slugify($className)
         ]);
 
         $form = new ContactForm();
+
         return $form->setName($className)
             ->setEnabled($data["admin_contact_enable"])
             ->setPath("App\Form\\". StringTransformer::toPascalCase($className)."Form");
@@ -116,15 +117,16 @@ class FormTypeBuilderServices
 
     private function generateFile($data)
     {
+        dump($data["form_fields"]);
         ob_start();
-        usort($data["form_fields"], function ($a, $b) {
-            return $a["position"] < $b["position"];
+        uasort($data["form_fields"], function ($a, $b) {
+            return $a["parameters"]["position"] > $b["parameters"]["position"];
         });
 
         extract($data);
         require $this->template;
         $content = ob_get_clean();
-
+        dump($data["form_fields"]);
         file_put_contents(ROOT_PATH . "/src/Form/" . $data["class_name"] . ".php", $content);
         return ROOT_PATH . "/src/Form/" . $data["class"] . ".php";
     }

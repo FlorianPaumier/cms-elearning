@@ -36,17 +36,25 @@ abstract class Hydrator
 
                 if (!is_null($type) && !self::isRecursif()) {
                     $class = $type->getName();
+
                     if (!($value instanceof $class)) {
+
                         if (gettype($value) == "integer") {
                             self::$recursif = true;
                             /** @var Table $repo */
                             $repo = ConfigHandler::get("repository");
                             $repo->getClass($class);
                             $value = $repo->find($value)[0];
+
                         }
                     }
                     self::$recursif = false;
                 }
+
+                if(self::isTypeArray($instance, $method)){
+                    $value = json_decode($value);
+                }
+
                 $instance->$method($value);
             }
             $i++;
@@ -79,6 +87,16 @@ abstract class Hydrator
                 if($value instanceof \DateTime){
                     $value = $value->format("d-m-Y h:i:s");
                 }
+                if(gettype($value) == "object"){
+                    $value = $value->getId();
+                }
+
+                if(gettype($value) == "array"){
+                    dump($value);
+                    dump(gettype($value));
+                    $value = json_encode($value);
+                dump($value);
+                }
                 $params[$name] = $value;
             }
         };
@@ -103,6 +121,10 @@ abstract class Hydrator
         return $reflection->getParameters()[0]->getClass();
     }
 
+    private static function isTypeArray(object $instance, string $method){
+        $reflection = new \ReflectionMethod($instance, $method);
+        return $reflection->getParameters()[0]->isArray();
+    }
     /**
      * format function set
      * @param string $fieldName

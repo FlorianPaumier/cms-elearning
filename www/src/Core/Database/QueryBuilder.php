@@ -83,6 +83,7 @@ class QueryBuilder
         } else {
             $this->fields = array_merge($this->fields, $fields);
         }
+
         return $this;
     }
 
@@ -294,17 +295,18 @@ class QueryBuilder
         return $this->from;
     }
 
-    private function clear()
+    protected function clear()
     {
         /** @var \ReflectionClass $class */
         $class = new \ReflectionClass($this);
 
         foreach ($class->getDefaultProperties() as $key => $property) {
             if(is_null($property)) continue;
-
                 if ($key !== "pdo") {
                     $this->$key = $property;
                 }
         };
+
+        $this->entity = null;
     }
 }

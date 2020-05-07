@@ -9,7 +9,9 @@
   ],
   "require": {
 	"ext-pdo": "*",
-	"ext-gd": "*"
+    "swiftmailer/swiftmailer": "^6.2",
+	"ext-gd": "*",
+	"ext-json": "*"
   },
   "autoload": {
 	"psr-4": {

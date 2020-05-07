@@ -33,7 +33,8 @@ class ContactController extends BaseController
 
             $this->repository->from(StringTransformer::slugify($form->getName()))->persist($form);
             $this->repository->flush();
-            die;
+
+            $this->redirect->redirectToRoute("admin_contact_list");
         }
 
         return $this->render("admin/contact/new", []);

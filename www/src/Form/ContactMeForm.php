@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Core\Form\FormBuilder;
 use App\Core\Form\AbstractForm;
-use App\Core\Form\Fields\EmailType;
+use App\Core\Form\Fields\TextType;
 use App\Core\Form\Fields\TextAreaType;
 use App\Core\Form\Fields\SubmitType;
 
@@ -15,26 +15,33 @@ class ContactMeForm extends AbstractForm
     public function buildForm(FormBuilder $builder): FormBuilder
     {
         return $builder
-                        ->add('0', EmailType::class , array (
-  'require' => true,
-  'placeholder' => 'Email',
-  'label' => 'Email',
-  'key' => 'email',
-  'position' => '0',
-))
-                        ->add('1', TextAreaType::class , array (
-  'require' => true,
-  'placeholder' => 'Message',
-  'label' => 'Message',
-  'key' => 'message',
-  'position' => '1',
-))
-                        ->add('2', SubmitType::class , array (
+                        ->add('af', TextType::class , array (
   'require' => false,
   'placeholder' => '',
-  'label' => 'Valider',
-  'key' => 'valider',
+  'label' => 'af',
+  'key' => 'af',
+  'position' => '0',
+))
+                        ->add('aa', TextAreaType::class , array (
+  'require' => false,
+  'placeholder' => '',
+  'label' => 'aa',
+  'key' => 'aa',
+  'position' => '1',
+))
+                        ->add('f', TextType::class , array (
+  'require' => false,
+  'placeholder' => '',
+  'label' => 'f',
+  'key' => 'f',
   'position' => '2',
+))
+                        ->add('ad', SubmitType::class , array (
+  'require' => false,
+  'placeholder' => '',
+  'label' => 'ad',
+  'key' => 'ad',
+  'position' => '3',
 ))
                 ;
     }
@@ -45,7 +52,7 @@ class ContactMeForm extends AbstractForm
     */
     public function setBlockPrefix(string $prefix = null)
     {
-        $this->prefix = "contact_me";
+        $this->prefix = "contactme";
     }
 
     public function getBlockPrefix(): string

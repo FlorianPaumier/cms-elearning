@@ -5,22 +5,48 @@ namespace App\Controllers;
 
 
 use App\Core\Interfaces\BaseController;
+use App\Core\Mailer\MailerHandler;
 use App\Core\Request\Request;
+use App\Entity\Configuration;
 use App\Entity\ContactForm;
+use App\Entity\ContactMeta;
+use App\Entity\ContactObject;
 
 class ContactController extends BaseController
 {
 
-    public function index(Request $request)
+    public function index(Request $request, MailerHandler $handler)
     {
         /** @var ContactForm $contactForm */
         $contactForm = $this->repository->setEntity(ContactForm::class)->from("contact_form")->findBy(["enabled" => true])[0];
 
-        $contact = new \stdClass();
-        $form = $this->createForm($contactForm->getPath(), $contact);
+        $form = $this->createForm($contactForm->getPath());
         $form->handleRequest($request);
 
-        if($request->getMethod() == "POST" && $form->isValid()){
+        if ($request->getMethod() == "POST" && $form->isValid()) {
+            $data = $request->getRequest()->all();
+
+            $contact = new ContactObject();
+            $this->repository->persist($contact);
+
+            foreach ($data as $key => $value) {
+                $field = new ContactMeta();
+                $name = explode("_",$key);
+                $field->setInput(array_pop($name));
+                $field->setValue($value);
+
+                $field->setContact($contact);
+                $this->repository->persist($field);
+            }
+
+            $this->repository->from("configuration")->delete(15);
+            $config = (new Configuration())->setContact(["flopau53@gmail.com"]);
+            $this->repository->persist($config);
+            die;
+            $this->repository->flush();
+            $dest = $this->repository->from("configuration")->fetchOrFail();
+            dump($dest);
+            $handler->setDest($dest);
             die;
         }
 

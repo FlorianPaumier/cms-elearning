@@ -116,6 +116,8 @@ class Table extends QueryBuilder
             $sql = $this->pdo->prepare($query["sql"]);
             $sql->execute($query["data"]);
         }
+
+        $this->clear();
     }
 
     private function buildWhereFieldQuery(array $params)

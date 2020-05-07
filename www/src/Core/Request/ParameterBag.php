@@ -7,7 +7,7 @@ namespace App\Core\Request;
 class ParameterBag
 {
     /** @var array */
-    private $data;
+    private $data = [];
 
     public function __construct($data)
     {

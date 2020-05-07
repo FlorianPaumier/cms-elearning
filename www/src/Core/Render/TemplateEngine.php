@@ -80,7 +80,7 @@ class TemplateEngine
         }
 
         if (empty($this->view)) {
-            ConfigHandler::get("eventEmmiter")->emit("error.404");
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "$view not found");
         }
 
         return true;

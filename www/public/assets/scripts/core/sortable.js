@@ -38,9 +38,7 @@ function handleDrop(item) {
 
 function resetPosition(target) {
     $(target).each((key,ele) => {
-        console.log({key,ele})
         let position = $(ele).find(".input-position");
         position.val(key)
-        console.log(position.val())
     })
 }

@@ -3,6 +3,7 @@
 namespace App\Core\Database;
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\Helpers\StringTransformer;
 
 /**
  * Transforme un tableau en objet en utilisant les setters
@@ -64,10 +65,20 @@ abstract class Hydrator
         /** @var \ReflectionProperty $property */
         foreach ($class->getProperties() as $property) {
             $name = $property->getName();
-            $method = "get" . ucfirst($name);
+            $method = "get" . StringTransformer::toPascalCase($name);
+            if (!method_exists($object, $method)) {
+                $method = "is" . ucfirst($name);
+                if (!method_exists($object, $method)) {
+                    ConfigHandler::get("eventEmmiter")->emit("erreur.404", "method don't exist for $name in " . get_class($object));
+                }
+            }
+
             $value = $object->$method();
 
             if (!is_null($value)) {
+                if($value instanceof \DateTime){
+                    $value = $value->format("d-m-Y h:i:s");
+                }
                 $params[$name] = $value;
             }
         };

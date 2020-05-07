@@ -17,7 +17,7 @@ class ParameterBag
     /**
      * Return the data in the request if the key exist
      * @param $key
-     * @return string|null
+     * @return mixed
      */
     public function get($key)
     {

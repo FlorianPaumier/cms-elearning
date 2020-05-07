@@ -4,24 +4,20 @@
 namespace App\Entity;
 
 
+use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
+use phpDocumentor\Reflection\Types\This;
 
 class ContactForm
 {
-
     use Entity;
+    use TimestampableEntity;
 
     /** @var string */
     private $name;
 
     /** @var string */
     private $path;
-
-    /** @var \DateTime */
-    private $created_at;
-
-    /** @var \DateTime */
-    private $updated_at;
 
     /** @var bool */
     private $enabled;
@@ -36,10 +32,12 @@ class ContactForm
 
     /**
      * @param string $name
+     * @return ContactForm
      */
-    public function setName(string $name): void
+    public function setName(string $name): ContactForm
     {
         $this->name = $name;
+        return $this;
     }
 
     /**
@@ -52,42 +50,12 @@ class ContactForm
 
     /**
      * @param string $path
+     * @return ContactForm
      */
-    public function setPath(string $path): void
+    public function setPath(string $path): ContactForm
     {
         $this->path = $path;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt(): \DateTime
-    {
-        return $this->created_at;
-    }
-
-    /**
-     * @param \DateTime $created_at
-     */
-    public function setCreatedAt(\DateTime $created_at): void
-    {
-        $this->created_at = $created_at;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt(): \DateTime
-    {
-        return $this->updated_at;
-    }
-
-    /**
-     * @param \DateTime $updated_at
-     */
-    public function setUpdatedAt(\DateTime $updated_at): void
-    {
-        $this->updated_at = $updated_at;
+        return $this;
     }
 
     /**
@@ -100,9 +68,12 @@ class ContactForm
 
     /**
      * @param bool $enabled
+     * @return ContactForm
      */
-    public function setEnabled(bool $enabled): void
+    public function setEnabled(bool $enabled): ContactForm
     {
         $this->enabled = $enabled;
+        return $this;
     }
+
 }

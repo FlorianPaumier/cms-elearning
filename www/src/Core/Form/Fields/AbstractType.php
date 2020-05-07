@@ -77,7 +77,7 @@ abstract class AbstractType implements FieldsInterface
         $parent = $this->getParent();
 
         $name = method_exists($parent, "getBlockPrefix") ? $parent->getBlockPrefix() . "_" . $key : "option_" . $key;
-        dump($name);
+
         $this->defaultOptions = array_merge($this->defaultOptions, [
             "key" => $key,
             "require" => true,

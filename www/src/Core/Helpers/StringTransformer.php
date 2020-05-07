@@ -26,7 +26,7 @@ abstract class StringTransformer
 
     public static function toPascalCase(string $value)
     {
-        $pascal = preg_replace('/[_-]/', ' $0', $value);
+        $pascal = preg_replace('/[_-]/', ' ', $value);
         $pascal = explode(" ", $pascal);
         return implode(
             "",

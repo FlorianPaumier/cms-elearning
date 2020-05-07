@@ -11,9 +11,11 @@ use App\Core\Form\Fields\DateType;
 use App\Core\Form\Fields\EmailType;
 use App\Core\Form\Fields\IntegerType;
 use App\Core\Form\Fields\PhoneType;
+use App\Core\Form\Fields\SubmitType;
 use App\Core\Form\Fields\TextAreaType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Helpers\StringTransformer;
+use App\Entity\ContactForm;
 
 class FormTypeBuilderServices
 {
@@ -58,8 +60,10 @@ class FormTypeBuilderServices
     }
 
 
-    public function createFormTypeClass(string $className)
+    public function createFormTypeClass(array $data): ContactForm
     {
+        $className = $data["admin_contact_class"];
+
         $this->generateFile([
             "form_fields" => $this->fields,
             "usesType" => $this->usesType,
@@ -67,7 +71,10 @@ class FormTypeBuilderServices
             "prefix" => StringTransformer::slugify($className)
         ]);
 
-        return "App\Form\\". StringTransformer::toPascalCase($className)."Form";
+        $form = new ContactForm();
+        return $form->setName($className)
+            ->setEnabled($data["admin_contact_enable"])
+            ->setPath("App\Form\\". StringTransformer::toPascalCase($className)."Form");
     }
 
     private function translateType(string $type)
@@ -101,12 +108,19 @@ class FormTypeBuilderServices
             case "email":
                 $this->usesType[] = EmailType::class;
                 return "EmailType::class";
+            case "submit":
+                $this->usesType[] = SubmitType::class;
+                return "SubmitType::class";
         }
     }
 
     private function generateFile($data)
     {
         ob_start();
+        usort($data["form_fields"], function ($a, $b) {
+            return $a["position"] < $b["position"];
+        });
+
         extract($data);
         require $this->template;
         $content = ob_get_clean();

@@ -120,7 +120,6 @@ class Router
             foreach ($pathTab as $key => $item) {
                 // If the uri the element don't math with the current route, stop
                 if ($this->hadParams($item)) {
-                    dump($param);
                     $pathTab[$key] = trim($param);
                 }
             }

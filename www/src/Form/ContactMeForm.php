@@ -4,9 +4,9 @@ namespace App\Form;
 
 use App\Core\Form\FormBuilder;
 use App\Core\Form\AbstractForm;
-use App\Core\Form\Fields\TextType;
 use App\Core\Form\Fields\EmailType;
 use App\Core\Form\Fields\TextAreaType;
+use App\Core\Form\Fields\SubmitType;
 
 
 class ContactMeForm extends AbstractForm
@@ -15,25 +15,25 @@ class ContactMeForm extends AbstractForm
     public function buildForm(FormBuilder $builder): FormBuilder
     {
         return $builder
-                        ->add('aaaa', TextType::class , array (
-  'require' => false,
-  'placeholder' => 'zzz',
-  'label' => 'aaaa',
-  'key' => 'aaaa',
+                        ->add('0', EmailType::class , array (
+  'require' => true,
+  'placeholder' => 'Email',
+  'label' => 'Email',
+  'key' => 'email',
   'position' => '0',
 ))
-                        ->add('eee', EmailType::class , array (
-  'require' => false,
-  'placeholder' => 'rrrr',
-  'label' => 'eee',
-  'key' => 'eee',
+                        ->add('1', TextAreaType::class , array (
+  'require' => true,
+  'placeholder' => 'Message',
+  'label' => 'Message',
+  'key' => 'message',
   'position' => '1',
 ))
-                        ->add('tttt', TextAreaType::class , array (
-  'require' => true,
-  'placeholder' => 'yyyy',
-  'label' => 'tttt',
-  'key' => 'tttt',
+                        ->add('2', SubmitType::class , array (
+  'require' => false,
+  'placeholder' => '',
+  'label' => 'Valider',
+  'key' => 'valider',
   'position' => '2',
 ))
                 ;

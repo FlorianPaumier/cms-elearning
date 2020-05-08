@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Entity;
+namespace App\Core\Contact;
 
 
 use App\Core\Helpers\TimestampableEntity;

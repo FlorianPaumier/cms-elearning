@@ -11,7 +11,8 @@
 	"ext-pdo": "*",
     "swiftmailer/swiftmailer": "^6.2",
 	"ext-gd": "*",
-	"ext-json": "*"
+	"ext-json": "*",
+    "guzzlehttp/guzzle": "^6.5"
   },
   "autoload": {
 	"psr-4": {

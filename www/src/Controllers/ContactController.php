@@ -28,6 +28,7 @@ class ContactController extends BaseController
 
             $contact = new ContactObject();
             $this->repository->persist($contact);
+            $this->repository->flush();
 
             foreach ($data as $key => $value) {
                 $field = new ContactMeta();
@@ -39,15 +40,12 @@ class ContactController extends BaseController
                 $this->repository->persist($field);
             }
 
-            $this->repository->from("configuration")->delete(15);
-            $config = (new Configuration())->setContact(["flopau53@gmail.com"]);
-            $this->repository->persist($config);
-            die;
             $this->repository->flush();
-            $dest = $this->repository->from("configuration")->fetchOrFail();
-            dump($dest);
-            $handler->setDest($dest);
-            die;
+            $dest = $this->repository->setEntity(Configuration::class)->from("configuration")->fetchOrFail()[0];
+            $handler->setDest($dest->getContact());
+            $handler->setBody("New Contact");
+            $handler->send();
+            $this->redirect->redirectToRoute("app_contact");
         }
 
         return $this->render("contact", [

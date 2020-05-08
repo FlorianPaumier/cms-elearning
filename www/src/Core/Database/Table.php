@@ -82,7 +82,7 @@ class Table extends QueryBuilder
         return $this->fetchOrFail();
     }
 
-    public function persist(object $objet): void
+    public function persist(object &$objet): void
     {
         $this->getClass(get_class($objet));
         $params = Hydrator::getData($objet);
@@ -107,6 +107,7 @@ class Table extends QueryBuilder
         $this->queries[] = [
             "sql" => $query,
             "data" => $params,
+            "object" => $objet,
         ];
     }
 
@@ -115,6 +116,7 @@ class Table extends QueryBuilder
         foreach ($this->queries as $query){
             $sql = $this->pdo->prepare($query["sql"]);
             $sql->execute($query["data"]);
+            $query["object"]->setId($this->pdo->lastInsertId());
         }
 
         $this->clear();

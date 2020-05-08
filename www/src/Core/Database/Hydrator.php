@@ -3,6 +3,7 @@
 namespace App\Core\Database;
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\Formatter\Serializer;
 use App\Core\Helpers\StringTransformer;
 
 /**
@@ -11,6 +12,7 @@ use App\Core\Helpers\StringTransformer;
 abstract class Hydrator
 {
     static $recursif = false;
+
 
     /**
      * Transforme un tableau en objet en utilisant les setters
@@ -27,6 +29,8 @@ abstract class Hydrator
             $instance = $object;
         }
         $i = 0;
+
+        $serializer = new Serializer();
 
         foreach ($array as $key => $value) {
             $method = self::getSetter($key);
@@ -52,7 +56,7 @@ abstract class Hydrator
                 }
 
                 if(self::isTypeArray($instance, $method)){
-                    $value = json_decode($value);
+                    $value = $serializer->deserialize($value, "json");
                 }
 
                 $instance->$method($value);
@@ -65,6 +69,8 @@ abstract class Hydrator
 
     public static function getData(object $object): array
     {
+
+        $serializer = new Serializer();
 
         $params = [];
 
@@ -92,10 +98,7 @@ abstract class Hydrator
                 }
 
                 if(gettype($value) == "array"){
-                    dump($value);
-                    dump(gettype($value));
-                    $value = json_encode($value);
-                dump($value);
+                    $value = $serializer->serialize($value, 'json');
                 }
                 $params[$name] = $value;
             }

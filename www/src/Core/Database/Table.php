@@ -87,9 +87,9 @@ class Table extends QueryBuilder
         $this->getClass(get_class($objet));
         $params = Hydrator::getData($objet);
 
-        $method = is_null($params["id"]) ? "INSERT" : "UPDATE";
+        $this->method = is_null($params["id"]) ? "INSERT" : "UPDATE";
 
-        if ($method == "INSERT"){
+        if ($this->method == "INSERT"){
             $query = "INSERT INTO {$this->from} ("
                 . join(', ', array_keys($params)) .
                 ") VALUES (" . $this->buildFieldQuery($params) . ")";
@@ -101,7 +101,7 @@ class Table extends QueryBuilder
                     }, array_keys($params)
                 )
             );
-            $query = "$method {$this->from} SET {$fieldQuery} WHERE id = :id";
+            $query = "$this->method {$this->from} SET {$fieldQuery} WHERE id = :id";
         }
 
         $this->queries[] = [
@@ -114,9 +114,15 @@ class Table extends QueryBuilder
     public function flush()
     {
         foreach ($this->queries as $query){
-            $sql = $this->pdo->prepare($query["sql"]);
-            $sql->execute($query["data"]);
-            $query["object"]->setId($this->pdo->lastInsertId());
+            try {
+                $sql = $this->pdo->prepare($query["sql"]);
+                $sql->execute($query["data"]);
+            }catch (\Exception $e){
+                dump($e->getMessage());
+            }
+            dump($sql->errorInfo());
+            if(is_null($query["object"]->getId()))
+                $query["object"]->setId($this->pdo->lastInsertId());
         }
 
         $this->clear();
@@ -144,7 +150,7 @@ class Table extends QueryBuilder
     {
         $this->where("id = :id");
         $this->setParam("id" ,$id);
-        return $this->fetchOrFail();
+        return $this->fetchOrFail()[0];
     }
 
     /**

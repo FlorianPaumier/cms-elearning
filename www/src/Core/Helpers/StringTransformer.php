@@ -15,13 +15,13 @@ abstract class StringTransformer
         return $snake;
     }
 
-    public static function slugify(string $value,string $delimiter = "_"){
-        $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $value);
-        $clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
-        $clean = strtolower($clean);
-        $clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
-        $clean = trim($clean, $delimiter);
-        return $clean;
+    public static function slugify(string $value, string $delimiter = "_"){
+        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $value, $matches);
+        $ret = $matches[0];
+        foreach ($ret as &$match) {
+            $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
+        }
+        return implode($delimiter, $ret);
     }
 
     public static function toPascalCase(string $value)

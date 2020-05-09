@@ -25,7 +25,7 @@
                    type="checkbox"
                    id="admin_contact[__INDEX__][require_input]"
                    name="admin_contact[__INDEX__][require_input]">
-            <label class="tgl-btn pl-5 " data-tg-off="Oui" data-tg-on="Non" for="admin_contact[__INDEX__][require_input]"></label>
+            <label class="tgl-btn pl-5 " data-tg-off="Non" data-tg-on="Oui" for="admin_contact[__INDEX__][require_input]"></label>
         </li>
         <li>
             <label for="admin_contact[__INDEX__][placeholder_input]">Placeholder</label>
@@ -33,6 +33,7 @@
         </li>
         <li>
             <input type="hidden" name="admin_contact[__INDEX__][position_input]" class="input-position" value="__INDEX__">
+            <input type="hidden" name="admin_contact[__INDEX__][id_input]" class="input-id" value="">
         </li>
         <li>
             <button type="button" class="btn delete-button" data-index="__INDEX__">-</button>

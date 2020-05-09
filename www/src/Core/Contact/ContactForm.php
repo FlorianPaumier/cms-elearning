@@ -70,7 +70,7 @@ class ContactForm
      * @param bool $enabled
      * @return ContactForm
      */
-    public function setEnabled(bool $enabled): ContactForm
+    public function setEnabled(bool $enabled = false): ContactForm
     {
         $this->enabled = $enabled;
         return $this;

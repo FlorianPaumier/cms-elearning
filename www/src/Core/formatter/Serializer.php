@@ -2,6 +2,8 @@
 
 namespace App\Core\Formatter;
 
+use App\Core\Database\Hydrator;
+
 class Serializer
 {
 
@@ -32,7 +34,7 @@ class Serializer
                 break;
         }
 
-        if(!isset($formatter)){
+        if (!isset($formatter)) {
             throw new \Exception();
         }
 

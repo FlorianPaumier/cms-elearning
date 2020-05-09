@@ -40,19 +40,17 @@ abstract class Hydrator
 
                 if (!is_null($type) && !self::isRecursif()) {
                     $class = $type->getName();
-
                     if (!($value instanceof $class)) {
-
                         if (gettype($value) == "integer") {
                             self::$recursif = true;
                             /** @var Table $repo */
                             $repo = ConfigHandler::get("repository");
                             $repo->getClass($class);
-                            $value = $repo->find($value)[0];
-
+                            $value = $repo->find($value);
                         }
                     }
                     self::$recursif = false;
+                    ConfigHandler::get("repository")->setEntity(get_class($instance));
                 }
 
                 if(self::isTypeArray($instance, $method)){
@@ -79,7 +77,10 @@ abstract class Hydrator
         /** @var \ReflectionProperty $property */
         foreach ($class->getProperties() as $property) {
             $name = $property->getName();
+
+            $key = StringTransformer::slugify($name);
             $method = "get" . StringTransformer::toPascalCase($name);
+
             if (!method_exists($object, $method)) {
                 $method = "is" . ucfirst($name);
                 if (!method_exists($object, $method)) {
@@ -93,17 +94,19 @@ abstract class Hydrator
                 if($value instanceof \DateTime){
                     $value = $value->format("d-m-Y h:i:s");
                 }
+
                 if(gettype($value) == "object"){
                     $value = $value->getId();
+                }elseif (gettype($value) == "boolean"){
+                    $value = (int)$value;
                 }
 
                 if(gettype($value) == "array"){
                     $value = $serializer->serialize($value, 'json');
                 }
-                $params[$name] = $value;
+                $params[$key] = $value;
             }
         };
-
         return $params;
 
     }

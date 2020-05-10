@@ -4,6 +4,7 @@
 namespace App\Core\Contact;
 
 
+use App\Core\Form\FormBuilder;
 use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
 
@@ -17,11 +18,15 @@ class ContactObject
 
     /** @var bool */
     private $enabled;
+    /**
+     * @var FormBuilder
+     */
+    private $contactForm;
 
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -39,7 +44,7 @@ class ContactObject
     /**
      * @return bool
      */
-    public function isEnabled(): bool
+    public function isEnabled(): ?bool
     {
         return $this->enabled;
     }
@@ -54,4 +59,17 @@ class ContactObject
         return $this;
     }
 
+    public function setContactForm(ContactForm $form)
+    {
+        $this->contactForm = $form;
+        return $this;
+    }
+
+    /**
+     * @return FormBuilder
+     */
+    public function getContactForm(): ?ContactForm
+    {
+        return $this->contactForm;
+    }
 }

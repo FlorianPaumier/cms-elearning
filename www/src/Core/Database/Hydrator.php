@@ -45,17 +45,20 @@ abstract class Hydrator
                             self::$recursif = true;
                             /** @var Table $repo */
                             $repo = ConfigHandler::get("repository");
-                            $repo->getClass($class);
+                            $repo->clear()->getClass($class);
                             $value = $repo->find($value);
                         }
+
                     }
                     self::$recursif = false;
                     ConfigHandler::get("repository")->setEntity(get_class($instance));
+
                 }
 
-                if(self::isTypeArray($instance, $method)){
+                if (self::isTypeArray($instance, $method)) {
                     $value = $serializer->deserialize($value, "json");
                 }
+
 
                 $instance->$method($value);
             }
@@ -91,17 +94,17 @@ abstract class Hydrator
             $value = $object->$method();
 
             if (!is_null($value)) {
-                if($value instanceof \DateTime){
+                if ($value instanceof \DateTime) {
                     $value = $value->format("d-m-Y h:i:s");
                 }
 
-                if(gettype($value) == "object"){
+                if (gettype($value) == "object") {
                     $value = $value->getId();
-                }elseif (gettype($value) == "boolean"){
+                } elseif (gettype($value) == "boolean") {
                     $value = (int)$value;
                 }
 
-                if(gettype($value) == "array"){
+                if (gettype($value) == "array") {
                     $value = $serializer->serialize($value, 'json');
                 }
                 $params[$key] = $value;
@@ -127,10 +130,12 @@ abstract class Hydrator
         return $reflection->getParameters()[0]->getClass();
     }
 
-    private static function isTypeArray(object $instance, string $method){
+    private static function isTypeArray(object $instance, string $method)
+    {
         $reflection = new \ReflectionMethod($instance, $method);
         return $reflection->getParameters()[0]->isArray();
     }
+
     /**
      * format function set
      * @param string $fieldName

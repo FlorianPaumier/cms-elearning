@@ -4,13 +4,15 @@
 namespace App\Controllers;
 
 
+use App\Core\Contact\ContactForm;
+use App\Core\Contact\ContactInput;
+use App\Core\Contact\ContactMeta;
+use App\Core\Contact\ContactObject;
 use App\Core\Interfaces\BaseController;
 use App\Core\Mailer\MailerHandler;
 use App\Core\Request\Request;
-use App\Entity\Configuration;
-use App\Entity\ContactForm;
-use App\Entity\ContactMeta;
-use App\Entity\ContactObject;
+use App\Entity\SiteConfiguration;
+use PHPUnit\Util\Configuration;
 
 class ContactController extends BaseController
 {
@@ -27,24 +29,31 @@ class ContactController extends BaseController
             $data = $request->getRequest()->all();
 
             $contact = new ContactObject();
+            $contact->setContactForm($contactForm);
             $this->repository->persist($contact);
-            $this->repository->flush();
 
             foreach ($data as $key => $value) {
                 $field = new ContactMeta();
                 $name = explode("_",$key);
-                $field->setInput(array_pop($name));
+                $input = $this->repository->setEntity(ContactInput::class)->from("contact_input")->findOneBy([
+                    "form_key" => end($name),
+                    "contact_form" => $contactForm->getId()
+                ]);
+
+                $field->setInput($input);
                 $field->setValue($value);
 
                 $field->setContact($contact);
                 $this->repository->persist($field);
             }
 
-            $this->repository->flush();
-            $dest = $this->repository->setEntity(Configuration::class)->from("configuration")->fetchOrFail()[0];
+//            $this->repository->flush();
+            $dest = $this->repository->clear()->setEntity(SiteConfiguration::class)->from("site_configuration")->find(16);
+            dump($dest);
             $handler->setDest($dest->getContact());
             $handler->setBody("New Contact");
             $handler->send();
+            die;
             $this->redirect->redirectToRoute("app_contact");
         }
 

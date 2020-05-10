@@ -67,9 +67,10 @@ class Table extends QueryBuilder
      * @return mixed|false
      * @throws NoRecordException
      */
-
     public function findBy(array $params)
     {
+        $this->method = "SELECT";
+
         foreach (array_keys($params) as $key => $param){
             if($key > 0){
                 $this->andWhere("$param = :$param");
@@ -80,6 +81,29 @@ class Table extends QueryBuilder
 
         $this->setParams($params);
         return $this->fetchOrFail();
+    }
+
+    /**
+     * Récupère une ligne par rapport à un champs
+     *
+     * @param  array $params
+     * @return mixed|false
+     * @throws NoRecordException
+     */
+    public function findOneBy(array $params)
+    {
+        $this->method = "SELECT";
+        foreach (array_keys($params) as $key => $param){
+            if($key > 0){
+                $this->andWhere("$param = :$param");
+            }else{
+                $this->where("$param = :$param");
+            }
+        }
+
+        $this->setParams($params);
+
+        return $this->fetchOrFail()[0];
     }
 
     public function persist(object &$objet): void

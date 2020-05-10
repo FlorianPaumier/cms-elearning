@@ -12,7 +12,7 @@ class ContactInput
     use Entity;
 
     /** @var string */
-    private $key;
+    private $formKey;
 
     /** @var string */
     private $label;
@@ -38,18 +38,18 @@ class ContactInput
     /**
      * @return string
      */
-    public function getKey(): ?string
+    public function getFormKey(): ?string
     {
-        return $this->key;
+        return $this->formKey;
     }
 
     /**
-     * @param string $key
+     * @param string $formKey
      * @return ContactInput
      */
-    public function setKey(string $key): ContactInput
+    public function setFormKey(string $formKey): ContactInput
     {
-        $this->key = $key;
+        $this->formKey = $formKey;
         return $this;
     }
 

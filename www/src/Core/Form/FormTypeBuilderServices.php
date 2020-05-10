@@ -59,7 +59,7 @@ class FormTypeBuilderServices
             ];
 
             $this->inputs[$slug] = (new ContactInput())
-                ->setKey($slug)
+                ->setFormKey($slug)
                 ->setType($field["type_input"])
                 ->setPlaceholder($field["placeholder_input"])
                 ->setLabel($field["label_input"])

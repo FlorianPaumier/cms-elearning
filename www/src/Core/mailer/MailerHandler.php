@@ -1,6 +1,7 @@
 <?php
 namespace App\Core\Mailer;
 
+use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Kernel\Kernel;
 use Swift_Mailer;
@@ -199,7 +200,8 @@ class MailerHandler
 
     private function createTransport(): Swift_SmtpTransport
     {
-        $config = ConfigHandler::get("config")["swiftmailer"];
+        $config = CacheHandler::get("config")["swiftmailer"];
+        dump(CacheHandler::get("config")["swiftmailer"], "mail");
         $transport = new Swift_SmtpTransport($config["host"], $config["port"] ?? 25, $config["encryption"]);
 
         if(!is_null($config["username"])){

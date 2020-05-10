@@ -12,11 +12,11 @@ class QueryBuilder
     /**
      * @var string
      */
-    protected $from = " ";
+    protected $from = "";
     /**
      * @var string|null
      */
-    protected $alias = " ";
+    protected $alias = "";
     /**
      * @var string
      */
@@ -38,7 +38,7 @@ class QueryBuilder
     /**
      * @var string
      */
-    protected $where = " ";
+    protected $where = "";
     /**
      * @var array
      */
@@ -46,7 +46,7 @@ class QueryBuilder
     /**
      * @var string
      */
-    protected $sql = " ";
+    protected $sql = "";
     /**
      * @var array
      */

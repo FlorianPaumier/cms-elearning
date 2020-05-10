@@ -47,13 +47,13 @@ class ContactController extends BaseController
                 $this->repository->persist($field);
             }
 
-//            $this->repository->flush();
+            $this->repository->flush();
             $dest = $this->repository->clear()->setEntity(SiteConfiguration::class)->from("site_configuration")->find(16);
-            dump($dest);
+
             $handler->setDest($dest->getContact());
             $handler->setBody("New Contact");
             $handler->send();
-            die;
+
             $this->redirect->redirectToRoute("app_contact");
         }
 

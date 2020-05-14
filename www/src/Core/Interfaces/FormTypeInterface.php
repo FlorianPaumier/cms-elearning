@@ -9,21 +9,40 @@ use App\Core\Form\FormBuilder;
 interface FormTypeInterface
 {
     /**
-     * Function to get the validation rules for the form
+     * Create and define the the form
+     * @param FormBuilder $builder
+     * @return FormBuilder
      */
-    public static function getConstraint(): array;
+    public function buildForm(FormBuilder $builder);
+
 
     /**
-     * @return mixed
-     * Create the input to show
+     * Retrieve the form prefix
      */
-    public function buildForm(): FormBuilder;
+    public function getBlockPrefix();
 
     /**
-     * Set prefix for input
+     * Define the input prefix for the form
+     * @param string|null $prefix
      */
-    public function setBlockPrefix(): void;
+    public function setBlockPrefix(string $prefix = null);
 
-    public function getBlockPrefix(): string;
+    /**
+     * Configures the options for this type.
+     */
+    public function configureOptions();
 
+    /**
+     * Returns the name of the parent type.
+     *
+     * @return string|null The name of the parent type if any, null otherwise
+     */
+    public function getParent();
+
+    /**
+     * Returns the name of the parent type.
+     *
+     * @return string|null The name of the parent type if any, null otherwise
+     */
+    public function setParent($parent);
 }

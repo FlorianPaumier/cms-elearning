@@ -1,7 +1,7 @@
 @extend(templates/back)
 
 @section(styles)
-
+<link rel="stylesheet" href="assets/styles/admin/form.css">
 @endsection
 
 @section(body)
@@ -17,4 +17,5 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/17.0.0/classic/ckeditor.js"></script>
 <script src="/assets/scripts/ckeditor.js"></script>
 <script  src="/assets/scripts/core/collection.js"></script>
+<script  src="/assets/scripts/core/select2.js"></script>
 @endsection

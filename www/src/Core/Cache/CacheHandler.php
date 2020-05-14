@@ -10,10 +10,6 @@ abstract class CacheHandler
     {
         $cacheFile = CACHE_PATH."/".md5($key)."Cache.php";
 
-        if($_SERVER["APP_ENV"] == "dev" && !in_array($key, self::$configFile)){
-            return null;
-        }
-
         try{
             file_put_contents($cacheFile, "<?php \n return ".var_export($data, true) .";");
             return $data;

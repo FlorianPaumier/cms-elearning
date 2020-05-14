@@ -7,7 +7,7 @@ use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Events\EventEmmiter;
 use App\Core\Render\RenderView;
-use Exception;
+use PHPUnit\Util\Exception;
 
 /**
  * Point d'entré et de sortie de notre appplication
@@ -17,15 +17,15 @@ use Exception;
 class Kernel
 {
 
-    public function __construct(string $env, ?bool $debug = false)
+    public function __construct(string $env, bool $debug = false)
     {
-        /** Set Serveur var */
         $_SERVER["APP_ENV"] = $env;
         $_SERVER["APP_DEBUG"] = $debug;
 
         /** Récupération des éléments de base */
         include_once dirname(__DIR__) . "/Helpers/VarDumper.php";
         include_once dirname(__DIR__) . "/Helpers/basicFunction.php";
+
     }
 
     /**
@@ -51,7 +51,13 @@ class Kernel
             ConfigHandler::get("eventEmmiter")->emit("error.500");
         };
 
-        $response->compile();
+        $view = $response->compile();
+        
+        if(!$view){
+            throw new \Exception();
+        };
+
+        echo $view;
     }
 
 

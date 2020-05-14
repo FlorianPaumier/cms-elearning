@@ -2,10 +2,13 @@
 
 namespace App\Controllers\Admin;
 
+use App\Core\Cache\ConfigHandler;
 use App\Core\Interfaces\BaseController;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Request\Request;
+use App\Entity\Faq;
 use App\Form\FaqForm;
+use App\Form\UserLoginForm;
 
 class FaqController extends BaseController
 {
@@ -21,26 +24,23 @@ class FaqController extends BaseController
 
     public function new(Request $request)
     {
-        $form = (new FaqForm())->buildForm();
+        $faq = new Faq();
 
-        if ($this->query->getMethod() == "POST") {
-            $validator = $this->getValidator()->buildValidator(FaqForm::getConstraint()); // A corriger
+        $form = $this->createForm(FaqForm::class, $faq);
+        $form->handleRequest($request);
 
-            if ($validator->isValid()) {
-                if ($this->repository->from('faq')->insert(['question'=>'test', 'reponse'=>'test', 'date_insert'=>'2020-04-20']) !== true) {
-                    $this->session->set("app.flash", ["error" => 'Erreur lors de l\'ajout']);
-                } else {
-                    $this->redirect->redirectToRoute("admin_faq_list");
-                }
-            } else {
-                $this->session->set("app.flash", ["error" => $validator->getErrors()]);
-            }
-        } else {
-            return $this->renderer->render("admin/faq/new", [
-                "form" => $form->createView(),
-                'title' => "Création d'une Question / Réponse"
-            ]);
+        if ($request->getMethod() == "POST" && $form->isValid()) {
+            /** @var Table $em */
+            $em = ConfigHandler::get("repository");
+            $em->persist($faq);
+            $em->flush();
+            $this->redirect->redirectToRoute("admin_faq_list");
         }
+        
+        return $this->renderer->render("admin/faq/new", [
+            'form' => $form->createView(),
+            'title' => "Création d'une Question/Réponse"
+        ]);
     }
 
     public function edit(Request $request)

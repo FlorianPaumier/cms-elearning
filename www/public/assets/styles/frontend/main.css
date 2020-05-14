@@ -2343,11 +2343,14 @@ img {
 #header {
   width: 100vw;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   vertical-align: center;
 }
 @media all and (min-width: 800px) {
+  #header {
+    flex-direction: row;
+  }
   #header .hamburger {
     display: none;
   }
@@ -2355,6 +2358,11 @@ img {
 #header #menu {
   width: 55vw;
   background-color: #87B7FF;
+}
+@media all and (max-width: 720px) {
+  #header #menu {
+    display: none;
+  }
 }
 #header #menu nav > ul {
   height: 75px;
@@ -2377,6 +2385,9 @@ img {
 }
 #header #menu nav > ul li.profile {
   height: 35px;
+}
+#header #menu nav > ul li.profile .login-menu-mobile {
+  display: none;
 }
 #header #menu nav > ul li.profile .icon {
   border-radius: 100%;
@@ -2474,6 +2485,41 @@ img {
   color: #87B7FF;
   border: 1px solid #87B7FF;
 }
+#header #menu.is-active {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  width: 100vw;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+#header #menu.is-active nav > ul {
+  width: 100vw;
+  height: calc(100vh - 75px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+#header #menu.is-active nav > ul a {
+  font-size: 2rem;
+}
+#header #menu.is-active nav > ul li.profile .icon {
+  display: none;
+}
+#header #menu.is-active nav > ul li.profile .login-menu {
+  display: none;
+}
+#header #menu.is-active nav > ul li.profile .login-menu-mobile {
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+#header #menu.is-active nav > ul li.profile .login-menu-mobile a {
+  padding: 15px;
+  background-color: #364885;
+  color: white;
+}
 #header #search {
   width: 45vw;
   height: 75px;
@@ -2485,11 +2531,24 @@ img {
   align-items: center;
   padding: 0 1%;
 }
+@media all and (max-width: 720px) {
+  #header #search {
+    width: 100vw;
+  }
+  #header #search .hamburger .line {
+    background-color: #364885;
+  }
+}
 #header #search img {
   height: 50px;
 }
 #header #search .search {
   position: relative;
+}
+@media all and (max-width: 720px) {
+  #header #search .search {
+    display: none;
+  }
 }
 #header #search .search input {
   background-color: #faf9f9;
@@ -2523,10 +2582,10 @@ main #main-section .background {
   display: flex;
   flex-direction: column;
   background-color: #999999;
-  height: 80%;
-  min-height: 80%;
+  height: calc(100vh - 75px);
   color: white;
-  padding-top: 10%;
+  justify-content: center;
+  align-content: center;
   padding-left: 10%;
 }
 main #main-section .background h1 {
@@ -2537,7 +2596,13 @@ main #main-section .background p {
   font-size: 20px;
   line-height: 29px;
   font-style: italic;
-  width: 50%;
+  text-align: justify;
+  width: 80%;
+}
+@media all and (min-width: 720px) {
+  main #main-section .background p {
+    width: 50%;
+  }
 }
 main .section-doc {
   display: flex;

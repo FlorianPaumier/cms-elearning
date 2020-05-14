@@ -1,17 +1,26 @@
+@mixin transition($time) {
+  transition: all $time cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
 #header {
   width: 100vw;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   vertical-align: center;
 
   @media all and (min-width: 800px) {
+    flex-direction: row;
     .hamburger {
       display: none;
     }
   }
 
   #menu {
+    @media all and (max-width: 720px){
+      display: none;
+    }
+
     width: 55vw;
     background-color: $blue;
 
@@ -40,6 +49,10 @@
 
           &.profile {
             height: 35px;
+
+            .login-menu-mobile {
+              display: none;
+            }
 
             .icon {
               border-radius: 100%;
@@ -158,6 +171,51 @@
         }
       }
     }
+
+    &.is-active {
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      align-items: center;
+      width: 100vw;
+      @include transition(0.2s);
+
+      nav > ul {
+        width: 100vw;
+        height: calc(100vh - 75px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+
+        a{
+          font-size: 2rem;
+        }
+
+        li {
+          &.profile {
+            .icon {
+              display: none;
+            }
+
+            .login-menu {
+              display: none;
+            }
+
+            .login-menu-mobile {
+              width: 100vw;
+              display: flex;
+              flex-direction: row;
+              justify-content: space-around;
+              a {
+                padding: 15px;
+                background-color: $dark-blue;
+                color: white;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
 
@@ -172,11 +230,21 @@
     align-items: center;
     padding: 0 1%;
 
+    @media all and (max-width: 720px){
+      width: 100vw;
+      .hamburger .line {
+        background-color: $dark-blue;
+      }
+    }
+
     img {
       height: 50px;
     }
 
     .search {
+      @media all and (max-width: 720px){
+        display: none;
+      }
       position: relative;
 
       input {

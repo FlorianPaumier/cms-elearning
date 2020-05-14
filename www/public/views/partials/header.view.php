@@ -11,6 +11,12 @@
                 <i class="fa fa-search"></i>
             </button>
         </form>
+
+        <div class="hamburger" id="hamburger-12">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+        </div>
     </section>
     <section id="menu">
         <nav>
@@ -23,6 +29,10 @@
                 <li class="profile user-menu acilir">
                     <span class="icon"><i class="fa fa-user"></i></span>
                     <div class="login-menu">
+                        <a href="">Login</a>
+                        <a href="">Sign Up</a>
+                    </div>
+                    <div class="login-menu-mobile">
                         <a href="">Login</a>
                         <a href="">Sign Up</a>
                     </div>

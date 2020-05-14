@@ -10,6 +10,7 @@
     </div>
 </section>
 <section class="section-doc">
+    <?php for ($y = 0; $y < 0; $y++): ?>
     <article>
         <i class="fa fa-cogs icon"></i>
         <h1>Une nouvelle approche</h1>
@@ -17,26 +18,13 @@
             Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
         </p>
     </article>
-    <article>
-        <i class="fa fa-cogs icon"></i>
-        <h1>Une nouvelle approche</h1>
-        <p>
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-        </p>
-    </article>
-    <article>
-        <i class="fa fa-cogs icon"></i>
-        <h1>Une nouvelle approche</h1>
-        <p>
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-        </p>
-    </article>
+    <?php endfor; ?>
 </section>
 <section id="section-lesson">
     <h2 class="text-center">les cours populaires</h2>
     <div id="lessons">
         <button><i class="fa fa-arrow-left"></i></button>
-        <?php for ($y = 0; $y < 3; $y++): ?>
+        <?php for ($y = 0; $y < 0; $y++): ?>
             <article class="lesson <?php if ($y === 0) echo 'active' ?>">
                 <section>
                     <img src="https://unsplash.it/800/600?image=59" alt="lesson">
@@ -56,7 +44,7 @@
 </section>
 <section id="home-news" class="row">
     <section id="testimonies" class="col-md-6">
-        <?php for ($y = 0; $y < 3; $y++): ?>
+        <?php for ($y = 0; $y < 0; $y++): ?>
             <article class="testimony <?php if ($y == 1) echo 'active' ?>">
                 <h2 class="text-center">Salut</h2>
                 <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem</p>
@@ -66,7 +54,7 @@
     </section>
     <section id="flux-rss" class="col-md-6 col-sm-12 col-lg-6">
         <h2>Dernières actualités</h2>
-        <?php for ($y = 0; $y < 3; $y++): ?>
+        <?php for ($y = 0; $y < 0; $y++): ?>
             <article class="news col-md-6 col-sm-12 col-lg-6 <?php if ($y == 1) echo 'active' ?>">
                 <span class="date">10/02/2020</span>
                 <h1>Salut</h1>

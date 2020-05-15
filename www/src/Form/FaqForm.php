@@ -21,15 +21,15 @@ class FaqForm extends AbstractForm
     public function buildForm(FormBuilder $builder): FormBuilder
     {
         return $builder
-            ->add("question", TextAreaType::class, [
+            ->add("question", TextType::class, [
                 "label" => "Question",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->add("reponse", TextAreaType::class, [
+            ->add("reponse", TextType::class, [
                 "label" => "Réponse",
                 "required" => true,
-                "class" => "col-md-6 col-lg-6 col-sm-12 ckeditor",
+                "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
             ->add("valider", ButtonType::class, [
                 "label" => "Valider",

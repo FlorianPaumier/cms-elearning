@@ -1,9 +1,5 @@
 @extend(templates/back)
 
-@section(styles)
-
-@endsection
-
 @section(body)
 <section>
     <a href="@path(admin_faq_new)" id="add-faq" class="btn c-blue">Ajouter</a>
@@ -24,16 +20,16 @@
         foreach( $questions as $question):
             ?>
             <tr>
-                <td><?= $question->id ?></td>
-                <td><?= $question->question ?></td>
-                <td><?= $question->reponse ?></td>
+                <td><?= $question->getId(); ?></td>
+                <td><?= $question->getQuestion(); ?></td>
+                <td><?= $question->getReponse(); ?></td>
                 <td>
-                    <form action="/admin/faq/edit/<?= $question->id ?>">
+                    <form action="/admin/faq/edit/<?= $question->getId(); ?>">
                         <button id="edit-faq" class="btn btn-danger">Modifier</button>
                     </form>
                 </td>
                 <td>
-                    <form action="/admin/faq/delete/<?= $question->id ?>">
+                    <form action="/admin/faq/delete/<?= $question->getId(); ?>">
                         <button id="delete-faq" class="btn btn-danger">Supprimer</button>
                     </form>
                 </td>

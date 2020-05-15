@@ -4,17 +4,16 @@ namespace App\Controllers\Admin;
 
 use App\Core\Cache\ConfigHandler;
 use App\Core\Interfaces\BaseController;
-use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Request\Request;
 use App\Entity\Faq;
 use App\Form\FaqForm;
-use App\Form\UserLoginForm;
 
 class FaqController extends BaseController
 {
     public function index()
     {
-        $questions = $this->repository->from('faq')->findAll();
+        $this->repository->getClass(Faq::class);
+        $questions = $this->repository->findAll();
 
         return $this->renderer->render("admin/faq/index", [
             'questions' => $questions,
@@ -36,7 +35,7 @@ class FaqController extends BaseController
             $em->flush();
             $this->redirect->redirectToRoute("admin_faq_list");
         }
-        
+
         return $this->renderer->render("admin/faq/new", [
             'form' => $form->createView(),
             'title' => "Création d'une Question/Réponse"

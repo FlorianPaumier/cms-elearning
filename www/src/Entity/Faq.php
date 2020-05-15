@@ -25,7 +25,7 @@ class Faq
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -43,7 +43,7 @@ class Faq
     /**
      * @return string
      */
-    public function getQuestion(): string
+    public function getQuestion(): ?string
     {
         return $this->question;
     }
@@ -61,7 +61,7 @@ class Faq
     /**
      * @return string
      */
-    public function getReponse(): string
+    public function getReponse(): ?string
     {
         return $this->reponse;
     }

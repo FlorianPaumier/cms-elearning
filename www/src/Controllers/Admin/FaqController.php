@@ -42,16 +42,22 @@ class FaqController extends BaseController
         ]);
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request, Faq $faq)
     {
-        $form = (new FaqForm())->buildForm();
+        $form = $this->createForm(FaqForm::class, $faq);
+        $form->handleRequest($request);
+
+        if ($request->getMethod() == "POST" && $form->isValid()) {
+            $em = ConfigHandler::get("repository");
+            $em->persist($faq);
+            $em->flush();
+            $this->redirect->redirectToRoute("admin_faq_list");
+        }
 
         return $this->renderer->render("admin/faq/new", [
-            "form" => $form->createView(),
-            'title' => "Création d'une Question / Réponse"
+            'form' => $form->createView(),
+            'title' => "Modification d'une Question/Réponse"
         ]);
-
-//        $this->repository->from('faq')->insert(['question'=>'test', 'reponse'=>'test', 'date_insert'=>'2020-04-20']);
     }
 
     public function delete(Request $request)
@@ -59,7 +65,7 @@ class FaqController extends BaseController
         $form = (new FaqForm())->buildForm();
 
         return $this->renderer->render("admin/faq/new", [
-            "form" => $form->createView(),
+            'form' => $form->createView(),
             'title' => "Création d'une Question / Réponse"
         ]);
 

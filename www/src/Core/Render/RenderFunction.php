@@ -38,7 +38,6 @@ abstract class RenderFunction
 
         foreach ($sections[1] as $key => $value){
             preg_match("#^\s*?@section\($value\)([\s\S]*)@endsection#mU", $view, $sectionsValue);
-           // dump($sectionsValue);
             $template = preg_replace("#@section\($value\)#mU", $sectionsValue[1], $template);
         }
 

@@ -114,7 +114,7 @@ class RenderView
             return $this;
         }
 
-        ConfigHandler::get("eventEmmiter")->emit("error.404");
+        ConfigHandler::get("eventEmmiter")->emit("error.404", "The view $template doesn't exist");
     }
 
     /**
@@ -134,6 +134,7 @@ class RenderView
 
         $view = gettype($type) == "object" ? $type::getTemplate() : FORM_PATH."/input.tpl.php";
         $options["prefix"] = "app_form";
+
 
         $this->templateEngine->setData(["parameter" => $options]);
         if($this->templateEngine->setView($view)){

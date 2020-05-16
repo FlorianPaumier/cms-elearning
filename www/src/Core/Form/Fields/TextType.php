@@ -19,7 +19,7 @@ class TextType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockType()
     {
         return 'text';
     }

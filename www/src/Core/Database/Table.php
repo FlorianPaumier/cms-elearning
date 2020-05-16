@@ -144,7 +144,6 @@ class Table extends QueryBuilder
             }catch (\Exception $e){
                 dump($e->getMessage());
             }
-            dump($sql->errorInfo());
             if(is_null($query["object"]->getId()))
                 $query["object"]->setId($this->pdo->lastInsertId());
         }

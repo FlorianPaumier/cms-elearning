@@ -24,12 +24,12 @@
                 <td><?= $question->getQuestion(); ?></td>
                 <td><?= $question->getReponse(); ?></td>
                 <td>
-                    <form action="/admin/faq/edit/<?= $question->getId(); ?>">
+                    <a href="/admin/faq/edit/<?= $question->getId(); ?>">
                         <button id="edit-faq" class="btn btn-danger">Modifier</button>
-                    </form>
+                    </a>
                 </td>
                 <td>
-                    <form action="/admin/faq/delete/<?= $question->getId(); ?>">
+                    <form action="/admin/faq/delete/<?= $question->getId(); ?>" method="post">
                         <button id="delete-faq" class="btn btn-danger">Supprimer</button>
                     </form>
                 </td>

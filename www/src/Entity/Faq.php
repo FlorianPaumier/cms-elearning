@@ -20,7 +20,7 @@ class Faq
     /** @var string */
     protected $reponse;
 
-    public function __construct(int $id = null){}
+    public function __construct(){}
 
     /**
      * @return int

@@ -60,15 +60,10 @@ class FaqController extends BaseController
         ]);
     }
 
-    public function delete(Request $request)
+    public function delete(Faq $faq)
     {
-        $form = (new FaqForm())->buildForm();
-
-        return $this->renderer->render("admin/faq/new", [
-            'form' => $form->createView(),
-            'title' => "Création d'une Question / Réponse"
-        ]);
-
-//        $this->repository->from('faq')->insert(['question'=>'test', 'reponse'=>'test', 'date_insert'=>'2020-04-20']);
+        $em = ConfigHandler::get("repository");
+        $em->from('faq')->delete($faq->getId());
+        $this->redirect->redirectToRoute("admin_faq_list");
     }
 }

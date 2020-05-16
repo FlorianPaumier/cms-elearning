@@ -15,4 +15,12 @@ class PasswordType extends AbstractType
     public function getBlockName(){
         return "input";
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockType()
+    {
+        return 'password';
+    }
 }

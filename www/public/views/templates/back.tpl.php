@@ -20,6 +20,8 @@
     <!-- Custom styles for this template-->
     <link href="assets/styles/css/sb-admin-2.min.css" rel="stylesheet">
 
+    @section(styles)
+
 </head>
 
 <body id="page-top">

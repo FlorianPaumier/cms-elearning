@@ -114,7 +114,7 @@ class RenderView
             return $this;
         }
 
-        ConfigHandler::get("eventEmmiter")->emit("error.404");
+        ConfigHandler::get("eventEmmiter")->emit("error.404", "The view $template doesn't exist");
     }
 
     /**

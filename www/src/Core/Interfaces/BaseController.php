@@ -47,6 +47,11 @@ abstract class BaseController
     protected $redirect;
 
     /**
+     * @var FormBuilder $form
+     */
+    protected $form;
+
+    /**
      * @var PHPSession
      */
     protected $session;
@@ -65,15 +70,7 @@ abstract class BaseController
         $this->redirect = new RedirectionHandler();
     }
 
-    /**
-     * Return une instance d'un validator pour le form donner
-     * @param FormTypeInterface $formType
-     * @return Validator
-     */
-    protected function getValidator(FormTypeInterface $formType)
-    {
-        return new Validator($formType);
-    }
+
 
     /**
      * Creates and returns a Form instance from the type of the form.

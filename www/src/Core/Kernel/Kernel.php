@@ -41,14 +41,14 @@ class Kernel
         $matched = ConfigHandler::get("router")->match();
 
         if ($matched === false) {
-            ConfigHandler::get("eventEmmiter")->emit("error.404");
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "Aucune route n'a été trouvé pour l'url");
         }
 
         /** @var RenderView $response */
         $response = ConfigHandler::get("router")->exec();
 
         if (!$response){
-            ConfigHandler::get("eventEmmiter")->emit("error.500");
+            ConfigHandler::get("eventEmmiter")->emit("error.500", "Le controller doit retourner une Strin ou FormBuilder , Null retourner");
         };
 
         $view = $response->compile();

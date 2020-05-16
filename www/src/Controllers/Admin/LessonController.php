@@ -16,7 +16,6 @@ class LessonController extends BaseController
     {
         $lessons = $this->repository->from("lesson")->findAll();
 
-        dump($lessons);
         return $this->renderer->render("admin/lessons/lesson", [
             "lessons" => $lessons,
             'title' => "Listes des Cours"

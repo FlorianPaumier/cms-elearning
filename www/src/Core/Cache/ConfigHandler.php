@@ -10,6 +10,7 @@ use App\Core\Database\Table;
 use App\Core\Events\EventEmmiter;
 use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Form\FormFactory;
+use App\Core\Formatter\Serializer;
 use App\Core\Logger\AbstractLogger;
 use App\Core\Request\Request;
 use App\Core\Router\Router;
@@ -65,7 +66,7 @@ class ConfigHandler
         self::bind("router", new Router());
         self::bind("logger", AbstractLogger::getInstance());
         self::bind("eventEmmiter", EventEmmiter::getInstance());
-        self::bind("form.factory", new FormFactory());
+        self::bind("serializer", new Serializer());
 
     }
 

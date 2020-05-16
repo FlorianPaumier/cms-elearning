@@ -1,7 +1,6 @@
 @extend(templates/front)
 
 @section(body)
-
 <section id="main-section">
     <div class="background">
         <h1>Un site pour apprendre</h1>

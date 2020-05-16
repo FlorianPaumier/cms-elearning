@@ -7,7 +7,7 @@ namespace App\Core\Request;
 class ParameterBag
 {
     /** @var array */
-    private $data;
+    private $data = [];
 
     public function __construct($data)
     {
@@ -17,10 +17,13 @@ class ParameterBag
     /**
      * Return the data in the request if the key exist
      * @param $key
-     * @return string|null
+     * @return mixed
      */
-    public function get($key): ?string
+    public function get($key)
     {
+        if (preg_match("/\[\]/", $key)) {
+            $key = preg_replace("/\[\]/", "", $key);
+        }
         return key_exists($key, $this->data) ? $this->data[$key] : null;
     }
 

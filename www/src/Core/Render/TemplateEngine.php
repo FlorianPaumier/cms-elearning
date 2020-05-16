@@ -44,7 +44,7 @@ class TemplateEngine
     /** @var array */
     private $functions = [];
 
-    /** @var ParseView  */
+    /** @var ParseView */
     private $viewParser;
 
     /** @var string */
@@ -79,8 +79,8 @@ class TemplateEngine
             }
         }
 
-        if(empty($this->view)){
-            ConfigHandler::get("eventEmmiter")->emit("error.404");
+        if (empty($this->view)) {
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "$view not found");
         }
 
         return true;
@@ -127,7 +127,7 @@ class TemplateEngine
     private function _parseTemplate()
     {
         preg_match_all("/{{\s?(\w+)\s?}}/m", $this->content, $this->fieldEntries, PREG_SET_ORDER, 0);
-        preg_match_all("/@(\w+)\((.*?)\)/m", $this->content, $this->methodEntries, PREG_SET_ORDER, 0);
+        preg_match_all("/@(\w+)\((.*?)(,(.*?))?\)/m", $this->content, $this->methodEntries, PREG_SET_ORDER, 0);
     }
 
     /**
@@ -173,20 +173,21 @@ class TemplateEngine
     {
         $this->_parseTemplate();
 
-        if (count($this->methodEntries) > 0) {
-            $this->_parseFunctions();
-        }
 
         if ($tags) {
-            //CacheHandler::set($this->view, $this->content);
+//            CacheHandler::set($this->view, $this->content);
+
+            $this->content = $this->getParsePhpView($this->content, $this->data["parameter"]);
+            $this->_parseTemplate();
 
             if (count($this->fieldEntries) > 0) {
                 $this->_parseTags();
                 $this->_parseTemplate();
+            }
 
-                if (count($this->methodEntries) > 0) {
-                    $this->_parseFunctions($this);
-                }
+
+            if (count($this->methodEntries) > 0) {
+                $this->_parseFunctions($this);
             }
 
             foreach ($this->functions as $regex => $function){
@@ -200,8 +201,10 @@ class TemplateEngine
 
 
         if (!is_null($this->view)) {
-            $this->betterEval($this->content, $this->data["parameter"]);
+            return $this->getParsePhpView($this->content, $this->data);
         }
+
+        return false;
     }
 
     /**
@@ -272,16 +275,25 @@ class TemplateEngine
     {
         $this->_parseTemplate();
         $this->_parseTags();
+        $this->_parseTemplate();
+
+        if (count($this->methodEntries) > 0) {
+
+            $this->_parseFunctions($this);
+
+            foreach ($this->functions as $regex => $function) {
+                $this->content = preg_replace("#$regex#", $function, $this->content);
+            }
+        }
     }
 
-    function betterEval($code, array $data = []) {
-        $tmp = tmpfile ();
-        $tmpf = stream_get_meta_data ( $tmp );
-        $tmpf = $tmpf ['uri'];
-        fwrite ( $tmp, $code );
+    private function getParsePhpView(string $content, array $data)
+    {
+        ob_start();
+        $tmp = tmpfile();
+        fwrite($tmp, $content);
         extract($data);
-        $ret = include ($tmpf);
-        fclose ( $tmp );
-        return $ret;
+        require stream_get_meta_data($tmp)['uri'];
+        return ob_get_clean();
     }
 }

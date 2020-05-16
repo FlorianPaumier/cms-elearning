@@ -26,10 +26,10 @@ class FaqForm extends AbstractForm
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->add("reponse", TextType::class, [
+            ->add("reponse", TextAreaType::class, [
                 "label" => "Réponse",
                 "required" => true,
-                "class" => "col-md-6 col-lg-6 col-sm-12",
+                "class" => "col-md-6 col-lg-6 col-sm-12 ckeditor",
             ])
             ->add("valider", ButtonType::class, [
                 "label" => "Valider",

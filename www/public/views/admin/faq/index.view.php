@@ -22,7 +22,6 @@
             <tr>
                 <td><?= $question->getId(); ?></td>
                 <td><?= $question->getQuestion(); ?></td>
-                <td><?= $question->getReponse(); ?></td>
                 <td>
                     <a href="/admin/faq/edit/<?= $question->getId(); ?>">
                         <button id="edit-faq" class="btn btn-danger">Modifier</button>

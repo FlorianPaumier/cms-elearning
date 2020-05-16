@@ -3,6 +3,8 @@
 namespace App\Core\Database;
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\Formatter\Serializer;
+use App\Core\Helpers\StringTransformer;
 
 /**
  * Transforme un tableau en objet en utilisant les setters
@@ -10,6 +12,7 @@ use App\Core\Cache\ConfigHandler;
 abstract class Hydrator
 {
     static $recursif = false;
+
 
     /**
      * Transforme un tableau en objet en utilisant les setters
@@ -27,6 +30,8 @@ abstract class Hydrator
         }
         $i = 0;
 
+        $serializer = new Serializer();
+
         foreach ($array as $key => $value) {
             $method = self::getSetter($key);
 
@@ -40,12 +45,21 @@ abstract class Hydrator
                             self::$recursif = true;
                             /** @var Table $repo */
                             $repo = ConfigHandler::get("repository");
-                            $repo->getClass($class);
-                            $value = $repo->find($value)[0];
+                            $repo->clear()->getClass($class);
+                            $value = $repo->find($value);
                         }
+
                     }
                     self::$recursif = false;
+                    ConfigHandler::get("repository")->setEntity(get_class($instance));
+
                 }
+
+                if (self::isTypeArray($instance, $method)) {
+                    $value = $serializer->deserialize($value, "json");
+                }
+
+
                 $instance->$method($value);
             }
             $i++;
@@ -57,6 +71,8 @@ abstract class Hydrator
     public static function getData(object $object): array
     {
 
+        $serializer = new Serializer();
+
         $params = [];
 
         $class = new \ReflectionClass(get_class($object));
@@ -64,14 +80,36 @@ abstract class Hydrator
         /** @var \ReflectionProperty $property */
         foreach ($class->getProperties() as $property) {
             $name = $property->getName();
-            $method = "get" . ucfirst($name);
+
+            $key = StringTransformer::slugify($name);
+            $method = "get" . StringTransformer::toPascalCase($name);
+
+            if (!method_exists($object, $method)) {
+                $method = "is" . ucfirst($name);
+                if (!method_exists($object, $method)) {
+                    ConfigHandler::get("eventEmmiter")->emit("erreur.404", "method don't exist for $name in " . get_class($object));
+                }
+            }
+
             $value = $object->$method();
 
             if (!is_null($value)) {
-                $params[$name] = $value;
+                if ($value instanceof \DateTime) {
+                    $value = $value->format("d-m-Y h:i:s");
+                }
+
+                if (gettype($value) == "object") {
+                    $value = $value->getId();
+                } elseif (gettype($value) == "boolean") {
+                    $value = (int)$value;
+                }
+
+                if (gettype($value) == "array") {
+                    $value = $serializer->serialize($value, 'json');
+                }
+                $params[$key] = $value;
             }
         };
-
         return $params;
 
     }
@@ -90,6 +128,12 @@ abstract class Hydrator
 
         /** @var \ReflectionParameter $parameter */
         return $reflection->getParameters()[0]->getClass();
+    }
+
+    private static function isTypeArray(object $instance, string $method)
+    {
+        $reflection = new \ReflectionMethod($instance, $method);
+        return $reflection->getParameters()[0]->isArray();
     }
 
     /**

@@ -21,6 +21,8 @@
     <!-- Custom styles for this template-->
     <link href="/assets/styles/admin/main.css" rel="stylesheet" type="text/css">
 
+    @section(styles)
+
 </head>
 
 <body id="page-top">

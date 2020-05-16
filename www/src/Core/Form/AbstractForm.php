@@ -8,7 +8,7 @@ use App\Core\Interfaces\FormTypeInterface;
 
 abstract class AbstractForm implements FormTypeInterface
 {
-    protected $prefix;
+    protected $prefix = "";
 
     protected $options = [];
 

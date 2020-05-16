@@ -76,11 +76,21 @@ abstract class AbstractType implements FieldsInterface
         /** @var FormTypeInterface $parent */
         $parent = $this->getParent();
 
+        if(method_exists($parent, "getBlockPrefix")){
+            if(is_null($parent->getBlockPrefix()) || empty($parent->getBlockPrefix())){
+                $parent->setBlockPrefix();
+            }
+
+            $name = $parent->getBlockPrefix() ."_" .$key;
+        }else {
+            $name = "option_" . $key;
+        }
+
         $this->defaultOptions = array_merge($this->defaultOptions, [
             "key" => $key,
             "require" => true,
             "label" => $args["label"] ?? $key,
-            "name" => method_exists($parent, "getBlockPrefix") ? $parent->getBlockPrefix() . "_" . $key : "option_" . $key,
+            "name" => $name
         ]);
 
         foreach ($args as $key => $arg){

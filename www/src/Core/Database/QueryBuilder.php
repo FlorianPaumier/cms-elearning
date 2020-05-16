@@ -83,6 +83,7 @@ class QueryBuilder
         } else {
             $this->fields = array_merge($this->fields, $fields);
         }
+
         return $this;
     }
 
@@ -229,7 +230,7 @@ class QueryBuilder
 
             if (count($this->andWhere) > 0) {
                 foreach ($this->andWhere as $selector) {
-                    $this->sql .= " AND WHERE " . $selector;
+                    $this->sql .= " AND " . $selector;
                 }
             }
         }
@@ -264,6 +265,7 @@ class QueryBuilder
         $query->execute($this->params);
 
         $this->params = [];
+
         $results = $query->fetchAll(\PDO::FETCH_ASSOC);
 
         if (isset($this->entity)) {
@@ -294,17 +296,23 @@ class QueryBuilder
         return $this->from;
     }
 
-    private function clear()
+    public function clear()
     {
         /** @var \ReflectionClass $class */
         $class = new \ReflectionClass($this);
 
         foreach ($class->getDefaultProperties() as $key => $property) {
-            if(is_null($property)) continue;
+            if (is_null($property)) {
+                continue;
+            }
 
-                if ($key !== "pdo") {
-                    $this->$key = $property;
-                }
+            if ($key !== "pdo") {
+                $this->$key = $property;
+            }
         };
+
+        $this->entity = null;
+
+        return $this;
     }
 }

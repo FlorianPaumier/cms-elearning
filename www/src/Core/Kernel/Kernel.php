@@ -51,7 +51,13 @@ class Kernel
             ConfigHandler::get("eventEmmiter")->emit("error.500", "Le controller doit retourner une Strin ou FormBuilder , Null retourner");
         };
 
-        echo $response->compile();
+        $view = $response->compile();
+        
+        if(!$view){
+            throw new \Exception();
+        };
+
+        echo $view;
     }
 
 

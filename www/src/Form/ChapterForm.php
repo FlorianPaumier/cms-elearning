@@ -94,5 +94,4 @@ class ChapterForm extends AbstractForm
             "data_class" => LessonChapter::class
         ];
     }
-
 }

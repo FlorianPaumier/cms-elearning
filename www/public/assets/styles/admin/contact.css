@@ -1,0 +1,21 @@
+.contactForm {
+  width: 50vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+.contactForm .form {
+  height: 80vh;
+  overflow-y: auto;
+}
+.contactForm .form ul.list-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 3%;
+  border: 1px solid black;
+}
+.contactForm .form ul.list-input li {
+  list-style-type: none;
+}
+
+/*# sourceMappingURL=contact.css.map */

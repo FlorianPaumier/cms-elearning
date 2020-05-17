@@ -4,6 +4,7 @@
 namespace App\Form;
 
 use App\Core\Form\AbstractForm;
+use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
 
@@ -27,9 +28,15 @@ class ChatForm extends AbstractForm
     {
         return $builder
             ->add("message", TextType::class,[
-                "label" => "Nom",
+                "label" => "message",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
+                "placeholder" => "message..."
+            ])
+            ->add("valider", ButtonType::class, [
+                "label" => "Valider",
+                "class" => "btn-submit",
+                "type" => "submit",
             ]);
     }
 

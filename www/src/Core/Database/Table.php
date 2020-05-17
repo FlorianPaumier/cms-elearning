@@ -71,10 +71,10 @@ class Table extends QueryBuilder
     {
         $this->method = "SELECT";
 
-        foreach (array_keys($params) as $key => $param){
-            if($key > 0){
+        foreach (array_keys($params) as $key => $param) {
+            if ($key > 0) {
                 $this->andWhere("$param = :$param");
-            }else{
+            } else {
                 $this->where("$param = :$param");
             }
         }
@@ -93,10 +93,10 @@ class Table extends QueryBuilder
     public function findOneBy(array $params)
     {
         $this->method = "SELECT";
-        foreach (array_keys($params) as $key => $param){
-            if($key > 0){
+        foreach (array_keys($params) as $key => $param) {
+            if ($key > 0) {
                 $this->andWhere("$param = :$param");
-            }else{
+            } else {
                 $this->where("$param = :$param");
             }
         }
@@ -113,11 +113,11 @@ class Table extends QueryBuilder
 
         $this->method = is_null($params["id"]) ? "INSERT" : "UPDATE";
 
-        if ($this->method == "INSERT"){
-            $query = "INSERT INTO {$this->from} ("
-                . join(', ', array_keys($params)) .
-                ") VALUES (" . $this->buildFieldQuery($params) . ")";
-        }else{
+        if ($this->method == "INSERT") {
+            $query = "INSERT INTO \"{$this->from}\" ("
+            . join(', ', array_keys($params)) .
+            ") VALUES (" . $this->buildFieldQuery($params) . ")";
+        } else {
             $fieldQuery = implode(
                 ',', array_map(
                     function ($param) {
@@ -137,16 +137,19 @@ class Table extends QueryBuilder
 
     public function flush()
     {
-        foreach ($this->queries as $query){
+
+        foreach ($this->queries as $query) {
             try {
                 $sql = $this->pdo->prepare($query["sql"]);
                 $sql->execute($query["data"]);
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
                 dump($e->getMessage());
             }
             dump($sql->errorInfo());
-            if(is_null($query["object"]->getId()))
+            if (is_null($query["object"]->getId())) {
                 $query["object"]->setId($this->pdo->lastInsertId());
+            }
+
         }
 
         $this->clear();
@@ -163,7 +166,6 @@ class Table extends QueryBuilder
         );
     }
 
-
     /**
      * Récupère un élément à partir de son ID
      *
@@ -173,7 +175,7 @@ class Table extends QueryBuilder
     public function find(int $id)
     {
         $this->where("id = :id");
-        $this->setParam("id" ,$id);
+        $this->setParam("id", $id);
         return $this->fetchOrFail()[0];
     }
 
@@ -190,7 +192,6 @@ class Table extends QueryBuilder
             . join(', ', array_keys($params)) .
             ") VALUES (" . $this->buildFieldQuery($params) . ")"
         );
-
 
         if (!($result = $query->execute($params))) {
             foreach ($params as $key => $param) {
@@ -313,13 +314,13 @@ class Table extends QueryBuilder
      */
     public function hydrate($object, array $data)
     {
-        return Hydrator::hydrate($data,$object);
+        return Hydrator::hydrate($data, $object);
     }
 
     public function getData(object $object)
     {
-         $data = Hydrator::getData($object);
-         die;
+        $data = Hydrator::getData($object);
+        die;
     }
 
     /**

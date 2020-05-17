@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Core\Exceptions;
-
 
 use App\Core\Interfaces\SubscriberInterface;
 use App\Core\Render\RenderView;
@@ -25,7 +23,6 @@ class ExceptionSubscriber implements SubscriberInterface
         ];
     }
 
-
     /**
      * Redirect to 500 page error with message
      *
@@ -34,14 +31,13 @@ class ExceptionSubscriber implements SubscriberInterface
      */
     public function serverErrorException($message = "Une erreur est survenue."): void
     {
-        if($_SERVER["APP_ENV"]== "dev"){
+        if ($_SERVER["APP_ENV"] == "dev") {
             $this->view = (new RenderView())->render("Errors/500", ["message" => $message]);
-        }else{
+        } else {
             header("{$_SERVER["SERVER_PROTOCOL"]} 500 server error" . $message);
         }
         die;
     }
-
 
     /**
      * Redirect to 404 page error with message
@@ -51,10 +47,10 @@ class ExceptionSubscriber implements SubscriberInterface
      */
     public function notFoundException($message = "Ce que vous cherchez n'est pas ici <a href='/'>Retour</a>"): void
     {
-        dump(get_called_class());
-        if($_SERVER["APP_ENV"]== "dev"){
+        dump($message);
+        if ($_SERVER["APP_ENV"] == "dev") {
             $this->view = (new RenderView())->render("Errors/404", ["message" => $message]);
-        }else{
+        } else {
             header("{$_SERVER["SERVER_PROTOCOL"]} 404 not found" . $message);
         }
         die;
@@ -62,7 +58,9 @@ class ExceptionSubscriber implements SubscriberInterface
 
     public function __destruct()
     {
-        if($this->view)
+        if ($this->view) {
             $this->view->compile();
+        }
+
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Core\Cache\ConfigHandler;
 use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\TextType;
@@ -15,7 +14,6 @@ class UserForgetpasswordForm extends AbstractForm
     public function buildForm(FormBuilder $builder): FormBuilder
     {
         return $builder
-            ->setAction(ConfigHandler::get("router")->getPath("app_user_forget_password"))
             ->add(
                 "email", TextType::class, [
                     'type' => 'email',

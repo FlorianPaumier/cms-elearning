@@ -39,7 +39,7 @@ class User
     /**
      * @param mixed $password
      */
-    public function setPassword(User $password): void
+    public function setPassword($password): void
     {
         $this->password = $password;
     }
@@ -49,7 +49,7 @@ class User
         return $this->email;
     }
 
-    public function setEmail(User $email): void
+    public function setEmail($email): void
     {
         $this->email = $email;
     }

@@ -60,10 +60,11 @@ class QueryBuilder
 
     public function __construct(\PDO $pdo = null)
     {
+        dump($pdo);
         if (is_null($pdo)) {
             $pdo = Connection::instance();
         }
-
+        dump($pdo);
         $this->pdo = $pdo;
     }
 
@@ -183,9 +184,9 @@ class QueryBuilder
         $q = (clone $this)->select('COUNT(id) count')->fetchOrFail();
 
         if (is_array($q)) {
-            $count = (int)$q[0]["count"];
+            $count = (int) $q[0]["count"];
         } else {
-            $count = (int)$q->count;
+            $count = (int) $q->count;
         }
 
         return $count;
@@ -285,7 +286,6 @@ class QueryBuilder
     {
         $this->data = $data;
     }
-
 
     public function getClass(string $class)
     {

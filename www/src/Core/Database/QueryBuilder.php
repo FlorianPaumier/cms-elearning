@@ -3,6 +3,7 @@
 namespace App\Core\Database;
 
 use App\Core\Helpers\StringTransformer;
+use App\Entity\Lesson;
 
 class QueryBuilder
 {
@@ -56,8 +57,11 @@ class QueryBuilder
      */
     protected $data = [];
 
+    /** @var array */
     protected $params = [];
-    private $relations = [];
+
+    /** @var array  */
+    protected $relations = [];
 
     public function __construct(\PDO $pdo = null)
     {
@@ -215,6 +219,7 @@ class QueryBuilder
     public function join(string $type, string $value)
     {
         $this->relations[$type][] = $value;
+        return $this;
     }
     /**
      * @return string
@@ -227,11 +232,13 @@ class QueryBuilder
             $fields = implode(', ', $this->fields);
         }
 
-        $this->sql = "$this->method $fields FROM \"{$this->from}\"";
+        $this->sql = "$this->method $fields FROM {$this->from}";
 
         if($this->relations){
             foreach ($this->relations as $type => $relation){
-                $this->sql .= $type . " " . $relation;
+                foreach ($relation as $value){
+                    $this->sql .= " $type $value";
+                }
             }
         }
 

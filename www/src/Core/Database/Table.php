@@ -61,9 +61,19 @@ class Table extends QueryBuilder
      *
      * @return int
      */
-    public function count(): int
+    public function count(array $params): int
     {
-        $this->select("count(id) as nb");
+        $this->select("count(*)");
+
+        foreach (array_keys($params) as $key => $param){
+            if($key > 0){
+                $this->andWhere("$param = :$param");
+            }else{
+                $this->where("$param = :$param");
+            }
+        }
+
+        $this->setParams($params);
 
         return $this->fetchOrFail();
     }

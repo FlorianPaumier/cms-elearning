@@ -1,30 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>SB Admin 2 - Dashboard</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="assets/styles/sb-admin/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="assets/styles/css/main.css" rel="stylesheet">
-
-</head>
+<section id="header">
+    <section id="search">
+        <div>
+            <a href="@path(app_home)">
+                <img src="https://i1.wp.com/s1.wp.com/wp-content/themes/h4/landing/marketing/pages/_common/components/vip-pitch/media/vip-logo.png?ssl=1" alt="">
+            </a>
+        </div>
+        <form action="" method="post" class="input-group search">
+            <input type="text" placeholder="Chercher dans le site" class="input-search">
+            <button class="btn-search">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </section>
+    <section id="menu">
+        <nav>
+            <ul>
+                <li class="link"><a href="@path(app_catalogue)">Cours</a></li>
+                <li class="link"><a href="#">Article</a></li>
+                <li class="link"><a href="#">Evenements</a></li>
+                <li class="link"><a href="#">Contact</a></li>
+                <li class="link"><a href="#">Recherche</a></li>
+                <li class="profile user-menu acilir">
+                    <span class="icon"><i class="fa fa-user"></i></span>
+                    <div class="login-menu">
+                        <a href="">Login</a>
+                        <a href="">Sign Up</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </section>
+</section>
 
 <?php
 
 if(isset($session))
-    //include ("nav.view.php");
 
 if(isset($flash)){
     if(isset($flash["success"])){
@@ -32,7 +42,7 @@ if(isset($flash)){
             echo "<div class='alert alert-sucess'>$message</div>";
         }
     }
-    if($flash["error"]){
+    if(isset($flash["error"])){
         foreach ($flash["error"] as $key => $message){
             echo "<div class='alert alert-error'>$message</div>";
         }

@@ -1,4 +1,4 @@
-FROM php:7.2.0-fpm
+FROM php:7.2-fpm
 
 RUN docker-php-ext-install pdo_mysql
 
@@ -22,14 +22,6 @@ RUN docker-php-ext-configure gd \
 
 RUN docker-php-ext-install zip
 RUN docker-php-ext-enable apcu
-
-RUN curl -sS https://getcomposer.org/installer | php \
-        && mv composer.phar /usr/local/bin/ \
-        && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
-
-WORKDIR /app
-
-ENV PATH="~/.composer/vendor/bin:./vendor/bin:${PATH}"
 
 WORKDIR /app
 

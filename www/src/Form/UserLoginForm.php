@@ -2,44 +2,62 @@
 
 namespace App\Form;
 
-use App\Core\Form\FormType;
+use App\Core\Cache\ConfigHandler;
+use App\Core\Form\AbstractForm;
+use App\Core\Form\Fields\ButtonType;
+use App\Core\Form\Fields\PasswordType;
+use App\Core\Form\Fields\TextType;
+use App\Core\Form\FormBuilder;
+use App\Entity\User;
 
-class UserLoginForm extends FormType
+class UserLoginForm extends AbstractForm
 {
-    /**
-     * @return array|void
-     */
-    public static function getConstraint()
+
+    public function buildForm(FormBuilder $builder): FormBuilder
     {
-        return [
-            [
-                "username" => [
-                    "empty" => false,
-                    "required" => true,
-                    "exists" => true,
+        return $builder
+            ->setAction(ConfigHandler::get("router")->getPath("app_user_login_check"))
+            ->add(
+                "username", TextType::class, [
+                    'type' => 'text',
+                    'required' => true,
+                    'label' => 'Username',
+                    "class" => "form-control form-control-user",
+                    "before" => "<i class=\"fa fa-user\"></i>",
                 ]
-            ],
-            [
-                "password" => [
-                    "empty" => false,
-                    "required" => true,
-                    "exists" => true,
+            )
+            ->add(
+                "password", PasswordType::class, [
+                    'required' => false,
+                    'label' => 'Mot de passe',
+                    "class" => "form-control form-control-user",
                 ]
-            ]
+            )
+            ->add(
+                "submit", ButtonType::class, [
+                    'type' => 'submit',
+                    'label' => "Se connecter",
+                    "class" => "btn",
+                ]
+            );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getBlockPrefix(): string
+    {
+        return "app_register";
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function configureOptions()
+    {
+        $this->options = [
+            "data_class" => User::class,
         ];
     }
 
-    public function buildForm()
-    {
-        $this->formBuilder
-            ->input("username", "username", true)
-            ->input("password", "passworrd", true);
-
-        return $this->formBuilder;
-    }
-
-    public function getBlockPrefix()
-    {
-        $this->formBuilder->setPrefix("app_login");
-    }
 }

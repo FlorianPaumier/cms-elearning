@@ -1,0 +1,2 @@
+exception_subscriber:
+  class: App\Core\Exceptions\ExceptionSubscriber

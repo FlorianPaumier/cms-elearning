@@ -8,6 +8,6 @@ class HomeController extends BaseController
 {
     public function index()
     {
-        return $this->renderer->render(ROOT_DIR . "/public/views/admin/home");
+        return $this->renderer->render(ROOT_PATH . "/public/views/admin/home");
     }
 }

@@ -1,15 +1,13 @@
 <?php
 
-
 use App\Core\Kernel\Kernel;
 
-define("ROOT_DIR", dirname(__DIR__));
-define('DS', DIRECTORY_SEPARATOR); // meilleur portabilité sur les différents systeme.
-define("DEFAULT_VIEW_DIR", dirname(__DIR__)."/public/views");
+define("ROOT_PATH", dirname(__DIR__));
 
-require ROOT_DIR.'/src/Core/Autoloader/Autoloader.php';
+require ROOT_PATH . '/src/Core/Helpers/autoloader.php';
 
 //Define ENV TYPE
+#Todo : Use config var
 $env="dev";
 
 if($env == "dev"){

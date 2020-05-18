@@ -2,7 +2,8 @@
 
 namespace App\Core\Database;
 
-use App\Core\Exception\NoRecordException;
+use App\Core\Exceptions\NoRecordException;
+use App\Core\Exceptions\BDDException;
 use PDO;
 
 /**
@@ -260,7 +261,11 @@ class Table extends QueryBuilder
      */
     public function hydrate($object, array $data)
     {
-        return Hydrator::hydrate($data,$object);
+        try {
+            return Hydrator::hydrate($data,$object);
+        } catch (BDDException $e) {
+            echo "[Exception] : ". $e->getMessage();
+        }
     }
 
     /**

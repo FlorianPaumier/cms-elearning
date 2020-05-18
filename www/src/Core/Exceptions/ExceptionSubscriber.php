@@ -47,7 +47,6 @@ class ExceptionSubscriber implements SubscriberInterface
      */
     public function notFoundException($message = "Ce que vous cherchez n'est pas ici <a href='/'>Retour</a>"): void
     {
-        dump($message);
         if ($_SERVER["APP_ENV"] == "dev") {
             $this->view = (new RenderView())->render("Errors/404", ["message" => $message]);
         } else {

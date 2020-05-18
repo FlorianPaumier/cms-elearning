@@ -36,6 +36,10 @@ class DependencyInjection
                     array_splice($parameters, $parameter->getPosition(), 0, [$var]);
                 } else {
                     try {
+                        if(is_null($parameter->getClass())){
+                            array_splice($parameters, $parameter->getPosition(), 0, [$args[$name]]);
+                            continue;
+                        }
                         $className = $parameter->getClass()->getName();
                         $class = new $className();
 

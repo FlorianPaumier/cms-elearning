@@ -47,8 +47,8 @@ class ParseView
 
             switch ($template) {
                 case "path":
-                    $value = explode(",", $value);
-                    $path = ConfigHandler::get("router")->getPath($value[0], $value[1]);
+                    $param = $tag[4] ?? null;
+                    $path = ConfigHandler::get("router")->getPath($value, $param);
                     $html = $path ?? "";
                     break;
                 case "isRequired":

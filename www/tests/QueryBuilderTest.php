@@ -17,7 +17,7 @@ final class QueryBuilderTest extends TestCase
     public function getPDO(): PDO
     {
         $pdo = new PDO("sqlite::memory:");
-        $pdo->query('CREATE TABLE products (
+        $pdo->query('CREATE Table products (
     id INTEGER CONSTRAINT products_pk primary key autoincrement,
     name TEXT,
     address TEXT,
@@ -30,19 +30,19 @@ final class QueryBuilderTest extends TestCase
 
     public function getBuilder(PDO $pdo): Table
     {
-        return new Table($pdo);
+        return (new Table($pdo))->setEntity(\StdClass::class);
     }
 
     public function testSimpleQuery()
     {
         $q = $this->queryBuilder->from("users", "u")->toSQL();
-        $this->assertEquals("SELECT * FROM users u", $q);
+        $this->assertEquals('SELECT * FROM "users u"', $q);
     }
 
     public function testOrderBy()
     {
         $q = $this->queryBuilder->from("users", "u")->orderBy("id", "DESC")->toSQL();
-        $this->assertEquals("SELECT * FROM users u ORDER BY id DESC", $q);
+        $this->assertEquals('SELECT * FROM "users u" ORDER BY id DESC', $q);
     }
 
     public function testMultipleOrderBy()
@@ -52,7 +52,7 @@ final class QueryBuilderTest extends TestCase
             ->orderBy("id", "ezaearz")
             ->orderBy("name", "desc")
             ->toSQL();
-        $this->assertEquals("SELECT * FROM users ORDER BY id, name DESC", $q);
+        $this->assertEquals('SELECT * FROM "users" ORDER BY id, name DESC', $q);
     }
 
     public function testLimit()
@@ -62,7 +62,7 @@ final class QueryBuilderTest extends TestCase
             ->limit(10)
             ->orderBy("id", "DESC")
             ->toSQL();
-        $this->assertEquals("SELECT * FROM users ORDER BY id DESC LIMIT 10", $q);
+        $this->assertEquals('SELECT * FROM "users" ORDER BY id DESC LIMIT 10', $q);
     }
 
     public function testOffset()
@@ -73,7 +73,7 @@ final class QueryBuilderTest extends TestCase
             ->offset(3)
             ->orderBy("id", "DESC")
             ->toSQL();
-        $this->assertEquals("SELECT * FROM users ORDER BY id DESC LIMIT 10 OFFSET 3", $q);
+        $this->assertEquals('SELECT * FROM "users" ORDER BY id DESC LIMIT 10 OFFSET 3', $q);
     }
 
     public function testPageOffset20()
@@ -84,7 +84,7 @@ final class QueryBuilderTest extends TestCase
             ->page(3)
             ->orderBy("id", "DESC")
             ->toSQL();
-        $this->assertEquals("SELECT * FROM users ORDER BY id DESC LIMIT 10 OFFSET 20", $q);
+        $this->assertEquals('SELECT * FROM "users" ORDER BY id DESC LIMIT 10 OFFSET 20', $q);
     }
 
     public function testPageOffset0()
@@ -95,7 +95,7 @@ final class QueryBuilderTest extends TestCase
             ->page(1)
             ->orderBy("id", "DESC")
             ->toSQL();
-        $this->assertEquals("SELECT * FROM users ORDER BY id DESC LIMIT 10 OFFSET 0", $q);
+        $this->assertEquals('SELECT * FROM "users" ORDER BY id DESC LIMIT 10 OFFSET 0', $q);
     }
 
     public function testCondition()
@@ -107,7 +107,7 @@ final class QueryBuilderTest extends TestCase
             ->limit(10)
             ->orderBy("id", "DESC")
             ->toSQL();
-        $this->assertEquals("SELECT * FROM users WHERE id > :id ORDER BY id DESC LIMIT 10", $q);
+        $this->assertEquals('SELECT * FROM "users" WHERE id > :id ORDER BY id DESC LIMIT 10', $q);
     }
 
     public function testMultiCondition()
@@ -122,7 +122,7 @@ final class QueryBuilderTest extends TestCase
             ->limit(10)
             ->orderBy("id", "DESC")
             ->toSQL();
-        $this->assertEquals("SELECT * FROM users WHERE id > :id AND WHERE name like :name ORDER BY id DESC LIMIT 10", $q);
+        $this->assertEquals('SELECT * FROM "users" WHERE id > :id AND WHERE name like :name ORDER BY id DESC LIMIT 10', $q);
     }
 
     public function testSelect()
@@ -130,7 +130,15 @@ final class QueryBuilderTest extends TestCase
         $q = $this->queryBuilder
             ->select("id", "name", "product")
             ->from("users");
-        $this->assertEquals("SELECT id, name, product FROM users", $q->toSQL());
+        $this->assertEquals('SELECT id, name, product FROM "users"', $q->toSQL());
+    }
+
+    public function testSelectWithAlias()
+    {
+        $q = $this->queryBuilder
+            ->select("id", "name", "product")
+            ->from("users", "u");
+        $this->assertEquals('SELECT u.id, u.name, u.product FROM "users u"', $q->toSQL());
     }
 
     public function testSelectMultiple()
@@ -139,7 +147,7 @@ final class QueryBuilderTest extends TestCase
             ->select("id", "name")
             ->from("users")
             ->select('product');
-        $this->assertEquals("SELECT id, name, product FROM users", $q->toSQL());
+        $this->assertEquals('SELECT id, name, product FROM "users"', $q->toSQL());
     }
 
     public function testSelectAsArray()
@@ -147,7 +155,7 @@ final class QueryBuilderTest extends TestCase
         $q = $this->queryBuilder
             ->select(["id", "name", "product"])
             ->from("users");
-        $this->assertEquals("SELECT id, name, product FROM users", $q->toSQL());
+        $this->assertEquals('SELECT id, name, product FROM "users"', $q->toSQL());
     }
 
     public function testFetch()
@@ -166,7 +174,7 @@ final class QueryBuilderTest extends TestCase
             ->from("products")
             ->where("name = :name")
             ->setParam("name", "azezaeeazazzaez")
-            ->fetchOrFail( "city");
+            ->fetchOrFail();
         $this->assertNull($city);
     }
 
@@ -187,7 +195,7 @@ final class QueryBuilderTest extends TestCase
     {
         $q = $this->queryBuilder->from("products");
         $this->assertEquals(10, $q->count());
-        $this->assertEquals("SELECT * FROM products", $q->toSQL());
+        $this->assertEquals('SELECT * FROM "products"', $q->toSQL());
     }
 
 }

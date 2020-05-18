@@ -1,13 +1,21 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Core\Interfaces\BaseController;
-use App\Core\Mailer\SendMailHandler;
+use App\Core\Request\Request;
 
 class DefaultController extends BaseController
 {
-    public function index()
+    public function index(Request $request)
     {
-        $this->renderer->render("home");
+        return $this->renderer->render("home", [
+            "method" => $request->getMethod(),
+        ]);
+    }
+
+    public function doc()
+    {
+        return $this->renderer->render("doc");
     }
 }

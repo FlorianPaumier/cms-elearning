@@ -52,6 +52,7 @@ class ConfigHandler
      */
     public function init()
     {
+        require_once ROOT_PATH."/lib/PHPMailer";
 
         $this->getConfig();
         $this->getRouting();

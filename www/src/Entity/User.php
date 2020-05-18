@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Entity;
 
 use App\Core\Interfaces\Entity;
@@ -11,6 +10,7 @@ class User
 
     protected $username;
     protected $password;
+    protected $email;
 
     /**
      * @return mixed
@@ -39,9 +39,19 @@ class User
     /**
      * @param mixed $password
      */
-    public function setPassword(User $password): void
+    public function setPassword($password): void
     {
         $this->password = $password;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function setEmail($email): void
+    {
+        $this->email = $email;
     }
 
 }

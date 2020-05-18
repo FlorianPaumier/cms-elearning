@@ -10,7 +10,6 @@ class SendMailHandler extends MailerHandler
 
     public function contact(array $dest){
         $this->setDest($dest);
-
         $this->setBody("Hello");
         $this->send();
     }

@@ -1,17 +1,16 @@
 <?php
+
 namespace App\Core\Mailer;
 
 use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Kernel\Kernel;
-use Swift_Mailer;
-use Swift_Message;
-use Swift_SmtpTransport;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class MailerHandler
 {
 
-    /** @var Swift_Mailer */
+    /** @var PHPMailer */
     private $swiftmailer;
 
     /** @var string */
@@ -23,7 +22,7 @@ class MailerHandler
     /** @var string */
     private $subjet;
 
-    /** @var Swift_Message */
+    /** @var PHPMailer */
     private $body;
 
     /** @var array  */
@@ -40,7 +39,7 @@ class MailerHandler
 
     public function __construct()
     {
-       $this->swiftmailer = new Swift_Mailer($this->createTransport());
+       $this->swiftmailer = new PHPMailer($this->createTransport());
     }
 
     public function send()

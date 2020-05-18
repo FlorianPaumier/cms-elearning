@@ -2,10 +2,7 @@
 
 namespace App\Core\Kernel;
 
-
-use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
-use App\Core\Events\EventEmmiter;
 use App\Core\Render\RenderView;
 use PHPUnit\Util\Exception;
 
@@ -47,19 +44,18 @@ class Kernel
         /** @var RenderView $response */
         $response = ConfigHandler::get("router")->exec();
 
-        if (!$response){
+        if (!$response) {
             ConfigHandler::get("eventEmmiter")->emit("error.500", "Le controller doit retourner une Strin ou FormBuilder , Null retourner");
         };
 
         $view = $response->compile();
-        
-        if(!$view){
+
+        if (!$view) {
             throw new \Exception();
         };
 
         echo $view;
     }
-
 
     /**
      * Set the working configuration

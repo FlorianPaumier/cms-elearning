@@ -16,8 +16,11 @@ class ChatController extends BaseController
     {
         $chatMessage = new ChatMessage();
 
+        //$this->repository->getClass(User::class);
+        //$users = $this->repository->findAll();
+
         $this->repository->getClass(ChatMessage::class);
-        $messages = $this->repository->findAll();
+        $messages = $this->repository->findBy(['id_session' => $_SESSION['id_session']]);
 
         $this->repository->getClass(ChatSession::class);
         $chatSession = $this->repository->findAll();
@@ -27,9 +30,8 @@ class ChatController extends BaseController
 
         if ($request->getMethod() == "POST" && $form->isValid()) {
             $em = ConfigHandler::get("repository");
-            $chatMessage->setIdUser("10");
-            $chatMessage->setIdSession("10");
-            $chatMessage->setMessageDate("NOW()");
+            $chatMessage->setIdUser($_SESSION["id_user"]);
+            $chatMessage->setIdSession($_SESSION["id_session"]);
             $em->persist($chatMessage);
             $em->flush();
             $this->redirect->redirectToRoute("app_chat");
@@ -40,6 +42,7 @@ class ChatController extends BaseController
                 "form" => $form->createView(),
                 "messages" => $messages,
                 "chatSession" => $chatSession
+                //"users" => $users
             ]
         );
     }

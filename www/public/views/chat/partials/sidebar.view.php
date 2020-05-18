@@ -1,8 +1,25 @@
+<?php
+    use App\Entity\ChatSession;
+    use App\Entity\User;
+?>
 <div>
     sidebar
-    <!-- Lister les utilisateurs -->
+    <!-- Liste des utilisateurs -->
+<!--    <ul>-->
+<!--        --><?php
+//        /** @var User $user */
+//        foreach ($users as $user ) : ?>
+<!--            <li>-->
+<!--                --><?//= $user->getId(); ?>
+<!--                --><?//= $user->getUsername() ?>
+<!--            </li>-->
+<!--        --><?php //endforeach; ?>
+<!--    </ul>-->
+    <!-- Lister les session -->
     <ul>
-        <?php foreach ( $chatSession as $instance ) : ?>
+        <?php
+            /** @var ChatSession $instance */
+        foreach ( $chatSession as $instance ) : ?>
             <li>
                 <?= $instance->getIdUser(); ?>
                 <?= $instance->getIdSession(); ?>

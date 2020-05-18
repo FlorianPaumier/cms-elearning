@@ -31,7 +31,7 @@ class ChatMessage
     /**
      * @param mixed $idUser
      */
-    public function setIdUser($idUser): void
+    public function setIdUser(int $idUser): void
     {
         $this->idUser = $idUser;
     }
@@ -47,7 +47,7 @@ class ChatMessage
     /**
      * @param mixed $message
      */
-    public function setMessage($message): void
+    public function setMessage(string $message): void
     {
         $this->message = $message;
     }

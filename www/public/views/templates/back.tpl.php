@@ -9,42 +9,43 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>
-        <?php
-        if(isset($title)){
-            echo $title;
-        }else{
-            echo "Accueil";
-        }
-        ?></title>
+    <title>{{ title }}</title>
 
     <meta lang="fr">
 
     <!-- Custom fonts for this template-->
-    <link rel="stylesheet" href="assets/dist/fontawesome/css/all.css">
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
 
     <!-- Custom styles for this template-->
-    <link href="assets/styles/main.css" rel="stylesheet" type="text/css">
+    <link href="/assets/styles/admin/main.css" rel="stylesheet" type="text/css">
 
-    @section(style)
+    @section(styles)
+
 </head>
 
 <body id="page-top">
 
-{{ @View/partials/header|include }}
+@include(admin/partials/sidebar)
 
-<?php
-    if($session["user"]):
-?>
-        {{ @View/partials/sidebar|include }}
-<?php endif; ?>
+@include(admin/partials/titlebar)
 
 @section(body)
 
-{{ @View/partials/modal|include }}
-{{ @View/partials/footer|include }}
-@section(script)
+
+@include(partials/modal)
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+<script  src="/assets/scripts/core/observer.js"></script>
+
+@section(javascripts)
+
+@include(admin/partials/footer)
 </body>
 </html>
 

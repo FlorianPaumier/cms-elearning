@@ -1,0 +1,268 @@
+main {
+  #main-section {
+    height: 100vh;
+
+    .background {
+      display: flex;
+      flex-direction: column;
+      background-color: $gray;
+      height: 80%;
+      min-height: 80%;
+      color: white;
+      padding-top: 10%;
+      padding-left: 10%;
+
+      h1 {
+        font-size: 50px;
+        line-height: 70px;
+      }
+
+      p {
+        font-size: 20px;
+        line-height: 29px;
+        font-style: italic;
+        width: 50%;
+      }
+    }
+  }
+
+  .section-doc {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    article {
+      width: 430px;
+      padding: 3%;
+      height: 350px;
+      background: #FFFFFF;
+      border: 1px solid #000000;
+      border-radius: 15px;
+
+      .icon {
+        color: #5777EA;
+        font-size: 40px;
+      }
+
+      h1 {
+        font-size: 25px;
+        line-height: 56px;
+        color: #5777EA;
+      }
+
+      p {
+        font-style: italic;
+        font-size: 18px;
+        line-height: 21px;
+      }
+    }
+  }
+
+  #section-lesson {
+
+    margin-top: 20vh;
+
+    h2 {
+      &.text-center {
+        text-align: center;
+      }
+
+      font-size: 30px;
+      line-height: 47px;
+      color: #5777EA;
+    }
+
+    #lessons {
+      display: flex;
+      flex-direction: row;
+      padding: 0 44px;
+      justify-content: space-between;
+
+      button {
+        background-color: transparent;
+        border: none;
+        font-size: 5vw;
+      }
+
+      article {
+        display: none;
+        width: 70vw;
+        height: 30vh;
+
+        h2 {
+          margin: 0;
+          font-size: 25px;
+          line-height: 47px;
+        }
+
+        &.active {
+          display: flex;
+          background: #FFFFFF;
+          box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+          border-radius: 15px;
+          overflow: hidden;
+        }
+
+        img {
+          width: 100%;
+          min-height: 100%;
+        }
+
+        .content {
+          padding-left: 5%;
+          display: flex;
+          flex-direction: column;
+          font-style: italic;
+          font-size: 12px;
+          line-height: 19px;
+
+          p {
+            padding-right: 2%;
+          }
+
+          .btn {
+            background-color: $blue;
+            border-radius: 15px;
+            width: 10vw;
+            text-align: center;
+            margin-left: auto;
+          }
+        }
+      }
+    }
+  }
+
+  #home-news {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10%;
+
+    article {
+      display: none;
+    }
+
+    #testimonies {
+      article {
+        width: 300px;
+        height: 300px;
+        border-radius: 100%;
+        margin: auto;
+        justify-content: center;
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+        background-color: $light-blue;
+
+        &.active {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          overflow: hidden;
+          text-align: center;
+
+          p {
+            padding: 0 4%;
+          }
+        }
+      }
+    }
+
+    #flux-rss {
+
+      h2 {
+        color: #5777EA;
+        margin: 0;
+        font-size: 25px;
+        line-height: 47px;
+        padding-left: 10px;
+      }
+
+      article {
+        width: 500px;
+        height: 300px;
+
+        * {
+          padding: 10px 0;
+        }
+
+        h1 {
+          margin: 0;
+        }
+
+        &.active {
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+
+          .date {
+            font-size: 12px;
+            line-height: 14px;
+            color: #555;
+          }
+
+          p {
+            font-style: italic;
+          }
+
+          a {
+            color: black;
+          }
+        }
+      }
+    }
+  }
+
+  #newsletter {
+    height: 250px;
+    background-color: #415D86;
+    padding: 3%;
+    justify-content: space-around;
+    color: white;
+    display: flex;
+    flex-direction: row;
+
+    div {
+      justify-content: space-between;
+      align-items: center;
+      vertical-align: center;
+      width: 75%;
+      flex-direction: row;
+      display: flex;
+
+      input {
+        width: 700px;
+        height: 50px;
+        border: none;
+        font-size: 15px;
+        font-style: italic;
+        padding-left: 5%;
+
+      }
+
+      .btn {
+        background-color: $blue;
+        height: 50px;
+        border-radius: 15px;
+        width: 10vw;
+        text-align: center;
+        margin-left: auto;
+      }
+    }
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

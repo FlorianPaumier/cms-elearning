@@ -1,0 +1,24 @@
+<?php
+
+
+namespace App\Core\Form\Fields;
+
+
+use App\Core\Interfaces\FormTypeInterface;
+
+interface FieldsInterface
+{
+    public static function getTemplate();
+
+    public function getParent();
+
+    public function setOptions(string $key, array $args);
+
+    public function generatePrototype(string $key, FormTypeInterface $field, array $args);
+
+    public function setParent(string $parent);
+
+    public function getBlockType();
+
+    public function getConstraintOffset(string $key);
+}

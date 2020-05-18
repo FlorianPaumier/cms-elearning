@@ -16,21 +16,21 @@ class ArticleController extends BaseController
 
     public function list()
     {
-        return $this->renderer->render(ROOT_DIR . "/public/views/article/article_list");
+        return $this->renderer->render("article/article_list");
     }
 
     public function create()
     {
-        $this->renderer->render(ROOT_DIR . "/public/views/article/article_list");
+        $this->renderer->render("article/article_list");
     }
 
     public function modify()
     {
-        $this->renderer->render(ROOT_DIR . "/public/views/article/article_list");
+        $this->renderer->render("article/article_list");
     }
 
     public function design()
     {
-        $this->renderer->render(ROOT_DIR . "/public/views/article/article_design");
+        $this->renderer->render("article/article_design");
     }
 }

@@ -57,6 +57,18 @@ class Table extends QueryBuilder
     }
 
     /**
+     * Récupère le nombre d'enregistrements
+     *
+     * @return int
+     */
+    public function count(): int
+    {
+        $this->select("count(id) as nb");
+
+        return $this->fetchOrFail();
+    }
+
+    /**
      * Récupère une ligne par rapport à un champs
      *
      * @param  array $params

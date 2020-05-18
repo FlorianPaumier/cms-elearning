@@ -57,6 +57,7 @@ class QueryBuilder
     protected $data = [];
 
     protected $params = [];
+    private $relations = [];
 
     public function __construct(\PDO $pdo = null)
     {
@@ -211,6 +212,10 @@ class QueryBuilder
         return $this;
     }
 
+    public function join(string $type, string $value)
+    {
+        $this->relations[$type][] = $value;
+    }
     /**
      * @return string
      */
@@ -223,6 +228,12 @@ class QueryBuilder
         }
 
         $this->sql = "$this->method $fields FROM \"{$this->from}\"";
+
+        if($this->relations){
+            foreach ($this->relations as $type => $relation){
+                $this->sql .= $type . " " . $relation;
+            }
+        }
 
         if ($this->where) {
             $this->sql .= " WHERE " . $this->where;

@@ -47,8 +47,9 @@ class LessonController extends BaseController
         ]);
     }
 
-    public function edit(Request $request, Lesson $lesson)
+    public function edit(Request $request, int $lessonId)
     {
+
         $form = $this->createForm(LessonForm::class, $lesson);
         $form->handleRequest($request);
 

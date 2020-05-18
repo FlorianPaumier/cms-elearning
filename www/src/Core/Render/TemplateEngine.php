@@ -66,6 +66,7 @@ class TemplateEngine
      */
     public function setView(string $view)
     {
+
         foreach (self::TPL_EXT as $ext) {
             if (file_exists(VIEW_PATH . DIRECTORY_SEPARATOR . $view . $ext)) {
                 $this->view = VIEW_PATH . DIRECTORY_SEPARATOR . $view . $ext;
@@ -80,7 +81,7 @@ class TemplateEngine
         }
 
         if (empty($this->view)) {
-            ConfigHandler::get("eventEmmiter")->emit("error.404");
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "$view not found");
         }
 
         return true;
@@ -173,11 +174,9 @@ class TemplateEngine
     {
         $this->_parseTemplate();
 
-        if (count($this->methodEntries) > 0) {
-            $this->_parseFunctions($this);
-        }
 
         if ($tags) {
+            $this->content = $this->getParsePhpView($this->content, $this->data["parameter"]);
 //            CacheHandler::set($this->view, $this->content);
 
             if (count($this->fieldEntries) > 0) {
@@ -198,11 +197,8 @@ class TemplateEngine
             return $this->content;
         }
 
-
         if (!is_null($this->view)) {
-            extract($this->data["parameter"]);
-            eval("?>".$this->content);
-            return true;
+            return $this->getParsePhpView($this->content, $this->data);
         }
 
         return false;
@@ -276,7 +272,6 @@ class TemplateEngine
     {
         $this->_parseTemplate();
         $this->_parseTags();
-
         $this->_parseTemplate();
 
         if (count($this->methodEntries) > 0) {
@@ -289,4 +284,13 @@ class TemplateEngine
         }
     }
 
+    private function getParsePhpView(string $content, array $data)
+    {
+        ob_start();
+        $tmp = tmpfile();
+        fwrite($tmp, $content);
+        extract($data);
+        require stream_get_meta_data($tmp)['uri'];
+        return ob_get_clean();
+    }
 }

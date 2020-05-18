@@ -39,7 +39,7 @@ class DependencyInjection
                         $className = $parameter->getClass()->getName();
                         $class = new $className();
 
-                        if (!empty($parameters)) {
+                        if (!empty($args)) {
                             /** @var Table $repo */
                             $repo = ConfigHandler::get("repository");
                             $repo->getClass($className);

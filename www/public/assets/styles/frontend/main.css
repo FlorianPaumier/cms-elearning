@@ -512,6 +512,12 @@ img {
   font-size: 1.5rem;
 }
 
+.scroll-to-top {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
 @keyframes jittery {
   5%, 50% {
     transform: scale(1);
@@ -1028,7 +1034,8 @@ form li {
 .tgl + .tgl-btn {
   outline: 0;
   display: block;
-  width: 4em;
+  max-width: 6em;
+  min-width: 4em;
   height: 2em;
   position: relative;
   cursor: pointer;
@@ -1101,6 +1108,7 @@ form li {
 .tgl-skewed + .tgl-btn {
   overflow: hidden;
   transform: skew(-10deg);
+  width: 100%;
   backface-visibility: hidden;
   transition: all 0.2s ease;
   font-family: sans-serif;

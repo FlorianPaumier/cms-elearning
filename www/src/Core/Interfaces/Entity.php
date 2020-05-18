@@ -11,11 +11,6 @@ Trait Entity
 {
     protected $id;
 
-    public function __construct(int $id = null)
-    {
-        return $this->setId($id);
-    }
-
     /**
      * @return null
      */

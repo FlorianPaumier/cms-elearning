@@ -35,24 +35,37 @@ class Kernel
         /**
          * Test if the current url match with the routing file
          */
-        $matched = ConfigHandler::get("router")->match();
-
-        if ($matched === false) {
-            ConfigHandler::get("eventEmmiter")->emit("error.404", "Aucune route n'a été trouvé pour l'url");
+        try {
+            ConfigHandler::get("router")->match();
+        }catch (\Exception $e){
+             (new RenderView())->renderErrors("errors/errors",$e);
+            die;
         }
 
+
         /** @var RenderView $response */
-        $response = ConfigHandler::get("router")->exec();
+        try {
+            $response = ConfigHandler::get("router")->exec();
+        }catch (\Exception $e){
+            (new RenderView())->renderErrors("errors/errors",$e);
+            die;
+        }
 
         if (!$response) {
-            ConfigHandler::get("eventEmmiter")->emit("error.500", "Le controller doit retourner une Strin ou FormBuilder , Null retourner");
+            try {
+                ConfigHandler::get("eventEmmiter")->emit("error.500", "Le controller doit retourner une Strin ou FormBuilder , Null retourner");
+            }catch (\Exception $e){
+                 (new RenderView())->renderErrors("errors/errors",$e);
+                die;
+            }
         };
 
-        $view = $response->compile();
-
-        if (!$view) {
-            throw new \Exception();
-        };
+        try {
+            $view = $response->compile();
+        }catch (\Exception $e){
+             (new RenderView())->renderErrors("errors/errors",$e);
+            die;
+        }
 
         echo $view;
     }

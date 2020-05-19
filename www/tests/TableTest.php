@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Framework\Database;
+namespace Tests;
 
 use App\Core\Database\Table;
 use PDO;

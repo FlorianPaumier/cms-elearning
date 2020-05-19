@@ -20,6 +20,15 @@ class ExceptionSubscriber implements SubscriberInterface
             "error.404" => [
                 "method" => "notFoundException",
             ],
+            "error.401" => [
+                "method" => "notAuthorizedException",
+            ],
+            "error.403" => [
+                "method" => "forbiddenException",
+            ],
+            "error.405" => [
+                "method" => "methodNotAllowedException",
+            ],
         ];
     }
 
@@ -32,7 +41,7 @@ class ExceptionSubscriber implements SubscriberInterface
     public function serverErrorException($message = "Une erreur est survenue."): void
     {
         if ($_SERVER["APP_ENV"] == "dev") {
-            $this->view = (new RenderView())->render("Errors/500", ["message" => $message]);
+            throw new NotFoundAbsctractException($message, 500);
         } else {
             header("{$_SERVER["SERVER_PROTOCOL"]} 500 server error" . $message);
         }
@@ -48,18 +57,22 @@ class ExceptionSubscriber implements SubscriberInterface
     public function notFoundException($message = "Ce que vous cherchez n'est pas ici <a href='/'>Retour</a>"): void
     {
         if ($_SERVER["APP_ENV"] == "dev") {
-            $this->view = (new RenderView())->render("Errors/404", ["message" => $message]);
+            throw new NotFoundAbsctractException($message, 404);
         } else {
             header("{$_SERVER["SERVER_PROTOCOL"]} 404 not found" . $message);
         }
-        die;
     }
 
-    public function __destruct()
-    {
-        if ($this->view) {
-            $this->view->compile();
-        }
-
+    public function forbiddenException(string $message = "Vous devez vous connecter"){
+        throw new ForbiddenException($message, 403);
     }
+
+    public function notAuthorizedException(string $message = "Vous n'êtes pas autoriser à être ici"){
+        throw new ForbiddenException($message, 401);
+    }
+
+    public function methodNotAllowedException(string $message = "Méthod non autoriser"){
+        throw new ForbiddenException($message, 405);
+    }
+
 }

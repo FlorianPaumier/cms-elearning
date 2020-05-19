@@ -157,11 +157,13 @@ class RenderView
 
     public function renderErrors(string $view,\Exception $exception)
     {
-        echo $this->render($view, [
-            "message" => $exception->getMessage(),
-            "line" => $exception->getLine(),
-            "trace" => $exception->getTrace(),
-            "code" => $exception->getCode(),
-        ])->compile();
+        if($_SERVER["APP_ENV"] == "dev"){
+            echo $this->render($view, [
+                "message" => $exception->getMessage(),
+                "line" => $exception->getLine(),
+                "trace" => $exception->getTrace(),
+                "code" => $exception->getCode(),
+            ])->compile();
+        }
     }
 }

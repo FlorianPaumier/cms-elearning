@@ -38,14 +38,9 @@ class ExceptionSubscriber implements SubscriberInterface
      * @param  $message
      * @return false|string
      */
-    public function serverErrorException($message = "Une erreur est survenue."): void
+    public function serverErrorException(string $message = "Une erreur est survenue.", int $code = 500): void
     {
-        if ($_SERVER["APP_ENV"] == "dev") {
-            throw new NotFoundAbsctractException($message, 500);
-        } else {
-            header("{$_SERVER["SERVER_PROTOCOL"]} 500 server error" . $message);
-        }
-        die;
+        $this->throwException(ServerErrorException::class, $message, $code);
     }
 
     /**
@@ -54,25 +49,33 @@ class ExceptionSubscriber implements SubscriberInterface
      * @param  $message
      * @return false|string
      */
-    public function notFoundException($message = "Ce que vous cherchez n'est pas ici <a href='/'>Retour</a>"): void
+    public function notFoundException(string $message = "Ce que vous cherchez n'est pas ici <a href='/'>Retour</a>", int $code = 404): void
     {
-        if ($_SERVER["APP_ENV"] == "dev") {
-            throw new NotFoundAbsctractException($message, 404);
-        } else {
-            header("{$_SERVER["SERVER_PROTOCOL"]} 404 not found" . $message);
+        $this->throwException(NotFoundAbsctractException::class, $message, $code);
+    }
+
+    public function notAuthorizedException(string $message = "Vous n'êtes pas autoriser à être ici", int $code = 401){
+        $this->throwException(ForbiddenException::class, $message, $code);
+    }
+
+    public function forbiddenException(string $message = "Vous devez vous connecter", int $code = 403){
+        $this->throwException(ForbiddenException::class, $message, $code);
+    }
+
+    public function methodNotAllowedException(string $message = "Méthod non autoriser", int $code = 405){
+        $this->throwException(MethodNotAllowedAbsctractException::class, $message, $code);
+    }
+
+    private function throwException(string $exception, string $message, int $code){
+        if($_SERVER["APP_ENV"] === "dev"){
+            try{
+                throw new $exception($message, $code);
+            }catch (AbsctractException $e){
+                (new RenderView())->renderErrors("errors/errors",$e);
+            }
         }
-    }
 
-    public function forbiddenException(string $message = "Vous devez vous connecter"){
-        throw new ForbiddenException($message, 403);
+        http_response_code($code);
+        throw new $exception($message, $code);
     }
-
-    public function notAuthorizedException(string $message = "Vous n'êtes pas autoriser à être ici"){
-        throw new ForbiddenException($message, 401);
-    }
-
-    public function methodNotAllowedException(string $message = "Méthod non autoriser"){
-        throw new ForbiddenException($message, 405);
-    }
-
 }

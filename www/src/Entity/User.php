@@ -23,9 +23,10 @@ class User
     /**
      * @param mixed $username
      */
-    public function setUsername($username): void
+    public function setUsername($username): User
     {
         $this->username = $username;
+        return $this;
     }
 
     /**
@@ -39,9 +40,10 @@ class User
     /**
      * @param mixed $password
      */
-    public function setPassword($password): void
+    public function setPassword($password): User
     {
         $this->password = $password;
+        return $this;
     }
 
     public function getEmail()

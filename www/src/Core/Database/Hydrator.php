@@ -60,7 +60,6 @@ abstract class Hydrator
                     $value = $serializer->deserialize($value, "json");
                 }
 
-
                 $instance->$method($value);
             }
             $i++;

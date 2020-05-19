@@ -64,7 +64,6 @@ class ConfigHandler
 
         self::bind("request", Request::createFromGlobals());
 //        self::bind("session", new PHPSession());
-        self::bind("exception", new ExceptionHandler());
         self::bind("repository", new Table());
         self::bind("entityManager", new QueryBuilder());
         self::bind("userManager", new UserManager());

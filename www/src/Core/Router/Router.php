@@ -69,7 +69,7 @@ class Router
         if (!isset($this->matchRoute["method"]) || in_array($this->request->getMethod(), $this->matchRoute["method"])) {
             $match = true;
         } else {
-            ConfigHandler::get("eventEmmiter")->emit("error.405", "La méthode ".$this->request->getMethod()." n'est oas autoriser pour cette route");
+            ConfigHandler::get("eventEmmiter")->emit("error.405", "La méthode ".$this->request->getMethod()." n'est pas autorisée pour cette route");
         }
 
         if (!$match) {

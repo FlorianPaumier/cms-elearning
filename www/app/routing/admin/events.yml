@@ -1,0 +1,19 @@
+admin_events_list:
+  controller: App\Controllers\Admin\Event:list
+  path: "/admin/events"
+  method: [GET]
+
+admin_events_new:
+  controller: App\Controllers\Admin\Event:new
+  path: "/admin/events/new"
+  method: [GET, POST]
+
+admin_events_edit:
+  controller: App\Controllers\Admin\Event:edit
+  path: "/admin/events/edit/{id<\\d+>}"
+  method: [GET, POST]
+
+admin_events_delete:
+  controller: App\Controllers\Admin\Event:delete
+  path: "/admin/events/delete/{id<\\d+>}"
+  method: [GET, POST]

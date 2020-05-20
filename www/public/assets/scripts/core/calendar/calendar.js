@@ -7,6 +7,12 @@ class Calendar {
         this.month = moment();
     }
 
+    getConstant() {
+        this.dayOfMonth = {};
+        this.dayOfWeek = this.getDayOfWeek();
+        this.calendarDays = this.createElement("tbody", "", {});
+    }
+
     createEvent() {
 
     }
@@ -15,7 +21,7 @@ class Calendar {
         if (e.target.classList.contains("event")) {
             return;
         }
-        
+
         e.target.classList.add("select-day")
     }
 
@@ -29,34 +35,49 @@ class Calendar {
     }
 
 
+    setDayOfMonth(nbDay) {
+        for (let i = 1; i <= nbDay; i++) {
+            let day = moment(this.month).date(i).format("dddd")
+            this.dayOfMonth[i] = this.dayOfWeek[day]
+        }
+    }
+
+    /**
+     * Set Day in week
+     * @returns {{}}
+     */
     getStructureWeek = () => {
-        let week = {};
+        let weeks = {};
         let nbWeeks = 1;
-        week[nbWeeks] = {};
+        weeks[nbWeeks] = {};
+
         for (let i = 1; i <= Object.keys(this.dayOfMonth).length; i++) {
+
             if (this.dayOfMonth[i] % 7 === 1) {
                 nbWeeks++;
-                week[nbWeeks] = {};
+                weeks[nbWeeks] = {};
             }
 
             let dateFormat = moment().date(i).month(this.month.format("MM") - 1).year(this.month.format("Y")).format("DD-MM-Y");
+
             let day = this.createElement("td", i, {"class": "day", "data-date": dateFormat})
+
             day.addEventListener("click", (e) => {
                 this.selectDay(e)
             })
-            week[nbWeeks][this.dayOfMonth[i]] = day
+
+            weeks[nbWeeks][this.dayOfMonth[i]] = day
         }
 
-        return week
+        return weeks
     }
 
     navigate(goTo) {
-        console.log(goTo)
         if (goTo === "prev") {
             this.month = this.month.subtract(1, "months")
-        }else if (goTo === "next") {
+        } else if (goTo === "next") {
             this.month = this.month.add(1, "months")
-        }else {
+        } else {
             this.month = moment(goTo)
         }
         this.getConstant()
@@ -76,27 +97,37 @@ class Calendar {
     }
 
     render() {
-        this.target.innerHTML = "";
+
+        if ($(this.target).find("tbody")) {
+            $(this.target).find("tbody").html(this.calendarDays)
+        }
+
         let lastDay = moment(this.month).endOf("month").format("DD-MM-YYYY");
         let firstDay = moment(this.month).startOf("month").format("DD-MM-YYYY");
         let nbDay = lastDay.split("-").shift()
 
         this.setDayOfMonth(nbDay);
+
         let structure = this.getStructureWeek()
 
         this.renderWeek(structure)
+
         let table = this.createElement("table", "");
 
         table.append(this.renderHeader(), this.calendarDays)
+
         this.target.html(table)
     }
 
     renderWeek(structure) {
         let headerDays = this.createElement("tr", "", {"class": "row"});
+
         for (const dayOfWeekKey in this.dayOfWeek) {
             headerDays.append(this.createElement("td", dayOfWeekKey, {"class": "header-day"}))
         }
+
         this.calendarDays.append(headerDays)
+
         for (const week in structure) {
             let row = this.createElement("tr", "", {"class": "row"});
 
@@ -110,30 +141,40 @@ class Calendar {
                     })
                 }
 
-                if(structure[week][day].getAttribute("data-date") == moment().format("DD-MM-Y")){
+                if (structure[week][day].getAttribute("data-date") == moment().format("DD-MM-Y")) {
                     structure[week][day].classList.add("today")
                 }
+
                 structure[week][day].append(event)
+
                 row.append(structure[week][day])
             }
 
-            for (let i = 1; i <= 7 - Object.keys(structure[week]).length; i++) {
-                if(Object.keys(structure[week]).length > 0){
+            for (let index = 0; index < 7 - Object.keys(structure[week]).length; index++) {
+                if (Object.keys(structure[week]).length > 0) {
+                    if (week == 1) {
+                        let day = this.createElement("td", "", {"class": "day is-disable"})
+                        row.prepend(day)
+                    }
 
-                if (week == 1) {
-                    let day = this.createElement("td", "", {"class": "day is-disable"})
-                    row.prepend(day)
-                }
+                    if (week == Object.keys(structure).length){
+                        let day = this.createElement("td", "", {"class": "day is-disable"})
+                        row.append(day)
+                    }
                 }
             }
 
-            this.calendarDays.append(row)
+            if(row.childNodes.length > 0){
+                this.calendarDays.append(row)
+            }
         }
     }
 
     createElement(type, content, attributes) {
         let element = document.createElement(type)
-        element.append(content)
+        if(content !== ""){
+            element.append(content)
+        }
         for (const attributeKey in attributes) {
             element.setAttribute(attributeKey, attributes[attributeKey])
         }
@@ -148,9 +189,10 @@ class Calendar {
 
         let center = this.createElement("th", this.createElement("input", "", {
             "type": "date",
-            "value" : moment(this.month).format("Y-MM-DD"),
+            "value": moment(this.month).format("Y-MM-DD"),
             "class": "datetime-picker"
         }), {"col-span": 5})
+
         center.addEventListener("change", (e) => {
             this.navigate(e.target.value)
         })
@@ -159,9 +201,11 @@ class Calendar {
         right.addEventListener("click", (e) => {
             this.navigate("next")
         })
+
         let headerRow = this.createElement("tr", "", {"class": "calendar-header"})
         let header = this.createElement("thead", "", {"class": "calendar-header"})
-        headerRow.append(left, center, right)
+
+        header.append(left, center, right)
         header.append(headerRow)
 
         return header
@@ -169,18 +213,5 @@ class Calendar {
 
     selectEvent(target) {
         console.log(target)
-    }
-
-    getConstant() {
-        this.dayOfMonth = {};
-        this.dayOfWeek = this.getDayOfWeek();
-        this.calendarDays = this.createElement("tbody", "", {});
-    }
-
-    setDayOfMonth(nbDay) {
-        for (let i = 1; i <= nbDay; i++) {
-            let day = moment(this.month).date(i).format("dddd")
-            this.dayOfMonth[i] = this.dayOfWeek[day]
-        }
     }
 }

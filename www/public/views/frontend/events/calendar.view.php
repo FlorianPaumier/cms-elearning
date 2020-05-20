@@ -18,6 +18,10 @@
         justify-content: end;
     }
 
+    .header-day {
+        min-width: 5vw;
+        text-align: center;
+    }
     .day {
         width: 5vw;
         height: 5vh;

@@ -4,17 +4,18 @@ use App\Core\Kernel\Kernel;
 
 define("ROOT_PATH", dirname(__DIR__));
 
-require ROOT_PATH.'/src/Core/Helpers/autoloader.php';
-require ROOT_PATH . "/vendor/autoload.php";
+require ROOT_PATH . '/src/Core/Helpers/autoloader.php';
 
 //Define ENV TYPE
 #Todo : Use config var
-$env="dev";
+$env="prod";
+ini_set('display_errors', true);
+$debug = false;
 
 if($env == "dev"){
     $debug=true;
     //Display All Php errors
-    ini_set("display_errors", 1);
+    ini_set('display_errors', true);
 }
 
 //Create new Environment

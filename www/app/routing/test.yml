@@ -27,6 +27,6 @@ test_to_ini:
     controller: App\Controllers\Test:toIni
     method: [GET]
 test_complex:
-    path: '/test/{id<\d+>}'
+    path: '/test/{id<\\d+>}'
     controller: App\Controllers\Test:complexRouting
     method: [GET]

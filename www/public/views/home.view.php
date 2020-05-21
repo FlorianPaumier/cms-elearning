@@ -1,5 +1,6 @@
 @extend(templates/front)
 
+
 @section(body)
 
 <section id="main-section">
@@ -75,7 +76,7 @@
                 </p>
                 <a href="#" class="know-more">Voir la suite</a>
             </article>
-        <?php endfor; ?>
+            <?php endfor;?>
     </section>
 </section>
 

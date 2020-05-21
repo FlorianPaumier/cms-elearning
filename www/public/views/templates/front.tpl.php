@@ -36,6 +36,7 @@
 
     <!-- Custom styles for this template-->
     <link href="assets/styles/frontend/main.css" rel="stylesheet">
+    <link href="assets/styles/globals/collapsible.css" rel="stylesheet">
     @section(style)
 </head>
 
@@ -51,6 +52,7 @@
 @include(partials/footer)
 
 <script src="/assets/scripts/header.js"></script>
+<script src="/assets/scripts/collapsible.js"></script>
 @section(javascript)
 </body>
 </html>

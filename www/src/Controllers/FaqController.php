@@ -19,12 +19,4 @@ class FaqController extends BaseController
             'title' => 'Liste des Question / Réponse'
         ]);
     }
-
-    public function show(Faq $faq)
-    {
-        return $this->renderer->render("faq/show", [
-            'question' => $faq,
-            'title' => 'Affichage d\'une question'
-        ]);
-    }
 }

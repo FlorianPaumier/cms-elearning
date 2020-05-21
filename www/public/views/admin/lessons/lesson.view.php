@@ -1,5 +1,8 @@
 @extend(templates/back)
 
+@section(styles)
+<link rel="stylesheet" href="/assets/styles/admin/form.css">
+@endsection
 
 @section(body)
 <section>

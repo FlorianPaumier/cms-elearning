@@ -4,14 +4,18 @@
 namespace App\Controllers\Frontend;
 
 
+use App\Core\Formatter\Serializer;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
+use App\Entity\Event;
 
 class EventController extends BaseController
 {
 
-    public function index(Request $request)
+    public function index(Request $request, Serializer $serializer)
     {
-        return $this->render("frontend/events/calendar");
+        $events = $this->repository->setEntity(Event::class)->findAll();
+
+        return $this->render("frontend/events/calendar", ["events" => $serializer->serialize($events, 'json')]);
     }
 }

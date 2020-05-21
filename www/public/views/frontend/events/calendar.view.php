@@ -2,48 +2,15 @@
 
 @section(style)
 
-<style>
-    #container-calendar{
-        width: 90vw;
-        margin: auto;
-    }
-    .calendar-header {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-    .row{
-        display: flex;
-        flex-direction: row;
-        justify-content: end;
-    }
-
-    .header-day {
-        min-width: 5vw;
-        text-align: center;
-    }
-    .day {
-        width: 5vw;
-        height: 5vh;
-        border: 1px solid black;
-        z-index: 0;
-    }
-
-    .event {
-        z-index: 3;
-        background-color: red;
-    }
-
-    .today {
-        background-color: rgba(0,0,100, 0.5);
-    }
-</style>
+<link rel="stylesheet" href="/assets/styles/frontend/events.css">
 
 @endsection
 
 @section(body)
 
     <section id="container-calendar"></section>
+
+    @include(partials/modal)
 @endsection
 
 @section(javascript)
@@ -52,7 +19,7 @@
 
 <script>
     $(document).ready(function() {
-        let calendar = new Calendar("#container-calendar");
+        let calendar = new Calendar("#container-calendar",{{events}})
         calendar.render();
     })
 </script>

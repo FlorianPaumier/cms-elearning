@@ -221,6 +221,7 @@ class Router
         if (isset($pregParameters[2][0]) && isset($pregParameters[1][0])) {
             $reg = $pregParameters[2][0];
             $reg = preg_replace('#\\\\#', "", $reg, 1);
+            dump(gettype($params));
             if (preg_match("/${reg}/", $params)) {
                 return [$pregParameters[1][0] => $params];
             } else {

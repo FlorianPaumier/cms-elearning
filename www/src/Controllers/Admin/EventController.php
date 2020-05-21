@@ -37,7 +37,18 @@ class EventController extends BaseController
 
     public function edit(Request $request, Event $event)
     {
+        $form = $this->createForm(EventForm::class, $event);
+        $form->handleRequest($request);
 
+        if($request->getMethod() == "POST" && $form->isValid()){
+            $event->setSlug(StringTransformer::slugify($event->getTitle()));
+            $this->repository->persist($event);
+            $this->repository->flush();
+
+            $this->redirect->redirectToRoute("admin_events_list");
+        }
+
+        return $this->render("admin/events/form", ["form" => $form->createView()]);
     }
 
     public function delete(Event $event)

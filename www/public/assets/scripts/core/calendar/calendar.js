@@ -1,8 +1,13 @@
 class Calendar {
 
+
     constructor(target, events) {
         this.getConstant()
-        this.eventsArray = {'8': "event"}
+        this.dateFormat = "Y-MM-DD"
+        this.eventsArray = {}
+        if (events !== undefined) {
+            this.createEvent(events);
+        }
         this.target = $(target)
         this.month = moment();
     }
@@ -13,8 +18,27 @@ class Calendar {
         this.calendarDays = this.createElement("tbody", "", {});
     }
 
-    createEvent() {
+    createEvent(events) {
 
+        for (const arrayKey in events) {
+            if (this.eventsArray[events[arrayKey].happen_at] == undefined)
+                this.eventsArray[events[arrayKey].happen_at] = [];
+
+            this.eventsArray[events[arrayKey].happen_at].push({
+                "date": events[arrayKey].happen_at,
+                "id": events[arrayKey].id,
+                "content": events[arrayKey].content,
+                "title": events[arrayKey].title,
+                "event": this.createElement(
+                    "div",
+                    events[arrayKey].title,
+                    {
+                        "class": "event",
+                        "data-date": events[arrayKey].happen_at,
+                        "data-id": events[arrayKey].id
+                    })
+            })
+        }
     }
 
     selectDay(e) {
@@ -33,7 +57,6 @@ class Calendar {
 
         return days;
     }
-
 
     setDayOfMonth(nbDay) {
         for (let i = 1; i <= nbDay; i++) {
@@ -58,9 +81,9 @@ class Calendar {
                 weeks[nbWeeks] = {};
             }
 
-            let dateFormat = moment().date(i).month(this.month.format("MM") - 1).year(this.month.format("Y")).format("DD-MM-Y");
+            let date = moment().date(i).month(this.month.format("MM") - 1).year(this.month.format("Y")).format(this.dateFormat);
 
-            let day = this.createElement("td", i, {"class": "day", "data-date": dateFormat})
+            let day = this.createElement("td", i, {"class": "day", "data-date": date})
 
             day.addEventListener("click", (e) => {
                 this.selectDay(e)
@@ -85,7 +108,7 @@ class Calendar {
     }
 
     currentDay() {
-        return moment.format("d-m-Y");
+        return moment.format(this.dateFormat);
     }
 
     currentMonth() {
@@ -102,9 +125,9 @@ class Calendar {
             $(this.target).find("tbody").html(this.calendarDays)
         }
 
-        let lastDay = moment(this.month).endOf("month").format("DD-MM-YYYY");
-        let firstDay = moment(this.month).startOf("month").format("DD-MM-YYYY");
-        let nbDay = lastDay.split("-").shift()
+        let lastDay = moment(this.month).endOf("month").format(this.dateFormat);
+        let firstDay = moment(this.month).startOf("month").format(this.dateFormat);
+        let nbDay = lastDay.split("-").pop()
 
         this.setDayOfMonth(nbDay);
 
@@ -134,14 +157,9 @@ class Calendar {
             for (const day in structure[week]) {
                 let event = ""
 
-                if (this.eventsArray[structure[week][day].innerHTML] != undefined) {
-                    event = this.createElement("div", "Event", {"class": "event"})
-                    event.addEventListener("click", (e) => {
-                        this.selectEvent(e)
-                    })
-                }
+                this.addEvent(structure[week][day])
 
-                if (structure[week][day].getAttribute("data-date") == moment().format("DD-MM-Y")) {
+                if (structure[week][day].getAttribute("data-date") == moment().format("Y-MM-DD")) {
                     structure[week][day].classList.add("today")
                 }
 
@@ -157,14 +175,14 @@ class Calendar {
                         row.prepend(day)
                     }
 
-                    if (week == Object.keys(structure).length){
+                    if (week == Object.keys(structure).length) {
                         let day = this.createElement("td", "", {"class": "day is-disable"})
                         row.append(day)
                     }
                 }
             }
 
-            if(row.childNodes.length > 0){
+            if (row.childNodes.length > 0) {
                 this.calendarDays.append(row)
             }
         }
@@ -172,7 +190,7 @@ class Calendar {
 
     createElement(type, content, attributes) {
         let element = document.createElement(type)
-        if(content !== ""){
+        if (content !== "") {
             element.append(content)
         }
         for (const attributeKey in attributes) {
@@ -182,7 +200,7 @@ class Calendar {
     }
 
     renderHeader() {
-        let left = this.createElement("th", this.createElement("button", "Prev"), {"col-span": 1})
+        let left = this.createElement("th", this.createElement("button", "Prev"), {"colspan": 1})
         left.addEventListener("click", (e) => {
             this.navigate("prev")
         })
@@ -191,13 +209,13 @@ class Calendar {
             "type": "date",
             "value": moment(this.month).format("Y-MM-DD"),
             "class": "datetime-picker"
-        }), {"col-span": 5})
+        }), {"colspan": 5})
 
         center.addEventListener("change", (e) => {
             this.navigate(e.target.value)
         })
 
-        let right = this.createElement("th", this.createElement("button", "Next"), {"col-span": 1})
+        let right = this.createElement("th", this.createElement("button", "Next"), {"colspan": 1})
         right.addEventListener("click", (e) => {
             this.navigate("next")
         })
@@ -212,6 +230,37 @@ class Calendar {
     }
 
     selectEvent(target) {
-        console.log(target)
+        let event;
+
+        for (const eventsKey in this.eventsArray[target.getAttribute("data-date")]) {
+            if(target.getAttribute("data-id") == this.eventsArray[target.getAttribute("data-date")][eventsKey].id){
+                event = this.eventsArray[target.getAttribute("data-date")][eventsKey];
+            }
+        }
+
+        const modal = document.getElementById("eventModal");
+
+        let title = modal.querySelector(".modal-title");
+        let body = modal.querySelector(".modal-body");
+        title.innerHTML = event.title;
+        body.innerHTML = event.content;
+
+        modal.classList.remove("hide")
+    }
+
+    addEvent(day) {
+
+        let events = this.eventsArray[day.getAttribute("data-date")];
+
+        if (events != undefined) {
+            for (const eventsKey in events) {
+                day.append(events[eventsKey].event);
+                events[eventsKey].event.addEventListener("click", (e) => {
+                    this.selectEvent(e.target)
+                })
+            }
+        }
+
+        return day;
     }
 }

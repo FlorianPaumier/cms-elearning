@@ -1,0 +1,173 @@
+<?php
+
+namespace App\Controllers\Admin;
+
+use App\Core\Database\Migration;
+use App\Core\Interfaces\BaseController;
+use App\Entity\PatchList;
+use phpDocumentor\Reflection\Types\This;
+
+class MigrationController extends BaseController
+{
+
+    /*
+     * Ce controller va récupérer les tables, distribuer les datas et effectuer la création des datas
+     */
+    private const MIGRATION_PATH = "../app/migration";
+
+    public $migration;
+
+    public $patchList;
+
+    public $tables = [];
+
+    public $tableName = "";
+
+    public $columnName = "";
+
+    public $files = [];
+
+    public $datas = [];
+
+    public $foreignKey = "";
+
+    public $options = [];
+
+    public $type = "";
+
+    public $method = "create";
+
+    public $content = "";
+
+    public function index()
+    {
+        $this->migration = new Migration();
+        $this->patchList = new PatchList();
+
+        $this->repository->getClass(PatchList::class);
+
+        $this->setFiles();
+        $this->processMigration();
+
+        return $this->renderer->render(
+            "admin/migration/migration"
+        );
+    }
+
+    public function setFiles(): self
+    {
+        $this->files = preg_grep('/^([^.])/', scandir(self::MIGRATION_PATH));
+
+        return $this;
+    }
+
+    public function setData($file): self
+    {
+        $this->datas = yaml_parse_file(self::MIGRATION_PATH.'/'.$file);
+
+        return $this;
+    }
+
+    public function setTableName($table): self
+    {
+        $this->tableName = preg_replace('/\..*/', '', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $table)));
+
+        return $this;
+    }
+
+    public function setMethod($method): self
+    {
+        if(!empty($method)){
+            $this->method = $method;
+        } else {
+            //todo ajouter un message d'erreur avec le nom de la table et l'erreur d'action absent
+            die('nok');
+        }
+
+        return $this;
+    }
+
+    public function setType($type): string
+    {
+        if(!empty($type)){
+            return $type . ' ';
+        } else {
+            //todo ajouter un message d'erreur avec le nom de la table et l'erreur type absent
+            die('nok');
+        }
+    }
+
+    public function setOptions($options): string
+    {
+        if(!empty($options)){
+            return implode(' ',$options) . ' ';
+        } else {
+            return '';
+        }
+    }
+
+    public function setColumnName($columnName): string
+    {
+        if(!empty($columnName)){
+            return $columnName . ' ';
+        } else {
+            //todo ajouter un message d'erreur avec le nom de la table et l'erreur de nom absent
+            die('nok');
+        }
+    }
+    public function setForeignKey($foreignKey): string
+    {
+        if(!empty($foreignKey)){
+            return 'REFERENCES '.$foreignKey['table'].' ('.$foreignKey['column'].')';
+        } else {
+            return '';
+        }
+    }
+
+    public function setDefaultValue($value): string
+    {
+        if(!empty($value)){
+            return 'DEFAULT '. $value . ' ';
+        }else{
+            return '';
+        }
+
+    }
+
+    public function setContent(): self
+    {
+        foreach ($this->datas as $data) {
+            $this->setMethod($data['action']);
+            foreach ($data['column'] as $column){
+                $this->content .= $this->setColumnName($column['name']);
+                $this->content .= $this->setType($column['type']);
+                $this->content .= $this->setOptions($column['options']);
+                $this->content .= $this->setDefaultValue($column['default']);
+                $this->content .= $this->setForeignKey($column['foreign_key']);
+                $this->content .= ', ';
+
+            }
+        }
+
+        $this->content = ltrim(substr($this->content, 0, -3));
+
+        return $this;
+    }
+
+    public function processMigration(): self
+    {
+        foreach ($this->files as $file) {
+            $this->setTableName($file);
+            $this->setData($file);
+            $this->setContent();
+
+            $this->migration->setTableName($this->tableName);
+            $this->migration->setContent($this->content);
+            $this->migration->apply($this->method);
+
+            $this->content = "";
+        }
+
+        return $this;
+    }
+}

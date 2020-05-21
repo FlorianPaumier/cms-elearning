@@ -10,10 +10,10 @@ admin_events_new:
 
 admin_events_edit:
   controller: App\Controllers\Admin\Event:edit
-  path: "/admin/events/edit/{event}"
+  path: "/admin/events/edit/{id}"
   method: [GET, POST]
 
 admin_events_delete:
   controller: App\Controllers\Admin\Event:delete
-  path: "/admin/events/delete/{event}"
+  path: "/admin/events/delete/{id}"
   method: [GET, POST]

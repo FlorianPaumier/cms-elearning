@@ -8,7 +8,7 @@ require ROOT_PATH . '/src/Core/Helpers/autoloader.php';
 
 //Define ENV TYPE
 #Todo : Use config var
-$env="prod";
+$env="dev";
 ini_set('display_errors', true);
 $debug = false;
 

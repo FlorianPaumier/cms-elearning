@@ -21,6 +21,7 @@ class ParseView
         foreach ($data["parameter"] as $key => $value) {
             foreach ($fieldEntries as $tag) {
                 if ($tag[1] == $key) {
+                    if($value instanceof \DateTime) $value = $value->format("Y-m-d");
                     $content = preg_replace("/{{\s?($key)\s?}}/m", $value, $content);
                 }
             }

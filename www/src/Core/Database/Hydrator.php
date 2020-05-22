@@ -23,6 +23,8 @@ abstract class Hydrator
      */
     public static function hydrate($array, $object)
     {
+        if(empty($array)) return $array;
+
         if (is_string($object)) {
             $instance = new $object();
         } else {
@@ -60,6 +62,7 @@ abstract class Hydrator
                     $value = $serializer->deserialize($value, "json");
                 }
 
+                if(!is_null($type) && $type->getName() == "DateTime") $value = new \DateTime($value);
 
                 $instance->$method($value);
             }
@@ -96,7 +99,7 @@ abstract class Hydrator
 
             if (!is_null($value)) {
                 if ($value instanceof \DateTime) {
-                    $value = $value->format("d-m-Y h:i:s");
+                    $value = $value->format("Y-m-d");
                 }
 
                 if (gettype($value) == "object") {

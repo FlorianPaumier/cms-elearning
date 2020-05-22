@@ -40,6 +40,7 @@ class DependencyInjection
                             array_splice($parameters, $parameter->getPosition(), 0, [$args[$name]]);
                             continue;
                         }
+
                         $className = $parameter->getClass()->getName();
                         $class = new $className();
 
@@ -47,7 +48,7 @@ class DependencyInjection
                             /** @var Table $repo */
                             $repo = ConfigHandler::get("repository");
                             $repo->getClass($className);
-                            $class = $repo->setEntity($className)->findBy($args)[0];
+                            $class = $repo->setEntity($className)->findBy($args);
                         }
                         array_splice($parameters, $parameter->getPosition(), 0, [$name => $class]);
                     } catch (\Exception $e) {

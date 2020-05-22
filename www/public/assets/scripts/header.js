@@ -8,7 +8,5 @@ $(document).ready(function () {
             $(".header-mobile")[0].classList.remove("is-open")
             $("main")[0].classList.remove("d-none")
         }
-
     });
-
 });

@@ -1,5 +1,5 @@
 <?php
-namespace App\Core\Interfaces;
+namespace App\Core\Helpers;
 
 interface CommandInterface
 {

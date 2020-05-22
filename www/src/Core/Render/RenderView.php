@@ -3,6 +3,7 @@
 namespace App\Core\Render;
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\Exceptions\AbsctractException;
 use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Kernel\Kernel;
 use App\Core\Session\PHPSession;
@@ -70,10 +71,10 @@ class RenderView
      */
     public static function include(string $template, array $args = [])
     {
-        $defaultData = [
-            "session" => ConfigHandler::get("session")->offsetGet("app.user") ? ["connected" => true, "roles" => null] : ["connected" => false, "roles" => null],
-            "flash" => ConfigHandler::get("session")->get("app.flash") ?? "",
-        ];
+        $defaultData = [];
+//            "session" => ConfigHandler::get("session")->offsetGet("app.user") ? ["connected" => true, "roles" => null] : ["connected" => false, "roles" => null],
+//            "flash" => ConfigHandler::get("session")->get("app.flash") ?? "",
+//        ];
 
         $includeEngine = new TemplateEngine();
 
@@ -152,5 +153,17 @@ class RenderView
      */
     public function compile(){
         return $this->templateEngine->compile();
+    }
+
+    public function renderErrors(string $view,\Exception $exception)
+    {
+        if($_SERVER["APP_ENV"] == "dev"){
+            echo $this->render($view, [
+                "message" => $exception->getMessage(),
+                "line" => $exception->getLine(),
+                "trace" => $exception->getTrace(),
+                "code" => $exception->getCode(),
+            ])->compile();
+        }
     }
 }

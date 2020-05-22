@@ -47,6 +47,7 @@ class Router
          * / | /url
          */
         $this->formatUrl();
+        $match = false;
 
         foreach ($this->routes as $route) {
             if ($this->hadParams($route["path"])) {
@@ -61,14 +62,18 @@ class Router
             }
         }
 
+        if (is_null($this->matchRoute)) {
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "La route n'exsite pas");
+        }
+
         if (!isset($this->matchRoute["method"]) || in_array($this->request->getMethod(), $this->matchRoute["method"])) {
             $match = true;
         } else {
-            throw new \Exception("Method not allowed", 405);
+            ConfigHandler::get("eventEmmiter")->emit("error.405", "La méthode ".$this->request->getMethod()." n'est pas autorisée pour cette route");
         }
 
         if (!$match) {
-            throw new \Exception("Page Not Found", 404);
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "La route $route n'exsite pas");
         }
 
         return $match;
@@ -207,20 +212,23 @@ class Router
         /**
          * Regex to extract the parameters name and is type
          */
-        preg_match_all('/{(\w+)<{1}(.*?)>{1}\??}/m', $str, $pregParameters);
+        preg_match_all('/{(\w+)(<{1}(.*?)>{1}\?)?}/m', $str, $pregParameters);
 
         // Retrieve the entire match result
         $params = $this->getParameters($str);
 
         // Test if the parameters had regex rule and test it
-        if (isset($pregParameters[2][0]) && isset($pregParameters[1][0])) {
+        if ((isset($pregParameters[2][0]) && !empty($pregParameters[2][0])) && isset($pregParameters[1][0])) {
             $reg = $pregParameters[2][0];
             $reg = preg_replace('#\\\\#', "", $reg, 1);
+
             if (preg_match("/${reg}/", $params)) {
                 return [$pregParameters[1][0] => $params];
             } else {
-                throw new \Exception("Parameter is not in the correct type");
+                ConfigHandler::get("eventEmmiter")->emit("error.500", "La paramètre $params ne correspond pas au type demandé");
             }
+        }else if (isset($pregParameters[1][0])){
+            return [$pregParameters[1][0] => $params];
         }
 
         return [];

@@ -5,16 +5,17 @@ $tables = preg_grep('/^([^.])/', scandir($migrationPath));
 
 foreach ($tables as $table){
     $versions = yaml_parse_file($migrationPath."/".$table);
+    $table = preg_replace('\..*/', '', strtolower($table));
     foreach ($versions as $key => $version) {
-        if($key == "version_1" ) {
+        if($key == "2" ) {
             switch($version['action']) {
                 case 'create':
                     createTable($table,$version['column']);
                     break;
-                case 'update':
-                    //$this->updateTable($table,$version['column']);
+                case 'add-col':
+                    addTableColumn($table,$version['column']);
                     break;
-                case 'drop':
+                case 'mod-col':
                     //$this->dropTable();
                     break;
                 default:
@@ -26,21 +27,32 @@ foreach ($tables as $table){
 }
 
 
-function createTable($name,$columns)
+function createTable($table,$columns)
 {
-    $table = preg_replace('/\..*/','',strtolower($name));
-
     $content = tableConfigurable($columns);
 
     echo "create table ".$table."{".$content."}";
 }
 
-function updateTable($column)
+function addTableColumn($table,$columns)
 {
+    $content = tableConfigurableAddColumn($columns);
+    var_dump($content);
+    echo "ALTER TABLE " . $table . " ADD COLUMN " .$content. ";";
+}
+
+function alterTableColumn($table,$columns) {
+
 
 }
 
-function dropTable(){
+function dropTableColumn($table,$columns) {
+
+
+}
+
+function dropTable($name){
+    $sql = 'DROP TABLE '.$name;
 
 }
 
@@ -52,12 +64,46 @@ function tableConfigurable($columns){
             if($key == "options"){
                 $options = implode(" ",$value);
             }
+
+            if($key == "foreign_key") {
+                $foreignKey = ' REFERENCES ' . $value['table'] . '(' . $value['column'] . ')';
+            } else {
+                $foreignKey = '';
+            }
+
         }
-        $sentence = $column['name'].' '.$column['type'].' '.$options;
+        $sentence = $column['name'].' '.$column['type'].' '.$options.''.$foreignKey;
         $options = '';
         $content = $content.' '.$sentence.', ';
         $sentence = '';
     }
+
+    $content = ltrim(substr($content, 0, -2));
+    return $content;
+}
+
+function tableConfigurableAddColumn($columns){
+    $sentence = '';
+    $content = '';
+    foreach ($columns as $column){
+        foreach ($column as $key => $value){
+            if($key == "options"){
+                $options = implode(" ",$value);
+            }
+
+            if($key == "foreign_key") {
+                $foreignKey = ' REFERENCES ' . $value['table'] . '(' . $value['column'] . ')';
+            } else {
+                $foreignKey = '';
+            }
+
+        }
+        $sentence = $column['name'].' '.$column['type'].' '.$options.''.$foreignKey;
+        $options = '';
+        $content = $content.' '.$sentence.', ';
+        $sentence = '';
+    }
+
     $content = ltrim(substr($content, 0, -2));
     return $content;
 }

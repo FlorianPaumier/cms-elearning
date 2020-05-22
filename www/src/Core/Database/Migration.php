@@ -31,20 +31,32 @@ class Migration extends Table
 
     }
 
+    public function drop(): self
+    {
+        $this->sql = $this->method." ".$this->tableName.";";
+    }
+
+    public function alter(): self
+    {
+        $this->sql = $this->method." ".$this->tableName;
+    }
+
     public function apply($method)
     {
         switch($method){
             case 'create':
                 $this->createTable();
                 $this->create();
-                var_dump($this->pdo->exec($this->sql));
-                var_dump($this->sql);
+                $this->pdo->exec($this->sql);
                 break;
             case 'alter':
                 $this->alterTable();
+                $this->alter();
+                $this->pdo->exec($this->sql);
                 break;
             case 'drop':
                 $this->dropTable();
+                $this->drop();
                 break;
             default:
                 die('missing method in yml');
@@ -78,7 +90,8 @@ class Migration extends Table
 
     public function dropTable(): self
     {
-        $this->method = "DROP TABLE";
+        // see to add cascade
+        $this->method = "DROP TABLE IF EXISTS";
         return $this;
     }
 

@@ -5,52 +5,42 @@ namespace App\Controllers\Admin;
 use App\Core\Database\Migration;
 use App\Core\Interfaces\BaseController;
 use App\Entity\PatchList;
-use phpDocumentor\Reflection\Types\This;
 
 class MigrationController extends BaseController
 {
-
-    /*
-     * Ce controller va récupérer les tables, distribuer les datas et effectuer la création des datas
-     */
-    private const MIGRATION_PATH = "../app/migration";
+    private const MIGRATION_PATH = '../app/migration';
 
     public $migration;
 
-    public $patchList;
-
-    public $tables = [];
-
-    public $tableName = "";
-
-    public $columnName = "";
+    public $tableName = '';
 
     public $files = [];
 
     public $datas = [];
 
-    public $foreignKey = "";
-
     public $options = [];
 
-    public $type = "";
+    public $type = '';
 
-    public $method = "create";
+    public $method = 'create';
 
-    public $content = "";
+    public $content = '';
+
+    public $version = '';
+
+    public $tableCurrentVersion = '';
+
+    public $id = '';
 
     public function index()
     {
         $this->migration = new Migration();
-        $this->patchList = new PatchList();
-
-        $this->repository->getClass(PatchList::class);
 
         $this->setFiles();
         $this->processMigration();
 
         return $this->renderer->render(
-            "admin/migration/migration"
+            'admin/migration/migration'
         );
     }
 
@@ -64,6 +54,13 @@ class MigrationController extends BaseController
     public function setData($file): self
     {
         $this->datas = yaml_parse_file(self::MIGRATION_PATH.'/'.$file);
+
+        return $this;
+    }
+
+    public function setId($id): self
+    {
+        $this->id = $id;
 
         return $this;
     }
@@ -134,18 +131,71 @@ class MigrationController extends BaseController
 
     }
 
+    public function setVersion($version): self
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    public function addPatchList(): void
+    {
+        $patchList = new PatchList();
+        $patchList->setTableName($this->tableName);
+        $patchList->setCurrentVersion($this->version);
+
+        $this->repository->from('patch_list')->persist($patchList)->flush();
+    }
+
+    public function updatePatchList(): void
+    {
+        $patchList = new PatchList();
+        $patchList->setTableName($this->tableName);
+        $patchList->setCurrentVersion($this->version);
+        $patchList->setId($this->id);
+
+        $this->repository->from('patch_list')->persist($patchList)->flush();
+    }
+
+    public function setTableCurrentVersion($currentVersion): self
+    {
+        $this->tableCurrentVersion = $currentVersion;
+
+        return $this;
+    }
+
+    public function checkTableExist()
+    {
+        $this->repository->getClass(PatchList::class);
+        $row = $this->repository->findBy(["table_name" => $this->tableName]);
+        if($row){
+            $this->setId($row->getId());
+            $this->setTableCurrentVersion($row->getCurrentVersion());
+        } else {
+            $this->addPatchList();
+        }
+    }
+
     public function setContent(): self
     {
-        foreach ($this->datas as $data) {
-            $this->setMethod($data['action']);
-            foreach ($data['column'] as $column){
-                $this->content .= $this->setColumnName($column['name']);
-                $this->content .= $this->setType($column['type']);
-                $this->content .= $this->setOptions($column['options']);
-                $this->content .= $this->setDefaultValue($column['default']);
-                $this->content .= $this->setForeignKey($column['foreign_key']);
-                $this->content .= ', ';
+        foreach ($this->datas as $version => $data) {
+            $this->setVersion($version);
+            $this->checkTableExist();
 
+            if($version > $this->tableCurrentVersion){
+                $this->setMethod($data['action']);
+                foreach ($data['column'] as $column){
+                    $this->content .= $this->setColumnName($column['name']);
+                    $this->content .= $this->setType($column['type']);
+                    $this->content .= $this->setOptions($column['options']);
+                    $this->content .= $this->setDefaultValue($column['default']);
+                    $this->content .= $this->setForeignKey($column['foreign_key']);
+                    $this->content .= ', ';
+
+                }
+                if($this->method !== 'create'){
+                    $this->updatePatchList();
+                }
             }
         }
 

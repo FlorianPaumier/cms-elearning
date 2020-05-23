@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Core\Database\Migration;
+use App\Core\Exception\NoRecordException;
 use App\Core\Interfaces\BaseController;
 use App\Core\Render\RenderView;
 use App\Entity\PatchList;
@@ -292,7 +293,7 @@ class MigrationController extends BaseController
      * check if table exist or not then set data get by sql request in patch_list
      *
      * @return bool
-     * @throws \App\Core\Exception\NoRecordException
+     * @throws NoRecordException
      */
     public function checkTableExist()
     {
@@ -318,7 +319,7 @@ class MigrationController extends BaseController
      * Set sql content to execute in sql request
      *
      * @return $this
-     * @throws \App\Core\Exception\NoRecordException
+     * @throws NoRecordException
      */
     public function setContent(): self
     {
@@ -383,7 +384,7 @@ class MigrationController extends BaseController
      * execute migration
      *
      * @return $this
-     * @throws \App\Core\Exception\NoRecordException
+     * @throws NoRecordException
      */
     public function processMigration(): self
     {

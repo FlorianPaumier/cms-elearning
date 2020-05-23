@@ -54,7 +54,7 @@ class UserController extends BaseController
             if ($form->isValid()) {
                 $this->repository->persist($user);
                 $this->repository->flush();
-                
+
             } else {
                 $this->session->set("app.flash", ["error" => $form->getErrors()]);
             }
@@ -122,13 +122,15 @@ class UserController extends BaseController
 
     public function deleteUser(Request $request)
     {
-        $form = $this->createForm(UserDeleteUserForm::class);
+        $user = new User();
+        $form = $this->createForm(UserDeleteUserForm::class, $user);
         $form->handleRequest($request);
 
         if ($this->query->getMethod() == "POST") {
-            $validator = $this->getValidator(new UserDeleteUserForm())->buildValidator($request);
 
-            if ($validator->isValid()) {
+            if ($form->isValid()) {
+                $this->repository->delete($user);
+                $this->repository->flush();
                 $email = "";
                 if (($response = $this->userManager->deleteUser($email)) !== true) {
                     $this->session->set("app.flash", ["error" => [$response]]);
@@ -136,7 +138,7 @@ class UserController extends BaseController
                     $this->redirect->redirectToRoute("app_home");
                 }
             } else {
-                $this->session->set("app.flash", ["error" => $validator->getErrors()]);
+                $this->session->set("app.flash", ["error" => $form->getErrors()]);
             }
         }
 

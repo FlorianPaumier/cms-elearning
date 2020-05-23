@@ -4,39 +4,84 @@ namespace App\Controllers\Admin;
 
 use App\Core\Database\Migration;
 use App\Core\Interfaces\BaseController;
+use App\Core\Render\RenderView;
 use App\Entity\PatchList;
+use Exception;
 
+/**
+ * Class MigrationController
+ * @package App\Controllers\Admin
+ */
 class MigrationController extends BaseController
 {
+    /**
+     * @const string MIGRATION_PATH;
+     */
     private const MIGRATION_PATH = '../app/migration';
 
+    /**
+     * @var object $migration;
+     */
     public $migration;
 
+    /**
+     * @var string $tableName
+     */
     public $tableName = '';
 
+    /**
+     * @var array $files
+     */
     public $files = [];
 
+    /**
+     * @var array $datas
+     */
     public $datas = [];
 
+    /**
+     * @var array $options
+     */
     public $options = [];
 
+    /**
+     * @var string $type
+     */
     public $type = '';
 
+    /**
+     * @var string $method
+     */
     public $method = '';
 
+    /**
+     * @var string $content
+     */
     public $content = '';
 
+    /**
+     * @var string $version
+     */
     public $version = '';
 
+    /**
+     * @var string $tableCurrentVersion
+     */
     public $tableCurrentVersion = '';
 
+    /**
+     * @var string $id
+     */
     public $id = '';
 
+    /**
+     * @return RenderView|string|string[]|null
+     * @throws Exception
+     */
     public function index()
     {
         $this->migration = new Migration();
 
-        $this->setFiles();
         $this->processMigration();
 
         return $this->renderer->render(
@@ -44,6 +89,11 @@ class MigrationController extends BaseController
         );
     }
 
+    /**
+     * Set list of file for migration
+     *
+     * @return $this
+     */
     public function setFiles(): self
     {
         $this->files = preg_grep('/^([^.])/', scandir(self::MIGRATION_PATH));
@@ -51,13 +101,25 @@ class MigrationController extends BaseController
         return $this;
     }
 
-    public function setData($file): self
+    /**
+     * Set list of data from yml file
+     *
+     * @param string $file
+     * @return $this
+     */
+    public function setData(string $file): self
     {
         $this->datas = yaml_parse_file(self::MIGRATION_PATH.'/'.$file);
 
         return $this;
     }
 
+    /**
+     * set id
+     *
+     * @param int|string $id
+     * @return $this
+     */
     public function setId($id): self
     {
         $this->id = $id;
@@ -65,14 +127,26 @@ class MigrationController extends BaseController
         return $this;
     }
 
-    public function setTableName($table): self
+    /**
+     * set table name
+     *
+     * @param string $table
+     * @return $this
+     */
+    public function setTableName(string $table): self
     {
         $this->tableName = preg_replace('/\..*/', '', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $table)));
 
         return $this;
     }
 
-    public function setMethod($method)
+    /**
+     * set method
+     *
+     * @param string $method
+     * @return $this|bool
+     */
+    public function setMethod(string $method)
     {
         if(!empty($method)){
             $this->method = $method;
@@ -85,7 +159,13 @@ class MigrationController extends BaseController
         return $this;
     }
 
-    public function formatType($type): string
+    /**
+     * return column type if not empty
+     *
+     * @param string $type
+     * @return string
+     */
+    public function formatType(string $type): string
     {
         if(!empty($type)){
             return $type . ' ';
@@ -95,7 +175,13 @@ class MigrationController extends BaseController
         }
     }
 
-    public function formatOptions($options): string
+    /**
+     * return implode options if not empty
+     *
+     * @param null|array $options
+     * @return string
+     */
+    public function formatOptions(?array $options): string
     {
         if(!empty($options)){
             return implode(' ',$options) . ' ';
@@ -104,7 +190,13 @@ class MigrationController extends BaseController
         }
     }
 
-    public function formatColumnName($columnName): string
+    /**
+     * return column name if exist
+     *
+     * @param null|string $columnName
+     * @return bool|string
+     */
+    public function formatColumnName(?string $columnName)
     {
         if(!empty($columnName)){
             return $columnName . ' ';
@@ -113,7 +205,14 @@ class MigrationController extends BaseController
             return false;
         }
     }
-    public function formatForeignKey($foreignKey): string
+
+    /**
+     * return foreign key it exist
+     *
+     * @param null|string[] $foreignKey
+     * @return string
+     */
+    public function formatForeignKey(?array $foreignKey): string
     {
         if(!empty($foreignKey)){
             return 'REFERENCES '.$foreignKey['table'].' ('.$foreignKey['column'].')';
@@ -122,7 +221,13 @@ class MigrationController extends BaseController
         }
     }
 
-    public function formatDefaultValue($value): string
+    /**
+     * return default value if exist
+     *
+     * @param null|string $value
+     * @return string
+     */
+    public function formatDefaultValue(?string $value): string
     {
         if(!empty($value)){
             return 'DEFAULT '. $value . ' ';
@@ -132,13 +237,22 @@ class MigrationController extends BaseController
 
     }
 
-    public function setVersion($version): self
+    /**
+     * return version
+     *
+     * @param int $version
+     * @return $this
+     */
+    public function setVersion(int $version): self
     {
         $this->version = $version;
 
         return $this;
     }
 
+    /**
+     *  add new row of table name and version in patch_list
+     */
     public function addPatchList(): void
     {
         $patchList = new PatchList();
@@ -148,6 +262,9 @@ class MigrationController extends BaseController
         $this->repository->from('patch_list')->persist($patchList)->flush();
     }
 
+    /**
+     *  update existing row of table name and version in patch_list
+     */
     public function updatePatchList(): void
     {
         $patchList = new PatchList();
@@ -158,13 +275,25 @@ class MigrationController extends BaseController
         $this->repository->from('patch_list')->persist($patchList)->flush();
     }
 
-    public function setTableCurrentVersion($currentVersion): self
+    /**
+     * set value of current version of table if exist in patch_list
+     *
+     * @param null|int $currentVersion
+     * @return $this
+     */
+    public function setTableCurrentVersion(?int $currentVersion): self
     {
         $this->tableCurrentVersion = $currentVersion;
 
         return $this;
     }
 
+    /**
+     * check if table exist or not then set data get by sql request in patch_list
+     *
+     * @return bool
+     * @throws \App\Core\Exception\NoRecordException
+     */
     public function checkTableExist()
     {
         $this->repository->getClass(PatchList::class);
@@ -175,7 +304,6 @@ class MigrationController extends BaseController
             return true;
         } else {
             if($this->method === 'create') {
-                $this->addPatchList();
                 $this->setTableCurrentVersion(null);
                 return true;
             } else {
@@ -186,11 +314,19 @@ class MigrationController extends BaseController
         }
     }
 
+    /**
+     * Set sql content to execute in sql request
+     *
+     * @return $this
+     * @throws \App\Core\Exception\NoRecordException
+     */
     public function setContent(): self
     {
         foreach ($this->datas as $version => $data) {
-            dump($this->tableName);
-            dump($data['method']);
+            if(!is_int($version)){
+                dump($this->tableName . ' version must be an integer');
+                break;
+            }
             if($this->setMethod($data['method']) === false) {
                 break;
             }
@@ -207,8 +343,9 @@ class MigrationController extends BaseController
                         }else if($this->method === 'alter-drop') {
                             $this->content .= 'DROP COLUMN ';
                         }
+
                         if($this->formatColumnName($column['name']) === false ) {
-                            break;
+                            break 2;
                         } else {
                             $this->content .= $this->formatColumnName($column['name']);
                         }
@@ -225,7 +362,6 @@ class MigrationController extends BaseController
 
                 $this->content = ltrim(substr($this->content, 0, -3));
 
-                dump($this->tableName);
                 $this->migration->setTableName($this->tableName);
                 $this->migration->setContent($this->content);
                 $this->migration->apply($this->method);
@@ -234,6 +370,8 @@ class MigrationController extends BaseController
 
                 if($this->method !== 'create' && !empty($this->id)){
                     $this->updatePatchList();
+                } else {
+                    $this->addPatchList();
                 }
             }
         }
@@ -241,8 +379,16 @@ class MigrationController extends BaseController
         return $this;
     }
 
+    /**
+     * execute migration
+     *
+     * @return $this
+     * @throws \App\Core\Exception\NoRecordException
+     */
     public function processMigration(): self
     {
+        $this->setFiles();
+
         foreach ($this->files as $file) {
             $this->setTableName($file);
             $this->setData($file);

@@ -34,11 +34,22 @@ class Migration extends Table
     public function drop(): self
     {
         $this->sql = $this->method." ".$this->tableName.";";
+
+        return $this;
     }
 
-    public function alter(): self
+    public function alterAdd(): self
     {
-        $this->sql = $this->method." ".$this->tableName;
+        $this->sql = $this->method." ".$this->tableName." ". $this->content.";";
+
+        return $this;
+    }
+
+    public function alterDrop(): self
+    {
+        $this->sql = $this->method." ".$this->tableName." ". $this->content.";";
+
+        return $this;
     }
 
     public function apply($method)
@@ -47,19 +58,28 @@ class Migration extends Table
             case 'create':
                 $this->createTable();
                 $this->create();
+                dump($this->sql);
                 $this->pdo->exec($this->sql);
                 break;
-            case 'alter':
+            case 'alter-add':
                 $this->alterTable();
-                $this->alter();
+                $this->alterAdd();
+                dump($this->sql);
+                $this->pdo->exec($this->sql);
+                break;
+            case 'alter-drop':
+                $this->alterTable();
+                $this->alterDrop();
+                dump($this->sql);
                 $this->pdo->exec($this->sql);
                 break;
             case 'drop':
                 $this->dropTable();
                 $this->drop();
+                dump($this->sql);
                 break;
             default:
-                die('missing method in yml');
+                dump($method . ' doesn\'t exit');
                 break;
         }
     }

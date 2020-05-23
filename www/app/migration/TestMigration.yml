@@ -1,5 +1,5 @@
 1:
-  action: create
+  method: create
   column:
     id:
       name: id

@@ -22,7 +22,7 @@ class MigrationController extends BaseController
 
     public $type = '';
 
-    public $method = 'create';
+    public $method = '';
 
     public $content = '';
 
@@ -72,29 +72,30 @@ class MigrationController extends BaseController
         return $this;
     }
 
-    public function setMethod($method): self
+    public function setMethod($method)
     {
         if(!empty($method)){
             $this->method = $method;
         } else {
-            //todo ajouter un message d'erreur avec le nom de la table et l'erreur d'action absent
-            die('nok');
+            $this->method = '';
+            dump($this->tableName.' method empty');
+            return false;
         }
 
         return $this;
     }
 
-    public function setType($type): string
+    public function formatType($type): string
     {
         if(!empty($type)){
             return $type . ' ';
         } else {
-            //todo ajouter un message d'erreur avec le nom de la table et l'erreur type absent
-            die('nok');
+            dump($this->tableName.' need type');
+            return false;
         }
     }
 
-    public function setOptions($options): string
+    public function formatOptions($options): string
     {
         if(!empty($options)){
             return implode(' ',$options) . ' ';
@@ -103,16 +104,16 @@ class MigrationController extends BaseController
         }
     }
 
-    public function setColumnName($columnName): string
+    public function formatColumnName($columnName): string
     {
         if(!empty($columnName)){
             return $columnName . ' ';
         } else {
-            //todo ajouter un message d'erreur avec le nom de la table et l'erreur de nom absent
-            die('nok');
+            dump($this->tableName.' need column name');
+            return false;
         }
     }
-    public function setForeignKey($foreignKey): string
+    public function formatForeignKey($foreignKey): string
     {
         if(!empty($foreignKey)){
             return 'REFERENCES '.$foreignKey['table'].' ('.$foreignKey['column'].')';
@@ -121,7 +122,7 @@ class MigrationController extends BaseController
         }
     }
 
-    public function setDefaultValue($value): string
+    public function formatDefaultValue($value): string
     {
         if(!empty($value)){
             return 'DEFAULT '. $value . ' ';
@@ -168,38 +169,74 @@ class MigrationController extends BaseController
     {
         $this->repository->getClass(PatchList::class);
         $row = $this->repository->findBy(["table_name" => $this->tableName]);
-        if($row){
+        if($row && !is_array($row)){
             $this->setId($row->getId());
             $this->setTableCurrentVersion($row->getCurrentVersion());
+            return true;
         } else {
-            $this->addPatchList();
+            if($this->method === 'create') {
+                $this->addPatchList();
+                $this->setTableCurrentVersion(null);
+                return true;
+            } else {
+                $this->setId('');
+                dump($this->tableName . ' first method should be "create"');
+                return false;
+            }
         }
     }
 
     public function setContent(): self
     {
         foreach ($this->datas as $version => $data) {
+            dump($this->tableName);
+            dump($data['method']);
+            if($this->setMethod($data['method']) === false) {
+                break;
+            }
             $this->setVersion($version);
-            $this->checkTableExist();
-
+            if($this->checkTableExist() === false ) {
+                break;
+            }
+            
             if($version > $this->tableCurrentVersion){
-                $this->setMethod($data['action']);
-                foreach ($data['column'] as $column){
-                    $this->content .= $this->setColumnName($column['name']);
-                    $this->content .= $this->setType($column['type']);
-                    $this->content .= $this->setOptions($column['options']);
-                    $this->content .= $this->setDefaultValue($column['default']);
-                    $this->content .= $this->setForeignKey($column['foreign_key']);
-                    $this->content .= ', ';
+                if($this->method !== 'drop'){
+                    foreach ($data['column'] as $column){
+                        if($this->method === 'alter-add') {
+                            $this->content .= 'ADD COLUMN ';
+                        }else if($this->method === 'alter-drop') {
+                            $this->content .= 'DROP COLUMN ';
+                        }
+                        if($this->formatColumnName($column['name']) === false ) {
+                            break;
+                        } else {
+                            $this->content .= $this->formatColumnName($column['name']);
+                        }
 
+                        if($this->method !== 'alter-drop') {
+                            $this->content .= $this->formatType($column['type']);
+                            $this->content .= $this->formatOptions($column['options']);
+                            $this->content .= $this->formatDefaultValue($column['default']);
+                            $this->content .= $this->formatForeignKey($column['foreign_key']);
+                        }
+                        $this->content .= ', ';
+                    }
                 }
-                if($this->method !== 'create'){
+
+                $this->content = ltrim(substr($this->content, 0, -3));
+
+                dump($this->tableName);
+                $this->migration->setTableName($this->tableName);
+                $this->migration->setContent($this->content);
+                $this->migration->apply($this->method);
+
+                $this->content = "";
+
+                if($this->method !== 'create' && !empty($this->id)){
                     $this->updatePatchList();
                 }
             }
         }
-
-        $this->content = ltrim(substr($this->content, 0, -3));
 
         return $this;
     }
@@ -210,12 +247,6 @@ class MigrationController extends BaseController
             $this->setTableName($file);
             $this->setData($file);
             $this->setContent();
-
-            $this->migration->setTableName($this->tableName);
-            $this->migration->setContent($this->content);
-            $this->migration->apply($this->method);
-
-            $this->content = "";
         }
 
         return $this;

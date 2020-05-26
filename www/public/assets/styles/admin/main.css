@@ -1219,10 +1219,6 @@ form li {
   transform: rotateY(20deg);
 }
 
-p, li, a {
-  font-size: 14px;
-}
-
 /* GRID */
 .twelve {
   width: 100%;
@@ -1277,6 +1273,9 @@ p, li, a {
   display: block;
   float: left;
   margin: 1% 0 1% 1.6%;
+}
+.col p, .col li, .col a {
+  font-size: 14px;
 }
 
 .col:first-of-type {

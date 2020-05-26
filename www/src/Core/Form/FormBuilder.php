@@ -63,7 +63,6 @@ class FormBuilder
     {
         $this->entity = $entity;
         $this->render = new RenderView();
-        define("FORM_PATH", __DIR__);
     }
 
     /**
@@ -314,7 +313,6 @@ class FormBuilder
 
     private function fieldExist(string $key, string $field, array $args)
     {
-
         $options = (new $this->formType)->getOptions();
 
         if (!key_exists("data_class", $options) || $field === ButtonType::class || $args["mapped"] === false) {
@@ -437,7 +435,7 @@ class FormBuilder
             $args["name"] = $this->formType->getBlockPrefix() . "[" . $args["key"] . "]";
         }
 
-        if ($args["multiple"]) {
+        if (isset($args["multiple"]) && $args["multiple"]) {
             $parent = new $this->parent;
 
             $args["name"] = $parent->getBlockPrefix() . "_" . $args['key'] . "[]";

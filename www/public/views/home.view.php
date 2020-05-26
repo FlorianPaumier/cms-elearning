@@ -2,7 +2,6 @@
 
 
 @section(body)
-
 <section id="main-section">
     <div class="background">
         <h1>Un site pour apprendre</h1>
@@ -10,22 +9,22 @@
             et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut </p>
     </div>
 </section>
-<section class="section-doc">
-    <article>
+<section class="section-doc row">
+    <article class="col-md-4 col-sm-10">
         <i class="fa fa-cogs icon"></i>
         <h1>Une nouvelle approche</h1>
         <p>
             Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
         </p>
     </article>
-    <article>
+    <article class="col-md-4 col-sm-10">
         <i class="fa fa-cogs icon"></i>
         <h1>Une nouvelle approche</h1>
         <p>
             Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
         </p>
     </article>
-    <article>
+    <article class="col-md-4 col-sm-10">
         <i class="fa fa-cogs icon"></i>
         <h1>Une nouvelle approche</h1>
         <p>
@@ -65,13 +64,13 @@
             </article>
         <?php endfor; ?>
     </section>
-    <section id="flux-rss" class="col-md-6 col-sm-12 col-lg-6">
+    <section id="flux-rss" class="col-md-6 col-sm-10 col-lg-6">
         <h2>Dernières actualités</h2>
         <?php for ($y = 0; $y < 3; $y++): ?>
-            <article class="news col-md-6 col-sm-12 col-lg-6 <?php if ($y == 1) echo 'active' ?>">
+            <article class="news col-md-6 col-sm-10 col-lg-6 d-flex <?php if ($y == 1) echo 'active' ?>">
                 <span class="date">10/02/2020</span>
                 <h1>Salut</h1>
-                <p>Sed ut perspiciatis unde omnis iste natus error sit
+                <p class="pr-2">Sed ut perspiciatis unde omnis iste natus error sit
                     voluptatem accusantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium ....
                 </p>
                 <a href="#" class="know-more">Voir la suite</a>

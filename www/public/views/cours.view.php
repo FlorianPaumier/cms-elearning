@@ -21,7 +21,7 @@
     <ul class="cards">
         <?php for ($i = 0; $i < 10; $i++): ?>
             <li class="lesson">
-                <article class="">
+                <article class="" data-path="@path(app_catalogue_show, <?= $i ?>)">
                     <img src="https://unsplash.it/800/600?image=82" alt="lessons logo">
                     <section class="content">
                         <span>Type</span>

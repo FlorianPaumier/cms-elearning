@@ -166,7 +166,7 @@ main {
     }
 
     #flux-rss {
-
+      width: 90vw;
       h2 {
         color: #5777EA;
         margin: 0;
@@ -188,6 +188,7 @@ main {
         }
 
         &.active {
+          max-width: 90vw;
           display: flex;
           flex-direction: column;
           overflow: hidden;

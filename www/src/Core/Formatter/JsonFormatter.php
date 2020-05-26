@@ -17,6 +17,8 @@ class JsonFormatter implements FormatterInterface
     {
         $json = [];
 
+        if(empty($this->data) || is_null($this->data)) return json_encode("");
+
         foreach ($this->data as $value){
             if (gettype($value) == "object"){
                 $array = Hydrator::getData($value);

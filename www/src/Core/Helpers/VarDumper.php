@@ -62,6 +62,10 @@ if (!function_exists('dump')) {
         }
     }
 
+    function dd($data, $title =""){
+        dump($data, $title);
+        die;
+    }
     function output($data)
     {
         var_dump($data);

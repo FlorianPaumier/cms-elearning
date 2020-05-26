@@ -351,7 +351,8 @@ class FormBuilder
         /** @var Table $repository */
         $repository = ConfigHandler::get('repository');
         $repository->getClass($args["entry_type"]);
-        $items = $repository->findAll();
+
+        $items = $repository->select('id', $args["choice_label"])->findAll();
         $options = [];
 
 
@@ -478,12 +479,12 @@ class FormBuilder
             $method = "add";
             $items = [];
             foreach ($value as $id) {
-                $result = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->find($id)[0];
+                $result = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->select($this->fields[$key]["args"]["choice_label"] ?? "id")->find($id);
                 $items[] = $result;
             }
             $value = $items;
         } else {
-            $value = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->find($value);
+            $value = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->select($this->fields[$key]["args"]["choice_label"] ?? "id")->find($value);
         }
 
         return $value;

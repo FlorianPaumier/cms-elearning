@@ -278,14 +278,13 @@ class QueryBuilder
      */
     public function fetchOrFail()
     {
-//        var_dump($this->toSQL());
+//        dd($this->toSQL());
         $query = $this->pdo->prepare($this->toSQL());
         $query->execute($this->params);
 
-        $this->params = [];
-
         $results = $query->fetchAll(\PDO::FETCH_ASSOC);
         $record = false;
+
         if (isset($this->entity)) {
             if(count($results) > 1){
                 foreach ($results as $result) {

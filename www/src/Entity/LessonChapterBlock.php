@@ -6,7 +6,7 @@ namespace App\Entity;
 
 use App\Core\Interfaces\Entity;
 
-class ChapterBlock
+class LessonChapterBlock
 {
 
     use Entity;
@@ -30,9 +30,9 @@ class ChapterBlock
 
     /**
      * @param int $idChapter
-     * @return ChapterBlock
+     * @return LessonChapterBlock
      */
-    public function setIdChapter(int $idChapter): ChapterBlock
+    public function setIdChapter(int $idChapter): LessonChapterBlock
     {
         $this->idChapter = $idChapter;
         return $this;
@@ -48,9 +48,9 @@ class ChapterBlock
 
     /**
      * @param string $title
-     * @return ChapterBlock
+     * @return LessonChapterBlock
      */
-    public function setTitle(string $title): ChapterBlock
+    public function setTitle(string $title): LessonChapterBlock
     {
         $this->title = $title;
         return $this;
@@ -66,9 +66,9 @@ class ChapterBlock
 
     /**
      * @param string $content
-     * @return ChapterBlock
+     * @return LessonChapterBlock
      */
-    public function setContent(string $content): ChapterBlock
+    public function setContent(string $content): LessonChapterBlock
     {
         $this->content = $content;
         return $this;

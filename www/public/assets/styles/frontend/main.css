@@ -2677,19 +2677,29 @@ main #main-section .background h1 {
   line-height: 70px;
 }
 main #main-section .background p {
-  font-size: 20px;
+  font-size: 15px;
   line-height: 29px;
   font-style: italic;
-  width: 50%;
+  width: 80vw;
+}
+main h2 {
+  font-size: 30px;
+  line-height: 47px;
+  color: #5777EA;
+}
+main h2.text-center {
+  text-align: center;
 }
 main .section-doc {
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
 }
 main .section-doc article {
-  width: 430px;
+  width: 90vw;
   padding: 3%;
+  margin: 1vh 0;
   height: 350px;
   background: #FFFFFF;
   border: 1px solid #000000;
@@ -2710,20 +2720,11 @@ main .section-doc article p {
   line-height: 21px;
 }
 main #section-lesson {
-  margin-top: 20vh;
-}
-main #section-lesson h2 {
-  font-size: 30px;
-  line-height: 47px;
-  color: #5777EA;
-}
-main #section-lesson h2.text-center {
-  text-align: center;
+  margin-top: 15vh;
 }
 main #section-lesson #lessons {
   display: flex;
   flex-direction: row;
-  padding: 0 44px;
   justify-content: space-between;
 }
 main #section-lesson #lessons button {
@@ -2734,12 +2735,6 @@ main #section-lesson #lessons button {
 main #section-lesson #lessons article {
   display: none;
   width: 70vw;
-  height: 30vh;
-}
-main #section-lesson #lessons article h2 {
-  margin: 0;
-  font-size: 25px;
-  line-height: 47px;
 }
 main #section-lesson #lessons article.active {
   display: flex;
@@ -2750,7 +2745,7 @@ main #section-lesson #lessons article.active {
 }
 main #section-lesson #lessons article img {
   width: 100%;
-  min-height: 100%;
+  min-height: 80px;
 }
 main #section-lesson #lessons article .content {
   padding-left: 5%;
@@ -2763,31 +2758,33 @@ main #section-lesson #lessons article .content {
 main #section-lesson #lessons article .content p {
   padding-right: 2%;
 }
-main #section-lesson #lessons article .content .btn {
+main #section-lesson #lessons article .btn {
   background-color: #87B7FF;
   border-radius: 15px;
-  width: 10vw;
+  width: 100%;
   text-align: center;
   margin-left: auto;
 }
 main #home-news {
   display: flex;
   flex-direction: row;
-  margin-top: 10%;
+  justify-content: center;
 }
 main #home-news article {
   display: none;
 }
+main #home-news #testimonies {
+  margin: 10% 0;
+}
 main #home-news #testimonies article {
-  width: 300px;
-  height: 300px;
-  border-radius: 100%;
+  width: 80vw;
   margin: auto;
+  padding: 2vw;
+  border: 1px solid #aaaaaa;
   justify-content: center;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
-  background-color: #D0EDFF;
 }
 main #home-news #testimonies article.active {
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -2797,8 +2794,16 @@ main #home-news #testimonies article.active {
 main #home-news #testimonies article.active p {
   padding: 0 4%;
 }
+main #home-news #testimonies article.active .btn {
+  background-color: #87B7FF;
+  border-radius: 15px;
+  width: 100%;
+  text-align: center;
+  margin-left: auto;
+}
 main #home-news #flux-rss {
   width: 90vw;
+  margin: 10% 0;
 }
 main #home-news #flux-rss h2 {
   color: #5777EA;
@@ -2840,14 +2845,24 @@ main #newsletter {
   padding: 3%;
   justify-content: space-around;
   color: white;
-  display: flex;
   flex-direction: row;
+}
+@media screen and (min-width: 720px) {
+  main #newsletter {
+    display: flex;
+  }
+  main #newsletter div {
+    width: 10vw;
+  }
+}
+main #newsletter h2 {
+  height: auto;
+  color: white;
 }
 main #newsletter div {
   justify-content: space-between;
   align-items: center;
   vertical-align: center;
-  width: 75%;
   flex-direction: row;
   display: flex;
 }
@@ -2862,10 +2877,10 @@ main #newsletter div input {
 main #newsletter div .btn {
   background-color: #87B7FF;
   height: 50px;
-  border-radius: 15px;
-  width: 10vw;
+  border-radius: 0 15px 15px 0;
   text-align: center;
   margin-left: auto;
+  width: 75vw;
 }
 
 @keyframes fadein {

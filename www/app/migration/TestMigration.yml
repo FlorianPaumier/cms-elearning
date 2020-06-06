@@ -1,0 +1,12 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: int
+      options:
+        - PRIMARY KEY
+        - NOT NULL
+    name:
+      name: nom
+      type: text

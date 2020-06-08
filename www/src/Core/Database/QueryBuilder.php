@@ -186,17 +186,13 @@ class QueryBuilder
      * factorisation des fonctions en une seule fonction
      * 
      */
-    public function join(string $source, string $target,string $type="join", string $targetField = null): self
+    public function join(string $target, string $sourceField, string $targetField, string $type="join"): self
     {
 
         if(!key_exists($type, self::JOIN_ARGS))
         throw new \Exception("Type not found");
 
-        if(is_null($targetField)){
-            $targetField = "${source}_id";
-        }
-
-        $sql = self::JOIN_ARGS[$type]. " JOIN ${target} ON ${source}.id = ${target}.${targetField}";
+        $sql = self::JOIN_ARGS[$type]. " JOIN ${target} ON ${sourceField}.id = ${target}.${targetField}";
         $this->relations[] = $sql;
 
         return $this;

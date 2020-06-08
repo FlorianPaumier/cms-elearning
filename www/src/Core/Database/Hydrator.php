@@ -13,15 +13,19 @@ abstract class Hydrator
 {
     static $recursif = false;
 
+    static $join = false;
+
 
     /**
      * Transforme un tableau en objet en utilisant les setters
      *
      * @param array $array
      * @param  $object
+     * @param bool $join
      * @return mixed
+     * @throws \Exception
      */
-    public static function hydrate($array, $object)
+    public static function hydrate($array, $object, $join = false)
     {
         if(empty($array)) return $array;
 
@@ -44,7 +48,11 @@ abstract class Hydrator
                     $class = $type->getName();
 
                     if (!($value instanceof $class)) {
-                        if (gettype($value) == "integer") {
+
+                        $joinTable = Hydrator::hydrate($array, $class, true);
+                        self::$join = false;
+
+                        if (gettype($value) == "integer" ) {
                             self::$recursif = true;
                             /** @var Table $repo */
                             $repo = ConfigHandler::get("repository");
@@ -160,7 +168,11 @@ abstract class Hydrator
         $field = join('', array_map('ucfirst', explode('_', $fieldName)));
 
         if (preg_match('/_id/m', $fieldName)) {
-            $field = str_replace("Id", "", $field);
+            if(self::$join){
+                $field = "id";
+            } else {
+                $field = str_replace("Id", "", $field);
+            }
         }
 
         return $field;

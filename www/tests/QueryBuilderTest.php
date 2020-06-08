@@ -201,4 +201,21 @@ final class QueryBuilderTest extends TestCase
         $this->assertEquals(10, $q->count());
     }
 
+    /**
+     * test join
+     */
+    public function testJoin()
+    {
+        $q = $this->queryBuilder
+            ->from("user")
+            ->join("products", 'p', 'join')
+            ->toSQL();
+        $this->assertEquals('SELECT user.*, p.* FROM user JOIN products as p ON user.id = p.user_id', $q);
+
+        $results = $this->queryBuilder->where("user.id = :id")->setParam("id", 1)->fetchOrFail();
+        var_dump($results);
+        $this->assertEquals(1, $results[0]['id']);
+
+    }
+
 }

@@ -189,24 +189,19 @@ class QueryBuilder
     }
 
     /**
-     * @param string $source
      * @param string $target
-     * @param string $targetField
+     * @param string $alias
      * @param string $type
      *
-     * @throws Exception
      * @return $this
+     * @throws Exception
      */
-    public function join(string $source, string $target, string $type = "join",string $targetField = null): self
+    public function join(string $target, string $alias, string $type = null): self
     {
         if(!key_exists($type, self::JOIN_ARGS))
             throw new Exception("Type not found");
 
-        if(is_null($targetField)){
-            $target = "${source}_${targetField}";
-        }
-
-        $sql = self::JOIN_ARGS[$type] . " JOIN ${target} ON ${source}.id = ${target}.${targetField}";
+        $sql = self::JOIN_ARGS[$type] . " JOIN ${target} AS ${alias} ON". $this->from .".id= ${alias}.". $this->from ."_id";
         $this->relations[] = $sql;
 
         return $this;
@@ -230,7 +225,7 @@ class QueryBuilder
 
     /**
      * @param string $key
-     * @param  $value
+     * @param string $value
      * @return $this
      */
     public function setParam(string $key, $value): self
@@ -249,11 +244,6 @@ class QueryBuilder
         return $this;
     }
 
-    public function join(string $type, string $value)
-    {
-        $this->relations[$type][] = $value;
-        return $this;
-    }
     /**
      * @return string
      */
@@ -266,14 +256,6 @@ class QueryBuilder
         }
 
         $this->sql = "$this->method $fields FROM {$this->from}";
-
-        if($this->relations){
-            foreach ($this->relations as $type => $relation){
-                foreach ($relation as $value){
-                    $this->sql .= " $type $value";
-                }
-            }
-        }
 
         if($this->relations) {
             foreach ($this->relations as $relation){

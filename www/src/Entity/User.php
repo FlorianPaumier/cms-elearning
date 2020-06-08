@@ -8,9 +8,22 @@ class User
 {
     use Entity;
 
+    /**
+     * @var $username
+     */
     protected $username;
+    /**
+     * @var $password
+     */
     protected $password;
+    /**
+     * @var $email
+     */
     protected $email;
+    /**
+     * @var $lessons
+     */
+    protected $lessons;
 
     /**
      * @return mixed
@@ -46,14 +59,30 @@ class User
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function getEmail()
     {
         return $this->email;
     }
 
+    /**
+     * @param $email
+     */
     public function setEmail($email): void
     {
         $this->email = $email;
+    }
+
+    /**
+     * @param Lesson $lessons
+     * @return $this
+     */
+    public function setLesson(Lesson $lessons)
+    {
+        $this->lessons[] = $lessons;
+        return $this;
     }
 
 }

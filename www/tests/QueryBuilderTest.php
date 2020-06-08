@@ -187,6 +187,7 @@ final class QueryBuilderTest extends TestCase
             ->setParam("name2", "Product 2");
         $this->assertEquals(2, $query->count());
     }
+    
 
     /**
      * L'appel a count ne doit pas modifier les champs de la première requête

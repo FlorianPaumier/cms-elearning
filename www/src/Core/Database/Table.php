@@ -19,7 +19,11 @@ class Table extends QueryBuilder
      *
      * @var string|null
      */
-    protected $entity;
+    protected $entity = null;
+    /**
+     * @var array
+     */
+    protected $queries = [];
 
     /**
      * Récupération de l'instance de PDO
@@ -50,9 +54,9 @@ class Table extends QueryBuilder
      *
      * @return array
      */
-    public function findAll(): array
+    public function findAll(): ?array
     {
-        $this->select("*");
+        $this->select("*")->orderBy("id", 'ASC');
 
         return $this->fetchOrFail();
     }
@@ -99,6 +103,42 @@ class Table extends QueryBuilder
 
         $this->setParams($params);
         return $this->fetchOrFail();
+    }
+
+    public function persist(object $objet): void
+    {
+        $this->getClass(get_class($objet));
+        $params = Hydrator::getData($objet);
+
+        $method = is_null($params["id"]) ? "INSERT" : "UPDATE";
+
+        if ($method == "INSERT"){
+            $query = "INSERT INTO {$this->from} ("
+                . join(', ', array_keys($params)) .
+                ") VALUES (" . $this->buildFieldQuery($params) . ")";
+        }else{
+            $fieldQuery = implode(
+                ',', array_map(
+                    function ($param) {
+                        return $param . "=:" . $param;
+                    }, array_keys($params)
+                )
+            );
+            $query = "$method {$this->from} SET {$fieldQuery} WHERE id = :id";
+        }
+
+        $this->queries[] = [
+            "sql" => $query,
+            "data" => $params,
+        ];
+    }
+
+    public function flush()
+    {
+        foreach ($this->queries as $query){
+            $sql = $this->pdo->prepare($query["sql"]);
+            $sql->execute($query["data"]);
+        }
     }
 
     private function buildWhereFieldQuery(array $params)
@@ -219,6 +259,7 @@ class Table extends QueryBuilder
     public function setEntity(?string $entity): Table
     {
         $this->entity = $entity;
+        $this->getClass($entity);
         return $this;
     }
 
@@ -266,6 +307,12 @@ class Table extends QueryBuilder
         } catch (BDDException $e) {
             echo "[Exception] : ". $e->getMessage();
         }
+    }
+
+    public function getData(object $object)
+    {
+         $data = Hydrator::getData($object);
+         die;
     }
 
     /**

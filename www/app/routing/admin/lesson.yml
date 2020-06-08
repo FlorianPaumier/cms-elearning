@@ -8,7 +8,7 @@ admin_lesson_new:
   method: [GET,POST]
 
 admin_lesson_edit:
-  path: /admin/lesson/edit/{id<\\d+>}
+  path: /admin/lesson/edit/{lessonId<\\d+>}
   controller: App\Controllers\Admin\Lesson:edit
   method: [GET,POST]
 

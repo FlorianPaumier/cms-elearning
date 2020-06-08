@@ -1,5 +1,7 @@
 <?php
 
+use App\Core\Exceptions\AbsctractException;
+use App\Core\Exceptions\NotFoundAbsctractException;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 
@@ -12,6 +14,7 @@ final class RoutingTest extends TestCase
         $this->client = new Client([
             "base_uri" => 'http://localhost:280'
         ]);
+
     }
 
     public function testSimpleRoute()
@@ -28,20 +31,23 @@ final class RoutingTest extends TestCase
 
     public function testErrorView()
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(404);
         $response = $this->client->get("/test/view");
-        $this->assertEquals(404, $response->getStatusCode());
     }
 
     public function testWrongMethod()
     {
+        $this->expectExceptionCode(405);
+        $this->expectException(Exception::class);
         $response = $this->client->post("/test");
-        $this->assertEquals(405, $response->getStatusCode());
     }
 
     public function testForbidden()
     {
+        $this->expectExceptionCode(403);
+        $this->expectException(Exception::class);
         $response = $this->client->get("/test/forbidden");
-        $this->assertEquals(403, $response->getStatusCode());
     }
 
 }

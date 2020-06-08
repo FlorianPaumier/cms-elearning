@@ -9,6 +9,7 @@ use App\Core\Database\Table;
 use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\ChoiceType;
 use App\Core\Form\Fields\CollectionType;
+use App\Core\Form\Fields\DateType;
 use App\Core\Form\Fields\EntityType;
 use App\Core\Form\Fields\FieldsInterface;
 use App\Core\Form\Fields\OptionType;
@@ -141,25 +142,10 @@ class FormBuilder
 
                     $method = "set";
 
-                    if ($this->fields[$key]["type"] == EntityType::class) {
-                        /** @var Table $repository */
-                        $repository = ConfigHandler::get('repository');
-
-                        if (gettype($value) == "array") {
-                            $method = "add";
-                            $items = [];
-                            foreach ($value as $id) {
-                                $result = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->find($id)[0];
-                                $items[] = $result;
-                            }
-                            $value = $items;
-                        } else {
-                            $value = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->find($value);
-                        }
-
-                    }
+                    $value = $this->transformValue($key, $value);
 
                     $property = $this->fields[$key]["key"];
+
                     $method .= ucfirst($property);
                     if (method_exists($this->entity, $method)) {
 //                        /** @var \ReflectionMethod $methodReflection */
@@ -468,6 +454,44 @@ class FormBuilder
         }
 
         return "";
+    }
+
+    private function transformValue(string $key, $value)
+    {
+        if ($this->fields[$key]["type"] == EntityType::class) {
+            return $this->transformEntity($key, $value);
+        }
+
+        if ($this->fields[$key]["type"] == DateType::class) {
+            return $this->transformDate($key, $value);
+        }
+
+        return $value;
+    }
+
+    private function transformEntity(string $key, $value)
+    {
+        /** @var Table $repository */
+        $repository = ConfigHandler::get('repository');
+
+        if (gettype($value) == "array") {
+            $method = "add";
+            $items = [];
+            foreach ($value as $id) {
+                $result = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->find($id)[0];
+                $items[] = $result;
+            }
+            $value = $items;
+        } else {
+            $value = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->find($value);
+        }
+
+        return $value;
+    }
+
+    private function transformDate(string $key, $value)
+    {
+        return new \DateTime($value);
     }
 
 }

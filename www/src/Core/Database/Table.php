@@ -39,7 +39,7 @@ class Table extends QueryBuilder
     public function findList(): array
     {
         $results = $this->pdo
-            ->query("SELECT id, name FROM {$this->from}")
+            ->query("SELECT * FROM {$this->from}")
             ->fetchAll(\PDO::FETCH_NUM);
         $list = [];
         foreach ($results as $result) {
@@ -63,7 +63,7 @@ class Table extends QueryBuilder
     /**
      * Récupère une ligne par rapport à un champs
      *
-     * @param  array $params
+     * @param array $params
      * @return mixed|false
      * @throws NoRecordException
      */
@@ -87,7 +87,7 @@ class Table extends QueryBuilder
     /**
      * Récupère une ligne par rapport à un champs
      *
-     * @param  array $params
+     * @param array $params
      * @return mixed|false
      * @throws NoRecordException
      */
@@ -107,17 +107,17 @@ class Table extends QueryBuilder
         return $this->fetchOrFail()[0];
     }
 
-    public function persist(object &$objet): void
+    public function persist(object &$objet): Table
     {
         $this->getClass(get_class($objet));
         $params = Hydrator::getData($objet);
 
-        $this->method = is_null($params["id"]) ? "INSERT" : "UPDATE";
+        $this->method = !isset($params["id"]) || is_null($params["id"]) ? "INSERT" : "UPDATE";
 
         if ($this->method == "INSERT") {
             $query = "INSERT INTO \"{$this->from}\" ("
-            . join(', ', array_keys($params)) .
-            ") VALUES (" . $this->buildFieldQuery($params) . ")";
+                . join(', ', array_keys($params)) .
+                ") VALUES (" . $this->buildFieldQuery($params) . ")";
         } else {
             $fieldQuery = implode(
                 ',', array_map(
@@ -126,7 +126,7 @@ class Table extends QueryBuilder
                     }, array_keys($params)
                 )
             );
-            $query = "$this->method {$this->from} SET {$fieldQuery} WHERE id = :id";
+            $query = "$this->method \"{$this->from}\" SET {$fieldQuery} WHERE id = :id";
         }
 
         $this->queries[] = [
@@ -134,11 +134,12 @@ class Table extends QueryBuilder
             "data" => $params,
             "object" => $objet,
         ];
+
+        return $this;
     }
 
     public function flush()
     {
-
         foreach ($this->queries as $query) {
             try {
                 $sql = $this->pdo->prepare($query["sql"]);
@@ -146,11 +147,9 @@ class Table extends QueryBuilder
             } catch (\Exception $e) {
                 dump($e->getMessage());
             }
-            
             if (is_null($query["object"]->getId())) {
                 $query["object"]->setId($this->pdo->lastInsertId());
             }
-
         }
 
         $this->clear();
@@ -167,23 +166,24 @@ class Table extends QueryBuilder
         );
     }
 
+
     /**
      * Récupère un élément à partir de son ID
      *
-     * @param  int $id
+     * @param int $id
      * @return mixed
      */
     public function find(int $id)
     {
         $this->where("id = :id");
         $this->setParam("id", $id);
-        return $this->fetchOrFail()[0];
+        return $this->fetchOrFail();
     }
 
     /**
      * Crée un nouvel enregistrement
      *
-     * @param  array $params
+     * @param array $params
      * @return bool
      */
     public function insert(array $params): bool
@@ -193,6 +193,7 @@ class Table extends QueryBuilder
             . join(', ', array_keys($params)) .
             ") VALUES (" . $this->buildFieldQuery($params) . ")"
         );
+
 
         if (!($result = $query->execute($params))) {
             foreach ($params as $key => $param) {
@@ -224,7 +225,7 @@ class Table extends QueryBuilder
     /**
      * Supprime un enregistrment
      *
-     * @param  int $id
+     * @param int $id
      * @return bool
      */
     public function delete(int $id): bool
@@ -236,8 +237,8 @@ class Table extends QueryBuilder
     /**
      * Met à jour un enregistrement au niveau de la base de données
      *
-     * @param  int   $id
-     * @param  array $params
+     * @param int $id
+     * @param array $params
      * @return bool
      */
     public function update(int $id, array $params): bool
@@ -327,8 +328,8 @@ class Table extends QueryBuilder
     /**
      * Récupère la première colonne
      *
-     * @param  string $query
-     * @param  array  $params
+     * @param string $query
+     * @param array $params
      * @return mixed
      */
     private function fetchColumn(string $query, array $params = [])

@@ -317,7 +317,7 @@ class QueryBuilder
      */
     public function fetchOrFail()
     {
-//        var_dump($this->toSQL());
+        //var_dump($this->toSQL());
         $query = $this->pdo->prepare($this->toSQL());
         $query->execute($this->params);
 

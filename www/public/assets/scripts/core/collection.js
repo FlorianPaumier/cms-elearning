@@ -6,7 +6,6 @@ $(document).ready(function () {
 
     collection.data("index", collection.find('li').length);
 
-
     button.click(function (e) {
         e.preventDefault();
         addCollections(collection)
@@ -16,9 +15,16 @@ $(document).ready(function () {
 
 function addCollections(containerHolder) {
 
-    let prototype = $(containerHolder).data("prototype");
+    let prototypeStr = $(containerHolder).data("prototype");
+
+    const key = $(containerHolder).data("key");
 
     let index = containerHolder.find("li").length;
+
+    const reg = new RegExp(key, "g")
+
+    let prototype = prototypeStr.replace(reg, index);
+    console.log(prototype);
 
     let container = $("<li>").append(prototype);
     containerHolder.append(container);

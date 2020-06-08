@@ -22,6 +22,7 @@ class Kernel
         /** Récupération des éléments de base */
         include_once dirname(__DIR__) . "/Helpers/VarDumper.php";
         include_once dirname(__DIR__) . "/Helpers/basicFunction.php";
+
     }
 
     /**
@@ -34,20 +35,24 @@ class Kernel
         /**
          * Test if the current url match with the routing file
          */
-        $matched = ConfigHandler::get("router")->match();
+        ConfigHandler::get("router")->match();
 
-        if ($matched === false) {
-            ConfigHandler::get("eventEmmiter")->emit("error.404");
-        }
 
         /** @var RenderView $response */
         $response = ConfigHandler::get("router")->exec();
 
         if (!$response) {
-            ConfigHandler::get("eventEmmiter")->emit("error.500");
+            ConfigHandler::get("eventEmmiter")->emit("error.500", "Le controller doit retourner une String ou FormBuilder , Null retourner");
         };
 
-        $response->compile();
+        $view = $response;
+
+        if($response instanceof RenderView){
+            $view = $response->compile();
+        }
+
+
+        echo $view;
     }
 
     /**

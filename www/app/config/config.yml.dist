@@ -7,3 +7,11 @@ database:
     username: utilisateur
     password: motdepasse
     charset: UTF8
+swiftmailer:
+    transport: smtp
+    host: smtp.gmail.com
+    port: null
+    encryption: ssl
+    username: null
+    password: null
+    spool: { type: memory }

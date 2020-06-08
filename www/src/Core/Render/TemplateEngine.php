@@ -44,7 +44,7 @@ class TemplateEngine
     /** @var array */
     private $functions = [];
 
-    /** @var ParseView  */
+    /** @var ParseView */
     private $viewParser;
 
     /** @var string */
@@ -56,7 +56,7 @@ class TemplateEngine
     public function __construct()
     {
         $this->viewParser = new ParseView();
-        $this->cacheDir = CACHE_PATH."/views/";
+        $this->cacheDir = CACHE_PATH . "/views/";
     }
 
     /**
@@ -72,16 +72,16 @@ class TemplateEngine
                 $this->view = VIEW_PATH . DIRECTORY_SEPARATOR . $view . $ext;
             } elseif (file_exists($view . $ext)) {
                 $this->view = $view . $ext;
-            }elseif (file_exists(FORM_PATH. "/$view$ext")) {
+            } elseif (file_exists(FORM_PATH . "/$view$ext")) {
                 $this->view = $view . $ext;
-            }elseif (file_exists($view)) {
+            } elseif (file_exists($view)) {
                 $this->view = $view;
                 break;
             }
         }
 
-        if(empty($this->view)){
-            ConfigHandler::get("eventEmmiter")->emit("error.404");
+        if (empty($this->view)) {
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "$view not found");
         }
 
         return true;
@@ -128,7 +128,7 @@ class TemplateEngine
     private function _parseTemplate()
     {
         preg_match_all("/{{\s?(\w+)\s?}}/m", $this->content, $this->fieldEntries, PREG_SET_ORDER, 0);
-        preg_match_all("/@(\w+)\((.*?)\)/m", $this->content, $this->methodEntries, PREG_SET_ORDER, 0);
+        preg_match_all("/@(\w+)\((.*?)(,(.*?))?\)/m", $this->content, $this->methodEntries, PREG_SET_ORDER, 0);
     }
 
     /**
@@ -139,21 +139,21 @@ class TemplateEngine
      */
     public function renderHtmlElement($type)
     {
-        if($type instanceof FieldsInterface){
+        if ($type instanceof FieldsInterface) {
             $block = $type::getBlockName();
-        }else{
+        } else {
             $block = $type;
         }
 
         $this->_load_template();
 
-        if($type == "errors"){
+        if ($type == "errors") {
             dump($this->content, "Template Content");
         }
 
         preg_match_all("#.*@block\($block\)((?s:.+?))@endblock.*#m", $this->content, $this->blockEntries, PREG_SET_ORDER, 0);
 
-        if($type == "errors"){
+        if ($type == "errors") {
             dump($this->blockEntries, "Block Entries");
         }
 
@@ -174,12 +174,10 @@ class TemplateEngine
     {
         $this->_parseTemplate();
 
-        if (count($this->methodEntries) > 0) {
-            $this->_parseFunctions();
-        }
 
         if ($tags) {
-            CacheHandler::set($this->view, $this->content);
+            $this->content = $this->getParsePhpView($this->content, $this->data["parameter"]);
+//            CacheHandler::set($this->view, $this->content);
 
             if (count($this->fieldEntries) > 0) {
                 $this->_parseTags();
@@ -190,21 +188,20 @@ class TemplateEngine
                 }
             }
 
-            foreach ($this->functions as $regex => $function){
+            foreach ($this->functions as $regex => $function) {
                 $this->content = preg_replace("#$regex#", $function, $this->content);
             }
         }
 
-        if(isset($this->data["render"]) && $this->data["render"]){
+        if (isset($this->data["render"]) && $this->data["render"]) {
             return $this->content;
         }
 
         if (!is_null($this->view)) {
-            $tmp = tmpfile();
-            fwrite($tmp, $this->content);
-            extract($this->data["parameter"]);
-            include stream_get_meta_data($tmp)['uri'];
+            return $this->getParsePhpView($this->content, $this->data);
         }
+
+        return false;
     }
 
     /**
@@ -275,6 +272,25 @@ class TemplateEngine
     {
         $this->_parseTemplate();
         $this->_parseTags();
+        $this->_parseTemplate();
+
+        if (count($this->methodEntries) > 0) {
+
+            $this->_parseFunctions($this);
+
+            foreach ($this->functions as $regex => $function) {
+                $this->content = preg_replace("#$regex#", $function, $this->content);
+            }
+        }
     }
 
+    private function getParsePhpView(string $content, array $data)
+    {
+        ob_start();
+        $tmp = tmpfile();
+        fwrite($tmp, $content);
+        extract($data);
+        require stream_get_meta_data($tmp)['uri'];
+        return ob_get_clean();
+    }
 }

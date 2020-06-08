@@ -39,7 +39,8 @@ form {
   + .tgl-btn {
     outline: 0;
     display: block;
-    width: 4em;
+    max-width: 6em;
+    min-width: 4em;
     height: 2em;
     position: relative;
     cursor: pointer;
@@ -137,6 +138,7 @@ form {
   + .tgl-btn {
     overflow: hidden;
     transform: skew(-10deg);
+    width: 100%;
     backface-visibility: hidden;
     transition: all .2s ease;
     font-family: sans-serif;

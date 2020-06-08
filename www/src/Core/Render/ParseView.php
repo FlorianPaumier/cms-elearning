@@ -21,7 +21,8 @@ class ParseView
         foreach ($data["parameter"] as $key => $value) {
             foreach ($fieldEntries as $tag) {
                 if ($tag[1] == $key) {
-                    $content = preg_replace("/{{\s?($key)\s?}}/", $value, $content);
+                    if($value instanceof \DateTime) $value = $value->format("Y-m-d");
+                    $content = preg_replace("/{{\s?($key)\s?}}/m", $value, $content);
                 }
             }
         }
@@ -39,6 +40,7 @@ class ParseView
     public function parseFunction(array $data, array $methodEntries, TemplateEngine $engine = null){
 
         $functions = [];
+
         foreach ($methodEntries as $tag) {
             $template = $tag[1];
             $value = $tag[2];
@@ -46,17 +48,18 @@ class ParseView
 
             switch ($template) {
                 case "path":
-                    $path = ConfigHandler::get("router")->getPath($value);
+                    $param = $tag[4] ?? null;
+                    $path = ConfigHandler::get("router")->getPath($value, $param);
                     $html = $path ?? "";
                     break;
                 case "isRequired":
-                    $html = isset($data["required"]) ? 'required="required"' : "";
+                    $html = isset($data["parameters"]["required"]) ? 'required="required"' : "";
                     break;
                 case "isMultiple":
-                    $html = isset($data["multiple"]) ? 'multiple' : "";
+                    $html = $tag[2] == true ? "multiple" : "";
                     break;
                 case "isSelected":
-                    $html = isset($data["selected"]) ? 'selected' : "";
+                    $html = $data["parameter"]["selected"];
                     break;
                 case "errorFeedback":
                     $html = RenderFunction::getErrorFeedback($data["errors"] ?? [], $engine);

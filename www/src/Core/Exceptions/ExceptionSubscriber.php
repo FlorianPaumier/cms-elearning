@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Core\Exceptions;
-
 
 use App\Core\Interfaces\SubscriberInterface;
 use App\Core\Render\RenderView;
@@ -22,9 +20,17 @@ class ExceptionSubscriber implements SubscriberInterface
             "error.404" => [
                 "method" => "notFoundException",
             ],
+            "error.401" => [
+                "method" => "notAuthorizedException",
+            ],
+            "error.403" => [
+                "method" => "forbiddenException",
+            ],
+            "error.405" => [
+                "method" => "methodNotAllowedException",
+            ],
         ];
     }
-
 
     /**
      * Redirect to 500 page error with message
@@ -32,16 +38,10 @@ class ExceptionSubscriber implements SubscriberInterface
      * @param  $message
      * @return false|string
      */
-    public function serverErrorException($message = "Une erreur est survenue."): void
+    public function serverErrorException(string $message = "Une erreur est survenue.", int $code = 500): void
     {
-        if($_SERVER["APP_ENV"]== "dev"){
-            $this->view = (new RenderView())->render("Errors/500", ["message" => $message]);
-        }else{
-            header("{$_SERVER["SERVER_PROTOCOL"]} 500 server error" . $message);
-        }
-        die;
+        $this->throwException(ServerErrorException::class, $message, $code);
     }
-
 
     /**
      * Redirect to 404 page error with message
@@ -49,20 +49,33 @@ class ExceptionSubscriber implements SubscriberInterface
      * @param  $message
      * @return false|string
      */
-    public function notFoundException($message = "Ce que vous cherchez n'est pas ici <a href='/'>Retour</a>"): void
+    public function notFoundException(string $message = "Ce que vous cherchez n'est pas ici <a href='/'>Retour</a>", int $code = 404): void
     {
-        dump(get_called_class());
-        if($_SERVER["APP_ENV"]== "dev"){
-            $this->view = (new RenderView())->render("Errors/404", ["message" => $message]);
-        }else{
-            header("{$_SERVER["SERVER_PROTOCOL"]} 404 not found" . $message);
-        }
-        die;
+        $this->throwException(NotFoundAbsctractException::class, $message, $code);
     }
 
-    public function __destruct()
-    {
-        if($this->view)
-            $this->view->compile();
+    public function notAuthorizedException(string $message = "Vous n'êtes pas autoriser à être ici", int $code = 401){
+        $this->throwException(ForbiddenException::class, $message, $code);
+    }
+
+    public function forbiddenException(string $message = "Vous devez vous connecter", int $code = 403){
+        $this->throwException(ForbiddenException::class, $message, $code);
+    }
+
+    public function methodNotAllowedException(string $message = "Méthod non autoriser", int $code = 405){
+        $this->throwException(MethodNotAllowedAbsctractException::class, $message, $code);
+    }
+
+    private function throwException(string $exception, string $message, int $code){
+        if($_SERVER["APP_ENV"] === "dev"){
+            try{
+                throw new $exception($message, $code);
+            }catch (AbsctractException $e){
+                (new RenderView())->renderErrors("errors/errors",$e);
+            }
+        }
+
+        http_response_code($code);
+        throw new $exception($message, $code);
     }
 }

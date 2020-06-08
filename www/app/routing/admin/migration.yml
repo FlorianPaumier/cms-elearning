@@ -1,0 +1,3 @@
+admin_db_migration:
+  path: /admin/migration
+  controller: App\Controllers\Admin\Migration:index

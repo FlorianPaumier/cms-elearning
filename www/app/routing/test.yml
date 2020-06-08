@@ -1,0 +1,32 @@
+test_simple:
+    path: '/test'
+    controller: App\Controllers\Test:simpleRouting
+    method: [GET]
+test_error:
+    path: '/test/view'
+    controller: App\Controllers\Test:errorView
+    method: [GET]
+test_error_forbidden:
+    path: '/test/forbidden'
+    controller: App\Controllers\Test:forbidden
+    method: [GET]
+test_to_json:
+    path: "/test/json"
+    controller: App\Controllers\Test:toJson
+    method: [GET]
+test_to_xml:
+    path: "/test/xml"
+    controller: App\Controllers\Test:toXml
+    method: [GET]
+test_to_yaml:
+    path: "/test/yaml"
+    controller: App\Controllers\Test:toYaml
+    method: [GET]
+test_to_ini:
+    path: "/test/ini"
+    controller: App\Controllers\Test:toIni
+    method: [GET]
+test_complex:
+    path: '/test/{id<\\d+>}'
+    controller: App\Controllers\Test:complexRouting
+    method: [GET]

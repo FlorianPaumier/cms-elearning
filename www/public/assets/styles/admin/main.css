@@ -179,13 +179,13 @@ img {
   left: 0;
 }
 .btn-shadow-in:hover {
-  box-shadow: inset 0 0 0 3px #AAA;
+  box-shadow: inset 0 0 0 3px #aaaaaa;
 }
 .btn-shadow-in:hover::after {
   width: 0;
 }
 .btn-shadow-out:hover {
-  box-shadow: 0 0 0 3px #AAA;
+  box-shadow: 0 0 0 3px #aaaaaa;
 }
 .btn-shadow-out:hover::after {
   width: 0;
@@ -510,6 +510,12 @@ img {
   width: 20px;
   height: 20px;
   font-size: 1.5rem;
+}
+
+.scroll-to-top {
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 
 @keyframes jittery {
@@ -1028,7 +1034,8 @@ form li {
 .tgl + .tgl-btn {
   outline: 0;
   display: block;
-  width: 4em;
+  max-width: 6em;
+  min-width: 4em;
   height: 2em;
   position: relative;
   cursor: pointer;
@@ -1101,6 +1108,7 @@ form li {
 .tgl-skewed + .tgl-btn {
   overflow: hidden;
   transform: skew(-10deg);
+  width: 100%;
   backface-visibility: hidden;
   transition: all 0.2s ease;
   font-family: sans-serif;
@@ -2334,10 +2342,83 @@ img {
   width: 20%;
 }
 
+/* The Modal (background) */
 .modal {
+  position: fixed;
+  /* Stay in place */
+  z-index: 100;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: black;
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+}
+.modal-dialog {
+  /* Modal Content/Box */
+}
+.modal-dialog .modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  /* 15% from the top and centered */
+  border: 1px solid #888;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+}
+.modal-dialog .modal-content .modal-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px;
+  background-color: #5cb85c;
+  color: white;
+  /* The Close Button */
+  /* Modal Body */
+  /* Modal Footer */
+}
+.modal-dialog .modal-content .modal-header .close {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+}
+.modal-dialog .modal-content .modal-header .close:hover, .modal-dialog .modal-content .modal-header .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+.modal-dialog .modal-content .modal-header .modal-body {
+  padding: 2px 16px;
+}
+.modal-dialog .modal-content .modal-header .modal-footer {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+.modal.hide {
   display: none;
 }
+.modal#eventModal .modal-content {
+  width: 30vw;
+}
 
+/* Add Animation */
+@keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
 .ck-editor__editable {
   min-height: 20vh;
 }

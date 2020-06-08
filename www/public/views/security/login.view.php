@@ -5,7 +5,10 @@
 <div class="container">
     <a href="#" id="link">Link</a>
     {{ form }}
-
+    <hr>
+     <div class="text-center">
+         <a class="small" href="@path(app_user_forget_password)">Forget Password?</a>
+ </div>
 </div>
 @endsection
 

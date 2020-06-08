@@ -16,22 +16,22 @@
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1>
+                                    <h1 class="h4 text-gray-900 mb-2">Forget Your Password?</h1>
                                     <p class="mb-4">We get it, stuff happens. Just enter your email address below and we'll send you a link to reset your password!</p>
                                 </div>
-                                <form class="user">
+
                                 {{form}}
 
-                                    <a href="{{ app_home|path }}" class="btn btn-primary btn-user btn-block">
-                                        Reset Password
+                                    <a href="@path(app_user_forget_password)" class="btn btn-primary btn-user btn-block">
+                                        forget Password
                                     </a>
-                                </form>
+
                                 <hr>
                                 <div class="text-center">
-                                    <a class="small" href="register @path(app_register)">Create an Account!</a>
+                                    <a class="small" href="@path(app_user_register)">Create an Account!</a>
                                 </div>
                                 <div class="text-center">
-                                    <a class="small" href="login @path(app_login)">Already have an account? Login!</a>
+                                    <a class="small" href="@path(app_user_login)">Already have an account? Login!</a>
                                 </div>
                             </div>
                         </div>

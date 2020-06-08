@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Core\Interfaces\BaseController;
@@ -12,6 +13,7 @@ class DefaultController extends BaseController
             "method" => $request->getMethod(),
         ]);
     }
+
     public function doc()
     {
         return $this->renderer->render("doc");

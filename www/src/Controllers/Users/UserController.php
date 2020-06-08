@@ -5,6 +5,7 @@ use App\Core\Interfaces\BaseController;
 use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Entity\User;
+use App\Form\UserDeleteUserForm;
 use App\Form\UserForgetpasswordForm;
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
@@ -24,7 +25,7 @@ class UserController extends BaseController
 
         if ($this->query->getMethod() == "POST" && $form->isValid()) {
 
-            if (($response = $this->userManager->connectUser($user->username, $user->password)) !== true) {
+            if (($response = $this->userManager->connectUser($user->getUsername(), $user->getPassword())) !== true) {
                 $this->session->set("app.flash", ["error" => [$response]]);
             } else {
                 $this->redirect->redirectToRoute("app_home");
@@ -44,22 +45,18 @@ class UserController extends BaseController
         /*if($this->userManager->isConnected()){
         $this->redirect->redirectToRoute("app_home");
         }*/
-
-        $form = $this->createForm(UserRegisterForm::class);
+        $user = new user();
+        $form = $this->createForm(UserRegisterForm::class, $user);
         $form->handleRequest($request);
 
         if ($this->query->getMethod() == "POST") {
-            $validator = $this->getValidator()->buildValidator(UserRegisterForm::getConstraint());
 
-            if ($validator->isValid()) {
-
-                if (($response = $this->userManager->createUser($this->query)) !== true) {
-                    $this->session->set("app.flash", ["error" => [$response]]);
-                } else {
-                    $this->redirect->redirectToRoute("app_user_login");
-                }
+            if ($form->isValid()) {
+                $this->repository->persist($user);
+                $this->repository->flush();
+                
             } else {
-                $this->session->set("app.flash", ["error" => $validator->getErrors()]);
+                $this->session->set("app.flash", ["error" => $form->getErrors()]);
             }
         }
 
@@ -68,6 +65,7 @@ class UserController extends BaseController
                 "form" => $form->createView(),
             ]
         );
+
     }
 
     public function loginCheck(Request $request)
@@ -101,9 +99,8 @@ class UserController extends BaseController
         $form->handleRequest($request);
 
         if ($this->query->getMethod() == "POST") {
-            $validator = $this->getValidator(new UserForgetpasswordForm())->buildValidator($request);
 
-            if ($validator->isValid()) {
+            if ($form->isValid()) {
                 $email = "";
                 if (($response = $this->userManager->forgetPassword($email)) !== true) {
                     $this->session->set("app.flash", ["error" => [$response]]);
@@ -111,7 +108,7 @@ class UserController extends BaseController
                     $this->redirect->redirectToRoute("app_home");
                 }
             } else {
-                $this->session->set("app.flash", ["error" => $validator->getErrors()]);
+                $this->session->set("app.flash", ["error" => $form->getErrors()]);
             }
         }
 
@@ -133,7 +130,7 @@ class UserController extends BaseController
 
             if ($validator->isValid()) {
                 $email = "";
-                if (($response = $this->userManager->forgetPassword($email)) !== true) {
+                if (($response = $this->userManager->deleteUser($email)) !== true) {
                     $this->session->set("app.flash", ["error" => [$response]]);
                 } else {
                     $this->redirect->redirectToRoute("app_home");
@@ -144,7 +141,7 @@ class UserController extends BaseController
         }
 
         return $this->renderer->render(
-            "security/frontend/forget_password", [
+            "security/frontend/delete_user", [
                 "form" => $form->createView(),
             ]
         );

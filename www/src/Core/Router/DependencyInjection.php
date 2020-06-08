@@ -5,6 +5,7 @@ namespace App\Core\Router;
 
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\Database\Table;
 use App\Core\Kernel\Kernel;
 
 class DependencyInjection
@@ -19,12 +20,13 @@ class DependencyInjection
         $this->action = $action;
     }
 
-    public function getParameters(?array $parameters)
+    public function getParameters(?array $args)
     {
-        if(is_null($parameters)){
-            $parameters = [];
+        if (is_null($args)) {
+            $args = [];
         }
 
+        $parameters = [];
         try {
             $functionParams = new \ReflectionMethod($this->controller, $this->action);
             foreach ($functionParams->getParameters() as $parameter) {
@@ -34,8 +36,20 @@ class DependencyInjection
                     array_splice($parameters, $parameter->getPosition(), 0, [$var]);
                 } else {
                     try {
+                        if(is_null($parameter->getClass())){
+                            array_splice($parameters, $parameter->getPosition(), 0, [$args[$name]]);
+                            continue;
+                        }
+
                         $className = $parameter->getClass()->getName();
                         $class = new $className();
+
+                        if (!empty($args)) {
+                            /** @var Table $repo */
+                            $repo = ConfigHandler::get("repository");
+                            $repo->getClass($className);
+                            $class = $repo->setEntity($className)->findBy($args);
+                        }
                         array_splice($parameters, $parameter->getPosition(), 0, [$name => $class]);
                     } catch (\Exception $e) {
                         dump($e->getMessage(), "Error");

@@ -12,6 +12,7 @@ class User
     protected $password;
     protected $email;
     protected $id;
+    protected $statut;
 
     /**
      * @return mixed
@@ -68,5 +69,15 @@ class User
         $this->id = $id;
     }
 
+
+    public function getStatut()
+    {
+        return $this->statut;
+    }
+
+    public function setStatut($token): void
+    {
+        $this->statut = $statut;
+    }
 
 }

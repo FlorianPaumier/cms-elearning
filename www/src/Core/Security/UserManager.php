@@ -83,6 +83,8 @@ class UserManager
         throw new ForbiddenException();
         }*/
 
+        dump($this->session->get("app.user"));
+
         if ($this->session->get("app.user")["timestamp"] < time()) {
             $this->disconnectUser();
         } else {

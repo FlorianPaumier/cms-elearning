@@ -54,6 +54,9 @@ class ConfigHandler
     public function init()
     {
 
+        session_start();
+
+
         $this->getConfig();
         $this->getRouting();
 
@@ -61,16 +64,16 @@ class ConfigHandler
             require_once ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php";
             self::bind("mailer", new MailerHandler());
         }
-
+        
         self::bind("request", Request::createFromGlobals());
-//        self::bind("session", new PHPSession());
+        self::bind("session", new PHPSession());
         self::bind("repository", new Table());
         self::bind("entityManager", new QueryBuilder());
         self::bind("userManager", new UserManager());
         self::bind("router", new Router());
         self::bind("logger", AbstractLogger::getInstance());
         self::bind("eventEmmiter", EventEmmiter::getInstance());
-        self::bind("serializer", new Serializer());
+        //self::bind("serializer", new Serializer());
 
     }
 

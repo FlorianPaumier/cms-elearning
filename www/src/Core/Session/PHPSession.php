@@ -12,7 +12,9 @@ class PHPSession implements SessionInterface, \ArrayAccess
 
     public function __construct()
     {
+        $this->ensureStarted();
         $this->session = ConfigHandler::get("request")->getSession();
+        
     }
 
     /**

@@ -66,6 +66,7 @@ class TemplateEngine
      */
     public function setView(string $view)
     {
+
         foreach (self::TPL_EXT as $ext) {
             if (file_exists(VIEW_PATH . DIRECTORY_SEPARATOR . $view . $ext)) {
                 $this->view = VIEW_PATH . DIRECTORY_SEPARATOR . $view . $ext;
@@ -173,10 +174,11 @@ class TemplateEngine
     {
         $this->_parseTemplate();
 
+
         if ($tags) {
+            $this->content = $this->getParsePhpView($this->content, $this->data["parameter"]);
 //            CacheHandler::set($this->view, $this->content);
 
-            $this->content = $this->getParsePhpView($this->content, $this->data["parameter"]);
             if (count($this->fieldEntries) > 0) {
                 $this->_parseTags();
                 $this->_parseTemplate();
@@ -194,7 +196,6 @@ class TemplateEngine
         if (isset($this->data["render"]) && $this->data["render"]) {
             return $this->content;
         }
-
 
         if (!is_null($this->view)) {
             return $this->getParsePhpView($this->content, $this->data);

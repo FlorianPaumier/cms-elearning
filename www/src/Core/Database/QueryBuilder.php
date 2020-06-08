@@ -3,6 +3,7 @@
 namespace App\Core\Database;
 
 use App\Core\Helpers\StringTransformer;
+use App\Entity\Lesson;
 
 class QueryBuilder
 {
@@ -16,7 +17,7 @@ class QueryBuilder
     /**
      * @var string|null
      */
-    protected $alias = "";
+    protected $alias = null;
     /**
      * @var string
      */
@@ -56,14 +57,17 @@ class QueryBuilder
      */
     protected $data = [];
 
+    /** @var array */
     protected $params = [];
+
+    /** @var array  */
+    protected $relations = [];
 
     public function __construct(\PDO $pdo = null)
     {
         if (is_null($pdo)) {
             $pdo = Connection::instance();
         }
-
         $this->pdo = $pdo;
     }
 
@@ -180,12 +184,12 @@ class QueryBuilder
      */
     public function count(): int
     {
-        $q = (clone $this)->select('COUNT(id) count')->fetchOrFail();
+        $q = $this->select('COUNT(id) count')->fetchOrFail();
 
         if (is_array($q)) {
-            $count = (int)$q[0]["count"];
+            $count = (int) $q[0]["count"];
         } else {
-            $count = (int)$q->count;
+            $count = (int) $q->count;
         }
 
         return $count;
@@ -212,6 +216,11 @@ class QueryBuilder
         return $this;
     }
 
+    public function join(string $type, string $value)
+    {
+        $this->relations[$type][] = $value;
+        return $this;
+    }
     /**
      * @return string
      */
@@ -223,7 +232,15 @@ class QueryBuilder
             $fields = implode(', ', $this->fields);
         }
 
-        $this->sql = "$this->method $fields FROM \"{$this->from}\"";
+        $this->sql = "$this->method $fields FROM {$this->from}";
+
+        if($this->relations){
+            foreach ($this->relations as $type => $relation){
+                foreach ($relation as $value){
+                    $this->sql .= " $type $value";
+                }
+            }
+        }
 
         if ($this->where) {
             $this->sql .= " WHERE " . $this->where;
@@ -261,16 +278,21 @@ class QueryBuilder
      */
     public function fetchOrFail()
     {
+//        var_dump($this->toSQL());
         $query = $this->pdo->prepare($this->toSQL());
         $query->execute($this->params);
 
         $this->params = [];
 
         $results = $query->fetchAll(\PDO::FETCH_ASSOC);
-
+        $record = false;
         if (isset($this->entity)) {
-            foreach ($results as $result) {
-                $record[] = Hydrator::hydrate($result, $this->entity);
+            if(count($results) > 1){
+                foreach ($results as $result) {
+                    $record[] = Hydrator::hydrate($result, $this->entity);
+                }
+            }else {
+                $record = Hydrator::hydrate($results[0], $this->entity);
             }
         } else {
             $record = $results;
@@ -278,14 +300,13 @@ class QueryBuilder
 
         $this->clear();
 
-        return $record !== false ? $record : null;
+        return (!empty($record) && $record !== false) ? $record : null;
     }
 
     public function setData(array $data)
     {
         $this->data = $data;
     }
-
 
     public function getClass(string $class)
     {

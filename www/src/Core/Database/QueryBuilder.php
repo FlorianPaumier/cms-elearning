@@ -4,6 +4,14 @@ namespace App\Core\Database;
 
 class QueryBuilder
 {
+    const JOIN_ARGS = [
+        "join" => "",
+        "inner" => "INNER",
+        "left" => "LEFT",
+        "right" => "RIGHT",
+        "full" => "FULL"
+    ];
+
     /** @var \PDO */
     protected $pdo;
     /**
@@ -54,6 +62,8 @@ class QueryBuilder
     protected $data;
 
     protected $params = [];
+
+    protected  $relations = [];
 
     public function __construct(\PDO $pdo = null)
     {
@@ -172,6 +182,28 @@ class QueryBuilder
     }
 
     /**
+     * Fonction de création de relation
+     * @param string $source
+     * @param string $target
+     * @param string $type
+     * @param string|null $targetField
+     * @return $this
+     * @throws \Exception
+     */
+    public function join(string $source, string $target, string $type = "join", string $targetField = null): self{
+        if(!key_exists($type, self::JOIN_ARGS))
+            throw new \Exception("Type not found");
+
+        if (is_null($targetField))
+            $targetField = "${source}_id";
+
+        $sql = self::JOIN_ARGS[$type] . " JOIN ${target} ON ${source}.id = ${target}.${targetField}";
+        $this->relations[] = $sql;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function count(): int
@@ -220,6 +252,12 @@ class QueryBuilder
         }
 
         $this->sql = "$this->method $fields FROM \"{$this->from}\"";
+
+        if ($this->relations) {
+            foreach ($this->relations as $relation) {
+                $this->sql .= " " . trim($relation);
+            }
+        }
 
         if ($this->where) {
             $this->sql .= " WHERE " . $this->where;

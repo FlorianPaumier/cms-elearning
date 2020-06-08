@@ -59,6 +59,7 @@ class FormBuilder
     /**
      * FormBuilder constructor.
      */
+    
     public function __construct(object $entity = null)
     {
         $this->entity = $entity;

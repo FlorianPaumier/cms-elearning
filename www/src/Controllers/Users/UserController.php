@@ -22,14 +22,16 @@ class UserController extends BaseController
         $user = new User();
         $form = $this->createForm(UserLoginForm::class, $user);
         $form->handleRequest($request);
-
+        
         if ($this->query->getMethod() == "POST" && $form->isValid()) {
-
-            if (($response = $this->userManager->connectUser($user->username, $user->password)) !== true) {
+            
+            if (($response = $this->userManager->connectUser($user->getUsername(), $user->getPassword)) !== true) {
                 $this->session->set("app.flash", ["error" => [$response]]);
-            } else {
+            }  else {
                 $this->redirect->redirectToRoute("app_home");
             }
+
+            
         }
 
         return $this->renderer->render(
@@ -52,8 +54,12 @@ class UserController extends BaseController
         if ($this->query->getMethod() == "POST") {
 
             if ($form->isValid()) {
+                $password = $user->getPassword();
+                $user->setPassword(md5($password));
                 $this->repository->persist($user);
                 $this->repository->flush();
+
+                $this->redirect->redirectToRoute("app_user_login");
 
             } else {
                 $this->session->set("app.flash", ["error" => $form->getErrors()]);

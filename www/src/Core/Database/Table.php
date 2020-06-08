@@ -69,8 +69,9 @@ class Table extends QueryBuilder
      */
     public function findBy(array $params)
     {
+       
         $this->method = "SELECT";
-
+        
         foreach (array_keys($params) as $key => $param) {
             if ($key > 0) {
                 $this->andWhere("$param = :$param");
@@ -145,7 +146,7 @@ class Table extends QueryBuilder
             } catch (\Exception $e) {
                 dump($e->getMessage());
             }
-            dump($sql->errorInfo());
+            
             if (is_null($query["object"]->getId())) {
                 $query["object"]->setId($this->pdo->lastInsertId());
             }

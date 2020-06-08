@@ -11,6 +11,7 @@ class User
     protected $username;
     protected $password;
     protected $email;
+    protected $id;
 
     /**
      * @return mixed
@@ -53,5 +54,17 @@ class User
     {
         $this->email = $email;
     }
+
+    
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+
 
 }

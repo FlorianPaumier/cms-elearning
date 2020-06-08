@@ -46,7 +46,7 @@ class UserManager
         $q = $this->repository->from("user")->findBy([
             "username" => $username,
             "password" => md5($password),
-            "enable" => true,
+            "statut" => true,
         ]);
 
         $response = false;

@@ -4,9 +4,19 @@ namespace App\Core\Database;
 
 use App\Core\Helpers\StringTransformer;
 use App\Entity\Lesson;
+use Exception;
 
 class QueryBuilder
 {
+    const JOIN_ARGS = [
+        "join" => '',
+        "inner" => 'INNER',
+        "left" => 'LEFT',
+        "right" => 'RIGHT',
+        "full" => 'FULL',
+
+    ];
+
     /** @var \PDO */
     protected $pdo;
 
@@ -120,8 +130,7 @@ class QueryBuilder
     }
 
     /**
-     * @param string $key
-     * @param string $direction
+     * @param string $field
      * @return $this
      */
     public function groupBy(string $field): self
@@ -180,6 +189,30 @@ class QueryBuilder
     }
 
     /**
+     * @param string $source
+     * @param string $target
+     * @param string $targetField
+     * @param string $type
+     *
+     * @throws Exception
+     * @return $this
+     */
+    public function join(string $source, string $target, string $type = "join",string $targetField = null): self
+    {
+        if(!key_exists($type, self::JOIN_ARGS))
+            throw new Exception("Type not found");
+
+        if(is_null($targetField)){
+            $target = "${source}_${targetField}";
+        }
+
+        $sql = self::JOIN_ARGS[$type] . " JOIN ${target} ON ${source}.id = ${target}.${targetField}";
+        $this->relations[] = $sql;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function count(): int
@@ -207,7 +240,7 @@ class QueryBuilder
     }
 
     /**
-     * @param  $value
+     * @param  $values
      * @return $this
      */
     public function setParams(array $values): self
@@ -239,6 +272,12 @@ class QueryBuilder
                 foreach ($relation as $value){
                     $this->sql .= " $type $value";
                 }
+            }
+        }
+
+        if($this->relations) {
+            foreach ($this->relations as $relation){
+                $this->sql .= " ".trim($relation);
             }
         }
 

@@ -3,6 +3,7 @@ use App\Core\Command\Receiver;
 use App\Core\Command\Invoker;
 use App\Core\ConstantLoader;
 
+
 include 'autoloader.php';
 
 new ConstantLoader();

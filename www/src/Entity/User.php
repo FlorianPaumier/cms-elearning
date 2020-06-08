@@ -11,6 +11,8 @@ class User
 
     protected $username;
     protected $password;
+    protected $email;
+    protected $lessons;
 
     /**
      * @return mixed
@@ -42,6 +44,23 @@ class User
     public function setPassword(User $password): void
     {
         $this->password = $password;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLessons()
+    {
+        return $this->lessons;
+    }
+
+    /**
+     * @param Lesson $lesson
+     */
+    public function setLessons(Lesson $lesson): User
+    {
+        $this->lessons[] = $lesson;
+        return $this;
     }
 
 }

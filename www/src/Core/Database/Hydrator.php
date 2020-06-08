@@ -36,6 +36,10 @@ abstract class Hydrator
                 if (!is_null($type) && !self::isRecursif()) {
                     $class = $type->getName();
                     if (!($value instanceof $class)) {
+
+                        // Cela fonctionne en Théorie
+                        $value = Hydrator::hydrate($array, $class);
+
                         if (gettype($value) == "integer") {
                             self::$recursif = true;
                             /** @var Table $repo */

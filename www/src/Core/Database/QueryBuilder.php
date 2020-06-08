@@ -186,21 +186,17 @@ class QueryBuilder
 
     /**
      * Fonction de création de relation
-     * @param string $source
      * @param string $target
+     * @param string $alias
      * @param string $type
-     * @param string|null $targetField
      * @return $this
      * @throws \Exception
      */
-    public function join(string $source, string $target, string $type = "join", string $targetField = null): self{
+    public function join(string $target, string $alias, string $type = "join"): self{
         if(!key_exists($type, self::JOIN_ARGS))
             throw new \Exception("Type not found");
 
-        if (is_null($targetField))
-            $targetField = "${source}_id";
-
-        $sql = self::JOIN_ARGS[$type] . " JOIN ${target} ON ${source}.id = ${target}.${targetField}";
+        $sql = self::JOIN_ARGS[$type] . " JOIN ${target} AS ${alias} ON ". $this->from . ".id = ${alias}." . $this->from . "_id";
         $this->relations[] = $sql;
 
         return $this;

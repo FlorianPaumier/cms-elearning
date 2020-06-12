@@ -9,6 +9,7 @@ class DefaultController extends BaseController
 {
     public function index(Request $request)
     {
+        dump($this->session->get("app.user"));
         return $this->renderer->render("home", [
             "method" => $request->getMethod(),
         ]);

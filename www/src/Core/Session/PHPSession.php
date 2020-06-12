@@ -21,7 +21,7 @@ class PHPSession implements SessionInterface, \ArrayAccess
     private function ensureStarted()
     {
         if (session_status() === PHP_SESSION_NONE) {
-            session_start();
+//            session_start();
         }
     }
 
@@ -34,7 +34,7 @@ class PHPSession implements SessionInterface, \ArrayAccess
      */
     public function get(string $key, $default = null)
     {
-        $this->ensureStarted();
+//        $this->ensureStarted();
         if (array_key_exists($key, $this->session)) {
             return $this->session[$key];
         }

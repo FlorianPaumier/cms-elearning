@@ -31,7 +31,7 @@
     @section(body)
 </main>
 
-@include(partials/modal)
+<!--@include(partials/modal)-->
 @include(partials/footer)
 
 <script src="/assets/scripts/header.js"></script>

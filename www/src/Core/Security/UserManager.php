@@ -7,6 +7,7 @@ use App\Core\Cache\ConfigHandler;
 use App\Core\database\Hydrator;
 use App\Core\Database\QueryBuilder;
 use App\Core\Database\Table;
+use App\Core\Request\ParameterBag;
 use App\Core\Request\Request;
 use App\Core\Session\PHPSession;
 use App\Entity\User;
@@ -43,14 +44,15 @@ class UserManager
      */
     public function connectUser(?string $username, ?string $password): bool
     {
-        $q = $this->repository->from("user")->findBy([
+        $q = $this->repository->setEntity(User::class)->findBy([
             "username" => $username,
             "password" => md5($password),
-            "enable" => true,
+//            "enable" => true,
         ]);
 
         $response = false;
 
+        dump($q);
         if ($q !== false) {
             $response = true;
             $this->session->set("app.user", [
@@ -59,6 +61,10 @@ class UserManager
                 "timestamp" => time() + 2 * 60 * 60,
             ]);
         }
+
+        dump($this->session);
+        die;
+
         return $response;
     }
 
@@ -75,9 +81,6 @@ class UserManager
      */
     public function isConnected()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
 
         /*if (!isset($_SESSION['auth'])) {
         throw new ForbiddenException();
@@ -88,7 +91,6 @@ class UserManager
         } else {
             return true;
         }
-
         return false;
 
     }

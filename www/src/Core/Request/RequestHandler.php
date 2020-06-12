@@ -62,8 +62,8 @@ class RequestHandler
         array $cookies = [],
         array $files = [],
         array $server = [],
-        $content = null,
-        array $session = []
+        array $session = [],
+        $content = null
     ) {
         $this->query = new ParameterBag($query);
         $this->request = new ParameterBag($request);

@@ -60,11 +60,9 @@ class QueryBuilder
 
     public function __construct(\PDO $pdo = null)
     {
-        dump($pdo);
         if (is_null($pdo)) {
             $pdo = Connection::instance();
         }
-        dump($pdo);
         $this->pdo = $pdo;
     }
 
@@ -265,6 +263,8 @@ class QueryBuilder
         $query = $this->pdo->prepare($this->toSQL());
         $query->execute($this->params);
 
+        dump($this->toSQL());
+        dump($this->params);
         $this->params = [];
 
         $results = $query->fetchAll(\PDO::FETCH_ASSOC);

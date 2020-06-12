@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 use App\Core\Kernel\Kernel;
 
 define("ROOT_PATH", dirname(__DIR__));

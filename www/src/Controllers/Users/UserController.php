@@ -21,16 +21,7 @@ class UserController extends BaseController
         }
         $user = new User();
         $form = $this->createForm(UserLoginForm::class, $user);
-        $form->handleRequest($request);
 
-        if ($this->query->getMethod() == "POST" && $form->isValid()) {
-
-            if (($response = $this->userManager->connectUser($user->username, $user->password)) !== true) {
-                $this->session->set("app.flash", ["error" => [$response]]);
-            } else {
-                $this->redirect->redirectToRoute("app_home");
-            }
-        }
 
         return $this->renderer->render(
             "security/login", [
@@ -74,14 +65,14 @@ class UserController extends BaseController
         $form = $this->createForm(UserLoginForm::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            if ($this->userManager->connectUser($this->query->getRequest()->get("username"), $this->query->getRequest()->get("password"))) {
-                $this->redirect->redirectToRoute("app_home");
+
+        if ($this->query->getMethod() == "POST" && $form->isValid()) {
+
+            if (($response = $this->userManager->connectUser($user->getUsername(), $user->getPassword())) !== true) {
+                $this->session->set("app.flash", ["error" => [$response]]);
             } else {
-                $this->session->set("app.flash", ["error" => ["Votre username ou votre mot de passe est incorrect"]]);
+//                $this->redirect->redirectToRoute("app_home");
             }
-        } else {
-            $this->session->set("app.flash", ["error" => $form->getErrorFeedback()]);
         }
 
         $this->redirect->redirectToRoute("app_user_login");

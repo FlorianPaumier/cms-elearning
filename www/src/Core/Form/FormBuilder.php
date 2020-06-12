@@ -59,7 +59,7 @@ class FormBuilder
     /**
      * FormBuilder constructor.
      */
-    
+
     public function __construct(object $entity = null)
     {
         $this->entity = $entity;
@@ -149,13 +149,13 @@ class FormBuilder
 
                     $method .= ucfirst($property);
                     if (method_exists($this->entity, $method)) {
-//                        /** @var \ReflectionMethod $methodReflection */
-//                        $methodReflection = new \ReflectionMethod($this->entity, $method);
-//
-//                        /** @var \ReflectionParameter $parameter */
-//                        $parameter = $methodReflection->getParameters()[0];
-//                        $paramClass = $parameter->getClass()->getName();
-//                        if($value instanceof $paramClass) dump("Hello");
+                        //                        /** @var \ReflectionMethod $methodReflection */
+                        //                        $methodReflection = new \ReflectionMethod($this->entity, $method);
+                        //
+                        //                        /** @var \ReflectionParameter $parameter */
+                        //                        $parameter = $methodReflection->getParameters()[0];
+                        //                        $paramClass = $parameter->getClass()->getName();
+                        //                        if($value instanceof $paramClass) dump("Hello");
 
                         if (gettype($value) == "array") {
                             foreach ($value as $entity) {
@@ -265,14 +265,16 @@ class FormBuilder
     public function createView(bool $prototype = false)
     {
         $html = implode(
-            "", array_map(
+            "",
+            array_map(
                 function ($input) {
                     if (!is_null($input->getHtml())) {
                         return $input->getHtml();
                     }
 
                     return html_entity_decode($input->renderElement());
-                }, $this->form
+                },
+                $this->form
             )
         );
 
@@ -387,7 +389,6 @@ class FormBuilder
             ]);
 
             $options[] = $type->renderElement();
-
         }
 
         $field->addData("optionsHTML", implode("", $options));
@@ -494,5 +495,4 @@ class FormBuilder
     {
         return new \DateTime($value);
     }
-
 }

@@ -52,18 +52,14 @@ class UserManager
 
         $response = false;
 
-        dump($q);
-        if ($q !== false) {
+        if (!empty($q)) {
             $response = true;
-            $this->session->set("app.user", [
-                "user" => $q->email,
-                "roles" => $q->roles,
+            $this->session->offsetSet("app.user", [
+                "user" => $q->getEmail(),
+                "roles" => $q->getRoles(),
                 "timestamp" => time() + 2 * 60 * 60,
             ]);
         }
-
-        dump($this->session);
-        die;
 
         return $response;
     }
@@ -73,7 +69,7 @@ class UserManager
      */
     public function disconnectUser()
     {
-        $this->session->delete("app.user");
+        $this->session->offsetUnset("app.user");
     }
 
     /**
@@ -81,16 +77,20 @@ class UserManager
      */
     public function isConnected()
     {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
         /*if (!isset($_SESSION['auth'])) {
         throw new ForbiddenException();
         }*/
 
-        if ($this->session->get("app.user")["timestamp"] < time()) {
+        if ($this->session->offsetGet("app.user")["timestamp"] < time()) {
             $this->disconnectUser();
         } else {
             return true;
         }
+
         return false;
 
     }
@@ -103,9 +103,10 @@ class UserManager
     public function getUser()
     {
         $session = $this->session->offsetGet("app.user");
-        $user = $this->repository->from('user')->findBy(["email" => $session["user"]]);
-        return $this->repository->hydrate(new User(), $user);
+//        $user = $this->repository->from('user')->findBy(["email" => $session["user"]]);
+        return $session;
     }
+
     /**
      * Test if the current user had the right roles to this request
      */

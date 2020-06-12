@@ -10,6 +10,7 @@ use App\Core\Contact\ContactMeta;
 use App\Core\Contact\ContactObject;
 use App\Core\Interfaces\BaseController;
 use App\Core\Mailer\MailerHandler;
+use App\Core\Mailer\MailerMessage;
 use App\Core\Request\Request;
 use App\Entity\SiteConfiguration;
 use PHPUnit\Util\Configuration;
@@ -17,7 +18,7 @@ use PHPUnit\Util\Configuration;
 class ContactController extends BaseController
 {
 
-    public function index(Request $request, MailerHandler $handler)
+    public function index(Request $request, MailerHandler $mailer)
     {
         /** @var ContactForm $contactForm */
         $contactForm = $this->repository->setEntity(ContactForm::class)->from("contact_form")->findBy(["enabled" => true])[0];
@@ -50,11 +51,12 @@ class ContactController extends BaseController
             $this->repository->flush();
             $dest = $this->repository->clear()->setEntity(SiteConfiguration::class)->from("site_configuration")->find(16);
 
-            $handler->setDest($dest->getContact());
-            $handler->setBody("New Contact");
-            $handler->send();
+            $message = new MailerMessage();
+            $message->setDest($dest->getContact());
+            $message->setBody("New Contact");
+            $mailer->send($message);
 
-            $this->redirect->redirectToRoute("app_contact");
+            $this->redirect->redirectToRoute("frontend_form_contact");
         }
 
         return $this->render("contact", [

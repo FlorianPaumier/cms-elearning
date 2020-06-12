@@ -101,7 +101,7 @@ class Request extends RequestHandler
     }
 
     /**
-     * @return mixed
+     * @return SessionBag
      */
     public function getSession()
     {

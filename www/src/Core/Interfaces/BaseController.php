@@ -69,7 +69,11 @@ abstract class BaseController
         $this->redirect = new RedirectionHandler();
     }
 
-
+    /** Return current log in user */
+    protected function getUser(){
+        dump($_SESSION);
+        return $this->session->offsetGet("app.user");
+    }
 
     /**
      * Creates and returns a Form instance from the type of the form.

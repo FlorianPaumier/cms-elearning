@@ -73,7 +73,7 @@ class RequestHandler
         $this->server = $server;
         $this->content = $content;
         $this->contentType = isset($this->server["CONTENT_TYPE"]) ?: null;
-        $this->session = $session;
+        $this->session = new SessionBag($session);
 
         return $this;
     }

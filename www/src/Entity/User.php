@@ -11,6 +11,9 @@ class User
     protected $username;
     protected $password;
     protected $email;
+    protected $id;
+    protected $statut;
+    protected $roles = ["ROLE_USER"];
 
     /**
      * @return mixed
@@ -23,9 +26,10 @@ class User
     /**
      * @param mixed $username
      */
-    public function setUsername($username): void
+    public function setUsername($username): User
     {
         $this->username = $username;
+        return $this;
     }
 
     /**
@@ -39,9 +43,10 @@ class User
     /**
      * @param mixed $password
      */
-    public function setPassword($password): void
+    public function setPassword($password): User
     {
         $this->password = $password;
+        return $this;
     }
 
     public function getEmail()
@@ -53,5 +58,46 @@ class User
     {
         $this->email = $email;
     }
+
+    
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+
+
+    public function getStatut()
+    {
+        return $this->statut;
+    }
+
+    public function setStatut($token): void
+    {
+        $this->statut = $token;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    /**
+     * @param string[] $roles
+     * @return User
+     */
+    public function setRoles(array $roles): User
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
 
 }

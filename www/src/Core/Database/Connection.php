@@ -28,7 +28,7 @@ abstract class Connection
             try {
                 self::$connection = new \PDO($dsn, $config["username"], $config["password"]);
             } catch (\PDOException $e) {
-                dump($e->getMessage());
+                echo $e->getMessage();
                 exit();
             }
         }

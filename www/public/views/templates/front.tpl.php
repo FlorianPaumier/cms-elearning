@@ -34,6 +34,7 @@
 <!--@include(partials/modal)-->
 @include(partials/footer)
 
+<script src="/assets/scripts/global.js"></script>
 <script src="/assets/scripts/header.js"></script>
 @section(javascript)
 </body>

@@ -174,10 +174,11 @@ class TemplateEngine
     {
         $this->_parseTemplate();
 
+
         if ($tags) {
+            $this->content = $this->getParsePhpView($this->content, $this->data["parameter"]);
 //            CacheHandler::set($this->view, $this->content);
 
-            $this->content = $this->getParsePhpView($this->content, $this->data["parameter"]);
             if (count($this->fieldEntries) > 0) {
                 $this->_parseTags();
                 $this->_parseTemplate();

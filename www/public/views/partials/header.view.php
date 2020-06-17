@@ -23,8 +23,8 @@
                 <li class="profile user-menu acilir">
                     <span class="icon"><i class="fa fa-user"></i></span>
                     <div class="login-menu">
-                        <a href="">Login</a>
-                        <a href="">Sign Up</a>
+                        <a href="@path(app_user_login)">Login</a>
+                        <a href="@path(app_user_register)">Sign Up</a>
                     </div>
                 </li>
             </ul>

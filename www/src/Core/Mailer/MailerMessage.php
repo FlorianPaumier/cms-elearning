@@ -38,8 +38,11 @@ class MailerMessage
      * @param array $dest
      * @return MailerMessage
      */
-    public function setDest(array $dest): MailerMessage
+    public function setDest(...$dest): MailerMessage
     {
+        foreach ($dest as $email){
+            $this->dest[] = $email;
+        }
         $this->dest = $dest;
         return $this;
     }

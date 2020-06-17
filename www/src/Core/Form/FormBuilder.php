@@ -17,6 +17,7 @@ use App\Core\Form\Validator\Validator;
 use App\Core\Helpers\ArrayCollection;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Render\RenderView;
+use App\Core\Request\ParameterBag;
 use App\Core\Request\Request;
 
 class FormBuilder
@@ -55,6 +56,12 @@ class FormBuilder
      * @var string
      */
     private $formParentType;
+
+    /** @var ParameterBag */
+    private $request;
+
+    /** @var ParameterBag */
+    private $query;
 
     /**
      * FormBuilder constructor.
@@ -115,6 +122,8 @@ class FormBuilder
     public function handleRequest(Request $request)
     {
         $keysForm = array_keys($this->form);
+
+        $this->request = $request->getRequest();
 
         foreach ($keysForm as $key) {
             preg_match_all('~\[\]~m', $key, $matches, PREG_SET_ORDER, 0);
@@ -292,6 +301,17 @@ class FormBuilder
     {
         return $this->inputs;
     }
+
+    public function get(string $key)
+    {
+        $prefix = $this->formType->getBlockPrefix();
+        $index = "${prefix}_${key}";
+
+
+
+     return $this->request->get($index);
+    }
+
 
     private function translateField(FieldsInterface $field, array $args)
     {

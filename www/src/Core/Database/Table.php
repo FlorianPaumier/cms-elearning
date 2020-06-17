@@ -153,6 +153,7 @@ class Table extends QueryBuilder
         }
 
         $this->clear();
+
     }
 
     private function buildWhereFieldQuery(array $params)
@@ -230,8 +231,12 @@ class Table extends QueryBuilder
      */
     public function delete(int $id): bool
     {
-        $query = $this->pdo->prepare("DELETE FROM {$this->from} WHERE id = :id");
-        return $query->execute(["id" => $id]);
+        $this->method = "DELETE";
+        $this->where("id = :id");
+        $this->setParam("id", $id);
+        $query = $this->pdo->prepare($this->toSQL());
+        $result = $query->execute($this->params);
+        return $result;
     }
 
     /**

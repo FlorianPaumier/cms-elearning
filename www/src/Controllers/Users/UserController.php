@@ -97,18 +97,17 @@ class UserController extends BaseController
         $form = $this->createForm(UserForgetpasswordForm::class);
         $form->handleRequest($request);
 
-        if ($this->query->getMethod() == "POST") {
+        if ($this->query->getMethod() == "POST" && $form->isValid()) {
+                $email = $form->get("email");
 
-            if ($form->isValid()) {
-                $email = "";
                 if (($response = $this->userManager->forgetPassword($email)) !== true) {
+
                     $this->session->set("app.flash", ["error" => [$response]]);
+
                 } else {
                     $this->redirect->redirectToRoute("app_home");
                 }
-            } else {
-                $this->session->set("app.flash", ["error" => $form->getErrors()]);
-            }
+
         }
 
         return $this->renderer->render(
@@ -121,31 +120,21 @@ class UserController extends BaseController
 
     public function deleteUser(Request $request)
     {
-        $user = new User();
-        $form = $this->createForm(UserDeleteUserForm::class, $user);
-        $form->handleRequest($request);
+        $currentUser = $this->getUser();
 
-        if ($this->query->getMethod() == "POST") {
+        if(empty($currentUser)) $this->redirect->redirectToRoute('app_user_login');
 
-            if ($form->isValid()) {
-                $this->repository->delete($user);
-                $this->repository->flush();
-                $email = "";
-                if (($response = $this->userManager->deleteUser($email)) !== true) {
-                    $this->session->set("app.flash", ["error" => [$response]]);
-                } else {
-                    $this->redirect->redirectToRoute("app_home");
-                }
-            } else {
-                $this->session->set("app.flash", ["error" => $form->getErrors()]);
-            }
+        $user = $this->repository->setEntity(User::class)->findBy(["email" => $currentUser["user"]]);
+
+        if($this->repository->from("user")->delete($user->getId())) {
+            $this->session->offsetUnset("app.user");
+        }else{
+                $this->redirect->redirectToRoute("app_user_profile");
         }
 
-        return $this->renderer->render(
-            "security/frontend/delete_user",
-            [
-                "form" => $form->createView(),
-            ]
-        );
-    }
+
+            $this->redirect->redirectToRoute("app_home");
+
+        }
+
 }

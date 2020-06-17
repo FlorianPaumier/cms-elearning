@@ -7,6 +7,8 @@ use App\Core\Cache\ConfigHandler;
 use App\Core\database\Hydrator;
 use App\Core\Database\QueryBuilder;
 use App\Core\Database\Table;
+use App\Core\Mailer\MailerHandler;
+use App\Core\Mailer\MailerMessage;
 use App\Core\Request\ParameterBag;
 use App\Core\Request\Request;
 use App\Core\Session\PHPSession;
@@ -165,9 +167,27 @@ class UserManager
      */
     public function forgetPassword(string $email)
     {
-        if ($this->repository->from("user")->findBy(["email" => $value["email"]])) {
-            return "un mail a été envoyé";
+        if ($this->repository->from("user")->exists(["email" => $email])) {
+
+            $user = $this->repository->setEntity(User::class)->findBy(["email" => $email]);
+            $user->setForgetPasswordToken(bin2hex(random_bytes(32)));
+
+            $server = ConfigHandler::get("request")->getServer();
+            $mailer = new MailerHandler();
+            $message = (new MailerMessage())
+                ->setSubjet("Forget Password")
+                ->setBody("<a href='".$server['HTTP_HOST']."/reset-token?token=".$user->getForgetPasswordToken()."'>Reset Password</a>")
+                ->setDest($email)
+                ->setContentType("text/html")
+                ;
+                if($mailer->send($message)){
+                    return "un mail a été envoyé";
+                }
+
+                return "Un problème est survenue lors de l'envoi";
         }
+
+        return "Aucun utilisateur ne correspond à cette email";
     }
 
     /**

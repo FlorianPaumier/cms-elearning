@@ -12,7 +12,14 @@ class User
     protected $password;
     protected $email;
     protected $id;
-    protected $statut;
+    protected $status;
+
+    /** @var string */
+    protected $forgetPasswordToken;
+
+    /** @var \DateTime */
+    protected $forgetPasswordTokenAvailable;
+
     protected $roles = ["ROLE_USER"];
 
 
@@ -72,14 +79,14 @@ class User
     }
 
 
-    public function getStatut()
+    public function getStatus()
     {
-        return $this->statut;
+        return $this->status;
     }
 
-    public function setStatut($token): void
+    public function setStatus($token): void
     {
-        $this->statut = $token;
+        $this->status = $token;
     }
 
     /**
@@ -99,4 +106,41 @@ class User
         $this->roles = $roles;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getForgetPasswordToken(): string
+    {
+        return $this->forgetPasswordToken;
+    }
+
+    /**
+     * @param string $forgetPasswordToken
+     */
+    public function setForgetPasswordToken( string $forgetPasswordToken): User
+    {
+        $this->forgetPasswordToken = $forgetPasswordToken;
+        $this->setForgetPasswordTokenAvailable();
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getForgetPasswordTokenAvailable(): \DateTime
+    {
+        return $this->forgetPasswordTokenAvailable;
+    }
+
+    /**
+     * @return User
+     */
+    private function setForgetPasswordTokenAvailable(): User
+    {
+        $this->forgetPasswordTokenAvailable = new \DateTime("+ 5 minutes");
+        return $this;
+    }
+
+
 }

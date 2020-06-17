@@ -27,6 +27,8 @@ class MailerHandler
     {
         if (file_exists(ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php")) {
             $this->mail = $this->createTransport();
+        }else{
+            throw new \Exception("You need to install phpmailer");
         }
     }
 

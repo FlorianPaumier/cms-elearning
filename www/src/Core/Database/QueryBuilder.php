@@ -228,7 +228,10 @@ class QueryBuilder
     {
         if (!is_null($this->alias)) {
             $fields = $this->fields !== ["*"] ? $this->alias . "." . implode(', ' . $this->alias . ".", $this->fields) : implode(', ' . $this->alias . ".", $this->fields);
-        } else {
+        } elseif($this->method == "DELETE"){
+            $fields = "";
+        }
+        else {
             $fields = implode(', ', $this->fields);
         }
 

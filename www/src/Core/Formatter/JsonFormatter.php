@@ -35,7 +35,7 @@ class JsonFormatter implements FormatterInterface
         if(!is_null($class) && !class_exists($class)){
             throw new ClassNotFoundException();
         }
-        $array = json_decode($this->data);
+        $array = json_decode($this->data, true);
 
         if(is_null($class)){
             return $array;

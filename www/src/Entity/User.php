@@ -15,6 +15,7 @@ class User
     protected $statut;
     protected $roles = ["ROLE_USER"];
 
+
     /**
      * @return mixed
      */
@@ -59,7 +60,7 @@ class User
         $this->email = $email;
     }
 
-    
+
     public function getId()
     {
         return $this->id;
@@ -98,6 +99,4 @@ class User
         $this->roles = $roles;
         return $this;
     }
-
-
 }

@@ -47,7 +47,7 @@ class UserManager
         $q = $this->repository->setEntity(User::class)->findBy([
             "username" => $username,
             "password" => md5($password),
-//            "enable" => true,
+            //            "enable" => true,
         ]);
 
         $response = false;
@@ -92,7 +92,6 @@ class UserManager
         }
 
         return false;
-
     }
 
     /**
@@ -103,7 +102,7 @@ class UserManager
     public function getUser()
     {
         $session = $this->session->offsetGet("app.user");
-//        $user = $this->repository->from('user')->findBy(["email" => $session["user"]]);
+        //        $user = $this->repository->from('user')->findBy(["email" => $session["user"]]);
         return $session;
     }
 
@@ -137,7 +136,6 @@ class UserManager
 
     public function updateUser()
     {
-
     }
 
     /**
@@ -177,6 +175,5 @@ class UserManager
      */
     public function deleteUser(string $email)
     {
-
     }
 }

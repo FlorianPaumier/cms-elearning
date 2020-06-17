@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers\Users;
 
 use App\Core\Interfaces\BaseController;
@@ -26,7 +27,8 @@ class UserController extends BaseController
 
 
         return $this->renderer->render(
-            "security/login", [
+            "security/login",
+            [
                 "form" => $form->createView(),
                 "errors" => [],
             ]
@@ -47,22 +49,23 @@ class UserController extends BaseController
             if ($form->isValid()) {
                 $password = $user->getPassword();
                 $user->setPassword(md5($password));
+
+
                 $this->repository->persist($user);
                 $this->repository->flush();
 
                 $this->redirect->redirectToRoute("app_user_login");
-
             } else {
                 $this->session->set("app.flash", ["error" => $form->getErrors()]);
             }
         }
 
         return $this->renderer->render(
-            ROOT_PATH . "/public/views/security/frontend/register", [
+            ROOT_PATH . "/public/views/security/frontend/register",
+            [
                 "form" => $form->createView(),
             ]
         );
-
     }
 
     public function loginCheck(Request $request)
@@ -109,11 +112,11 @@ class UserController extends BaseController
         }
 
         return $this->renderer->render(
-            "security/frontend/forget_password", [
+            "security/frontend/forget_password",
+            [
                 "form" => $form->createView(),
             ]
         );
-
     }
 
     public function deleteUser(Request $request)
@@ -139,10 +142,10 @@ class UserController extends BaseController
         }
 
         return $this->renderer->render(
-            "security/frontend/delete_user", [
+            "security/frontend/delete_user",
+            [
                 "form" => $form->createView(),
             ]
         );
-
     }
 }

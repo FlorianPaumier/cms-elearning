@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 use App\Core\Kernel\Kernel;
 
 define("ROOT_PATH", dirname(__DIR__));
@@ -11,8 +9,6 @@ require ROOT_PATH . '/src/Core/Helpers/autoloader.php';
 //Define ENV TYPE
 #Todo : Use config var
 $env="dev";
-ini_set('display_errors', true);
-$debug = false;
 
 if($env == "dev"){
     $debug=true;

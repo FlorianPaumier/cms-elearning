@@ -1219,10 +1219,6 @@ form li {
   transform: rotateY(20deg);
 }
 
-p, li, a {
-  font-size: 14px;
-}
-
 /* GRID */
 .twelve {
   width: 100%;
@@ -1277,6 +1273,9 @@ p, li, a {
   display: block;
   float: left;
   margin: 1% 0 1% 1.6%;
+}
+.col p, .col li, .col a {
+  font-size: 14px;
 }
 
 .col:first-of-type {
@@ -2431,45 +2430,127 @@ img {
     opacity: 1;
   }
 }
+#header #search .search, #header #nav-header nav > ul li.search-mobile {
+  position: relative;
+}
+#header #search .search input, #header #nav-header nav > ul li.search-mobile input {
+  background-color: #faf9f9;
+  border: 1px solid #e0e0e0;
+  color: #8f8f8f;
+  padding: 13px 50px 13px 20px;
+  border-radius: 20px;
+  width: 360px;
+}
+#header #search .search input:focus, #header #nav-header nav > ul li.search-mobile input:focus {
+  border: 1px solid #87B7FF;
+}
+#header #search .search input::placeholder, #header #nav-header nav > ul li.search-mobile input::placeholder {
+  color: #8f8f8f;
+}
+#header #search .search button, #header #nav-header nav > ul li.search-mobile button {
+  background-color: transparent;
+  border: 0;
+  color: #87B7FF;
+  font-size: 22px;
+  right: 4vw;
+  top: 6vh;
+  position: absolute;
+  cursor: pointer;
+}
+@media screen and (min-width: 720px) {
+  #header #search .search button, #header #nav-header nav > ul li.search-mobile button {
+    flex-direction: row;
+  }
+}
+
 #header {
   width: 100vw;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   vertical-align: center;
 }
-@media all and (min-width: 800px) {
-  #header .hamburger {
-    display: none;
+@media screen and (min-width: 720px) {
+  #header {
+    flex-direction: row;
   }
 }
-#header #menu {
-  width: 55vw;
+#header #nav-header {
+  display: none;
   background-color: #87B7FF;
 }
-#header #menu nav > ul {
+#header #nav-header.is-open {
+  display: flex;
+  height: calc(100vh - 75px);
+  width: 100vw;
+}
+#header #nav-header.is-open nav > ul {
+  display: flex;
+}
+#header #nav-header.is-open nav > ul .profile {
+  display: none;
+}
+@media screen and (min-width: 720px) {
+  #header #nav-header {
+    width: 55vw;
+    display: flex;
+  }
+}
+#header #nav-header nav > ul {
+  display: none;
   height: 75px;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   vertical-align: center;
   list-style: none;
   color: #FFF;
-  font-size: 18px;
 }
-#header #menu nav > ul li.link {
+#header #nav-header nav > ul li {
+  text-align: center;
+  width: 100vw;
+  font-size: 20px;
+  padding: 1.75rem 0;
+}
+#header #nav-header nav > ul li.search-mobile {
+  padding-bottom: 1rem;
+  flex-direction: row;
+  justify-content: space-between;
+  vertical-align: middle;
+  align-items: center;
+}
+@media screen and (min-width: 720px) {
+  #header #nav-header nav > ul li.search-mobile {
+    display: none;
+  }
+}
+#header #nav-header nav > ul li.link {
   text-decoration: underline;
 }
-#header #menu nav > ul li.link a, #header #menu nav > ul li.link a:visited {
+#header #nav-header nav > ul li.link a, #header #nav-header nav > ul li.link a:visited {
   color: white;
 }
-#header #menu nav > ul li.profile {
+#header #nav-header nav > ul li.profile {
   height: 35px;
 }
-#header #menu nav > ul li.profile .icon {
+#header #nav-header nav > ul li.profile-mobile {
+  justify-content: space-around;
+  display: flex;
+  padding: 0;
+}
+#header #nav-header nav > ul li.profile-mobile button {
+  background-color: #364885;
+  color: white;
+  border-color: #87B7FF;
+}
+@media screen and (min-width: 720px) {
+  #header #nav-header nav > ul li.profile-mobile {
+    display: none;
+  }
+}
+#header #nav-header nav > ul li.profile .icon {
   border-radius: 100%;
   background-color: #364885;
   width: 35px;
@@ -2479,36 +2560,36 @@ img {
   vertical-align: center;
   justify-content: center;
 }
-#header #menu nav > ul li.profile .icon i {
+#header #nav-header nav > ul li.profile .icon i {
   width: 25px;
 }
-#header #menu nav > ul li.profile.acilir {
+#header #nav-header nav > ul li.profile.acilir {
   position: relative;
 }
-#header #menu nav > ul li.profile.acilir:last-child {
+#header #nav-header nav > ul li.profile.acilir:last-child {
   margin-right: 0;
 }
-#header #menu nav > ul li.profile.acilir:hover > .login-menu {
+#header #nav-header nav > ul li.profile.acilir:hover > .login-menu {
   transition: all 0.3s;
   visibility: visible;
   opacity: 1;
   top: 6vh;
 }
-#header #menu nav > ul li.profile.acilir a {
+#header #nav-header nav > ul li.profile.acilir a {
   display: flex;
   flex-direction: column;
   align-items: center;
   color: #333333;
   font-size: 14px;
 }
-#header #menu nav > ul li.profile.acilir a > i {
+#header #nav-header nav > ul li.profile.acilir a > i {
   margin-bottom: 5px;
   font-size: 20px;
 }
-#header #menu nav > ul li.profile.acilir:hover > a {
+#header #nav-header nav > ul li.profile.acilir:hover > a {
   color: #87B7FF;
 }
-#header #menu nav > ul li.profile.acilir .login-menu {
+#header #nav-header nav > ul li.profile.acilir .login-menu {
   position: absolute;
   width: 180px;
   padding: 15px;
@@ -2523,7 +2604,7 @@ img {
   z-index: 999;
   background-color: #FFF;
 }
-#header #menu nav > ul li.profile.acilir .login-menu:before, #header #menu nav > ul li.profile.acilir .login-menu:after {
+#header #nav-header nav > ul li.profile.acilir .login-menu:before, #header #nav-header nav > ul li.profile.acilir .login-menu:after {
   content: "";
   position: absolute;
   right: 5%;
@@ -2531,15 +2612,15 @@ img {
   border-style: solid;
   border-width: 0 14px 14px 14px;
 }
-#header #menu nav > ul li.profile.acilir .login-menu:before {
+#header #nav-header nav > ul li.profile.acilir .login-menu:before {
   border-color: transparent transparent #d6d6d6 transparent;
   top: -14px;
 }
-#header #menu nav > ul li.profile.acilir .login-menu:after {
+#header #nav-header nav > ul li.profile.acilir .login-menu:after {
   border-color: transparent transparent #fff transparent;
   top: -13px;
 }
-#header #menu nav > ul li.profile.acilir .login-menu > a {
+#header #nav-header nav > ul li.profile.acilir .login-menu > a {
   display: block;
   text-align: center;
   padding-top: 8px;
@@ -2547,64 +2628,53 @@ img {
   font-size: 14px;
   font-weight: 600;
 }
-#header #menu nav > ul li.profile.acilir .login-menu > a:first-child {
+#header #nav-header nav > ul li.profile.acilir .login-menu > a:first-child {
   background-color: #87B7FF;
   color: #FFF;
   margin-bottom: 10px;
   border: 1px solid #87B7FF;
 }
-#header #menu nav > ul li.profile.acilir .login-menu > a:hover:first-child {
+#header #nav-header nav > ul li.profile.acilir .login-menu > a:hover:first-child {
   background-color: #364885;
   border: 1px solid #364885;
 }
-#header #menu nav > ul li.profile.acilir .login-menu > a:last-child {
+#header #nav-header nav > ul li.profile.acilir .login-menu > a:last-child {
   color: #666;
   border: 1px solid #d6d6d6;
 }
-#header #menu nav > ul li.profile.acilir .login-menu > a:hover:last-child {
+#header #nav-header nav > ul li.profile.acilir .login-menu > a:hover:last-child {
   color: #87B7FF;
   border: 1px solid #87B7FF;
 }
 #header #search {
-  width: 45vw;
+  width: 100vw;
   height: 75px;
-  background-color: #D0EDFF;
-  display: inherit;
+  background-color: #364885;
   flex-direction: row;
   justify-content: space-between;
   vertical-align: middle;
   align-items: center;
   padding: 0 1%;
+  display: flex;
+}
+@media all and (min-width: 800px) {
+  #header #search {
+    background-color: #D0EDFF;
+  }
+  #header #search .hamburger {
+    display: none;
+  }
 }
 #header #search img {
   height: 50px;
 }
 #header #search .search {
-  position: relative;
+  display: none;
 }
-#header #search .search input {
-  background-color: #faf9f9;
-  border: 1px solid #e0e0e0;
-  color: #8f8f8f;
-  padding: 13px 50px 13px 20px;
-  border-radius: 20px;
-  width: 360px;
-}
-#header #search .search input:focus {
-  border: 1px solid #87B7FF;
-}
-#header #search .search input:placeholder {
-  color: #8f8f8f;
-}
-#header #search .search button {
-  background-color: transparent;
-  border: 0;
-  color: #87B7FF;
-  font-size: 22px;
-  position: absolute;
-  right: 10px;
-  top: 8px;
-  cursor: pointer;
+@media screen and (min-width: 720px) {
+  #header #search .search {
+    display: flex;
+  }
 }
 
 main #main-section {
@@ -2621,23 +2691,37 @@ main #main-section .background {
   padding-left: 10%;
 }
 main #main-section .background h1 {
-  font-size: 50px;
+  font-size: 2.25rem;
   line-height: 70px;
 }
 main #main-section .background p {
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 29px;
   font-style: italic;
-  width: 50%;
+  width: 80vw;
+}
+@media screen and (min-width: 720px) {
+  main #main-section .background p {
+    font-size: 1.5rem;
+  }
+}
+main h2 {
+  line-height: 47px;
+  color: #5777EA;
+}
+main h2.text-center {
+  text-align: center;
 }
 main .section-doc {
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
 }
 main .section-doc article {
-  width: 430px;
+  width: 90vw;
   padding: 3%;
+  margin: 1vh 0;
   height: 350px;
   background: #FFFFFF;
   border: 1px solid #000000;
@@ -2658,21 +2742,17 @@ main .section-doc article p {
   line-height: 21px;
 }
 main #section-lesson {
-  margin-top: 20vh;
-}
-main #section-lesson h2 {
-  font-size: 30px;
-  line-height: 47px;
-  color: #5777EA;
-}
-main #section-lesson h2.text-center {
-  text-align: center;
+  margin-top: 15vh;
 }
 main #section-lesson #lessons {
   display: flex;
   flex-direction: row;
-  padding: 10px 44px;
   justify-content: space-between;
+}
+@media screen and (min-width: 720px) {
+  main #section-lesson #lessons {
+    padding: 10px 44px;
+  }
 }
 main #section-lesson #lessons button {
   background-color: transparent;
@@ -2682,12 +2762,6 @@ main #section-lesson #lessons button {
 main #section-lesson #lessons article {
   display: none;
   width: 70vw;
-  height: 30vh;
-}
-main #section-lesson #lessons article h2 {
-  margin: 0;
-  font-size: 25px;
-  line-height: 47px;
 }
 main #section-lesson #lessons article.active {
   display: flex;
@@ -2698,7 +2772,7 @@ main #section-lesson #lessons article.active {
 }
 main #section-lesson #lessons article img {
   width: 100%;
-  min-height: 100%;
+  min-height: 80px;
 }
 main #section-lesson #lessons article .content {
   padding-left: 5%;
@@ -2711,21 +2785,31 @@ main #section-lesson #lessons article .content {
 main #section-lesson #lessons article .content p {
   padding-right: 2%;
 }
-main #section-lesson #lessons article .content .btn {
+main #section-lesson #lessons article .btn {
   background-color: #87B7FF;
   border-radius: 15px;
-  width: 10vw;
+  width: 100%;
   text-align: center;
   margin-left: auto;
 }
 main #home-news {
   display: flex;
-  width: 80%;
-  margin-left: auto;
-  flex-direction: row;
-  justify-content: space-between;
+  width: 100%;
   margin-top: 10%;
+  flex-direction: column;
+  justify-content: center;
   margin-bottom: 10%;
+}
+main #home-news h2 {
+  text-align: center;
+}
+@media screen and (min-width: 720px) {
+  main #home-news {
+    margin-left: auto;
+    width: 80%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
 main #home-news article {
   display: none;
@@ -2734,6 +2818,9 @@ main #home-news .date {
   font-size: 1rem;
   line-height: 14px;
   text-decoration: underline;
+}
+main #home-news #testimonies {
+  margin: 10% 0;
 }
 main #home-news #testimonies article {
   width: 300px;
@@ -2744,6 +2831,7 @@ main #home-news #testimonies article {
   padding: 4%;
 }
 main #home-news #testimonies article.active {
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -2752,6 +2840,25 @@ main #home-news #testimonies article.active {
 }
 main #home-news #testimonies article.active p {
   font-size: 1.25rem;
+}
+main #home-news #testimonies article.active .btn {
+  background-color: #87B7FF;
+  border-radius: 15px;
+  width: 100%;
+  text-align: center;
+  margin-left: auto;
+}
+main #home-news #flux-rss {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 10% 0;
+}
+@media screen and (min-width: 720px) {
+  main #home-news #flux-rss {
+    width: 90vw;
+  }
 }
 main #home-news #flux-rss h2 {
   color: #5777EA;
@@ -2772,6 +2879,7 @@ main #home-news #flux-rss article h1 {
   margin: 0;
 }
 main #home-news #flux-rss article.active {
+  max-width: 90vw;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -2792,14 +2900,24 @@ main #newsletter {
   padding: 3%;
   justify-content: space-around;
   color: white;
-  display: flex;
   flex-direction: row;
+}
+@media screen and (min-width: 720px) {
+  main #newsletter {
+    display: flex;
+  }
+  main #newsletter div {
+    width: 10vw;
+  }
+}
+main #newsletter h2 {
+  height: auto;
+  color: white;
 }
 main #newsletter div {
   justify-content: space-between;
   align-items: center;
   vertical-align: center;
-  width: 75%;
   flex-direction: row;
   display: flex;
 }
@@ -2814,10 +2932,10 @@ main #newsletter div input {
 main #newsletter div .btn {
   background-color: #87B7FF;
   height: 50px;
-  border-radius: 15px;
-  width: 10vw;
+  border-radius: 0 15px 15px 0;
   text-align: center;
   margin-left: auto;
+  width: 75vw;
 }
 
 @keyframes fadein {

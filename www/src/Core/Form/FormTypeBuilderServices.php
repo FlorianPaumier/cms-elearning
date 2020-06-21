@@ -77,7 +77,6 @@ class FormTypeBuilderServices
         return $this;
     }
 
-
     public function createFormTypeClass(array $data, ContactForm $form = null): ContactForm
     {
         $className = $data["admin_contact_class"];

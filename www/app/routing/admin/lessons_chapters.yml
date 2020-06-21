@@ -8,11 +8,11 @@ admin_lesson_chapter_new:
   method: [GET,POST]
 
 admin_lesson_chapter_edit:
-  path: /admin/lesson_chapter/edit/{id<\\d+>}
+  path: /admin/lesson_chapter/edit/{id}
   controller: App\Controllers\Admin\LessonChapter:edit
   method: [GET,POST]
 
 admin_lesson_chapter_delete:
-  path: /admin/lesson_chapter/delete/{id<\\d+>}
+  path: /admin/lesson_chapter/delete/{id}
   controller: App\Controllers\Admin\LessonChapter:delete
   method: [DELETE]

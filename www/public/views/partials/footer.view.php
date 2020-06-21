@@ -1,7 +1,7 @@
 <!-- Scroll to Top Button-->
-<button class="scroll-to-top btn-jelly" data-target="#page-top">
-    <i class="fa fa-angle-up"></i>
-</button>
+<!--<button class="scroll-to-top btn-jelly" data-target="#page-top">-->
+<!--    <i class="fa fa-angle-up"></i>-->
+<!--</button>-->
 
 <footer>
     <ul class="footer-list">

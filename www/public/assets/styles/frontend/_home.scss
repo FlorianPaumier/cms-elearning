@@ -13,27 +13,42 @@ main {
       padding-left: 10%;
 
       h1 {
-        font-size: 50px;
+        font-size: 2.25rem;
         line-height: 70px;
       }
 
       p {
-        font-size: 20px;
+        @media screen and (min-width: $mobileWidth) {
+
+          font-size: 1.5rem;
+        }
+        font-size: 1.25rem;
         line-height: 29px;
         font-style: italic;
-        width: 50%;
+        width: 80vw;
       }
     }
   }
 
+  h2 {
+    &.text-center {
+      text-align: center;
+    }
+
+    line-height: 47px;
+    color: #5777EA;
+  }
+
   .section-doc {
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
 
     article {
-      width: 430px;
+      width: 90vw;
       padding: 3%;
+      margin: 1vh 0;
       height: 350px;
       background: #FFFFFF;
       border: 1px solid #000000;
@@ -60,22 +75,14 @@ main {
 
   #section-lesson {
 
-    margin-top: 20vh;
-
-    h2 {
-      &.text-center {
-        text-align: center;
-      }
-
-      font-size: 30px;
-      line-height: 47px;
-      color: #5777EA;
-    }
+    margin-top: 15vh;
 
     #lessons {
       display: flex;
       flex-direction: row;
-      padding: 10px 44px;
+      @media screen and (min-width: $mobileWidth) {
+        padding: 10px 44px;
+      }
       justify-content: space-between;
 
       button {
@@ -87,13 +94,6 @@ main {
       article {
         display: none;
         width: 70vw;
-        height: 30vh;
-
-        h2 {
-          margin: 0;
-          font-size: 25px;
-          line-height: 47px;
-        }
 
         &.active {
           display: flex;
@@ -105,7 +105,7 @@ main {
 
         img {
           width: 100%;
-          min-height: 100%;
+          min-height: 80px;
         }
 
         .content {
@@ -119,14 +119,14 @@ main {
           p {
             padding-right: 2%;
           }
+        }
 
-          .btn {
-            background-color: $blue;
-            border-radius: 15px;
-            width: 10vw;
-            text-align: center;
-            margin-left: auto;
-          }
+        .btn {
+          background-color: $blue;
+          border-radius: 15px;
+          width: 100%;
+          text-align: center;
+          margin-left: auto;
         }
       }
     }
@@ -134,14 +134,23 @@ main {
 
   #home-news {
     display: flex;
-    width: 80%;
-    margin-left: auto;
-    //margin-right: auto;
-    flex-direction: row;
-    justify-content: space-between;
+    width: 100%;
     margin-top: 10%;
+    flex-direction: column;
+    justify-content: center;
     margin-bottom: 10%;
 
+
+    h2 {
+      text-align: center;
+    }
+
+    @media screen and (min-width: $mobileWidth) {
+      margin-left: auto;
+      width: 80%;
+      flex-direction: row;
+      justify-content: space-between;
+    }
 
     article {
       display: none;
@@ -154,6 +163,7 @@ main {
     }
 
     #testimonies {
+      margin: 10% 0;
       article {
         width: 300px;
         height: auto;
@@ -163,6 +173,7 @@ main {
         padding: 4%;
 
         &.active {
+          background-color: #fff;
           display: flex;
           flex-direction: column;
           justify-content: space-around;
@@ -172,12 +183,28 @@ main {
           p {
             font-size: 1.25rem;
           }
+          .btn {
+            background-color: $blue;
+            border-radius: 15px;
+            width: 100%;
+            text-align: center;
+            margin-left: auto;
+          }
         }
       }
     }
 
     #flux-rss {
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
 
+      @media screen and (min-width: $mobileWidth) {
+        width: 90vw;
+      }
+
+      margin: 10% 0;
       h2 {
         color: #5777EA;
         margin: 0;
@@ -200,6 +227,7 @@ main {
         }
 
         &.active {
+          max-width: 90vw;
           display: flex;
           flex-direction: column;
           overflow: hidden;
@@ -231,14 +259,24 @@ main {
     padding: 3%;
     justify-content: space-around;
     color: white;
-    display: flex;
     flex-direction: row;
 
+    @media screen and (min-width: $mobileWidth){
+      display: flex;
+
+      div {
+        width: 10vw;
+      }
+    }
+
+    h2 {
+      height: auto;
+      color: white;
+    }
     div {
       justify-content: space-between;
       align-items: center;
       vertical-align: center;
-      width: 75%;
       flex-direction: row;
       display: flex;
 
@@ -255,10 +293,10 @@ main {
       .btn {
         background-color: $blue;
         height: 50px;
-        border-radius: 15px;
-        width: 10vw;
+        border-radius: 0 15px 15px 0;
         text-align: center;
         margin-left: auto;
+        width: 75vw;
       }
     }
   }

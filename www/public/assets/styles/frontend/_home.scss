@@ -290,13 +290,16 @@ main {
 
       }
 
-      .btn {
+      .btn-news {
         background-color: $blue;
         height: 50px;
         border-radius: 0 15px 15px 0;
         text-align: center;
         margin-left: auto;
-        width: 75vw;
+        width: auto;
+        font-size: 1rem;
+        font-weight: bold;
+        color: white;
       }
     }
   }

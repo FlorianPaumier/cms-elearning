@@ -103,7 +103,7 @@
     <h2 class="text-center">Newsletter</h2>
     <div>
         <input type="email" placeholder="Votre Email..." name="newsletter-email">
-        <button class="btn">M'inscrire</button>
+        <button class="btn-news">M'inscrire</button>
     </div>
 </section>
 @endsection

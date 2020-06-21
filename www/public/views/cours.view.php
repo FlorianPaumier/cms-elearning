@@ -4,15 +4,17 @@
 @section(body)
 <section id="catalogue-search">
     <form action="" method="get">
-        <select name="category" id="search_categories">
-            <option value="">Catégories</option>
-        </select>
-        <select name="themes" id="search_themes">
-            <option value="">Thèmes</option>
-        </select>
-        <select name="language" id="search_language">
-            <option value="">Langue</option>
-        </select>
+        <section class="select-form">
+            <select name="category" id="search_categories">
+                <option value="">Catégories</option>
+            </select>
+            <select name="themes" id="search_themes">
+                <option value="">Thèmes</option>
+            </select>
+            <select name="language" id="search_language">
+                <option value="">Langue</option>
+            </select>
+        </section>
         <input type="text" class="input-search" placeholder="Nom du cours">
         <button class="btn">Rechercher</button>
     </form>
@@ -20,13 +22,17 @@
 <section id="section-lessons" class="container">
     <ul class="cards">
         <?php for ($i = 0; $i < 10; $i++): ?>
-            <li class="lesson">
-                <article class="" data-path="@path(app_catalogue_show, <?= $i ?>)">
-                    <img src="https://unsplash.it/800/600?image=82" alt="lessons logo">
-                    <section class="content">
-                        <span>Type</span>
-                        <h1>Titre</h1>
-                        <span class="informations">
+            <li class="lesson cards__item">
+                <article data-path="@path(app_catalogue_show, <?= $i ?>)">
+                    <section class="content card__content">
+                        <section class="img">
+                            <img class="card__image" src="https://unsplash.it/800/600?image=82" alt="lessons logo">
+                        </section>
+                        <section class="right">
+                            <section class="top">
+                                <h1 class="text-center card__title">Titre</h1>
+                                <span>Type</span>
+                                <span class="informations">
                             <div class="times"><i class="far fa-hourglass"></i> 15 Heures</div>
                             <div class="difficulty">
                                 <div class="mesure">
@@ -35,9 +41,15 @@
                                 <span>Facile</span>
                             </div>
                         </span>
-                        <p class="">This is the shorthand for flex-grow, flex-shrink and flex-basis combined. The second and third parameters (flex-shrink and flex-basis) are
-                            optional.
-                            Default is 0 1 auto. </p>
+                            </section>
+                            <section class="bottom">
+                                <p class="card__text">This is the shorthand for flex-grow, flex-shrink and flex-basis combined. The second and third parameters (flex-shrink and
+                                    flex-basis)
+                                    are
+                                    optional.
+                                    Default is 0 1 auto. </p>
+                            </section>
+                        </section>
                     </section>
                 </article>
             </li>

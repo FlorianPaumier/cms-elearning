@@ -57,26 +57,49 @@
 </section>
 <section id="home-news" class="row">
     <section id="testimonies" class="col-md-6">
-        <?php for ($y = 0; $y < 3; $y++): ?>
-            <article class="testimony <?php if ($y == 1) echo 'active' ?>">
-                <h2 class="text-center">Salut</h2>
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem</p>
-                <span class="date">10/02/2020</span>
-            </article>
-        <?php endfor; ?>
+        <h2>Témoignages</h2>
+        <ul class="cards">
+            <?php for ($y = 0; $y < 3; $y++): ?>
+                <li class="cards_item">
+                    <article class="testimony card <?php if ($y == 1) echo 'active' ?>">
+                        <section class="card__title card__header">
+                            <h1>Salut</h1>
+                        </section>
+
+                        <section class="card__content card__text">
+                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem</p>
+                        </section>
+
+                        <section class="card__footer">
+                            <span class="date">10/02/2020</span>
+                        </section>
+                    </article>
+                </li>
+            <?php endfor; ?>
+        </ul>
     </section>
     <section id="flux-rss" class="col-md-6 col-sm-12 col-lg-6">
         <h2>Dernières actualités</h2>
-        <?php for ($y = 0; $y < 3; $y++): ?>
-            <article class="news col-md-6 col-sm-12 col-lg-6 <?php if ($y == 1) echo 'active' ?>">
-                <span class="date">10/02/2020</span>
-                <h1>Salut</h1>
-                <p>Sed ut perspiciatis unde omnis iste natus error sit
-                    voluptatem accusantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium ....
-                </p>
-                <a href="#" class="know-more">Voir la suite</a>
-            </article>
-            <?php endfor;?>
+        <ul class="cards">
+            <?php for ($y = 0; $y < 3; $y++): ?>
+                <li class="cards_item">
+                    <article class="card col-md-6 col-sm-12 col-lg-6 <?php if ($y === 0) echo 'active' ?>">
+                        <section class="card__title card__header">
+                            <h1>Salut</h1>
+                        </section>
+                        <section class="card__content card__text">
+                            <p>Sed ut perspiciatis unde omnis iste natus error sit
+                                voluptatem accusantium. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium ....
+                            </p>
+                        </section>
+                        <section class="card__footer">
+                            <span class="date">10/02/2020</span>
+                            <a href="@path(app_home)" class="know-more">Voir la suite</a>
+                        </section>
+                    </article>
+                </li>
+            <?php endfor; ?>
+        </ul>
     </section>
 </section>
 

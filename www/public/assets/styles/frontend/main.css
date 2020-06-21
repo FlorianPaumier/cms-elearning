@@ -2143,6 +2143,12 @@ img {
 .cards .card .btn--block {
   display: block;
 }
+.cards .card__header {
+  font-size: 1.5rem;
+  align-content: center;
+  text-align: center;
+  justify-content: center;
+}
 .cards .card__content {
   display: flex;
   flex: 1 1 auto;
@@ -2194,6 +2200,12 @@ img {
   font-size: 0.875rem;
   line-height: 1.5;
   margin-bottom: 1.25rem;
+}
+.cards .card__footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 2rem;
 }
 
 .cards {
@@ -2659,7 +2671,7 @@ main #section-lesson h2.text-center {
 main #section-lesson #lessons {
   display: flex;
   flex-direction: row;
-  padding: 0 44px;
+  padding: 10px 44px;
   justify-content: space-between;
 }
 main #section-lesson #lessons button {
@@ -2708,20 +2720,28 @@ main #section-lesson #lessons article .content .btn {
 }
 main #home-news {
   display: flex;
+  width: 80%;
+  margin-left: auto;
   flex-direction: row;
+  justify-content: space-between;
   margin-top: 10%;
+  margin-bottom: 10%;
 }
 main #home-news article {
   display: none;
 }
+main #home-news .date {
+  font-size: 1rem;
+  line-height: 14px;
+  text-decoration: underline;
+}
 main #home-news #testimonies article {
   width: 300px;
-  height: 300px;
-  border-radius: 100%;
+  height: auto;
+  max-height: 300px;
   margin: auto;
-  justify-content: center;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
   background-color: #D0EDFF;
+  padding: 4%;
 }
 main #home-news #testimonies article.active {
   display: flex;
@@ -2731,7 +2751,7 @@ main #home-news #testimonies article.active {
   text-align: center;
 }
 main #home-news #testimonies article.active p {
-  padding: 0 4%;
+  font-size: 1.25rem;
 }
 main #home-news #flux-rss h2 {
   color: #5777EA;
@@ -2743,6 +2763,7 @@ main #home-news #flux-rss h2 {
 main #home-news #flux-rss article {
   width: 500px;
   height: 300px;
+  background-color: #f1f1f1;
 }
 main #home-news #flux-rss article * {
   padding: 10px 0;
@@ -2755,16 +2776,15 @@ main #home-news #flux-rss article.active {
   flex-direction: column;
   overflow: hidden;
 }
-main #home-news #flux-rss article.active .date {
-  font-size: 12px;
-  line-height: 14px;
-  color: #555;
+main #home-news #flux-rss article.active .card__footer a {
+  color: black;
+  font-size: 1rem;
+  text-align: right;
 }
 main #home-news #flux-rss article.active p {
+  font-size: 1.25rem;
   font-style: italic;
-}
-main #home-news #flux-rss article.active a {
-  color: black;
+  padding: 1rem;
 }
 main #newsletter {
   height: 250px;

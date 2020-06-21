@@ -2143,6 +2143,12 @@ img {
 .cards .card .btn--block {
   display: block;
 }
+.cards .card__header {
+  font-size: 1.5rem;
+  align-content: center;
+  text-align: center;
+  justify-content: center;
+}
 .cards .card__content {
   display: flex;
   flex: 1 1 auto;
@@ -2194,6 +2200,12 @@ img {
   font-size: 0.875rem;
   line-height: 1.5;
   margin-bottom: 1.25rem;
+}
+.cards .card__footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 2rem;
 }
 
 .cards {

@@ -30,7 +30,6 @@ class SondageController extends BaseController
         $form->handleRequest($request);
 
         if ($request->getMethod() == "POST" && $form->isValid()) {
-            $sondage->setDate(new \DateTime());
             /** @var Table $em */
             $em = ConfigHandler::get("repository");
             $em->persist($sondage);

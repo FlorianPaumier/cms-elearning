@@ -18,9 +18,11 @@ class Sondage
     protected $question;
 
     /** @var \DateTime */
-    protected $date_created;
+    protected $dateCreated;
 
-    public function __construct(){}
+    public function __construct(){
+        $this->dateCreated = new \DateTime();
+    }
 
     /**
      * @return int
@@ -61,18 +63,18 @@ class Sondage
     /**
      * @return \DateTime
      */
-    public function getDate(): ?\DateTime
+    public function getDateCreated(): ?\DateTime
     {
-        return $this->date_created;
+        return $this->dateCreated;
     }
 
     /**
-     * @param \DateTime $date_created
+     * @param \DateTime $dateCreated
      * @return Sondage
      */
-    public function setDate(\DateTime $date_created): Sondage
+    public function setDateCreated(\DateTime $dateCreated): Sondage
     {
-        $this->date_created = $date_created;
+        $this->dateCreated = $dateCreated;
         return $this;
     }
 }

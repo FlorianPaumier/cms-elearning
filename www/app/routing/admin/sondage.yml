@@ -1,0 +1,18 @@
+admin_sondage_list:
+  path: /admin/sondage
+  controller: App\Controllers\Admin\Sondage:index
+
+admin_sondage_new:
+  path: /admin/sondage/new
+  controller: App\Controllers\Admin\Sondage:new
+  method: [GET,POST]
+
+admin_sondage_edit:
+  path: /admin/sondage/edit/{id<\\d+>}
+  controller: App\Controllers\Admin\Sondage:edit
+  method: [GET,POST]
+
+admin_sondage_delete:
+  path: /admin/sondage/delete/{id<\\d+>}
+  controller: App\Controllers\Admin\Sondage:delete
+  method: [GET,POST]

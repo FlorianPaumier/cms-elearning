@@ -12,3 +12,8 @@ app_catalogue:
   path: "/cours"
   controller: App\Controllers\Cours:index
   method: [GET]
+
+app_chat:
+  path: "/chat"
+  controller: App\Controllers\Chat\Chat:index
+  method: [GET,POST]

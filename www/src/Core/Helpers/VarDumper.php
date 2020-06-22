@@ -53,6 +53,7 @@ if (!function_exists('dump')) {
     </style>
     ";
         if($_SERVER["APP_ENV"] == "dev") {
+
             //=== Content
             echo "<pre style='background:$background; color:$color; padding:10px 20px; border:2px inset $color'>";
             echo    "<h2>$title</h2>";
@@ -61,6 +62,10 @@ if (!function_exists('dump')) {
         }
     }
 
+    function dd($data, $title =""){
+        dump($data, $title);
+        die;
+    }
     function output($data)
     {
         var_dump($data);

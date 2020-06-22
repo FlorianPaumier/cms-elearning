@@ -101,7 +101,7 @@ class Request extends RequestHandler
     }
 
     /**
-     * @return mixed
+     * @return SessionBag
      */
     public function getSession()
     {
@@ -123,6 +123,6 @@ class Request extends RequestHandler
      */
     public function getMethod()
     {
-        return $this->server["REQUEST_METHOD"] ?: "GET";
+        return $this->server["REQUEST_METHOD"] ?? "GET";
     }
 }

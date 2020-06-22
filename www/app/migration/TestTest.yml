@@ -1,0 +1,22 @@
+1:
+  method: alter-add
+  column:
+    id:
+      name: id
+      type: int
+      options:
+        - PRIMARY KEY
+        - NOT NULL
+    name:
+      name: nom
+      type: text
+2:
+  method: alter-drop
+  column:
+    id:
+      name: id
+3:
+  method: alter-drop
+  column:
+    id:
+      name: id

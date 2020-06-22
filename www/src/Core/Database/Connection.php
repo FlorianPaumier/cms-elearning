@@ -3,8 +3,6 @@
 namespace App\Core\Database;
 
 use App\Core\Cache\CacheHandler;
-use App\Core\Cache\ConfigHandler;
-use App\Core\Kernel\Kernel;
 
 /**
  * Singleton Connection
@@ -21,14 +19,15 @@ abstract class Connection
      */
     public static function instance()
     {
-        if(self::$connection === null ) {
+
+        if (self::$connection === null) {
             // Late static binding (PHP 5.3+)
             $config = CacheHandler::get("config")["database"];
             $dsn = "${config['driver']}:host=${config['host']};dbname=${config['dbname']}";
 
-            try{
+            try {
                 self::$connection = new \PDO($dsn, $config["username"], $config["password"]);
-            }catch (\PDOException $e){
+            } catch (\PDOException $e) {
                 echo $e->getMessage();
                 exit();
             }

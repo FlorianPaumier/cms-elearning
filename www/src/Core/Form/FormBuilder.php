@@ -9,6 +9,7 @@ use App\Core\Database\Table;
 use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\ChoiceType;
 use App\Core\Form\Fields\CollectionType;
+use App\Core\Form\Fields\DateType;
 use App\Core\Form\Fields\EntityType;
 use App\Core\Form\Fields\FieldsInterface;
 use App\Core\Form\Fields\OptionType;
@@ -16,6 +17,7 @@ use App\Core\Form\Validator\Validator;
 use App\Core\Helpers\ArrayCollection;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Render\RenderView;
+use App\Core\Request\ParameterBag;
 use App\Core\Request\Request;
 
 class FormBuilder
@@ -55,6 +57,12 @@ class FormBuilder
      */
     private $formParentType;
 
+    /** @var ParameterBag */
+    private $request;
+
+    /** @var ParameterBag */
+    private $query;
+
     /**
      * FormBuilder constructor.
      */
@@ -62,7 +70,6 @@ class FormBuilder
     {
         $this->entity = $entity;
         $this->render = new RenderView();
-        define("FORM_PATH", __DIR__);
     }
 
     /**
@@ -115,6 +122,8 @@ class FormBuilder
     {
         $keysForm = array_keys($this->form);
 
+        $this->request = $request->getRequest();
+
         foreach ($keysForm as $key) {
             preg_match_all('~\[\]~m', $key, $matches, PREG_SET_ORDER, 0);
             $requestKey = $key;
@@ -141,34 +150,19 @@ class FormBuilder
 
                     $method = "set";
 
-                    if ($this->fields[$key]["type"] == EntityType::class) {
-                        /** @var Table $repository */
-                        $repository = ConfigHandler::get('repository');
-
-                        if (gettype($value) == "array") {
-                            $method = "add";
-                            $items = [];
-                            foreach ($value as $id) {
-                                $result = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->find($id)[0];
-                                $items[] = $result;
-                            }
-                            $value = $items;
-                        } else {
-                            $value = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->find($value);
-                        }
-
-                    }
+                    $value = $this->transformValue($key, $value);
 
                     $property = $this->fields[$key]["key"];
+
                     $method .= ucfirst($property);
                     if (method_exists($this->entity, $method)) {
-//                        /** @var \ReflectionMethod $methodReflection */
-//                        $methodReflection = new \ReflectionMethod($this->entity, $method);
-//
-//                        /** @var \ReflectionParameter $parameter */
-//                        $parameter = $methodReflection->getParameters()[0];
-//                        $paramClass = $parameter->getClass()->getName();
-//                        if($value instanceof $paramClass) dump("Hello");
+                        //                        /** @var \ReflectionMethod $methodReflection */
+                        //                        $methodReflection = new \ReflectionMethod($this->entity, $method);
+                        //
+                        //                        /** @var \ReflectionParameter $parameter */
+                        //                        $parameter = $methodReflection->getParameters()[0];
+                        //                        $paramClass = $parameter->getClass()->getName();
+                        //                        if($value instanceof $paramClass) dump("Hello");
 
                         if (gettype($value) == "array") {
                             foreach ($value as $entity) {
@@ -278,14 +272,16 @@ class FormBuilder
     public function createView(bool $prototype = false)
     {
         $html = implode(
-            "", array_map(
+            "",
+            array_map(
                 function ($input) {
                     if (!is_null($input->getHtml())) {
                         return $input->getHtml();
                     }
 
                     return html_entity_decode($input->renderElement());
-                }, $this->form
+                },
+                $this->form
             )
         );
 
@@ -304,6 +300,17 @@ class FormBuilder
     {
         return $this->inputs;
     }
+
+    public function get(string $key)
+    {
+        $prefix = $this->formType->getBlockPrefix();
+        $index = "${prefix}_${key}";
+
+
+
+     return $this->request->get($index);
+    }
+
 
     private function translateField(FieldsInterface $field, array $args)
     {
@@ -328,7 +335,6 @@ class FormBuilder
 
     private function fieldExist(string $key, string $field, array $args)
     {
-
         $options = (new $this->formType)->getOptions();
 
         if (!key_exists("data_class", $options) || $field === ButtonType::class || $args["mapped"] === false) {
@@ -365,7 +371,8 @@ class FormBuilder
         /** @var Table $repository */
         $repository = ConfigHandler::get('repository');
         $repository->getClass($args["entry_type"]);
-        $items = $repository->findAll();
+
+        $items = $repository->select('id', $args["choice_label"])->findAll();
         $options = [];
 
 
@@ -400,7 +407,6 @@ class FormBuilder
             ]);
 
             $options[] = $type->renderElement();
-
         }
 
         $field->addData("optionsHTML", implode("", $options));
@@ -450,7 +456,7 @@ class FormBuilder
             $args["name"] = $this->formType->getBlockPrefix() . "[" . $args["key"] . "]";
         }
 
-        if ($args["multiple"]) {
+        if (isset($args["multiple"]) && $args["multiple"]) {
             $parent = new $this->parent;
 
             $args["name"] = $parent->getBlockPrefix() . "_" . $args['key'] . "[]";
@@ -470,4 +476,41 @@ class FormBuilder
         return "";
     }
 
+    private function transformValue(string $key, $value)
+    {
+        if ($this->fields[$key]["type"] == EntityType::class) {
+            return $this->transformEntity($key, $value);
+        }
+
+        if ($this->fields[$key]["type"] == DateType::class) {
+            return $this->transformDate($key, $value);
+        }
+
+        return $value;
+    }
+
+    private function transformEntity(string $key, $value)
+    {
+        /** @var Table $repository */
+        $repository = ConfigHandler::get('repository');
+
+        if (gettype($value) == "array") {
+            $method = "add";
+            $items = [];
+            foreach ($value as $id) {
+                $result = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->select($this->fields[$key]["args"]["choice_label"] ?? "id")->find($id);
+                $items[] = $result;
+            }
+            $value = $items;
+        } else {
+            $value = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->select($this->fields[$key]["args"]["choice_label"] ?? "id")->find($value);
+        }
+
+        return $value;
+    }
+
+    private function transformDate(string $key, $value)
+    {
+        return new \DateTime($value);
+    }
 }

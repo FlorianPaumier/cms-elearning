@@ -18,7 +18,7 @@ class ContactController extends BaseController
     public function index(Request $request)
     {
         return $this->renderer->render("admin/contact/index", [
-            "forms" => $this->repository->from("contact")->findAll()
+            "forms" => $this->repository->setEntity(ContactForm::class)->findAll()
         ]);
     }
 
@@ -47,8 +47,7 @@ class ContactController extends BaseController
     }
 
     public function edit(Request $request,Serializer $serializer, ContactForm $contactForm){
-
-        $inputs = $this->repository->from("contact_input")->orderBy("position", "ASC")->findBy(["contact_form" => $contactForm->getId()]);
+        $inputs = $this->repository->setEntity(ContactInput::class)->orderBy("position", "ASC")->findBy(["contact_form" => $contactForm->getId()]);
         $json = $serializer->serialize($inputs, "json");
 
         if($request->getMethod() == "POST"){
@@ -63,8 +62,6 @@ class ContactController extends BaseController
                 $this->repository->from("contact_input")->persist($input);
             }
             $this->repository->flush();
-
-            die;
         }
         return $this->render("admin/contact/edit", ["inputs" => $json, "form" => $contactForm]);
     }

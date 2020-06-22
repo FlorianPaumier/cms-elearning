@@ -43,6 +43,14 @@ img {
       display: block;
     }
 
+    &__header{
+      font-size: 1.5rem;
+      align-content: center;
+      text-align: center;
+      justify-content: center;
+    }
+
+
     &__content {
       display: flex;
       flex: 1 1 auto;
@@ -104,6 +112,13 @@ img {
       font-size: 0.875rem;
       line-height: 1.5;
       margin-bottom: 1.25rem;
+    }
+
+    &__footer {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      padding: 0 2rem;
     }
 
   }

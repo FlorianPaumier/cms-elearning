@@ -1,57 +1,65 @@
 <?php
+
 namespace App\Core\Mailer;
 
 use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Kernel\Kernel;
-use Swift_Mailer;
-use Swift_Message;
-use Swift_SmtpTransport;
+use App\Core\Render\RenderView;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 
 class MailerHandler
 {
 
-    /** @var Swift_Mailer */
-    private $swiftmailer;
+    /** @var PHPMailer */
+    private $mail;
 
     /** @var string */
     private $sender = "devweb.paumier@gmail.com";
-
-    /** @var array  */
-    private $dest = [];
-
-    /** @var string */
-    private $subjet;
-
-    /** @var Swift_Message */
-    private $body;
-
-    /** @var array  */
-    private $bcc = [];
-
-    /** @var array  */
-    private $cc = [];
-
-    /** @var string */
-    private $contentType = "text";
+    private $replyTo = "devweb.paumier@gmail.com";
 
     /** @var string */
     private $charset = "UTF-8";
 
     public function __construct()
     {
-       $this->swiftmailer = new Swift_Mailer($this->createTransport());
+        if (file_exists(ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php")) {
+            $this->mail = $this->createTransport();
+        }else{
+            throw new \Exception("You need to install phpmailer");
+        }
     }
 
-    public function send()
+    #Todo : Add Attachement
+    public function send(MailerMessage $message)
     {
-        $message = new Swift_Message($this->subjet, $this->body, $this->contentType, $this->charset);
 
-        $message->setTo($this->dest);
-        $message->setFrom($this->sender);
-        $message->setFrom($this->sender);
+        $this->mail->setFrom($this->sender);
 
-        return $this->swiftmailer->send($message);
+        $this->setDest($message->getDest());
+        $this->setBcc($message->getBcc());
+        $this->setCc($message->getCc());
+        $this->mail->addReplyTo($this->replyTo);
+        $this->mail->isHTML(true);
+
+        $content = $message->getBody();
+        if ($content instanceof RenderView) {
+            $content = $content->compile();
+        }
+
+        $this->mail->Subject = $message->getSubjet();
+        $this->mail->Body = $content;
+
+        try {
+            $this->mail->send();
+            return true;
+        } catch (Exception $exception) {
+            dump($exception->getMessage());
+        }
+
+        return false;
     }
 
     /**
@@ -73,114 +81,6 @@ class MailerHandler
     }
 
     /**
-     * @return array
-     */
-    public function getDest(): array
-    {
-        return $this->dest;
-    }
-
-    /**
-     * @param array $dest
-     * @return MailerHandler
-     */
-    public function setDest(array $dest): MailerHandler
-    {
-        $this->dest = $dest;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSubjet(): string
-    {
-        return $this->subjet;
-    }
-
-    /**
-     * @param string $subjet
-     * @return MailerHandler
-     */
-    public function setSubjet(string $subjet): MailerHandler
-    {
-        $this->subjet = $subjet;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBody(): string
-    {
-        return $this->body;
-    }
-
-    /**
-     * @param string $body
-     * @return MailerHandler
-     */
-    public function setBody(string $body): MailerHandler
-    {
-        $this->body = $body;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getBcc(): array
-    {
-        return $this->bcc;
-    }
-
-    /**
-     * @param array $bcc
-     * @return MailerHandler
-     */
-    public function setBcc(array $bcc): MailerHandler
-    {
-        $this->bcc = $bcc;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getCc(): array
-    {
-        return $this->cc;
-    }
-
-    /**
-     * @param array $cc
-     * @return MailerHandler
-     */
-    public function setCc(array $cc): MailerHandler
-    {
-        $this->cc = $cc;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContentType(): string
-    {
-        return $this->contentType;
-    }
-
-    /**
-     * @param string $contentType
-     * @return MailerHandler
-     */
-    public function setContentType(string $contentType): MailerHandler
-    {
-        $this->contentType = $contentType;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getCharset(): string
@@ -198,20 +98,68 @@ class MailerHandler
         return $this;
     }
 
-    private function createTransport(): Swift_SmtpTransport
+    private function createTransport(): PhpMailer
     {
-        $config = CacheHandler::get("config")["swiftmailer"];
-        dump(CacheHandler::get("config")["swiftmailer"], "mail");
-        $transport = new Swift_SmtpTransport($config["host"], $config["port"] ?? 25, $config["encryption"]);
+        $config = CacheHandler::get("config")["mailer"];
+        $mail = new PHPMailer(true);
 
-        if(!is_null($config["username"])){
-            $transport->setUsername($config["username"]);
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
+        $mail->isSMTP();                                            // Send using SMTP
+        $mail->Host = $config["host"];                    // Set the SMTP server to send through
+        $mail->SMTPAuth = $config["transport"] == "smtp";                                   // Enable SMTP authentication
+        $mail->Username = $config["username"];                     // SMTP username
+        $mail->Password = $config["password"];                               // SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+        $mail->Port = $config["port"] ?? 25;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+
+        return $mail;
+    }
+
+    private function setDest(array $recipients)
+    {
+        try {
+            foreach ($recipients as $key => $recipient) {
+                $name = "";
+                if (gettype($key) == 'string') {
+                    $name = $key;
+                }
+
+                $this->mail->addAddress($recipient, $name);
+            }
+        } catch (Exception $exception) {
+            dump($exception->getMessage());
         }
+    }
 
-        if(!is_null($config["password"])){
-            $transport->setPassword($config["password"]);
+    private function setBcc(array $bcc)
+    {
+        try {
+            foreach ($bcc as $key => $recipient) {
+                $name = "";
+                if (gettype($key) == 'string') {
+                    $name = $key;
+                }
+
+                $this->mail->addBCC($recipient, $name);
+            }
+        } catch (Exception $exception) {
+            dump($exception->getMessage());
         }
+    }
 
-        return $transport;
+    private function setCc(array $cc)
+    {
+        try {
+            foreach ($cc as $key => $recipient) {
+                $name = "";
+                if (gettype($key) == 'string') {
+                    $name = $key;
+                }
+
+                $this->mail->addBCC($recipient, $name);
+            }
+        } catch (Exception $exception) {
+            dump($exception->getMessage());
+        }
     }
 }

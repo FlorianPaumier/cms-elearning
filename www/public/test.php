@@ -37,43 +37,69 @@
     <!-- Custom styles for this template-->
     <link href="assets/styles/frontend/main.css" rel="stylesheet">
     
+<link rel="stylesheet" href="assets/styles/admin/login.css">
+
 </head>
 
 <body id="page-top">
 
-<section id="header">
-    <section id="search">
-        <div>
-            <a href="/">
-                <img src="https://i1.wp.com/s1.wp.com/wp-content/themes/h4/landing/marketing/pages/_common/components/vip-pitch/media/vip-logo.png?ssl=1" alt="">
-            </a>
-        </div>
-        <form action="" method="post" class="input-group search">
-            <input type="text" placeholder="Chercher dans le site" class="input-search">
-            <button class="btn-search">
-                <i class="fa fa-search"></i>
-            </button>
-        </form>
-    </section>
-    <section id="menu">
-        <nav>
-            <ul>
-                <li class="link"><a href="/cours">Cours</a></li>
-                <li class="link"><a href="#">Article</a></li>
-                <li class="link"><a href="#">Evenements</a></li>
-                <li class="link"><a href="#">Contact</a></li>
-                <li class="link"><a href="#">Recherche</a></li>
-                <li class="profile user-menu acilir">
-                    <span class="icon"><i class="fa fa-user"></i></span>
-                    <div class="login-menu">
-                        <a href="">Login</a>
-                        <a href="">Sign Up</a>
-                    </div>
+<section class="header">
+    <div class="col-sm-10">
+        <a href="/">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/WordPress_blue_logo.svg/1200px-WordPress_blue_logo.svg.png" alt="logo">
+        </a>
+    </div>
+    <nav class="nav-header">
+        <ul>
+            <li><a class="nav-link col-md-3" href="#">Cours</a></li>
+            <li><a class="nav-link col-md-3" href="#">Articles</a></li>
+            <li><a class="nav-link col-md-3" href="#">Évenements</a></li>
+            <li class="separator"><span></span></li>
+            <li>
+                <form action="/search" method="get">
+                    <input type="text" class="input-search" placeholder="Search">
+                    <button class="btn btn-append c-blue"><i class="fas fa-search"></i></button>
+                </form>
+
+            </li>
+            <li>
+                <a class="btn btn-login" href="/signin">S'inscrire</a>
+            </li>
+            <li>
+                <a class="btn btn-login" href="/login">Se connecter</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="hamburger" id="hamburger-10">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+    </div>
+</section>
+<section class="header-mobile">
+    <nav class="nav-header-mobile">
+        <ul>
+            <li class="search-form">
+                <form action="/search" method="get">
+                    <input type="text" class="input-search" placeholder="Search">
+                    <button class="btn btn-append c-blue"><i class="fas fa-search"></i></button>
+                </form>
+            </li>
+            <li class="nav-link"><a href="#">Cours</a></li>
+            <li class="nav-link"><a class="nav-link" href="#">Articles</a></li>
+            <li class="nav-link"><a class="nav-link" href="#">Évenements</a></li>
+            <ul class="footer-header">
+                <li>
+                    <a class="btn btn-login" href="/signin">S'inscrire</a>
+                </li>
+                <li>
+                    <a class="btn btn-login" href="/login">Se connecter</a>
                 </li>
             </ul>
-        </nav>
-    </section>
+        </ul>
+    </nav>
 </section>
+
 
 <?php
 
@@ -96,59 +122,44 @@ if(isset($flash)){
 
 <main>
     
-<section id="catalogue-search">
-    <form action="" method="get">
-        <select name="category" id="search_categories">
-            <option value="">Catégories</option>
-        </select>
-        <select name="themes" id="search_themes">
-            <option value="">Thèmes</option>
-        </select>
-        <select name="language" id="search_language">
-            <option value="">Langue</option>
-        </select>
-        <input type="text" class="input-search" placeholder="Nom du cours">
-        <button class="btn">Rechercher</button>
-    </form>
-</section>
-<section id="section-lessons" class="container">
-    <ul class="cards">
-        <?php for ($i = 0; $i < 10; $i++): ?>
-            <li class="lesson">
-                <article class="">
-                    <img src="https://unsplash.it/800/600?image=82" alt="lessons logo">
-                    <section class="content">
-                        <span>Type</span>
-                        <h1>Titre</h1>
-                        <span class="informations">
-                            <div class="times"><i class="far fa-hourglass"></i> 15 Heures</div>
-                            <div class="difficulty">
-                                <div class="mesure">
-                                    <img src="assets/images/levels.svg" alt="level">
-                                </div>
-                                <span>Facile</span>
-                            </div>
-                        </span>
-                        <p class="">This is the shorthand for flex-grow, flex-shrink and flex-basis combined. The second and third parameters (flex-shrink and flex-basis) are
-                            optional.
-                            Default is 0 1 auto. </p>
-                    </section>
-                </article>
-            </li>
-        <?php endfor; ?>
-    </ul>
+<section class="wrapper">
+    <div class="login">
+        <p class="title">Log in</p>
+        <form class="form-container" action="/login-check" method="POST">
+    
+<div class="form-group">
+    <label for="app_form_username">Username</label>
+    <input type="text"
+           id="app_form_username"
+           class="form-control form-control-user " placeholder="Username"
+           name="app_form_username" value="" >
+</div>
 
-    <section class="pagination">
-        <ul>
-            <li><a class="pagination-prev" href="#">Précedent</a></li>
-            <?php for ($i = 1; $i < 4; $i++): ?>
-                <li><a href="?page=<?= $i ?>" class="<?php if ($_GET["page"] == $i) {
-                        echo 'is-active';
-                    } ?>"><?= $i ?></a></li>
-            <? endfor; ?>
-            <li><a class="pagination-next" href="#">Suivant</a></li>
-        </ul>
-    </section>
+<div class="form-group">
+    <label for="app_form_password">Password</label>
+    <input type="password"
+           id="app_form_password"
+           class="form-control form-control-user " placeholder="Password"
+           name="app_form_password" value="" >
+</div>
+
+<div class="form-group">
+    <ul class="tg-list">
+        <li class="tg-list-item row">
+            <span>Ce souvenir de moi</span>
+            <input class="col-1 tgl tgl-skewed"
+                   type="checkbox"
+                   id="app_form_remember_me"placeholder="Ce souvenir de moi"
+                   name="app_form_remember_me" value="" >
+            <label class="tgl-btn pl-5 " data-tg-off="OFF" data-tg-on="ON" for="app_form_remember_me"></label>
+        </li>
+    </ul>
+</div>
+
+    <button id="app_form_submit" name="app_form_submit" type="submit" class="btn btn-primary">Se connecter</button>
+
+</form>
+    </div>
 </section>
 
 </main>
@@ -221,8 +232,6 @@ if(isset($flash)){
 
 
 <script src="/assets/scripts/header.js"></script>
-
-
 
 </body>
 </html>

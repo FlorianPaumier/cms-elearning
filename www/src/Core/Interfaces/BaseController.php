@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Core\Interfaces;
 
 use App\Core\Cache\ConfigHandler;
@@ -70,14 +69,20 @@ abstract class BaseController
         $this->redirect = new RedirectionHandler();
     }
 
-
+    /** Return current log in user */
+    protected function getUser(){
+        dump($_SESSION);
+        return $this->session->offsetGet("app.user");
+    }
 
     /**
      * Creates and returns a Form instance from the type of the form.
      */
     protected function createForm(string $type, &$data = null, array $options = []): FormBuilder
     {
-        if(!class_exists($type)) throw new \Exception();
+        if (!class_exists($type)) {
+            throw new \Exception();
+        }
 
         $form = (new $type);
         $formBuilder = (new FormBuilder($data))->setParent($type)->setFormType($form);

@@ -14,7 +14,7 @@
                         <article>
                             <h1><?=$question->getQuestion();?></h1>
                             <aside>
-                                <?=$question->getDate();?>
+                                <?=$question->getDateCreated()->format("d/m/Y");?>
                             </aside>
                         </article>
                     </div>

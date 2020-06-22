@@ -10,9 +10,7 @@ class SondageController extends BaseController
 {
     public function index()
     {
-        $this->repository->getClass(Sondage::class);
-        $questions = $this->repository->findAll();
-        $questions = !empty($questions) ? $questions : array();
+        $questions = $this->repository->setEntity(Sondage::class)->findAll();
 
         return $this->renderer->render("sondage/index", [
             'questions' => $questions,

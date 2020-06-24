@@ -5,7 +5,7 @@ namespace App\Core\Router;
 
 
 use App\Core\Cache\ConfigHandler;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Kernel\Kernel;
 
 class DependencyInjection
@@ -47,8 +47,8 @@ class DependencyInjection
                         $class = new $className();
 
                         if (!empty($args)) {
-                            /** @var Table $repo */
-                            $repo = ConfigHandler::get("repository");
+                            /** @var EntityManager $repo */
+                            $repo = ConfigHandler::get("entityManager");
                             $repo->getClass($className);
                             $class = $repo->setEntity($className)->findBy($args);
                         }

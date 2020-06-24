@@ -6,7 +6,7 @@ namespace App\Controllers\Admin;
 
 use App\Core\Contact\ContactForm;
 use App\Core\Contact\ContactInput;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Form\FormTypeBuilderServices;
 use App\Core\Formatter\Serializer;
 use App\Core\Helpers\StringTransformer;

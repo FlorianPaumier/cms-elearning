@@ -30,7 +30,7 @@ class SondageController extends BaseController
 
         if ($request->getMethod() == "POST" && $form->isValid()) {
             /** @var Table $em */
-            $em = ConfigHandler::get("repository");
+            $em = ConfigHandler::get("entityManager");
             $em->persist($sondage);
             $em->flush();
             $this->redirect->redirectToRoute("admin_sondage_list");
@@ -48,7 +48,7 @@ class SondageController extends BaseController
         $form->handleRequest($request);
 
         if ($request->getMethod() == "POST" && $form->isValid()) {
-            $em = ConfigHandler::get("repository");
+            $em = ConfigHandler::get("entityManager");
             $em->persist($sondage);
             $em->flush();
             $this->redirect->redirectToRoute("admin_sondage_list");
@@ -62,7 +62,7 @@ class SondageController extends BaseController
 
     public function delete(Sondage $sondage)
     {
-        $em = ConfigHandler::get("repository");
+        $em = ConfigHandler::get("entityManager");
         $em->from('sondage')->delete($sondage->getId());
         $this->redirect->redirectToRoute("admin_sondage_list");
     }

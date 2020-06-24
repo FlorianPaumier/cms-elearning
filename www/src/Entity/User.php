@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Core\Interfaces\Entity;
+use phpDocumentor\Reflection\Types\This;
 
 class User
 {
@@ -62,9 +63,10 @@ class User
         return $this->email;
     }
 
-    public function setEmail($email): void
+    public function setEmail($email): self
     {
         $this->email = $email;
+        return $this;
     }
 
 

@@ -46,15 +46,15 @@ abstract class Hydrator
                     if (!($value instanceof $class)) {
                         if (gettype($value) == "integer") {
                             self::$recursif = true;
-                            /** @var Table $repo */
-                            $repo = ConfigHandler::get("repository");
+                            /** @var EntityManager $repo */
+                            $repo = ConfigHandler::get("entityManager");
                             $repo->clear()->getClass($class);
                             $value = $repo->find($value);
                         }
 
                     }
                     self::$recursif = false;
-                    ConfigHandler::get("repository")->setEntity(get_class($instance));
+                    ConfigHandler::get("entityManager")->setEntity(get_class($instance));
 
                 }
 

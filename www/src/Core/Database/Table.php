@@ -53,7 +53,7 @@ class Table extends QueryBuilder
      *
      * @return array
      */
-    public function findAll(): ?array
+    public function findAll()
     {
         $this->select("*")->orderBy("id", 'ASC');
 

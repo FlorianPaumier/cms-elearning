@@ -22,6 +22,7 @@ class SondageForm extends AbstractForm
         return $builder
             ->add("question", TextType::class, [
                 "label" => "Question",
+                "placeholder" => "Question du sondage",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])

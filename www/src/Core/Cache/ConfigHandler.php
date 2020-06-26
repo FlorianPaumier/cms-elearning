@@ -37,6 +37,7 @@ class ConfigHandler
     {
         define("VIEW_PATH", ROOT_PATH . "/public/views");
         define("FORM_PATH", ROOT_PATH . "/src/Core/Form");
+        define("REPOSITORY_PATH", ROOT_PATH . "/src/Repository");
         define("CACHE_PATH", ROOT_PATH . "/app/cache");
         define("CONFIG_PATH", ROOT_PATH . "/app/config");
         define("ROUTING_PATH", ROOT_PATH . "/app/routing");

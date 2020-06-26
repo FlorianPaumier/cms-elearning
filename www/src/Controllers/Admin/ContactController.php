@@ -12,6 +12,8 @@ use App\Core\Formatter\Serializer;
 use App\Core\Helpers\StringTransformer;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
+use App\Repository\ContactInputRepository;
+use App\Repository\ContactRepository;
 
 class ContactController extends BaseController
 {
@@ -46,8 +48,8 @@ class ContactController extends BaseController
         return $this->render("admin/contact/new", []);
     }
 
-    public function edit(Request $request,Serializer $serializer, ContactForm $contactForm){
-        $inputs = $this->repository->setEntity(ContactInput::class)->orderBy("position", "ASC")->findBy(["contact_form" => $contactForm->getId()]);
+    public function edit(Request $request,Serializer $serializer, ContactForm $contactForm, ContactInputRepository $contactInputRepository){
+        $inputs = $contactInputRepository->orderBy("position", "ASC")->findBy(["contact_form" => $contactForm->getId()]);
         $json = $serializer->serialize($inputs, "json");
 
         if($request->getMethod() == "POST"){

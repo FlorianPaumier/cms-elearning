@@ -32,11 +32,10 @@ abstract class AbstractRepository extends QueryBuilder
         $this->repository = array_pop($repository);
 
         $this->class .= explode("Repository", $this->repository)[0];
-        $table = explode("_", StringTransformer::PascalCaseToSnakeCase($this->class));
-        $this->table = array_pop($table);
+        $this->table = explode("_", StringTransformer::PascalCaseToSnakeCase($this->class), 3)[2]."s";
 
         $this->setEntity(get_class(new $this->class()));
-        $this->from($this->table . "s");
+        $this->from($this->table);
         parent::__construct($pdo);
     }
 
@@ -122,6 +121,12 @@ abstract class AbstractRepository extends QueryBuilder
         return !empty($result);
     }
 
+    /**
+     * @param int $length
+     * @param bool $paginate
+     * @return array
+     * @throws \Exception
+     */
     public function paginate(int $length, bool $paginate = true): array
     {
         /** @var Request $request */
@@ -139,7 +144,7 @@ abstract class AbstractRepository extends QueryBuilder
 
         if ($paginate) {
             $server = $request->getServer();
-            $links = $this->createLinkPagination($server["HTTP_HOST"]. explode("?", $server["REQUEST_URI"], 2)[0]. "?page=", $page, $start, $end);
+            $links = $this->createLinkPagination("http://".$server["HTTP_HOST"]. explode("?", $server["REQUEST_URI"], 2)[0]. "?page=", $page, $start, $end);
         }
 
         return [
@@ -152,6 +157,10 @@ abstract class AbstractRepository extends QueryBuilder
         ];
     }
 
+    /**
+     * @param array $args
+     * @return int
+     */
     public function countBy(array $args)
     {
         foreach (array_keys($args) as $key => $param) {
@@ -167,6 +176,74 @@ abstract class AbstractRepository extends QueryBuilder
         return $this->count();
     }
 
+    /**
+     * @param string $tableTarget
+     * @param string $target
+     * @param string $source
+     */
+    public function join(string $tableTarget, string $alias)
+    {
+        if(strpos($tableTarget, "\\") !== false){
+            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget))."s";
+        }
+
+        if($this->alias){
+            $this->relations["JOIN"][] = "$tableTarget AS $alias on ".$this->alias.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
+        }else{
+            $this->relations["JOIN"][] = "$tableTarget AS $alias on ".$this->table.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
+        }
+
+        $this->addSelect($tableTarget, $alias);
+
+        return $this;
+    }
+
+    public function leftJoin(string $table, string $alias)
+    {
+
+    }
+
+    public function innerJoin(string $table, string $alias)
+    {
+
+    }
+
+    public function rightJoin(string $table, string $alias)
+    {
+
+    }
+
+    private function addSelect(string $table, string $alias)
+    {
+
+        if(empty($this->select)){
+            $this->addColumns($this->table, $this->alias ?? $this->table, $this->getColumns($this->table));
+        }
+
+        $this->addColumns($table,$alias, $this->getColumns($table));
+    }
+
+    private function getColumns(string $table){
+
+        $q = $this->pdo->prepare("SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_NAME = '$table'");
+        $q->execute();
+
+        return $q->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    private function addColumns(string $table,?string $alias, array $columns){
+        foreach ($columns as $column){
+            $name = $column["column_name"];
+            $target = $name;
+            if($alias){
+                $target = $alias.".$name";
+            }
+
+            $target .= " AS ".$table."_$name";
+
+            $this->select($target);
+        }
+    }
     private function createLinkPagination(string $url, int $page, int $start, int $end)
     {
 

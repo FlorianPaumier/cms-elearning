@@ -62,10 +62,13 @@ abstract class QueryBuilder
      */
     protected $offset = null;
 
+    /** @var string */
     protected $method = "SELECT";
 
     /** @var object */
     protected $entity = null;
+
+    protected $relations = [];
 
     public function __construct(\PDO $pdo = null)
     {
@@ -166,6 +169,12 @@ abstract class QueryBuilder
         return $this;
     }
 
+    public function setAlias(string $alias): self
+    {
+        $this->alias = $alias;
+        return $this;
+    }
+
     public function orderBy(string $key, $value = ""): self
     {
         if (!empty($value) && !in_array($value, ["ASC", "DESC"])) {
@@ -238,14 +247,14 @@ abstract class QueryBuilder
         } else {
             $sql = "$this->method $fields FROM {$this->from}";
         }
-//
-//        if($this->relations){
-//            foreach ($this->relations as $type => $relation){
-//                foreach ($relation as $value){
-//                    $sql .= " $type $value";
-//                }
-//            }
-//        }
+
+        if ($this->relations) {
+            foreach ($this->relations as $type => $relation) {
+                foreach ($relation as $value) {
+                    $sql .= " $type $value";
+                }
+            }
+        }
 
         if (!empty($this->where)) {
             $sql .= " WHERE " . $this->where[0];
@@ -259,9 +268,10 @@ abstract class QueryBuilder
             }
         }
 
+        $alias = $this->alias;
         if (!empty($this->order)) {
-            $sql .= " ORDER BY " . implode(', ', array_map(function ($key, $value) {
-                    return "$key $value";
+            $sql .= " ORDER BY " . implode(', ', array_map(function ($key, $value) use ($alias) {
+                    return "$alias.$key $value";
                 }, array_keys($this->order), $this->order));
         }
 
@@ -282,6 +292,7 @@ abstract class QueryBuilder
 
     public function fetch(bool $clear = true)
     {
+//        dump($this->toSQL());
         $query = $this->pdo->prepare($this->toSQL());
 
         if (!$query->execute($this->parameters)) {
@@ -289,18 +300,32 @@ abstract class QueryBuilder
             throw new \Exception("Un erreur est survenu lors de la requête", 500);
         }
 
-
         $results = $query->fetchAll(PDO::FETCH_ASSOC);
 
-        if(!is_null($this->entity)){
-            foreach ($results as $result){
-                $records[] = Hydrator::hydrate($result, $this->entity);
+
+        if (!is_null($this->entity)) {
+
+            if ($this->relations) {
+                Hydrator::$relations = true;
+                $records = Hydrator::hydrateRelation($results, $this->entity);
+            } else {
+                foreach ($results as $result) {
+                    $records[] = Hydrator::hydrate($result, $this->entity);
+                }
             }
-        }else {
+
+        } else {
             $records = $results;
         }
 
-        if($clear) $this->clear();
+        if ($clear) {
+            $this->clear();
+        }
+
+        if (is_null($records)) {
+            return null;
+        }
+
 
         return count($records) > 1 ? $records : (!empty($records) ? $records[0] : null);
     }
@@ -318,11 +343,12 @@ abstract class QueryBuilder
                     }, array_keys($this->fieldsValues)));
             case "SELECT":
                 if ($this->alias) {
-                    $fields = $this->select !== ["*"] ? $this->alias . "." . implode(', ' . $this->alias . ".", $this->select) : implode(', ' . $this->alias . ".", $this->select);
                     $this->from .= " AS {$this->alias}";
-                } else {
-                    $fields = join(", ", $this->select);
+                } elseif ($this->relations) {
+                    $this->alias = $this->from;
                 }
+                $fields = join(", ", $this->select);
+
                 return $fields;
             default:
                 return "";
@@ -334,7 +360,7 @@ abstract class QueryBuilder
         return array_map(function ($key, $value) {
             if (!is_null($this->fieldsValues[$key])) {
                 return $key;
-            }else{
+            } else {
                 return null;
             }
         }, array_keys($this->fieldsValues), $this->fieldsValues);
@@ -355,7 +381,7 @@ abstract class QueryBuilder
             }
         };
 
-        if($all){
+        if ($all) {
             $this->entity = null;
         }
 

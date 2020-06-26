@@ -3,7 +3,9 @@
 namespace App\Core\Database;
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\Database\Repository\AbstractRepository;
 use App\Core\Formatter\Serializer;
+use App\Core\Helpers\EntityHelper;
 use App\Core\Helpers\StringTransformer;
 
 /**
@@ -11,6 +13,7 @@ use App\Core\Helpers\StringTransformer;
  */
 abstract class Hydrator
 {
+    static $relations = false;
     static $recursif = false;
 
 
@@ -23,7 +26,9 @@ abstract class Hydrator
      */
     public static function hydrate($array, $object)
     {
-        if(empty($array)) return $array;
+        if (empty($array)) {
+            return $array;
+        }
 
         if (is_string($object)) {
             $instance = new $object();
@@ -35,41 +40,129 @@ abstract class Hydrator
         $serializer = new Serializer();
 
         foreach ($array as $key => $value) {
+            if (self::$relations) {
+                $key = str_replace(EntityHelper::getClass($instance) . "s_", "", $key);
+            }
+
             $method = self::getSetter($key);
 
-            if (method_exists($instance, $method)) {
-                $type = self::getParameterType($instance, $method);
-
-                if (!is_null($type) && !self::isRecursif()) {
-                    $class = $type->getName();
-
-                    if (!($value instanceof $class)) {
-                        if (gettype($value) == "integer") {
-                            self::$recursif = true;
-                            /** @var EntityManager $repo */
-                            $repo = ConfigHandler::get("entityManager");
-                            $repo->clear()->getClass($class);
-                            $value = $repo->find($value);
-                        }
-
-                    }
-                    self::$recursif = false;
-                    ConfigHandler::get("entityManager")->setEntity(get_class($instance));
-
-                }
-
-                if (self::isTypeArray($instance, $method)) {
-                    $value = $serializer->deserialize($value, "json");
-                }
-
-                if(!is_null($type) && $type->getName() == "DateTime") $value = new \DateTime($value);
-
-                $instance->$method($value);
+            if (!method_exists($instance, $method)) {
+                continue;
             }
+
+            $type = self::getParameterType($instance, $method);
+
+            if (!is_null($type) && !self::isRecursif()) {
+                $class = $type->getName();
+
+                if (!($value instanceof $class)) {
+                    if (gettype($value) == "integer") {
+                        self::$recursif = true;
+                        /** @var AbstractRepository $repo */
+                        $repo = ConfigHandler::get("entityManager")->getRepository($class . "Repository");
+                        $value = $repo->find($value);
+                    }
+
+                }
+                self::$recursif = false;
+                ConfigHandler::get("entityManager")->setEntity(get_class($instance));
+
+            }
+
+            if (self::isTypeArray($instance, $method)) {
+                $value = $serializer->deserialize($value, "json");
+            }
+
+            if (!is_null($type) && $type->getName() == "DateTime") {
+                $value = new \DateTime($value);
+            }
+
+            $instance->$method($value);
+
             $i++;
         }
 
         return $instance;
+    }
+
+    public static function hydrateRelation(array $array, $object)
+    {
+
+        if (is_string($object)) {
+            $instance = new $object();
+        } else {
+            $instance = $object;
+        }
+
+        $data = [];
+
+        $principalClass = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($object));
+        $principalKey = $principalClass . "s_";
+
+        foreach ($array as $row) {
+            foreach ($row as $key => $value) {
+                if (strpos($key, $principalKey) !== false) {
+                    $propertie = str_replace($principalKey, "", $key);
+                    $id = $principalKey . $row[$principalKey . "id"];
+
+                    if (!key_exists($id, $data))
+                    {
+                        if (is_string($object)) {
+                            $instance = new $object();
+                        } else {
+                            $instance = $object;
+                        }
+
+                        $data[$id] = $instance;
+                    }
+
+                    $method = self::getSetter($propertie);
+                    $type = self::getParameterType($data[$id], $method);
+                    if (is_null($type)) {
+                        $data[$id]->$method($value);
+                    }
+                }
+            }
+        }
+
+        $reflection = new \ReflectionClass($object);
+        $properties = $reflection->getProperties();
+
+        foreach ($properties as $propertie) {
+            $add = self::getSetter($propertie->getName(), true);
+
+            if (method_exists($instance, $add)) {
+                $addType = self::getParameterType($instance, $add);
+                if (!is_null($addType)) {
+                    $typeName = $addType->getName();
+                    $joinClass = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($typeName));
+                    foreach ($data as $key => $object) {
+                        foreach ($array as $row) {
+                            $currentInstance = new $typeName();
+                            foreach ($row as $fieldName => $value) {
+                                $parentId = $joinClass . "s_" . $principalClass . "_id";
+
+                                if (strpos($fieldName, $joinClass . "s_") !== false) {
+                                    $propertie = str_replace($joinClass . "s_", "", $fieldName);
+                                    $method = self::getSetter($propertie);
+                                    if (method_exists($currentInstance, $method)) {
+                                        $type = self::getParameterType($currentInstance, $method);
+                                        if (is_null($type)) {
+                                            $currentInstance->$method($value);
+                                        }
+                                    }
+                                }
+                            }
+                            if ($row[$parentId] == $data[$principalKey . $row[$parentId]]->getId()) {
+                                $data[$principalKey . $row[$parentId]] = $data[$principalKey . $row[$parentId]]->$add($currentInstance);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $data;
     }
 
     public static function getData(object $object): array
@@ -145,8 +238,13 @@ abstract class Hydrator
      * @param string $fieldName
      * @return string
      */
-    private static function getSetter(string $fieldName): string
+    private static function getSetter(string $fieldName, bool $collection = false): string
     {
+        if ($collection) {
+            $fieldName = mb_substr($fieldName, 0, -1);
+            return 'add' . self::getProperty($fieldName);
+        }
+
         return 'set' . self::getProperty($fieldName);
     }
 

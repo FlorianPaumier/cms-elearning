@@ -4,7 +4,7 @@
 namespace App\Entity;
 
 
-use App\Core\Helpers\ArrayCollection;
+use App\Core\Collections\ArrayCollection;
 use App\Core\Interfaces\Entity;
 
 class LessonChapter
@@ -19,19 +19,19 @@ class LessonChapter
     /** @var string */
     protected $title;
 
-    /** @var array */
-    protected $blocks;
+    /** @var ArrayCollection */
+    protected $lessonChapterBlocks;
 
     /** @var int */
     protected $position;
 
     public function __construct()
     {
-        $this->blocks = new ArrayCollection();
+        $this->lessonChapterBlocks = new ArrayCollection();
     }
 
     /**
-     * @return int
+     * @return Lesson|null
      */
     public function getLesson(): ?Lesson
     {
@@ -67,7 +67,7 @@ class LessonChapter
     }
 
     /**
-     * @return array
+     * @return ArrayCollection|null
      */
     public function getBlocks(): ?ArrayCollection
     {
@@ -75,24 +75,28 @@ class LessonChapter
     }
 
     /**
-     * @param array $blocks
+     * @param LessonChapterBlock $block
      * @return LessonChapter
      */
-    public function addBlock(LessonChapterBlock $block): LessonChapter
+    public function addLessonChapterBlock(LessonChapterBlock $block): LessonChapter
     {
-        if (!$this->blocks->contain($block)) {
-            $this->blocks->add($block);
+
+        if (!$this->lessonChapterBlocks->contains($block)) {
+            $this->lessonChapterBlocks[] = $block;
         }
+
         return $this;
     }
 
     /**
-     * @param array $blocks
+     * @param LessonChapterBlock $block
      * @return LessonChapter
      */
     public function removeBlock(LessonChapterBlock $block): LessonChapter
     {
-        $this->blocks = $this->removeElement($this->blocks, $block);
+        if ($this->lessonChapterBlocks->contains($block)) {
+            $this->lessonChapterBlocks->removeElement($block);
+        }
         return $this;
     }
 

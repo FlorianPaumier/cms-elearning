@@ -7,6 +7,7 @@ use App\Core\Exception\NoRecordException;
 use App\Core\Interfaces\BaseController;
 use App\Core\Render\RenderView;
 use App\Entity\PatchList;
+use App\Repository\PatchListRepository;
 use Exception;
 
 /**
@@ -297,8 +298,8 @@ class MigrationController extends BaseController
      */
     public function checkTableExist()
     {
-        $this->repository->getClass(PatchList::class);
-        $row = $this->repository->findBy(["table_name" => $this->tableName]);
+        $repository = new PatchListRepository();
+        $row = $repository->findBy(["table_name" => $this->tableName]);
         if($row && !is_array($row)){
             $this->setId($row->getId());
             $this->setTableCurrentVersion($row->getCurrentVersion());

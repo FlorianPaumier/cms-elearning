@@ -7,6 +7,9 @@
       options:
         - PRIMARY KEY
         - NOT NULL
-    name:
-      name: nom
+    title:
+      name: title
+      type: text
+    description:
+      name: description
       type: text

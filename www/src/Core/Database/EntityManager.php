@@ -27,6 +27,7 @@ class EntityManager extends QueryBuilder
     protected $queries = [];
 
     protected $fieldsValues = [];
+
     /**
      * Récupération de l'instance de PDO
      * @param PDO|null $pdo
@@ -95,6 +96,7 @@ class EntityManager extends QueryBuilder
 
         return $this;
     }
+
     /**
      * Met à jour un enregistrement au niveau de la base de données
      *
@@ -175,7 +177,17 @@ class EntityManager extends QueryBuilder
 
     public function getRepository(string $class)
     {
-        return new $class;
+        if (class_exists($class)) {
+            return new $class;
+        }else{
+            $name = EntityHelper::getClassName($class);
+            $repo = "App\\Repository\\$name";
+
+            if (class_exists($repo))
+                return new $repo;
+        }
+
+        return null;
     }
 
     private function setFieldsValues(array $values): void

@@ -62,7 +62,7 @@ abstract class BaseController
          * @deprected use render function
          */
         $this->renderer = new RenderView();
-        $this->repository = ConfigHandler::get('repository');
+        $this->repository = ConfigHandler::get('entityManager');
         $this->userManager = ConfigHandler::get("userManager");
         $this->query = ConfigHandler::get("request");
         $this->session = ConfigHandler::get("session");

@@ -9,9 +9,13 @@ abstract class EntityHelper
 
     public static function getClass(object $class): string
     {
-        $classTab = explode("\\", get_class($class));
-        $class = array_pop($classTab);
-        return strtolower(StringTransformer::PascalCaseToSnakeCase($class));
+        return strtolower(StringTransformer::PascalCaseToSnakeCase(self::getClassName(get_class($class))));
+    }
+
+    public static function getClassName(string $class): string
+    {
+        $classTab = explode("\\", $class);
+        return array_pop($classTab);
     }
 
     public static function getEntity(string $class): object
@@ -25,4 +29,12 @@ abstract class EntityHelper
 
     }
 
+    public static function getProperties(object $object): ?array {
+
+        $reflection = new \ReflectionClass($object);
+
+        dump($reflection->getProperties());
+
+        return [];
+    }
 }

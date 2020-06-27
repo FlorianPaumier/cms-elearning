@@ -27,7 +27,7 @@ class UserController extends BaseController
 
 
         return $this->renderer->render(
-            "security/login",
+            ROOT_PATH . "/public/views/security/frontend/login",
             [
                 "form" => $form->createView(),
                 "errors" => [],

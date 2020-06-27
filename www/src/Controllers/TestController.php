@@ -70,4 +70,8 @@ class TestController extends BaseController
         $array = $serializer->deserialize($yaml, "yaml");
         return $array;
     }
+
+    public function testPathFunction(){
+        return $this->render("test/path");
+    }
 }

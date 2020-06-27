@@ -55,9 +55,10 @@ class Table extends QueryBuilder
      */
     public function findAll(): ?array
     {
-        $this->select("*")->orderBy("id", 'ASC');
+        $this->orderBy("id", 'ASC');
+        $results = $this->fetchOrFail();
 
-        return $this->fetchOrFail();
+        return gettype($results) == "object" ? [$results] : $results;
     }
 
     /**

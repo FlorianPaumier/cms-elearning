@@ -2,23 +2,22 @@
 
 @section(body)
 <section>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Questions</th>
-            <th></th>
-        </tr>
-        </thead>
+    <table class="table" width="80%" style="margin: auto;">
         <tbody>
         <?php
         foreach( $questions as $question):
             ?>
             <tr>
-                <td><?= $question->getQuestion(); ?></td>
                 <td>
-                    <a href="/faq/show/<?=$question->getId()?>">
-                        <button id="edit-faq" class="btn btn-info">Afficher</button>
-                    </a>
+                    <button type="button" class="collapsible"><?= $question->getQuestion(); ?></button>
+                    <div class="content">
+                        <article>
+                            <h1><?=$question->getQuestion();?></h1>
+                            <aside>
+                                <?=$question->getReponse();?>
+                            </aside>
+                        </article>
+                    </div>
                 </td>
             </tr>
         <?php

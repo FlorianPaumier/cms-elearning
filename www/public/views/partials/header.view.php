@@ -11,10 +11,24 @@
                 <i class="fa fa-search"></i>
             </button>
         </form>
+
+        <div class="hamburger" id="hamburger-10" data-target="#nav-header">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+        </div>
     </section>
-    <section id="menu">
+    <section id="nav-header">
         <nav>
             <ul>
+                <li class="search-mobile">
+                    <form action="" method="post" class="input-group search">
+                        <input type="text" placeholder="Chercher dans le site" class="input-search">
+                        <button class="btn-search">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </form>
+                </li>
                 <li class="link"><a href="@path(app_catalogue)">Cours</a></li>
                 <li class="link"><a href="#">Article</a></li>
                 <li class="link"><a href="#">Evenements</a></li>
@@ -27,9 +41,14 @@
                         <a href="@path(app_user_register)">Sign Up</a>
                     </div>
                 </li>
+                <li class="profile-mobile">
+                    <a href="@path(app_user_login)"><button class="btn btn-primary btn-ghost btn-slide">Login</button></a>
+                    <a href="@path(app_user_register)"><button class="btn btn-primary btn-ghost btn-slide">Register</button> </a>
+                </li>
             </ul>
         </nav>
     </section>
+
 </section>
 
 <?php

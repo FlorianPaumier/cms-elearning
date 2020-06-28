@@ -5,7 +5,7 @@ namespace App\Core\Form\Validator;
 
 
 use App\Core\Cache\ConfigHandler;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Form\Fields\ButtonType;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Request\ParameterBag;
@@ -29,7 +29,7 @@ class Validator
     /** @var ParameterBag */
     private $request;
 
-    /** @var Table */
+    /** @var EntityManager */
     private $entityManager;
 
     /** @var array */
@@ -47,7 +47,7 @@ class Validator
     public function __construct(array $form)
     {
         $this->form = $form;
-        $this->entityManager = ConfigHandler::get("repository");
+        $this->entityManager = ConfigHandler::get("entityManager");
         $this->request = ConfigHandler::get("request");
 
         $this->buildValidator();

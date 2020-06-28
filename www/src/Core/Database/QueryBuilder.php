@@ -4,63 +4,70 @@ namespace App\Core\Database;
 
 use App\Core\Helpers\StringTransformer;
 use App\Entity\Lesson;
+use PDO;
+use PHPMailer\PHPMailer\Exception;
 
-class QueryBuilder
+abstract class QueryBuilder
 {
     /** @var \PDO */
     protected $pdo;
 
     /**
-     * @var string
+     * @var array
+     * Fields to search
      */
-    protected $from = "";
+    protected $select = [];
+
     /**
-     * @var string|null
+     * @var string
+     * Table to use
+     */
+    protected $from = null;
+
+    /**
+     * @var string
+     * Alias tp use for the fields in the query
      */
     protected $alias = null;
-    /**
-     * @var string
-     */
-    protected $method = "SELECT";
 
-    protected $fields = ["*"];
+    /**
+     * @var array
+     * Conditions to add in the query
+     */
+    protected $where = [];
+
+    /**
+     * @var array
+     * parameters to link to the query
+     */
+    protected $parameters = [];
+
     /**
      * @var array
      */
     protected $order = [];
-    /**
-     * @var int
-     */
-    protected $limit = null;
-    /**
-     * @var int
-     */
-    protected $offset = null;
-    /**
-     * @var string
-     */
-    protected $where = "";
-    /**
-     * @var array
-     */
-    protected $andWhere = [];
-    /**
-     * @var string
-     */
-    protected $sql = "";
+
     /**
      * @var array
      */
     protected $group = [];
+
     /**
-     * @var array
+     * @var int
      */
-    protected $data = [];
+    protected $limit = null;
 
-    /** @var array */
-    protected $params = [];
+    /**
+     * @var int
+     */
+    protected $offset = null;
 
-    /** @var array  */
+    /** @var string */
+    protected $method = "SELECT";
+
+    /** @var object */
+    protected $entity = null;
+
     protected $relations = [];
 
     public function __construct(\PDO $pdo = null)
@@ -72,262 +79,300 @@ class QueryBuilder
     }
 
     /**
-     * @param mixed ...$fields
+     * Add the fields to use
+     * @param mixed ...$args
      * @return $this
      */
-    public function select(...$fields): self
+    public function select(...$args): self
     {
-        $this->method = "SELECT";
-
-        if (is_array($fields[0])) {
-            $fields = $fields[0];
+        foreach ($args as $arg) {
+            if (gettype($arg) == "array") {
+                foreach ($arg as $value) {
+                    $this->select[] = $value;
+                }
+            } else {
+                $this->select[] = $arg;
+            }
         }
-        if ($this->fields === ['*']) {
-            $this->fields = $fields;
-        } else {
-            $this->fields = array_merge($this->fields, $fields);
-        }
+        return $this;
+    }
 
+    /**
+     * @param string|null $entity
+     * @return EntityManager
+     */
+    public function setEntity(?string $entity): self
+    {
+        $this->entity = $entity;
         return $this;
     }
 
     /**
      * @param string $table
-     * @param string|null $alias
+     * @param string $alias
      * @return $this
      */
     public function from(string $table, string $alias = null): self
     {
-        $this->from = $alias === null ? $table : "$table $alias";
+        $this->from = $table;
+        $this->alias = $alias;
+
+        return $this;
+    }
+
+    /**
+     * @param string $condition
+     * @return $this
+     */
+    public function where(string $condition): self
+    {
+        $this->where = [$condition];
+
+        return $this;
+    }
+
+    /**
+     * @param string $condition
+     * @return $this
+     */
+    public function andWhere(string $condition): self
+    {
+        $this->where[] = $condition;
+
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @param $value
+     * @return $this
+     */
+    public function setParameter(string $key, $value): self
+    {
+
+        $this->parameters[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param array $parameters
+     * @return $this
+     */
+    public function setParameters(array $parameters): self
+    {
+
+        foreach ($parameters as $key => $value) {
+            $this->parameters[$key] = $value;
+        }
+
+        return $this;
+    }
+
+    public function setAlias(string $alias): self
+    {
         $this->alias = $alias;
         return $this;
     }
 
-    /**
-     * @param string $key
-     * @param string $direction
-     * @return $this
-     */
-    public function orderBy(string $key, string $direction): self
+    public function orderBy(string $key, $value = ""): self
     {
-        $direction = strtoupper($direction);
-        if (!in_array($direction, ['ASC', 'DESC'])) {
-            $this->order[] = $key;
-        } else {
-            $this->order[] = "$key $direction";
+        if (!empty($value) && !in_array($value, ["ASC", "DESC"])) {
+            throw new \Exception("Method not allowed", 500);
         }
+
+
+        $this->order[$key] = $value;
         return $this;
     }
 
-    /**
-     * @param string $key
-     * @param string $direction
-     * @return $this
-     */
-    public function groupBy(string $field): self
+    public function groupBy(string $key, $value): self
     {
-        $this->group[] = $field;
+        $this->group[$key] = $value;
         return $this;
     }
 
-    /**
-     * @param int $limit
-     * @return $this
-     */
-    public function limit(int $limit): self
+    public function setMaxResult(int $limit): self
     {
         $this->limit = $limit;
         return $this;
     }
 
-    /**
-     * @param int $offset
-     * @return $this
-     */
-    public function offset(int $offset): self
+    public function setFirstResult(int $offset): self
     {
         $this->offset = $offset;
         return $this;
     }
 
-    /**
-     * @param int $page
-     * @return $this
-     */
     public function page(int $page): self
     {
-        return $this->offset($this->limit * ($page - 1));
-    }
-
-    /**
-     * @param string $where
-     * @return $this
-     */
-    public function where(string $where): self
-    {
-        $this->where = "$where";
+        $this->offset = ($page - 1) * $this->limit;
         return $this;
     }
 
-    /**
-     * @param string $where
-     * @return $this
-     */
-    public function andWhere(string $where): self
+    public function count()
     {
-        $this->andWhere[] = $where;
-        return $this;
+        $this->select("count(*)");
+
+        $entity = $this->entity;
+        $this->entity = null;
+
+        $results = $this->fetch();
+
+        $this->entity = $entity;
+
+        return isset($results["count"]) ? (int)$results["count"] : (int)$results["count(id)"];
+    }
+
+    public function execute(string $sql, array $values)
+    {
+        $sql = $this->pdo->prepare($sql);
+        return $sql->execute($values);
     }
 
     /**
-     * @return int
-     */
-    public function count(): int
-    {
-        $q = $this->select('COUNT(id) count')->fetchOrFail();
-
-        if (is_array($q)) {
-            $count = (int) $q[0]["count"];
-        } else {
-            $count = (int) $q->count;
-        }
-
-        return $count;
-    }
-
-    /**
-     * @param string $key
-     * @param  $value
-     * @return $this
-     */
-    public function setParam(string $key, $value): self
-    {
-        $this->params[$key] = $value;
-        return $this;
-    }
-
-    /**
-     * @param  $value
-     * @return $this
-     */
-    public function setParams(array $values): self
-    {
-        $this->params = array_merge($this->params, $values);
-        return $this;
-    }
-
-    public function join(string $type, string $value)
-    {
-        $this->relations[$type][] = $value;
-        return $this;
-    }
-    /**
+     * Transform this object into sql string
      * @return string
      */
     public function toSQL(): string
     {
-        if (!is_null($this->alias)) {
-            $fields = $this->fields !== ["*"] ? $this->alias . "." . implode(', ' . $this->alias . ".", $this->fields) : implode(', ' . $this->alias . ".", $this->fields);
-        } elseif($this->method == "DELETE"){
-            $fields = "";
-        }
-        else {
-            $fields = implode(', ', $this->fields);
+        if (empty($this->select)) {
+            $this->select = ["*"];
         }
 
-        $this->sql = "$this->method $fields FROM \"{$this->from}\"";
+        $fields = $this->setField();
 
-        if($this->relations){
-            foreach ($this->relations as $type => $relation){
-                foreach ($relation as $value){
-                    $this->sql .= " $type $value";
+        if (in_array($this->method, ["INSERT INTO", "UPDATE"])) {
+            $sql = "$this->method {$this->from} $fields";
+        } else {
+            $sql = "$this->method $fields FROM {$this->from}";
+        }
+
+        if ($this->relations) {
+            foreach ($this->relations as $type => $relation) {
+                foreach ($relation as $value) {
+                    $sql .= " $type $value";
                 }
             }
         }
 
-        if ($this->where) {
-            $this->sql .= " WHERE " . $this->where;
+        if (!empty($this->where)) {
+            $sql .= " WHERE " . $this->where[0];
 
-            if (count($this->andWhere) > 0) {
-                foreach ($this->andWhere as $selector) {
-                    $this->sql .= " AND " . $selector;
+            array_shift($this->where);
+
+            if (!empty($this->where)) {
+                foreach ($this->where as $selector) {
+                    $sql .= " AND " . $selector;
                 }
             }
         }
 
+        $alias = $this->alias;
         if (!empty($this->order)) {
-            $this->sql .= " ORDER BY " . implode(', ', $this->order);
+            $sql .= " ORDER BY " . implode(', ', array_map(function ($key, $value) use ($alias) {
+                    return "$alias.$key $value";
+                }, array_keys($this->order), $this->order));
         }
 
         if (!empty($this->group)) {
-            $this->sql .= " GROUP BY " . implode(', ', $this->group);
+            $sql .= " GROUP BY " . implode(', ', $this->group);
         }
 
-        if (!empty($this->limit)) {
-            $this->sql .= " LIMIT " . $this->limit;
+        if (!is_null($this->limit)) {
+            $sql .= " LIMIT " . $this->limit;
         }
 
         if (!is_null($this->offset)) {
-            $this->sql .= " OFFSET " . $this->offset;
+            $sql .= " OFFSET " . $this->offset;
         }
 
-        return $this->sql;
+        return $sql;
     }
 
-    /**
-     * Permet d'éxécuter une requête et de récupérer le premier résultat
-     *
-     * @return mixed|false
-     */
-    public function fetchOrFail()
+    public function fetch(bool $clear = true)
     {
-//        var_dump($this->toSQL());
         $query = $this->pdo->prepare($this->toSQL());
-        $query->execute($this->params);
+        dump($query);
 
-        $this->params = [];
-
-        $results = $query->fetchAll(\PDO::FETCH_ASSOC);
-        $record = false;
-
-        if (isset($this->entity)) {
-            if(count($results) > 1){
-                foreach ($results as $result) {
-                    $record[] = Hydrator::hydrate($result, $this->entity);
-                }
-            }else {
-                $record = Hydrator::hydrate($results[0], $this->entity);
-            }
-        } else {
-            $record = $results;
+        if (!$query->execute($this->parameters)) {
+            dump($query->errorInfo());
+            throw new \Exception("Un erreur est survenu lors de la requête", 500);
         }
 
-        $this->clear();
+        $results = $query->fetchAll(PDO::FETCH_ASSOC);
 
-        return (!empty($record) && $record !== false) ? $record : null;
+
+        if (!is_null($this->entity)) {
+
+            if ($this->relations) {
+                Hydrator::$relations = true;
+                $records = Hydrator::hydrateRelation($results, $this->entity);
+            } else {
+                foreach ($results as $result) {
+                    $records[] = Hydrator::hydrate($result, $this->entity);
+                }
+            }
+
+        } else {
+            $records = $results;
+        }
+
+        if ($clear) {
+            $this->clear();
+        }
+
+        if (is_null($records)) {
+            return null;
+        }
+
+
+        return count($records) > 1 ? $records : (!empty($records) ? $records[0] : null);
     }
 
-    public function setData(array $data)
+    private function setField()
     {
-        $this->data = $data;
+        switch ($this->method) {
+            case "INSERT INTO":
+                $fields = $this->getNotNullValues();
+                return "(" . join(", ", array_keys($this->fieldsValues)) . ") VALUES 
+            (:" . join(", :", array_keys($this->fieldsValues)) . ")";
+            case "UPDATE":
+                return "SET " . join(" , ", array_map(function ($value) {
+                        return "$value = :$value";
+                    }, array_keys($this->fieldsValues)));
+            case "SELECT":
+                if ($this->alias) {
+                    $this->from .= " AS {$this->alias}";
+                } elseif ($this->relations) {
+                    $this->alias = $this->from;
+                }
+                $fields = join(", ", $this->select);
+
+                return $fields;
+            default:
+                return "";
+        }
     }
 
-    public function getClass(string $class)
+    private function getNotNullValues()
     {
-        $this->entity = $class;
-        $classTab = explode("\\", $class);
-        $class = array_pop($classTab);
-        $this->from = strtolower(StringTransformer::PascalCaseToSnakeCase($class));
-        return $this->from;
+        return array_map(function ($key, $value) {
+            if (!is_null($this->fieldsValues[$key])) {
+                return $key;
+            } else {
+                return null;
+            }
+        }, array_keys($this->fieldsValues), $this->fieldsValues);
     }
 
-    public function clear()
+    public function clear(bool $all = false)
     {
         /** @var \ReflectionClass $class */
         $class = new \ReflectionClass($this);
 
         foreach ($class->getDefaultProperties() as $key => $property) {
-            if (is_null($property)) {
+            if (is_null($property) || (!$all && $key == "queries") || (!$all && $property == "from")) {
                 continue;
             }
 
@@ -336,7 +381,9 @@ class QueryBuilder
             }
         };
 
-        $this->entity = null;
+        if ($all) {
+            $this->entity = null;
+        }
 
         return $this;
     }

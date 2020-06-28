@@ -4,9 +4,8 @@ namespace App\Core\Security;
 
 use App\Core\database\Hydrator;
 use App\Core\Database\QueryBuilder;
-use App\Core\Database\Table;
-use App\Core\Entity\User;
-use App\Core\Exception\ForbiddenException;
+use App\Core\Database\EntityManager;
+use App\Entity\User;
 use App\Core\Request\Request;
 use App\Core\Session\PHPSession;
 use App\Core\Kernel\Kernel;
@@ -19,11 +18,6 @@ class CommentaryManager
     private $entityManager;
 
     /**
-     * @var Table
-     */
-    private $repository;
-
-    /**
      * @var PHPSession
      */
     private $article;
@@ -33,10 +27,8 @@ class CommentaryManager
     public function __construct()
     {
         $this->entityManager = Kernel::get("entityManager");
-        $this->repository = Kernel::get('repository');
         $this->session  = Kernel::get("article");
         $this->security  = Kernel::get("security");
-
     }
 
     /**
@@ -49,9 +41,9 @@ class CommentaryManager
 
     public function getCommentary()
     {
-        $article = $this->article->offsetGet('app.article');
-        $commentary = $this->repository->form('commentary')->findBy(['id_article' => $article["id_article"]] );
-        return $this->repository->hydrate(new Commentary(), $commentary);
+//        $article = $this->article->offsetGet('app.article');
+//        $commentary = $this->entityManager->form('commentary')->findBy(['id_article' => $article["id_article"]] );
+//        return $this->entityManager->hydrate(new Commentary(), $commentary);
     }
 
     public function updateCommentary()
@@ -70,11 +62,11 @@ class CommentaryManager
 
         $error = [];
 
-        if($this->repository->from("user")->findBy(["email" => $value["email"]])){
+        if($this->entityManager->from("user")->findBy(["email" => $value["email"]])){
             return "Votre email exist déjà. Veuillez le modifier";
         }
 
-        if($this->repository->from("user")->insert($value)){
+        if($this->entityManager->persist($value)){
             return true;
         }
 

@@ -4,7 +4,7 @@
 namespace App\Core\Interfaces;
 
 use App\Core\database\Hydrator;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Kernel\Kernel;
 
 Trait Entity
@@ -30,7 +30,7 @@ Trait Entity
 
     public function getEntity(int $id)
     {
-        /** @var Table $table */
+        /** @var EntityManager $table */
         $table = Kernel::get('repository');
         $entityNamespace = explode("\\", get_class());
         $entityName = strtolower(array_pop($entityNamespace));

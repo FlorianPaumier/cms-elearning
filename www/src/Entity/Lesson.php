@@ -4,7 +4,7 @@
 namespace App\Entity;
 
 
-use App\Core\Helpers\ArrayCollection;
+use App\Core\Collections\ArrayCollection;
 use App\Core\Interfaces\Entity;
 
 class Lesson
@@ -105,7 +105,7 @@ class Lesson
      */
     public function addChapters(LessonChapter $chapters): Lesson
     {
-        if (!$this->chapters->contain($chapters)) {
+        if (!$this->chapters->contains($chapters)) {
             $this->chapters->add($chapters);
         }
         return $this;
@@ -118,7 +118,7 @@ class Lesson
      */
     public function removeChapters(LessonChapter $chapter): Lesson
     {
-        if ($this->chapters->contain($chapter)) {
+        if ($this->chapters->contains($chapter)) {
             $this->chapters->removeElement($chapter);
         }
         return $this;

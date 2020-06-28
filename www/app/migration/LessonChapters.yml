@@ -1,0 +1,18 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: int
+      options:
+        - PRIMARY KEY
+        - NOT NULL
+    title:
+      name: title
+      type: string
+    position:
+      name: position
+      type: int
+    lesson:
+      name: lesson_id
+      type: int

@@ -5,7 +5,7 @@ namespace App\Core\Form;
 
 
 use App\Core\Cache\ConfigHandler;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\ChoiceType;
 use App\Core\Form\Fields\CollectionType;
@@ -368,7 +368,7 @@ class FormBuilder
         }
 
         $choiceLabel = $args["choice_label"] ? "get" . ucfirst($args["choice_label"]) : "getId";
-        /** @var Table $repository */
+        /** @var EntityManager $repository */
         $repository = ConfigHandler::get('repository');
         $repository->getClass($args["entry_type"]);
 
@@ -491,7 +491,7 @@ class FormBuilder
 
     private function transformEntity(string $key, $value)
     {
-        /** @var Table $repository */
+        /** @var EntityManager $repository */
         $repository = ConfigHandler::get('repository');
 
         if (gettype($value) == "array") {

@@ -153,7 +153,8 @@ abstract class Hydrator
                                     }
                                 }
                             }
-                            if ($row[$parentId] == $data[$principalKey . $row[$parentId]]->getId()) {
+
+                            if (!is_null($row[$parentId]) && $row[$parentId] == $data[$principalKey . $row[$parentId]]->getId()) {
                                 $data[$principalKey . $row[$parentId]] = $data[$principalKey . $row[$parentId]]->$add($currentInstance);
                             }
                         }

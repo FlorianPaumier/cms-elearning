@@ -178,8 +178,8 @@ abstract class AbstractRepository extends QueryBuilder
 
     /**
      * @param string $tableTarget
-     * @param string $target
-     * @param string $source
+     * @param string $alias
+     * @return AbstractRepository
      */
     public function join(string $tableTarget, string $alias)
     {
@@ -198,24 +198,68 @@ abstract class AbstractRepository extends QueryBuilder
         return $this;
     }
 
-    public function leftJoin(string $table, string $alias)
+    public function leftJoin(string $tableTarget, string $alias)
     {
+        if(strpos($tableTarget, "\\") !== false){
+            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget))."s";
+        }
 
+        $this->relations["LEFT JOIN"][] = "$tableTarget AS $alias on ".$this->alias.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
+
+        $this->addSelect($tableTarget, $alias);
+
+        return $this;
     }
 
-    public function innerJoin(string $table, string $alias)
+    public function innerJoin(string $tableTarget, string $alias)
     {
+        if(strpos($tableTarget, "\\") !== false){
+            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget))."s";
+        }
 
+        $this->relations["INNER JOIN"][] = "$tableTarget AS $alias on ".$this->alias.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
+
+
+        $this->addSelect($tableTarget, $alias);
+
+        return $this;
     }
 
-    public function rightJoin(string $table, string $alias)
+    public function rightJoin(string $tableTarget, string $alias)
     {
+        if(strpos($tableTarget, "\\") !== false){
+            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget))."s";
+        }
+
+        $this->relations["RIGHT JOIN"][] = "$tableTarget AS $alias on ".$this->table.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
+
+
+        $this->addSelect($tableTarget, $alias);
+
+        return $this;
+    }
+
+    public function joinMany(string $tableTarget, string $alias, string $type = "JOIN", string $joinTable = ""){
+
+        if(strpos($tableTarget, "\\") !== false){
+            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget))."s";
+        }
+
+        if(empty($joinTable)){
+            $joinTable = $this->from . "_" . $tableTarget;
+        }
+
+        $this->relations["JOIN"][] = "$joinTable on ".$this->alias.".id"." = $joinTable.".mb_substr($this->table, 0, -1)."_id";
+        $this->relations["JOIN"][] = "$tableTarget AS $alias on ".$joinTable.".".mb_substr($tableTarget, 0, -1)."_id = $alias.id";
+
+        $this->addSelect($tableTarget, $alias);
+
+        return $this;
 
     }
 
     private function addSelect(string $table, string $alias)
     {
-
         if(empty($this->select)){
             $this->addColumns($this->table, $this->alias ?? $this->table, $this->getColumns($this->table));
         }

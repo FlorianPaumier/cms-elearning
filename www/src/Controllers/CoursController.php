@@ -21,7 +21,7 @@ class CoursController extends BaseController
     {
         $chapters = $lessonChapterRepository
             ->setAlias("lc")
-            ->join(LessonChapterBlock::class, "lcb")
+            ->joinMany("tests", "lcb")
             ->where("lc.lesson_id = :id")
             ->setParameter("id", $lesson->getId())
             ->findAll();

@@ -29,7 +29,7 @@ class ChatController extends BaseController
         $form->handleRequest($request);
 
         if ($request->getMethod() == "POST" && $form->isValid()) {
-            $em = ConfigHandler::get("repository");
+            $em = ConfigHandler::get("entityManager");
             $chatMessage->setIdUser($_SESSION["id_user"]);
             $chatMessage->setIdSession($_SESSION["id_session"]);
             $em->persist($chatMessage);

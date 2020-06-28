@@ -19,7 +19,7 @@
         </thead>
         <tbody>
         <?php
-        foreach( $lessons as $lesson):
+        foreach( $lessons["data"] as $lesson):
             ?>
             <tr>
                 <td><?= $lesson->getId(); ?></td>
@@ -37,5 +37,7 @@
         ?>
         </tbody>
     </table>
+
+    <?= $lessons["links"] ?>
 </section>
 @endsection

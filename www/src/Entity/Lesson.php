@@ -5,12 +5,14 @@ namespace App\Entity;
 
 
 use App\Core\Collections\ArrayCollection;
+use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
 
 class Lesson
 {
 
     use Entity;
+    use TimestampableEntity;
 
     /**
      * @var

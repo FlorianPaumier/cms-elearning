@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
 use phpDocumentor\Reflection\Types\This;
 
 class User
 {
     use Entity;
+    use TimestampableEntity;
 
     protected $username;
     protected $password;

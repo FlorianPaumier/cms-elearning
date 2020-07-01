@@ -181,7 +181,6 @@ abstract class QueryBuilder
             throw new \Exception("Method not allowed", 500);
         }
 
-
         $this->order[$key] = $value;
         return $this;
     }
@@ -227,7 +226,9 @@ abstract class QueryBuilder
     public function execute(string $sql, array $values)
     {
         $sql = $this->pdo->prepare($sql);
-        return $sql->execute($values);
+        $sql->execute($values);
+
+        return $sql;
     }
 
     /**
@@ -271,7 +272,7 @@ abstract class QueryBuilder
         $alias = $this->alias;
         if (!empty($this->order)) {
             $sql .= " ORDER BY " . implode(', ', array_map(function ($key, $value) use ($alias) {
-                    return "$alias.$key $value";
+                    return $alias ? "$alias.$key $value" : "$key $value";
                 }, array_keys($this->order), $this->order));
         }
 
@@ -293,7 +294,6 @@ abstract class QueryBuilder
     public function fetch(bool $clear = true)
     {
         $query = $this->pdo->prepare($this->toSQL());
-        dump($query);
 
         if (!$query->execute($this->parameters)) {
             dump($query->errorInfo());
@@ -347,6 +347,7 @@ abstract class QueryBuilder
                 } elseif ($this->relations) {
                     $this->alias = $this->from;
                 }
+
                 $fields = join(", ", $this->select);
 
                 return $fields;

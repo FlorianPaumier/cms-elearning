@@ -37,13 +37,15 @@
                 <li class="profile user-menu acilir">
                     <span class="icon"><i class="fa fa-user"></i></span>
                     <div class="login-menu">
-                        <a href="@path(app_user_login)">Login</a>
-                        <a href="@path(app_user_register)">Sign Up</a>
+                        <a href="@path(app_user_login)">Se connecter</a>
+                        <a href="@path(app_user_register)">S'inscrire</a>
+                        <a href="@path(app_user_logout)">Déconnexion</a>
                     </div>
                 </li>
                 <li class="profile-mobile">
-                    <a href="@path(app_user_login)"><button class="btn btn-primary btn-ghost btn-slide">Login</button></a>
-                    <a href="@path(app_user_register)"><button class="btn btn-primary btn-ghost btn-slide">Register</button> </a>
+                    <a href="@path(app_user_login)"><button class="btn btn-primary btn-ghost btn-slide">Se connecter</button></a>
+                    <a href="@path(app_user_register)"><button class="btn btn-primary btn-ghost btn-slide">S'inscrire</button> </a>
+                    <a href="@path(app_user_logout))"><button class="btn btn-primary btn-ghost btn-slide">Déconnexion</button> </a>
                 </li>
             </ul>
         </nav>

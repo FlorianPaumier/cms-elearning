@@ -7,6 +7,7 @@ namespace App\Form;
 use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\CollectionType;
 use App\Core\Form\Fields\EntityType;
+use App\Core\Form\Fields\TextAreaType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
 use App\Core\Interfaces\FormTypeInterface;
@@ -40,11 +41,10 @@ class ChapterForm extends AbstractForm
                 "class" => "col-md-6 col-lg-6 col-sm-12",
                 'entry_type' => Lesson::class,
             ])
-            ->add("blocks", CollectionType::class,  [
+            ->add("content", TextAreaType::class,  [
                 "label" => "Contenu",
                 "required" => true,
-                "class" => "col-md-6 col-lg-6 col-sm-12",
-                "entry_type" => ChapterBlockForm::class,
+                "class" => "col-md-6 col-lg-6 col-sm-12 ckeditor",
             ]);
     }
 

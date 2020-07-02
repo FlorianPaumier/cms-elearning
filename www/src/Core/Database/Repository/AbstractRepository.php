@@ -49,6 +49,9 @@ abstract class AbstractRepository extends QueryBuilder
         $this->orderBy("id", 'ASC');
         $results = $this->fetch();
 
+        if(is_null($results))
+            return [];
+
         return gettype($results) == "object" ? [$results] : $results;
     }
 
@@ -148,9 +151,9 @@ abstract class AbstractRepository extends QueryBuilder
         }
 
         return [
-            "data" =>  $results = $this->setMaxResult($length)
+            "data" => $this->setMaxResult($length)
                 ->page($page)
-                ->fetch(false),
+                ->findAll(),
             "total" => $count,
             "per_page" => $length,
             "links" => $links,

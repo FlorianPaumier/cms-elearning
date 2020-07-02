@@ -3,6 +3,7 @@
 namespace App\Core\Database;
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\Collections\ArrayCollection;
 use App\Core\Database\Repository\AbstractRepository;
 use App\Core\Formatter\Serializer;
 use App\Core\Helpers\EntityHelper;
@@ -197,6 +198,9 @@ abstract class Hydrator
                 }
 
                 if (gettype($value) == "object") {
+                    if(get_class($value) == ArrayCollection::class)
+                        continue;
+
                     $value = $value->getId();
                 } elseif (gettype($value) == "boolean") {
                     $value = (int)$value;

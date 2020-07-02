@@ -274,7 +274,7 @@ class MigrationController extends BaseController
         $patchList->setCurrentVersion($this->version);
         $patchList->setId($this->id);
 
-        $this->repository->from('patch_list')->persist($patchList)->flush();
+        $this->repository->persist($patchList)->flush();
     }
 
     /**

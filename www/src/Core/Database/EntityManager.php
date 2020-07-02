@@ -39,7 +39,7 @@ class EntityManager extends QueryBuilder
 
     public function persist(object &$objet): self
     {
-        $this->from(EntityHelper::getClass($objet));
+        $this->from(EntityHelper::getClass($objet)."s");
 
         $params = Hydrator::getData($objet);
 
@@ -63,7 +63,6 @@ class EntityManager extends QueryBuilder
                     $query["object"]->setId($this->pdo->lastInsertId());
                 }
             } catch (\Exception $e) {
-                var_dump($e->getMessage());
                 throw new \Exception($e);
             }
         }

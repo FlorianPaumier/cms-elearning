@@ -20,6 +20,7 @@
         <tbody>
         <?php
         foreach( $lessons["data"] as $lesson):
+
             ?>
             <tr>
                 <td><?= $lesson->getId(); ?></td>

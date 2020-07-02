@@ -67,6 +67,8 @@ class Validator
                         $this->length($input, $value["min"], isset($value["max"]) ?: null);
                         break;
                     case "required":
+                        if(!$value)
+                            break;
                         $this->required($input);
                         break;
                     case "empty":

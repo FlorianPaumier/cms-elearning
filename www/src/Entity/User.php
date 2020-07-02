@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
 use phpDocumentor\Reflection\Types\This;
 
 class User
 {
     use Entity;
+    use TimestampableEntity;
 
     protected $username;
     protected $password;
@@ -120,7 +122,7 @@ class User
     /**
      * @param string $forgetPasswordToken
      */
-    public function setForgetPasswordToken(string $forgetPasswordToken): User
+    public function setForgetPasswordToken(?string $forgetPasswordToken): User
     {
         $this->forgetPasswordToken = $forgetPasswordToken;
         $this->setForgetPasswordTokenAvailable();

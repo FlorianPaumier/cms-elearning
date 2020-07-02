@@ -32,7 +32,7 @@ abstract class AbstractRepository extends QueryBuilder
         $this->repository = array_pop($repository);
 
         $this->class .= explode("Repository", $this->repository)[0];
-        $this->table = explode("_", StringTransformer::PascalCaseToSnakeCase($this->class), 3)[2]."s";
+        $this->table = explode("_", StringTransformer::PascalCaseToSnakeCase($this->class), 3)[2];
 
         $this->setEntity(get_class(new $this->class()));
         $this->from($this->table);

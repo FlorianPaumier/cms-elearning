@@ -153,15 +153,13 @@ class UserManager
 
         $error = [];
 
-        if ($this->repository->findBy(["email" => $value["email"]])) {
+        if ($this->repository->findBy(["email" => $user->getEmail()])) {
             return "Votre email exist déjà. Veuillez le modifier";
         }
 
-        if ($this->entityManager->persist($value)) {
-            return true;
-        }
-
-        return "Une erreur estr survenue. Veuilliez réessayer. Si l'erreur persist contacter l'admin";
+        $this->entityManager->persist($user)->flush();
+die;
+        return "Une erreur est survenue. Veuilliez réessayer. Si l'erreur persist contacter l'admin";
     }
 
     /**

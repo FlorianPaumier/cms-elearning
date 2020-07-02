@@ -193,7 +193,7 @@ abstract class Hydrator
 
             if (!is_null($value)) {
                 if ($value instanceof \DateTime) {
-                    $value = $value->format("Y-m-d");
+                    $value = $value->format("Y-m-d H:m:i");
                 }
 
                 if (gettype($value) == "object") {

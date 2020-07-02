@@ -269,9 +269,10 @@ abstract class QueryBuilder
         }
 
         $alias = $this->alias;
+
         if (!empty($this->order)) {
             $sql .= " ORDER BY " . implode(', ', array_map(function ($key, $value) use ($alias) {
-                    return "$alias.$key $value";
+                    return $alias ? "$alias.$key $value" : "$key $value";
                 }, array_keys($this->order), $this->order));
         }
 
@@ -293,7 +294,7 @@ abstract class QueryBuilder
     public function fetch(bool $clear = true)
     {
         $query = $this->pdo->prepare($this->toSQL());
-        dump($query);
+//        dump($query);
 
         if (!$query->execute($this->parameters)) {
             dump($query->errorInfo());
@@ -332,6 +333,8 @@ abstract class QueryBuilder
 
     private function setField()
     {
+        $this->from = "\"{$this->from}\"";
+
         switch ($this->method) {
             case "INSERT INTO":
                 $fields = $this->getNotNullValues();
@@ -344,9 +347,15 @@ abstract class QueryBuilder
             case "SELECT":
                 if ($this->alias) {
                     $this->from .= " AS {$this->alias}";
+                    $alias = $this->alias;
+                    if(!in_array("*", $this->select))
+                        $this->select = array_map(function ($value) use ($alias) {
+                            return  "$alias.$value";
+                        }, $this->select);
                 } elseif ($this->relations) {
                     $this->alias = $this->from;
                 }
+
                 $fields = join(", ", $this->select);
 
                 return $fields;

@@ -1,0 +1,17 @@
+env: 'dev'
+database:
+    driver: pgsql
+    host: postgres
+    port: null
+    dbname: project_cms
+    username: utilisateur
+    password: motdepasse
+    charset: UTF8
+swiftmailer:
+    transport: smtp
+    host: smtp.gmail.com
+    port: null
+    encryption: ssl
+    username: null
+    password: null
+    spool: { type: memory }

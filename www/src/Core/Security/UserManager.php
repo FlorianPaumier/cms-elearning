@@ -37,7 +37,7 @@ class UserManager
     public function __construct()
     {
         $this->entityManager = ConfigHandler::get("entityManager");
-        $this->repository =  new UserRepository();
+        $this->entityManager =  new UserRepository();
         $this->session = ConfigHandler::get("session");
         $this->security = CacheHandler::get("security");
 
@@ -48,12 +48,13 @@ class UserManager
      */
     public function connectUser(?string $username, ?string $password): bool
     {
-        $q = $this->repository->setEntity(User::class)->findBy([
+        $q = $this->entityManager->setEntity(User::class)->findBy([
             "username" => $username,
             "password" => md5($password),
             //            "enable" => true,
         ]);
 
+//        dump(empty($q));
         $response = false;
 
         if (!empty($q)) {
@@ -106,7 +107,7 @@ class UserManager
     public function getUser()
     {
         $session = $this->session->offsetGet("app.user");
-        //        $user = $this->repository->from('user')->findBy(["email" => $session["user"]]);
+        //        $user = $this->entityManager->from('user')->findBy(["email" => $session["user"]]);
         return $session;
     }
 
@@ -153,7 +154,7 @@ class UserManager
 
         $error = [];
 
-        if ($this->repository->findBy(["email" => $user->getEmail()])) {
+        if ($this->entityManager->findBy(["email" => $user->getEmail()])) {
             return "Votre email exist déjà. Veuillez le modifier";
         }
 
@@ -167,9 +168,9 @@ die;
      */
     public function forgetPassword(string $email)
     {
-        if ($this->repository->from("user")->exists(["email" => $email])) {
+        if ($this->entityManager->from("user")->exists(["email" => $email])) {
 
-            $user = $this->repository->setEntity(User::class)->findBy(["email" => $email]);
+            $user = $this->entityManager->setEntity(User::class)->findBy(["email" => $email]);
             $user->setForgetPasswordToken(bin2hex(random_bytes(32)));
 
             $server = ConfigHandler::get("request")->getServer();

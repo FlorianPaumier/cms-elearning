@@ -43,7 +43,6 @@ class EntityManager extends QueryBuilder
 
         $params = Hydrator::getData($objet);
 
-        dump($params);
         if (!isset($params["id"])) {
             $this->insert($objet);
         } else {
@@ -58,12 +57,13 @@ class EntityManager extends QueryBuilder
         foreach ($this->queries as $query) {
             try {
                 $this->execute($query["sql"], $query["data"]);
-                dump($this->pdo->errorInfo());
+//                dump($query["sql"])1;
+//                dump($query["data"]);
+
                 if (is_null($query["object"]->getId())) {
                     $query["object"]->setId($this->pdo->lastInsertId());
                 }
             } catch (\Exception $e) {
-                var_dump($e->getMessage());
                 throw new \Exception($e);
             }
         }

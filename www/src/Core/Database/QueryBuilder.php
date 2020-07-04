@@ -181,7 +181,6 @@ abstract class QueryBuilder
             throw new \Exception("Method not allowed", 500);
         }
 
-
         $this->order[$key] = $value;
         return $this;
     }
@@ -227,7 +226,9 @@ abstract class QueryBuilder
     public function execute(string $sql, array $values)
     {
         $sql = $this->pdo->prepare($sql);
-        return $sql->execute($values);
+        $sql->execute($values);
+
+        return $sql;
     }
 
     /**
@@ -236,6 +237,9 @@ abstract class QueryBuilder
      */
     public function toSQL(): string
     {
+        $fromCache = $this->from;
+
+        $this->from = "\"{$this->from}\"";
         if (empty($this->select)) {
             $this->select = ["*"];
         }
@@ -269,7 +273,6 @@ abstract class QueryBuilder
         }
 
         $alias = $this->alias;
-
         if (!empty($this->order)) {
             $sql .= " ORDER BY " . implode(', ', array_map(function ($key, $value) use ($alias) {
                     return $alias ? "$alias.$key $value" : "$key $value";
@@ -288,13 +291,14 @@ abstract class QueryBuilder
             $sql .= " OFFSET " . $this->offset;
         }
 
+        $this->from = $fromCache;
+
         return $sql;
     }
 
     public function fetch(bool $clear = true)
     {
         $query = $this->pdo->prepare($this->toSQL());
-//        dump($query);
 
         if (!$query->execute($this->parameters)) {
             dump($query->errorInfo());
@@ -302,19 +306,17 @@ abstract class QueryBuilder
         }
 
         $results = $query->fetchAll(PDO::FETCH_ASSOC);
-
-
         if (!is_null($this->entity)) {
 
             if ($this->relations) {
                 Hydrator::$relations = true;
                 $records = Hydrator::hydrateRelation($results, $this->entity);
+
             } else {
                 foreach ($results as $result) {
                     $records[] = Hydrator::hydrate($result, $this->entity);
                 }
             }
-
         } else {
             $records = $results;
         }
@@ -328,13 +330,11 @@ abstract class QueryBuilder
         }
 
 
-        return count($records) > 1 ? $records : (!empty($records) ? $records[0] : null);
+        return count($records) > 1 ? $records : (!empty($records) ? array_pop($records) : null);
     }
 
     private function setField()
     {
-        $this->from = "\"{$this->from}\"";
-
         switch ($this->method) {
             case "INSERT INTO":
                 $fields = $this->getNotNullValues();
@@ -355,7 +355,6 @@ abstract class QueryBuilder
                 } elseif ($this->relations) {
                     $this->alias = $this->from;
                 }
-
                 $fields = join(", ", $this->select);
 
                 return $fields;

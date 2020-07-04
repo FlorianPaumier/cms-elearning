@@ -13,5 +13,6 @@ var config = {
 // config.language = 'pl';
 // config.skin = 'jquery-mobile';
 
+config.filebrowserUploadMethod = 'form';
 CKFinder.define( config );
 CKFinder.popup(config);

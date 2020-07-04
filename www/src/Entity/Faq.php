@@ -4,12 +4,14 @@
 namespace App\Entity;
 
 
+use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
 
 class Faq
 {
 
     use Entity;
+    use TimestampableEntity;
 
     /** @var int */
     protected $id;

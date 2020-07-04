@@ -3,13 +3,36 @@
   column:
     id:
       name: id
-      type: int
+      type: SERIAL
       options:
+
         - PRIMARY KEY
         - NOT NULL
     title:
       name: title
-      type: text
+      type: character varying
+      options:
+        - UNIQUE
+    slug:
+      name: slug
+      type: character varying
+      options:
+        - UNIQUE
     description:
       name: description
       type: text
+    content:
+      name: content
+      type: text
+    created_at:
+      name: created_at
+      type: timestamp
+    updated_at:
+      name: updated_at
+      type: timestamp
+    creator:
+      name: user_id
+      type: integer
+    thumbnail:
+      name: thumbnail
+      type: character varying

@@ -290,6 +290,7 @@ class TemplateEngine
         $tmp = tmpfile();
         fwrite($tmp, $content);
         extract($data);
+
         require stream_get_meta_data($tmp)['uri'];
         return ob_get_clean();
     }

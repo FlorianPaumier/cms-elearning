@@ -12,6 +12,7 @@ use App\Core\Request\Request;
 use App\Entity\Lesson;
 use App\Entity\LessonChapter;
 use App\Form\LessonForm;
+use App\Repository\LessonChapterRepository;
 use App\Repository\LessonRepository;
 
 class LessonController extends BaseController
@@ -37,36 +38,31 @@ class LessonController extends BaseController
         if ($request->getMethod() == "POST" && $form->isValid()) {
             /** @var EntityManager $em */
             $em = ConfigHandler::get("entityManager");
-            $em->persist($lesson);
-            $em->flush();
+            $em->persist($lesson)->flush();
             $this->redirect->redirectToRoute("admin_lesson_list");
         }
 
 
         return $this->renderer->render("admin/lessons/new", [
             "form" => $form->createView(),
+            "errors" => $form->getErrorFeedback(),
             'title' => "Création d'un Cour"
         ]);
     }
 
-    public function edit(Request $request, Lesson $lesson)
+    public function edit(Request $request,LessonRepository $repository, Lesson $lesson)
     {
-        $chapters = $this->repository
-            ->from("lesson_chapter", "lc")
-            ->select("id","title")
-            ->join("INNER JOIN", "lesson on lc.lesson_id = lesson.id")
+        $lesson = $repository
+            ->leftJoin("lesson_chapter", "lc")
             ->where("lesson.id = :id")
-            ->setParam("id", $lesson->getId())
-            ->fetchOrFail();
-
-        foreach ($chapters as $chapter){
-            $lesson->addChapters(Hydrator::hydrate($chapter, LessonChapter::class));
-        }
+            ->setParameter("id", $lesson->getId())
+            ->fetch();
 
         $form = $this->createForm(LessonForm::class, $lesson);
         $form->handleRequest($request);
 
         if ($request->getMethod() == "POST" && $form->isValid()) {
+            /** @var EntityManager $em */
             $em = ConfigHandler::get("entityManager");
             $em->persist($lesson);
             $em->flush();

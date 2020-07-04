@@ -12,8 +12,8 @@ class FaqController extends BaseController
 {
     public function index()
     {
-        $this->repository->getClass(Faq::class);
-        $questions = $this->repository->findAll();
+        $this->entityManager->getClass(Faq::class);
+        $questions = $this->entityManager->findAll();
         $questions = !empty($questions) ? $questions : [];
 
         return $this->renderer->render("admin/faq/index", [

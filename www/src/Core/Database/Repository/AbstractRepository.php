@@ -49,6 +49,9 @@ abstract class AbstractRepository extends QueryBuilder
         $this->orderBy("id", 'ASC');
         $results = $this->fetch();
 
+        if(is_null($results))
+            return [];
+
         return gettype($results) == "object" ? [$results] : $results;
     }
 
@@ -148,9 +151,9 @@ abstract class AbstractRepository extends QueryBuilder
         }
 
         return [
-            "data" =>  $results = $this->setMaxResult($length)
+            "data" => $this->setMaxResult($length)
                 ->page($page)
-                ->fetch(false),
+                ->findAll(),
             "total" => $count,
             "per_page" => $length,
             "links" => $links,
@@ -181,16 +184,16 @@ abstract class AbstractRepository extends QueryBuilder
      * @param string $alias
      * @return AbstractRepository
      */
-    public function join(string $tableTarget, string $alias)
+    private function join(string $tableTarget,string $key,  string $alias)
     {
         if(strpos($tableTarget, "\\") !== false){
-            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget))."s";
+            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget));
         }
 
         if($this->alias){
-            $this->relations["JOIN"][] = "$tableTarget AS $alias on ".$this->alias.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
+            $this->relations[$key][] = "$tableTarget AS $alias on ".$this->alias.".id"." = $alias.".$this->table."_id";
         }else{
-            $this->relations["JOIN"][] = "$tableTarget AS $alias on ".$this->table.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
+            $this->relations[$key][] = "$tableTarget AS $alias on ".$this->table.".id"." = $alias.".$this->table."_id";
         }
 
         $this->addSelect($tableTarget, $alias);
@@ -200,43 +203,17 @@ abstract class AbstractRepository extends QueryBuilder
 
     public function leftJoin(string $tableTarget, string $alias)
     {
-        if(strpos($tableTarget, "\\") !== false){
-            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget))."s";
-        }
-
-        $this->relations["LEFT JOIN"][] = "$tableTarget AS $alias on ".$this->alias.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
-
-        $this->addSelect($tableTarget, $alias);
-
-        return $this;
+        return $this->join($tableTarget, "LEFT JOIN", $alias);
     }
 
     public function innerJoin(string $tableTarget, string $alias)
     {
-        if(strpos($tableTarget, "\\") !== false){
-            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget))."s";
-        }
-
-        $this->relations["INNER JOIN"][] = "$tableTarget AS $alias on ".$this->alias.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
-
-
-        $this->addSelect($tableTarget, $alias);
-
-        return $this;
+        return $this->join($tableTarget, "INNER JOIN", $alias);
     }
 
     public function rightJoin(string $tableTarget, string $alias)
     {
-        if(strpos($tableTarget, "\\") !== false){
-            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget))."s";
-        }
-
-        $this->relations["RIGHT JOIN"][] = "$tableTarget AS $alias on ".$this->table.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
-
-
-        $this->addSelect($tableTarget, $alias);
-
-        return $this;
+        return $this->join($tableTarget, "RIGHT JOIN", $alias);
     }
 
     public function joinMany(string $tableTarget, string $alias, string $type = "JOIN", string $joinTable = ""){
@@ -297,8 +274,8 @@ abstract class AbstractRepository extends QueryBuilder
         $link .= '<li class="page-item ' . (($page - 1) <= 1 ? "disabled" : "" ) . '">';
         $link .= '<a class="page-link" rel="external" href="' . $url . '1" aria-label="Previous">';
         $link .= '<span aria-hidden="true">&laquo;</span></a></li>';//<span class="sr-only"> Previous</span>
-        for ($i = $start; $i < $end; $i++) {
-            $link .= '<li class="page-item ' . (($page == $i) ? "active" : "" ) . '"><a rel="external" target="_blank" class="page-link" href="' . $url . $i . '">' . $i . '</a></li>';
+        for ($i = $start; $i <= $end; $i++) {
+            $link .= '<li class="page-item ' . (($page == $i) ? "active" : "" ) . '"><a rel="external" class="page-link" href="' . $url . $i . '">' . $i . '</a></li>';
 
         }
         $link .= '<li class="page-item ' . (($page + 1) === $end ? "disabled" : "" ). '">';

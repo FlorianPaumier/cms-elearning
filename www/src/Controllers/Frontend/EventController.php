@@ -14,7 +14,7 @@ class EventController extends BaseController
 
     public function index(Request $request, Serializer $serializer)
     {
-        $events = $this->repository->setEntity(Event::class)->findAll();
+        $events = $this->entityManager->setEntity(Event::class)->findAll();
 
         return $this->render("frontend/events/calendar", ["events" => $serializer->serialize($events, 'json')]);
     }

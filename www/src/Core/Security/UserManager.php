@@ -6,13 +6,14 @@ use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 use App\Core\database\Hydrator;
 use App\Core\Database\QueryBuilder;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Mailer\MailerHandler;
 use App\Core\Mailer\MailerMessage;
 use App\Core\Request\ParameterBag;
 use App\Core\Request\Request;
 use App\Core\Session\PHPSession;
 use App\Entity\User;
+use App\Repository\UserRepository;
 
 class UserManager
 {
@@ -22,7 +23,7 @@ class UserManager
     private $entityManager;
 
     /**
-     * @var Table
+     * @var EntityManager
      */
     private $repository;
 
@@ -36,9 +37,10 @@ class UserManager
     public function __construct()
     {
         $this->entityManager = ConfigHandler::get("entityManager");
-        $this->repository = ConfigHandler::get('repository');
+        $this->repository =  new UserRepository();
         $this->session = ConfigHandler::get("session");
         $this->security = CacheHandler::get("security");
+
     }
 
     /**
@@ -151,11 +153,11 @@ class UserManager
 
         $error = [];
 
-        if ($this->repository->from("user")->findBy(["email" => $value["email"]])) {
+        if ($this->repository->findBy(["email" => $value["email"]])) {
             return "Votre email exist déjà. Veuillez le modifier";
         }
 
-        if ($this->repository->from("user")->insert($value)) {
+        if ($this->entityManager->persist($value)) {
             return true;
         }
 

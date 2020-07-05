@@ -5,6 +5,11 @@
 @endsection
 
 @section(body)
+<?php
+    foreach ($errors as $error){
+        var_dump($error);
+    }
+?>
 <section>
     <a href="@path(admin_lesson_list)" id="add-lesson" class="btn c-blue">Retour</a>
 </section>

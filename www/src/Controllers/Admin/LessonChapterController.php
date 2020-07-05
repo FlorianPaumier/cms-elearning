@@ -5,7 +5,7 @@ namespace App\Controllers\Admin;
 
 
 use App\Core\Cache\ConfigHandler;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
 use App\Entity\LessonChapterBlock;
@@ -36,8 +36,8 @@ class LessonChapterController extends BaseController
         $form->handleRequest($request);
 
         if ($request->getMethod() == "POST" && $form->isValid()) {
-            /** @var Table $em */
-            $em = ConfigHandler::get("repository");
+            /** @var EntityManager $em */
+            $em = ConfigHandler::get("entityManager");
             $em->persist($chapter);
             $em->flush();
             $this->redirect->redirectToRoute("admin_chapter_list");
@@ -64,7 +64,7 @@ class LessonChapterController extends BaseController
         $form->handleRequest($request);
 
         if ($request->getMethod() == "POST" && $form->isValid()) {
-            $em = ConfigHandler::get("repository");
+            $em = ConfigHandler::get("entityManager");
             $em->persist($chapter);
             $em->flush();
             $this->redirect->redirectToRoute("admin_chapter_list");

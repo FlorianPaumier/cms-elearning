@@ -2,7 +2,7 @@
 namespace App\Core\Interfaces;
 
 use App\Core\Cache\ConfigHandler;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Form\FormBuilder;
 use App\Core\Form\Validator\Validator;
 use App\Core\Render\RenderView;
@@ -26,7 +26,7 @@ abstract class BaseController
     protected $renderer;
 
     /**
-     * @var Table
+     * @var EntityManager
      */
     protected $repository;
 
@@ -62,7 +62,7 @@ abstract class BaseController
          * @deprected use render function
          */
         $this->renderer = new RenderView();
-        $this->repository = ConfigHandler::get('repository');
+        $this->repository = ConfigHandler::get('entityManager');
         $this->userManager = ConfigHandler::get("userManager");
         $this->query = ConfigHandler::get("request");
         $this->session = ConfigHandler::get("session");

@@ -5,7 +5,7 @@ namespace App\Core\Form;
 
 
 use App\Core\Cache\ConfigHandler;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\ChoiceType;
 use App\Core\Form\Fields\CollectionType;
@@ -127,6 +127,7 @@ class FormBuilder
         foreach ($keysForm as $key) {
             preg_match_all('~\[\]~m', $key, $matches, PREG_SET_ORDER, 0);
             $requestKey = $key;
+            $value = null;
             if (!empty($matches)) {
                 $requestKey = preg_replace('~\[\]~', "", $key);
             }
@@ -227,7 +228,9 @@ class FormBuilder
 
     public function getErrorFeedback(): array
     {
-        return $this->errors;
+        $errors = $this->errors;
+        $this->errors = [];
+        return $errors;
     }
 
     public function setData($data)
@@ -368,13 +371,12 @@ class FormBuilder
         }
 
         $choiceLabel = $args["choice_label"] ? "get" . ucfirst($args["choice_label"]) : "getId";
-        /** @var Table $repository */
-        $repository = ConfigHandler::get('repository');
-        $repository->getClass($args["entry_type"]);
+        /** @var EntityManager $repository */
+        $em = ConfigHandler::get('entityManager');
+        $repository = $em->getRepository($args["entry_type"]."Repository");
 
         $items = $repository->select('id', $args["choice_label"])->findAll();
         $options = [];
-
 
         foreach ($items as $item) {
             $type = new OptionType();
@@ -491,19 +493,20 @@ class FormBuilder
 
     private function transformEntity(string $key, $value)
     {
-        /** @var Table $repository */
-        $repository = ConfigHandler::get('repository');
+        /** @var EntityManager $repository */
+        $em = ConfigHandler::get('entityManager');
+        $repository = $em->getRepository($this->fields[$key]["args"]["entry_type"]."Repository");
 
         if (gettype($value) == "array") {
             $method = "add";
             $items = [];
             foreach ($value as $id) {
-                $result = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->select($this->fields[$key]["args"]["choice_label"] ?? "id")->find($id);
+                $result = $repository->select($this->fields[$key]["args"]["choice_label"] ?? "id")->find($id);
                 $items[] = $result;
             }
             $value = $items;
         } else {
-            $value = $repository->setEntity($this->fields[$key]["args"]["entry_type"])->select($this->fields[$key]["args"]["choice_label"] ?? "id")->find($value);
+            $value = $repository->select($this->fields[$key]["args"]["choice_label"] ?? "id")->find($value);
         }
 
         return $value;

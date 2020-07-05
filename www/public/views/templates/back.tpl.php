@@ -26,6 +26,8 @@
 
     @section(styles)
 
+    @section(styles)
+
 </head>
 
 <body id="page-top">

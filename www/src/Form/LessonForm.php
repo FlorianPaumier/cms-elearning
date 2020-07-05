@@ -36,7 +36,7 @@ class LessonForm extends AbstractForm
             ])
             ->add("chapters", EntityType::class, [
                 "label" => "Chapitres",
-                "required" => true,
+                "required" => false,
                 "multiple" => true,
                 "entry_type" => LessonChapter::class,
                 "choice_label" => "title",

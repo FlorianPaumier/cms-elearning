@@ -5,10 +5,12 @@ namespace App\Controllers\Admin;
 
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\Database\Hydrator;
 use App\Core\Database\Table;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
 use App\Entity\Lesson;
+use App\Entity\LessonChapter;
 use App\Form\LessonForm;
 
 class LessonController extends BaseController
@@ -47,8 +49,19 @@ class LessonController extends BaseController
         ]);
     }
 
-    public function edit(Request $request, int $lessonId)
+    public function edit(Request $request, Lesson $lesson)
     {
+        $chapters = $this->repository
+            ->from("lesson_chapter", "lc")
+            ->select("id","title")
+            ->join("INNER JOIN", "lesson on lc.lesson_id = lesson.id")
+            ->where("lesson.id = :id")
+            ->setParam("id", $lesson->getId())
+            ->fetchOrFail();
+
+        foreach ($chapters as $chapter){
+            $lesson->addChapters(Hydrator::hydrate($chapter, LessonChapter::class));
+        }
 
         $form = $this->createForm(LessonForm::class, $lesson);
         $form->handleRequest($request);

@@ -49,8 +49,7 @@ class UserController extends BaseController
             if ($form->isValid()) {
                 $password = $user->getPassword();
                 $user->setPassword(md5($password));
-
-
+                
                 $this->repository->persist($user);
                 $this->repository->flush();
 

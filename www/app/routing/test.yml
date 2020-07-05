@@ -2,6 +2,10 @@ test_simple:
     path: '/test'
     controller: App\Controllers\Test:simpleRouting
     method: [GET]
+test_path:
+    path: '/path'
+    controller: App\Controllers\Test:testPathFunction
+    method: [GET]
 test_error:
     path: '/test/view'
     controller: App\Controllers\Test:errorView

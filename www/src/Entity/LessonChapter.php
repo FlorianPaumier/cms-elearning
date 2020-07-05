@@ -4,6 +4,7 @@
 namespace App\Entity;
 
 
+use App\Core\Helpers\ArrayCollection;
 use App\Core\Interfaces\Entity;
 
 class LessonChapter
@@ -23,6 +24,11 @@ class LessonChapter
 
     /** @var int */
     protected $position;
+
+    public function __construct()
+    {
+        $this->blocks = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -56,14 +62,14 @@ class LessonChapter
      */
     public function setTitle(string $title): LessonChapter
     {
-        $this->name = $title;
+        $this->title = $title;
         return $this;
     }
 
     /**
      * @return array
      */
-    public function getBlocks(): ?array
+    public function getBlocks(): ?ArrayCollection
     {
         return $this->blocks;
     }
@@ -72,9 +78,11 @@ class LessonChapter
      * @param array $blocks
      * @return LessonChapter
      */
-    public function setBlock(ChapterBlock $block): LessonChapter
+    public function addBlock(LessonChapterBlock $block): LessonChapter
     {
-        $this->blocks = $block;
+        if (!$this->blocks->contain($block)) {
+            $this->blocks->add($block);
+        }
         return $this;
     }
 
@@ -82,7 +90,7 @@ class LessonChapter
      * @param array $blocks
      * @return LessonChapter
      */
-    public function removeBlock(ChapterBlock $block): LessonChapter
+    public function removeBlock(LessonChapterBlock $block): LessonChapter
     {
         $this->blocks = $this->removeElement($this->blocks, $block);
         return $this;

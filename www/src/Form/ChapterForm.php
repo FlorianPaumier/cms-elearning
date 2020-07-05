@@ -19,29 +19,6 @@ class ChapterForm extends AbstractForm
     /**
      * @inheritDoc
      */
-    public static function getConstraint(): array
-    {
-        return [
-            [
-                "title" => [
-                    "empty" => false,
-                    "required" => true,
-                    "exists" => true,
-                ]
-            ],
-            [
-                "description" => [
-                    "empty" => false,
-                    "required" => true,
-                    "exists" => true,
-                ]
-            ]
-        ];
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function buildForm(FormBuilder $builder): FormBuilder
     {
         return $builder
@@ -58,6 +35,7 @@ class ChapterForm extends AbstractForm
             ])
             ->add("lesson", EntityType::class, [
                 "label" => "Lesson",
+                "choice_label" => "title",
                 "require" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
                 'entry_type' => Lesson::class,

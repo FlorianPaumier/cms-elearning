@@ -22,7 +22,7 @@
             <tr>
                 <td><?= $question->getId(); ?></td>
                 <td><?= $question->getQuestion(); ?></td>
-                <td><?= $question->getDateCreated()->format("d/m/Y"); ?></td>
+                <td><?= !is_null($question->getCreatedAt()) ? $question->getCreatedAt()->format("d/m/Y") : "N/A"; ?></td>
                 <td>
                     <a href="/admin/sondage/edit/<?= $question->getId(); ?>">
                         <button id="edit-sondage" class="btn btn-danger">Modifier</button>

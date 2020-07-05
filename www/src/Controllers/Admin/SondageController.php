@@ -7,12 +7,13 @@ use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
 use App\Entity\Sondage;
 use App\Form\SondageForm;
+use App\Repository\SondageRepository;
 
 class SondageController extends BaseController
 {
-    public function index()
+    public function index(SondageRepository $sondageRepository)
     {
-        $questions = $this->repository->setEntity(Sondage::class)->findAll();
+        $questions = $sondageRepository->findAll();
         $questions = !is_null($questions) ? $questions : [];
 
         return $this->renderer->render("admin/sondage/index", [

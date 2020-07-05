@@ -5,13 +5,13 @@ namespace App\Controllers;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
 use App\Entity\Faq;
+use App\Repository\FaqRepository;
 
 class FaqController extends BaseController
 {
-    public function index()
+    public function index(FaqRepository $faqRepository)
     {
-        $this->repository->getClass(Faq::class);
-        $questions = $this->repository->findAll();
+        $questions = $faqRepository->findAll();
         $questions = !empty($questions) ? $questions : array();
 
         return $this->renderer->render("faq/index", [

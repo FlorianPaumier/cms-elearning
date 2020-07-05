@@ -7,13 +7,13 @@ use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
 use App\Entity\Faq;
 use App\Form\FaqForm;
+use App\Repository\FaqRepository;
 
 class FaqController extends BaseController
 {
-    public function index()
+    public function index(FaqRepository $faqRepository)
     {
-        $this->repository->getClass(Faq::class);
-        $questions = $this->repository->findAll();
+        $questions = $faqRepository->findAll();
         $questions = !empty($questions) ? $questions : [];
 
         return $this->renderer->render("admin/faq/index", [

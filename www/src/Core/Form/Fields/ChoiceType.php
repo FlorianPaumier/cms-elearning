@@ -21,20 +21,20 @@ class ChoiceType extends AbstractType
            if($options["multiple"]){
                self::$template = CheckboxType::getTemplate();
                $this->blockName = "checkbox";
-               return true;
+           }else {
+                self::$template = RadioType::getTemplate();
+                $this->blockName = "radio";
            }
-
-            self::$template = RadioType::getTemplate();
-            $this->blockName = "radio";
-            return true;
+        }else{
+            self::$template = SelectType::getTemplate();
+            $this->blockName = "select";
         }
 
-        self::$template = SelectType::getTemplate();
-        $this->blockName = "select";
         return true;
     }
 
     public function getBlockName(){
         return $this->blockName;
     }
+
 }

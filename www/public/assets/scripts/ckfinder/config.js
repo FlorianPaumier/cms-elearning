@@ -4,7 +4,9 @@
  */
 
 var config = {
-    "language" : "fr"
+    "uploadUrl" : '/uploader/upload',
+    "language" : "fr",
+    "filebrowserUploadMethod" : 'form',
 };
 
 // Set your configuration options below.

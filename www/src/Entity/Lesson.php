@@ -132,7 +132,7 @@ class Lesson
     /**
      * @return mixed
      */
-    public function getThumbnail()
+    public function getThumbnail(): ?string
     {
         return $this->thumbnail;
     }
@@ -141,7 +141,7 @@ class Lesson
      * @param mixed $thumbnail
      * @return Lesson
      */
-    public function setThumbnail($thumbnail)
+    public function setThumbnail(?string $thumbnail)
     {
         $this->thumbnail = $thumbnail;
         return $this;

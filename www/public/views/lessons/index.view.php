@@ -26,7 +26,7 @@
                 <article data-path="@path(app_catalogue_show, <?= $lesson->getId() ?>)">
                     <section class="content card__content">
                         <section class="img">
-                            <img class="card__image" src="https://unsplash.it/800/600?image=82" alt="lessons logo">
+                            <img class="card__image" src="<?= $lesson->getThumbnail() ?? 'https://unsplash.it/800/600?image=82'?>" alt="lessons logo">
                         </section>
                         <section class="right">
                             <section class="top">

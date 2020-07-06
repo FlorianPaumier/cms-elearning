@@ -67,7 +67,7 @@ class FormTypeBuilderServices
                 ->setPosition($field["position_input"]);
 
             if (!empty($field["id_input"])) {
-                $this->inputs[$slug]->setId($field["id_input"]);
+                $this->inputs[$slug]->setId((int)$field["id_input"]);
             }
             if(!is_null($contactForm)){
                 $this->inputs[$slug]->setContactForm($contactForm);
@@ -150,6 +150,7 @@ class FormTypeBuilderServices
         require $this->template;
         $content = ob_get_clean();
         file_put_contents(ROOT_PATH . "/src/Form/" . $data["class_name"] . ".php", $content);
+
         return ROOT_PATH . "/src/Form/" . $data["class"] . ".php";
     }
 }

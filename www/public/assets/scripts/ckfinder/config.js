@@ -4,7 +4,9 @@
  */
 
 var config = {
-    "language" : "fr"
+    "uploadUrl" : '/uploader/upload',
+    "language" : "fr",
+    "filebrowserUploadMethod" : 'form',
 };
 
 // Set your configuration options below.
@@ -13,6 +15,5 @@ var config = {
 // config.language = 'pl';
 // config.skin = 'jquery-mobile';
 
-config.filebrowserUploadMethod = 'form';
 CKFinder.define( config );
 CKFinder.popup(config);

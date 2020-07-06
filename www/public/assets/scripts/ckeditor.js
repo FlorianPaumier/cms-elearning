@@ -16,7 +16,7 @@ function createCkeditor(container){
                 filebrowserImageUploadUrl: '/assets/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
                 ckfinder: {
                     openerMethod: 'popup',
-                    uploadUrl: '/assets/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json'
+                    uploadUrl: '/assets/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json'
                 }
             })
             .catch( error => {

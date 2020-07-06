@@ -125,4 +125,9 @@ class Request extends RequestHandler
     {
         return $this->server["REQUEST_METHOD"] ?? "GET";
     }
+
+    public function getFile()
+    {
+        return $this->files;
+    }
 }

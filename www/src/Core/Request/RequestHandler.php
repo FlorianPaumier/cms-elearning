@@ -14,7 +14,7 @@ class RequestHandler
     protected $request;
     protected $attribute;
     protected $cookie;
-    protected $file;
+    protected $files;
     protected $server;
     protected $session;
     protected $header;
@@ -69,7 +69,7 @@ class RequestHandler
         $this->request = new ParameterBag($request);
         $this->attribute = $attributes;
         $this->cookie = $cookies;
-        $this->file = $files;
+        $this->files = $files;
         $this->server = $server;
         $this->content = $content;
         $this->contentType = isset($this->server["CONTENT_TYPE"]) ?: null;

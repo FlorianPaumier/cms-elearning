@@ -5,8 +5,10 @@ namespace App\Core\Contact;
 
 
 use App\Core\Interfaces\Entity;
+use App\Core\Interfaces\GenerateFormInputInterface;
+use App\Core\Interfaces\GenerateFormInterface;
 
-class ContactInput
+class ContactInput implements GenerateFormInputInterface
 {
 
     use Entity;
@@ -47,7 +49,7 @@ class ContactInput
      * @param string $formKey
      * @return ContactInput
      */
-    public function setFormKey(string $formKey): ContactInput
+    public function setFormKey(string $formKey): GenerateFormInputInterface
     {
         $this->formKey = $formKey;
         return $this;
@@ -65,7 +67,7 @@ class ContactInput
      * @param string $label
      * @return ContactInput
      */
-    public function setLabel(string $label): ContactInput
+    public function setLabel(string $label): GenerateFormInputInterface
     {
         $this->label = $label;
         return $this;
@@ -83,7 +85,7 @@ class ContactInput
      * @param string $type
      * @return ContactInput
      */
-    public function setType(string $type): ContactInput
+    public function setType(string $type): GenerateFormInputInterface
     {
         $this->type = $type;
         return $this;
@@ -101,7 +103,7 @@ class ContactInput
      * @param bool $required
      * @return ContactInput
      */
-    public function setRequired(bool $required): ContactInput
+    public function setRequired(bool $required): GenerateFormInputInterface
     {
         $this->required = $required;
         return $this;
@@ -119,7 +121,7 @@ class ContactInput
      * @param string $placeholder
      * @return ContactInput
      */
-    public function setPlaceholder(string $placeholder): ContactInput
+    public function setPlaceholder(string $placeholder): GenerateFormInputInterface
     {
         $this->placeholder = $placeholder;
         return $this;
@@ -137,7 +139,7 @@ class ContactInput
      * @param array $choices
      * @return ContactInput
      */
-    public function setChoices(?array $choices): ContactInput
+    public function setChoices(?array $choices): GenerateFormInputInterface
     {
         $this->choices = $choices;
         return $this;
@@ -155,7 +157,7 @@ class ContactInput
      * @param int $position
      * @return ContactInput
      */
-    public function setPosition(int $position): ContactInput
+    public function setPosition(int $position): GenerateFormInputInterface
     {
         $this->position = $position;
         return $this;
@@ -164,7 +166,7 @@ class ContactInput
     /**
      * @return ContactForm
      */
-    public function getContactForm(): ContactForm
+    public function getContactForm(): GenerateFormInterface
     {
         return $this->contactForm;
     }
@@ -173,7 +175,7 @@ class ContactInput
      * @param ContactForm $contactForm
      * @return ContactInput
      */
-    public function setContactForm(ContactForm $contactForm): ContactInput
+    public function setContactForm(ContactForm $contactForm): GenerateFormInputInterface
     {
         $this->contactForm = $contactForm;
         return $this;

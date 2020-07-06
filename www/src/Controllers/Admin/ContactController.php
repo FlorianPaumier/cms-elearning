@@ -27,10 +27,10 @@ class ContactController extends BaseController
     public function new(Request $request)
     {
         if($request->getMethod() == "POST" ){
-            $formTypeBuilder = (new FormTypeBuilderServices($request->getRequest()->get("admin_contact")))->generate();
+            $formTypeBuilder = (new FormTypeBuilderServices($request->getRequest()->get("admin_contact")))->generateContact(ContactInput::class);
 
             $inputs = $formTypeBuilder->getInputs();
-            $form = $formTypeBuilder->createFormTypeClass($request->getRequest()->all());
+            $form = $formTypeBuilder->createFormTypeClass($request->getRequest()->all(), ContactForm::class);
 
             $this->entityManager->from("contact_form")->persist($form);
             $this->entityManager->flush();
@@ -53,10 +53,10 @@ class ContactController extends BaseController
         $json = $serializer->serialize($inputs, "json");
 
         if($request->getMethod() == "POST"){
-            $formTypeBuilder = (new FormTypeBuilderServices($request->getRequest()->get("admin_contact")))->generate($contactForm);
+            $formTypeBuilder = (new FormTypeBuilderServices($request->getRequest()->get("admin_contact")))->generateContact(ContactInput::class, $contactForm);
 
             $inputs = $formTypeBuilder->getInputs();
-            $form = $formTypeBuilder->createFormTypeClass($request->getRequest()->all(), $contactForm);
+            $form = $formTypeBuilder->createFormTypeClass($request->getRequest()->all(),ContactForm::class, $contactForm);
 
             $this->entityManager->from("contact_form")->persist($form);
             /** @var ContactInput $input */
@@ -68,8 +68,9 @@ class ContactController extends BaseController
         return $this->render("admin/contact/edit", ["inputs" => $json, "form" => $contactForm]);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request, ContactForm $contactForm)
     {
-
+        $this->entityManager->delete($contactForm);
+        $this->redirect->redirectToRoute("admin_contact_list");
     }
 }

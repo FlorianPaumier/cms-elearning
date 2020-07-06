@@ -18,6 +18,7 @@ use App\Core\Form\Fields\SubmitType;
 use App\Core\Form\Fields\TextAreaType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Helpers\StringTransformer;
+use App\Core\Interfaces\GenerateFormInterface;
 
 class FormTypeBuilderServices
 {
@@ -43,7 +44,7 @@ class FormTypeBuilderServices
 
     }
 
-    public function generate(ContactForm $contactForm = null)
+    public function generateContact(string $class, GenerateFormInterface $form = null): self
     {
         foreach ($this->data as $field) {
             $slug = StringTransformer::slugify($field["label_input"]);
@@ -58,7 +59,7 @@ class FormTypeBuilderServices
                 "type" => $this->translateType($field["type_input"]),
             ];
 
-            $this->inputs[$slug] = (new ContactInput())
+            $this->inputs[$slug] = (new $class())
                 ->setFormKey($slug)
                 ->setType($field["type_input"])
                 ->setPlaceholder($field["placeholder_input"])
@@ -69,17 +70,24 @@ class FormTypeBuilderServices
             if (!empty($field["id_input"])) {
                 $this->inputs[$slug]->setId((int)$field["id_input"]);
             }
-            if(!is_null($contactForm)){
-                $this->inputs[$slug]->setContactForm($contactForm);
+            if(!is_null($form)){
+                $this->inputs[$slug]->setContactForm($form);
             }
         }
 
         return $this;
     }
 
-    public function createFormTypeClass(array $data, ContactForm $form = null): ContactForm
+    public function createFormTypeClass(array $data,string $class, GenerateFormInterface $form = null): GenerateFormInterface
     {
-        $className = $data["admin_contact_class"];
+        $ext = ["admin_evaluation", "admin_contact"];
+
+        if(key_exists($ext[0], $data)){
+            $key = $ext[0];
+        }else if(key_exists($ext[0], $data)){
+            $key = $ext[0];
+        }
+        $className = $data[$key."_class"];
 
         $this->generateFile([
             "form_fields" => $this->fields,
@@ -89,11 +97,11 @@ class FormTypeBuilderServices
         ]);
 
         if (is_null($form)) {
-            $form = new ContactForm();
+            $form = new $class();
         }
 
         return $form->setName($className)
-            ->setEnabled(!is_null($data["admin_contact_enable"]))
+            ->setEnabled(!is_null($data[$key."_enable"]))
             ->setPath("App\Form\\" . StringTransformer::toPascalCase($className) . "Form");
     }
 
@@ -102,7 +110,7 @@ class FormTypeBuilderServices
         return $this->inputs;
     }
 
-    private function translateType(string $type)
+    private function translateType(string $type): string
     {
 
         switch ($type) {
@@ -136,6 +144,8 @@ class FormTypeBuilderServices
             case "submit":
                 $this->usesType[] = SubmitType::class;
                 return "SubmitType::class";
+            default:
+                return "TextType::class";
         }
     }
 

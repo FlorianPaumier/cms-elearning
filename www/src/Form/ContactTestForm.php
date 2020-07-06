@@ -6,6 +6,7 @@ use App\Core\Form\FormBuilder;
 use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\Fields\TextAreaType;
+use App\Core\Form\Fields\SubmitType;
 
 
 class ContactTestForm extends AbstractForm
@@ -48,6 +49,13 @@ class ContactTestForm extends AbstractForm
   'label' => 'Message',
   'key' => 'message',
   'position' => '5',
+))
+                        ->add('valider', SubmitType::class , array (
+  'require' => false,
+  'placeholder' => 'Valider',
+  'label' => 'Valider',
+  'key' => 'valider',
+  'position' => '6',
 ))
                 ;
     }

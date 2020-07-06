@@ -57,9 +57,8 @@ class EntityManager extends QueryBuilder
         foreach ($this->queries as $query) {
             try {
                 $this->execute($query["sql"], $query["data"]);
-//                dump($query["sql"])1;
+//                dump($query["sql"]);
 //                dump($query["data"]);
-
                 if (is_null($query["object"]->getId())) {
                     $query["object"]->setId($this->pdo->lastInsertId());
                 }
@@ -145,7 +144,7 @@ class EntityManager extends QueryBuilder
         if (!is_callable([$object, 'getId'])) {
             throw new \Exception("No id in object");
         }
-
+        $this->from(EntityHelper::getClass($object));
         $this->method = "DELETE";
 
         $this->where("id = :id")

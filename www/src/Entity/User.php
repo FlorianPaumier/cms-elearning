@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Core\Interfaces\Entity;
+use PHPUnit\Exception;
+
 
 class User
 {
@@ -21,6 +23,17 @@ class User
     protected $forgetPasswordTokenAvailable;
 
     protected $roles = ["ROLE_USER"];
+
+
+    /** @return \DateTimeInterface|null
+     * @throws Exception
+     */
+    protected $created_at;
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    protected $updated_at;
 
 
     /**
@@ -140,5 +153,57 @@ class User
     {
         $this->forgetPasswordTokenAvailable = new \DateTime("+ 5 minutes");
         return $this;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     * @throws Exception
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @param $created_at
+     * @return $this
+     */
+    public function setCreatedAt($created_at): User
+    {
+        $this->created_at = date("Y-m-d H:i:s");
+
+        return $this;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * @param DateTimeInterface $updated_at
+     * @return $this
+     */
+    public function setUpdatedAt($updated_at): User
+    {
+        $this->updated_at = date("Y-m-d H:i:s");
+
+        return $this;
+    }
+
+    /**
+     * PrePersist()
+     * PreUpdate()
+     */
+    public function updateTimestamps(): void
+    {
+        $now = date("Y-m-d H:i:s");
+        $this->setUpdatedAt($now);
+        if ($this->getId() === null) {
+            $this->setCreatedAt($now);
+        }
     }
 }

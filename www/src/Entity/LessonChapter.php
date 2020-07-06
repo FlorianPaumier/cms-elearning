@@ -5,12 +5,14 @@ namespace App\Entity;
 
 
 use App\Core\Collections\ArrayCollection;
+use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
 
 class LessonChapter
 {
 
     use Entity;
+    use TimestampableEntity;
 
     /** @var Lesson
      */
@@ -19,16 +21,11 @@ class LessonChapter
     /** @var string */
     protected $title;
 
-    /** @var ArrayCollection */
-    protected $lessonChapterBlocks;
+    /** @var string */
+    protected $content;
 
     /** @var int */
     protected $position;
-
-    public function __construct()
-    {
-        $this->lessonChapterBlocks = new ArrayCollection();
-    }
 
     /**
      * @return Lesson|null
@@ -75,28 +72,20 @@ class LessonChapter
     }
 
     /**
-     * @param LessonChapterBlock $block
-     * @return LessonChapter
+     * @return string
      */
-    public function addLessonChapterBlock(LessonChapterBlock $block): LessonChapter
+    public function getContent(): ?string
     {
-
-        if (!$this->lessonChapterBlocks->contains($block)) {
-            $this->lessonChapterBlocks[] = $block;
-        }
-
-        return $this;
+        return $this->content;
     }
 
     /**
-     * @param LessonChapterBlock $block
+     * @param string $content
      * @return LessonChapter
      */
-    public function removeBlock(LessonChapterBlock $block): LessonChapter
+    public function setContent(string $content): LessonChapter
     {
-        if ($this->lessonChapterBlocks->contains($block)) {
-            $this->lessonChapterBlocks->removeElement($block);
-        }
+        $this->content = $content;
         return $this;
     }
 

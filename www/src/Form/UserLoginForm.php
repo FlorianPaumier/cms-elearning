@@ -21,7 +21,8 @@ class UserLoginForm extends AbstractForm
                 "username", TextType::class, [
                     'type' => 'text',
                     'required' => true,
-                    'label' => 'Username',
+                    'label' => 'Identifiant',
+                    'placeholder' => 'Votre identifiant',
                     "class" => "form-control form-control-user",
                     "before" => "<i class=\"fa fa-user\"></i>",
                 ]
@@ -30,6 +31,7 @@ class UserLoginForm extends AbstractForm
                 "password", PasswordType::class, [
                     'required' => false,
                     'label' => 'Mot de passe',
+                    'placeholder' => 'Votre mot de passe',
                     "class" => "form-control form-control-user",
                 ]
             )

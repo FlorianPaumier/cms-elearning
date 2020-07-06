@@ -3,7 +3,6 @@
 
 namespace App\Core\Mailer;
 
-
 use App\Core\Render\RenderView;
 
 class MailerMessage

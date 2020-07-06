@@ -1,4 +1,4 @@
-admin_lesson_chapter_list:
+admin_lesson_chapter_index:
   path: /admin/lesson_chapter
   controller: App\Controllers\Admin\LessonChapter:index
 

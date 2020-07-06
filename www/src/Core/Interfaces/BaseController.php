@@ -28,7 +28,7 @@ abstract class BaseController
     /**
      * @var EntityManager
      */
-    protected $repository;
+    protected $entityManager;
 
     /**
      * @var UserManager
@@ -62,7 +62,7 @@ abstract class BaseController
          * @deprected use render function
          */
         $this->renderer = new RenderView();
-        $this->repository = ConfigHandler::get('entityManager');
+        $this->entityManager = ConfigHandler::get('entityManager');
         $this->userManager = ConfigHandler::get("userManager");
         $this->query = ConfigHandler::get("request");
         $this->session = ConfigHandler::get("session");
@@ -71,7 +71,6 @@ abstract class BaseController
 
     /** Return current log in user */
     protected function getUser(){
-        dump($_SESSION);
         return $this->session->offsetGet("app.user");
     }
 

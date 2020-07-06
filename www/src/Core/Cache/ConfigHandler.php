@@ -13,6 +13,7 @@ use App\Core\Form\FormFactory;
 use App\Core\Formatter\Serializer;
 use App\Core\Logger\AbstractLogger;
 use App\Core\Mailer\MailerHandler;
+use App\Core\Mailer\MailerMessage;
 use App\Core\Request\Request;
 use App\Core\Router\Router;
 use App\Core\Security\UserManager;

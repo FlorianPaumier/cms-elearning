@@ -13,7 +13,7 @@
       options:
         - UNIQUE
     enabled:
-      name: enable
+      name: enabled
       type: integer
     path:
       name: path

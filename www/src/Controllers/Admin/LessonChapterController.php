@@ -6,6 +6,7 @@ namespace App\Controllers\Admin;
 
 use App\Core\Cache\ConfigHandler;
 use App\Core\Database\EntityManager;
+use App\Core\Database\Repository\AbstractRepository;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
 use App\Entity\LessonChapterBlock;
@@ -13,14 +14,16 @@ use App\Entity\LessonChapter;
 use App\Entity\Lesson;
 use App\Form\ChapterForm;
 use App\Form\LessonForm;
+use App\Repository\LessonChapterRepository;
 
 class LessonChapterController extends BaseController
 {
 
     public function index()
     {
-        $this->repository->getClass(LessonChapter::class);
-        $chapters = $this->repository->findAll();
+        /** @var AbstractRepository $repository */
+        $repository = $this->entityManager->getRepository(LessonChapterRepository::class);
+        $chapters = $repository->paginate(10);
 
         return $this->renderer->render("admin/chapters/index", [
             "chapters" => $chapters,
@@ -40,19 +43,20 @@ class LessonChapterController extends BaseController
             $em = ConfigHandler::get("entityManager");
             $em->persist($chapter);
             $em->flush();
-            $this->redirect->redirectToRoute("admin_chapter_list");
+            $this->redirect->redirectToRoute("admin_lesson_chapter_index");
         }
 
 
         return $this->renderer->render("admin/chapters/form", [
             "form" => $form->createView(),
+            "errors" => $form->getErrorFeedback(),
             'title' => "Création d'un Cour"
         ]);
     }
 
     public function edit(Request $request, LessonChapter $chapter)
     {
-        $blocs = $this->repository->setEntity(LessonChapterBlock::class)->select("id, title, content, lesson_chapter_id")
+        $blocs = $this->entityManager->setEntity(LessonChapterBlock::class)->select("id, title, content, lesson_chapter_id")
             ->where("lesson_chapter_id = :id")
             ->setParam("id", $chapter->getId())
             ->fetchOrFail();
@@ -67,7 +71,7 @@ class LessonChapterController extends BaseController
             $em = ConfigHandler::get("entityManager");
             $em->persist($chapter);
             $em->flush();
-            $this->redirect->redirectToRoute("admin_chapter_list");
+            $this->redirect->redirectToRoute("admin_chapter_index");
         }
 
 

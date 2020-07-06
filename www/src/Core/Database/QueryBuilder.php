@@ -237,6 +237,9 @@ abstract class QueryBuilder
      */
     public function toSQL(): string
     {
+        $fromCache = $this->from;
+
+        $this->from = "\"{$this->from}\"";
         if (empty($this->select)) {
             $this->select = ["*"];
         }
@@ -288,6 +291,8 @@ abstract class QueryBuilder
             $sql .= " OFFSET " . $this->offset;
         }
 
+        $this->from = $fromCache;
+
         return $sql;
     }
 
@@ -301,19 +306,17 @@ abstract class QueryBuilder
         }
 
         $results = $query->fetchAll(PDO::FETCH_ASSOC);
-
-
         if (!is_null($this->entity)) {
 
             if ($this->relations) {
                 Hydrator::$relations = true;
                 $records = Hydrator::hydrateRelation($results, $this->entity);
+
             } else {
                 foreach ($results as $result) {
                     $records[] = Hydrator::hydrate($result, $this->entity);
                 }
             }
-
         } else {
             $records = $results;
         }
@@ -327,7 +330,7 @@ abstract class QueryBuilder
         }
 
 
-        return count($records) > 1 ? $records : (!empty($records) ? $records[0] : null);
+        return count($records) > 1 ? $records : (!empty($records) ? array_pop($records) : null);
     }
 
     private function setField()
@@ -344,10 +347,14 @@ abstract class QueryBuilder
             case "SELECT":
                 if ($this->alias) {
                     $this->from .= " AS {$this->alias}";
+                    $alias = $this->alias;
+                    if(!in_array("*", $this->select))
+                        $this->select = array_map(function ($value) use ($alias) {
+                            return  "$alias.$value";
+                        }, $this->select);
                 } elseif ($this->relations) {
                     $this->alias = $this->from;
                 }
-
                 $fields = join(", ", $this->select);
 
                 return $fields;

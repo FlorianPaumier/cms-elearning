@@ -64,7 +64,7 @@ class ConfigHandler
 
         if (file_exists(ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php")) {
             require_once ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php";
-            self::bind("mailer", new MailerHandler());
+            self::bind("mailer", new MailerMessage());
         }
         
         self::bind("request", Request::createFromGlobals());

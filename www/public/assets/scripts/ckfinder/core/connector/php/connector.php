@@ -15,6 +15,6 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use CKSource\CKFinder\CKFinder;
 
-$ckfinder = new CKFinder(CONFIG_PATH . '/config.php');
+$ckfinder = new CKFinder( '../../../../config.php');
 
 $ckfinder->run();

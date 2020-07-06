@@ -1,0 +1,16 @@
+admin_commentary:
+  path: /admin/commentary/index
+  controller: App\Controllers\Commentary\Commentary:index
+
+admin_commentary_create:
+  path: /admin/commentary/new
+  controller: App\Controllers\Commentary\Commentary:new
+
+admin_commentary_modify:
+  path: "/admin/commentary/edit/{id<\\d+>}"
+  controller: App\Controllers\Commentary\Commentary:edit
+  method: [GET]
+
+admin_commentary_destroy:
+  path: /admin/commentary/delete
+  controller: App\Controllers\Commentary\Commentary:delete

@@ -1,0 +1,44 @@
+form {
+  background-color: $colorSkyBlue;
+  margin: 0 20px;
+  padding: 25px;
+  min-height: 800px;
+
+  label {
+
+  }
+
+  input, textarea, select{
+    background-color: white;
+    width: 100%;
+    border-radius: 5px;
+    border: none;
+  }
+
+  input {
+    line-height: 30px;
+    height: 30px;
+  }
+
+  textarea {
+    resize: none;
+    height: 350px;
+    line-height: 1.25em;
+  }
+
+  button {
+    border: none;
+    border-radius: 5px;
+  }
+
+  button[type="submit"] {
+    background-color: limegreen;
+    border-radius: 5px;
+    line-height: 2em;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+}

@@ -64,7 +64,7 @@ class Router
         }
 
         if (is_null($this->matchRoute)) {
-            ConfigHandler::get("eventEmmiter")->emit("error.404", "La route n'exsite pas");
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "La route n'existe pas");
         }
 
         if (!isset($this->matchRoute["method"]) || in_array($this->request->getMethod(), $this->matchRoute["method"])) {

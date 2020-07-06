@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="description" content="Description">
     <title>Admin Component</title>
-    <link rel="stylesheet" href="../../assets/styles/form.css">
+    <link rel="stylesheet" href="../../../assets/styles/form.css">
 </head>
 <body>
 <section>

@@ -1,0 +1,16 @@
+admin_category:
+  path: /admin/category/index
+  controller: App\Controllers\Category\Category:index
+
+admin_category_create:
+  path: /admin/category/new
+  controller: App\Controllers\Category\Category:new
+
+admin_category_modify:
+  path: "/admin/category/edit/{id<\\d+>}"
+  controller: App\Controllers\Category\Category:edit
+  method: [GET]
+
+admin_category_destroy:
+  path: /admin/category/delete
+  controller: App\Controllers\Category\Category:delete

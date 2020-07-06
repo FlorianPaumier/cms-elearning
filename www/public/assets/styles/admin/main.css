@@ -2586,14 +2586,15 @@ body {
   display: none;
   line-height: 50px;
 }
-.sidebar ul li ul li {
-  text-align: center;
-}
-.sidebar ul li ul li:hover {
-  background-color: #87b7ff;
-}
 .sidebar ul li ul a {
   text-decoration: none;
+}
+.sidebar ul li ul a li {
+  text-align: center;
+  color: white;
+}
+.sidebar ul li ul a li:hover {
+  background-color: #87b7ff;
 }
 .sidebar ul li span {
   display: inline-block;
@@ -2684,19 +2685,19 @@ body {
 table {
   border-collapse: collapse;
   margin: auto;
-  width: 90%;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
 }
 table th {
-  background-color: #edf8ff;
   height: 1.5em;
-  border: 1px solid #edf8ff;
+  background-color: #edf8ff;
 }
 table td {
   padding: 0;
   text-align: center;
   background-color: #FFF;
   line-height: 1.5em;
-  border: 1px solid #FFF;
 }
 
 .cercle {
@@ -2738,6 +2739,42 @@ table td {
   height: 40px;
   border-radius: 20px;
   background: green;
+}
+
+form {
+  background-color: #edf8ff;
+  margin: 0 20px;
+  padding: 25px;
+  min-height: 800px;
+}
+form input, form textarea, form select {
+  background-color: white;
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+}
+form input {
+  line-height: 30px;
+  height: 30px;
+}
+form textarea {
+  resize: none;
+  height: 350px;
+  line-height: 1.25em;
+}
+form button {
+  border: none;
+  border-radius: 5px;
+}
+form button[type=submit] {
+  background-color: limegreen;
+  border-radius: 5px;
+  line-height: 2em;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 }
 
 /*# sourceMappingURL=main.css.map */

@@ -20,7 +20,7 @@ class ContactController extends BaseController
     public function index(Request $request)
     {
         return $this->renderer->render("admin/contact/index", [
-            "forms" => $this->repository->setEntity(ContactForm::class)->findAll()
+            "forms" => $this->entityManager->setEntity(ContactForm::class)->findAll()
         ]);
     }
 
@@ -32,16 +32,16 @@ class ContactController extends BaseController
             $inputs = $formTypeBuilder->getInputs();
             $form = $formTypeBuilder->createFormTypeClass($request->getRequest()->all());
 
-            $this->repository->from("contact_form")->persist($form);
-            $this->repository->flush();
+            $this->entityManager->from("contact_form")->persist($form);
+            $this->entityManager->flush();
 
             /** @var ContactInput $input */
             foreach ($inputs as $input){
                 $input->setContactForm($form);
-                $this->repository->from("contact_input")->persist($input);
+                $this->entityManager->from("contact_input")->persist($input);
             }
 
-            $this->repository->flush();
+            $this->entityManager->flush();
             $this->redirect->redirectToRoute("admin_contact_list");
         }
 
@@ -58,12 +58,12 @@ class ContactController extends BaseController
             $inputs = $formTypeBuilder->getInputs();
             $form = $formTypeBuilder->createFormTypeClass($request->getRequest()->all(), $contactForm);
 
-            $this->repository->from("contact_form")->persist($form);
+            $this->entityManager->from("contact_form")->persist($form);
             /** @var ContactInput $input */
             foreach ($inputs as $input){
-                $this->repository->from("contact_input")->persist($input);
+                $this->entityManager->from("contact_input")->persist($input);
             }
-            $this->repository->flush();
+            $this->entityManager->flush();
         }
         return $this->render("admin/contact/edit", ["inputs" => $json, "form" => $contactForm]);
     }

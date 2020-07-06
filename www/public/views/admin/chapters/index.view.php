@@ -16,12 +16,12 @@
         </thead>
         <tbody>
         <?php
-        foreach( $chapters as $chapter):
+        foreach( $chapters["data"] as $chapter):
             ?>
             <tr>
                 <td><?= $chapter->getId(); ?></td>
                 <td><?= $chapter->getTitle(); ?></td>
-                <td>
+                <td class="row">
                     <a href="@path(admin_lesson_chapter_edit, <?= $chapter->getId() ?>)">
                         <button class="btn btn-succes">Modifier</button>
                     </a>
@@ -34,5 +34,7 @@
         ?>
         </tbody>
     </table>
+
+    <?php $chapters["links"]?>
 </section>
 @endsection

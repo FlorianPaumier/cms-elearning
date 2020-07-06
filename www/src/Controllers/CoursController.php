@@ -5,6 +5,7 @@ namespace App\Controllers;
 
 
 use App\Core\Interfaces\BaseController;
+use App\Core\Request\Request;
 use App\Entity\Lesson;
 use App\Entity\LessonChapter;
 use App\Entity\LessonChapterBlock;
@@ -13,21 +14,22 @@ use App\Repository\LessonRepository;
 
 class CoursController extends BaseController
 {
-    public function index(){
-        return $this->renderer->render("lessons/index");
+    public function index(LessonRepository $repository){
+        $lessons = $repository->paginate(20);
+        return $this->renderer->render("lessons/index", ["lessons" => $lessons]);
     }
 
-    public function show(Lesson $lesson, LessonChapterRepository $lessonChapterRepository)
+    public function show(Request $request, Lesson $lesson, LessonChapterRepository $chapterRepository)
     {
-        $chapters = $lessonChapterRepository
-            ->setAlias("lc")
-            ->joinMany("tests", "lcb")
-            ->where("lc.lesson_id = :id")
-            ->setParameter("id", $lesson->getId())
-            ->findAll();
+        $chapters = $chapterRepository
+            ->orderBy("position", "ASC")
+            ->findBy(["lesson_id" => $lesson->getId()]);
 
-        dump($chapters);
 
-        return $this->render("lessons/show");
+        return $this->render("lessons/show", [
+            "lesson" => $lesson,
+            "chapters" => $chapters,
+            "chapter" => $request->get("chapter")
+        ]);
     }
 }

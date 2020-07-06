@@ -39,7 +39,7 @@ class EntityManager extends QueryBuilder
 
     public function persist(object &$objet): self
     {
-        $this->from(EntityHelper::getClass($objet)."s");
+        $this->from(EntityHelper::getClass($objet));
 
         $params = Hydrator::getData($objet);
 
@@ -55,9 +55,10 @@ class EntityManager extends QueryBuilder
     public function flush()
     {
         foreach ($this->queries as $query) {
-
             try {
                 $this->execute($query["sql"], $query["data"]);
+//                dump($query["sql"])1;
+//                dump($query["data"]);
 
                 if (is_null($query["object"]->getId())) {
                     $query["object"]->setId($this->pdo->lastInsertId());

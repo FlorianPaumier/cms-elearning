@@ -16,14 +16,14 @@ class ChatController extends BaseController
     {
         $chatMessage = new ChatMessage();
 
-        //$this->repository->getClass(User::class);
-        //$users = $this->repository->findAll();
+        //$this->entityManager->getClass(User::class);
+        //$users = $this->entityManager->findAll();
 
-        $this->repository->getClass(ChatMessage::class);
-        $messages = $this->repository->findBy(['id_session' => $_SESSION['id_session']]);
+        $this->entityManager->getClass(ChatMessage::class);
+        $messages = $this->entityManager->findBy(['id_session' => $_SESSION['id_session']]);
 
-        $this->repository->getClass(ChatSession::class);
-        $chatSession = $this->repository->findAll();
+        $this->entityManager->getClass(ChatSession::class);
+        $chatSession = $this->entityManager->findAll();
 
         $form = $this->createForm(ChatForm::class, $chatMessage);
         $form->handleRequest($request);

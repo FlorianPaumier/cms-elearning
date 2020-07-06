@@ -6,7 +6,7 @@
 
 @section(body)
 <section>
-    <a href="@path(admin_user_new)" id="add-lesson" class="btn c-blue">Ajout</a>
+    <a href="@path(admin_user_new)" id="add-user" class="btn c-blue">Ajout</a>
 </section>
 <section>
     <table class="table">
@@ -25,12 +25,12 @@
             <tr>
                 <td><?= $user->getId(); ?></td>
                 <td><?= $user->getUsername(); ?></td>
-                <td class="row">
+                <td class="row position-btn">
                     <a href="@path(admin_user_edit, <?= $user->getId(); ?>)">
                         <button class="btn btn-succes">Modifier</button>
                     </a>
                     <form action="@path(admin_user_delete, <?= $user->getId() ?>)">
-                        <button id="delete-lesson" class="btn btn-danger">Delete</button>
+                        <button id="delete-user" class="btn btn-danger">Delete</button>
                     </form>
                 </td>
             </tr>

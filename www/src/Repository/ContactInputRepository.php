@@ -4,6 +4,7 @@
 namespace App\Repository;
 
 
+use App\Core\Contact\ContactInput;
 use App\Core\Database\Repository\AbstractRepository;
 
 /**
@@ -15,4 +16,8 @@ use App\Core\Database\Repository\AbstractRepository;
 class ContactInputRepository extends AbstractRepository
 {
 
+    public function getEntity()
+    {
+        return ContactInput::class;
+    }
 }

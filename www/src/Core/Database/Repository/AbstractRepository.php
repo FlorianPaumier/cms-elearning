@@ -34,7 +34,13 @@ abstract class AbstractRepository extends QueryBuilder
         $this->class .= explode("Repository", $this->repository)[0];
         $this->table = explode("_", StringTransformer::PascalCaseToSnakeCase($this->class), 3)[2];
 
-        $this->setEntity(get_class(new $this->class()));
+        if(class_exists($this->class)){
+            $class = get_class(new $this->class());
+        }else{
+            $class = $this->getEntity();
+        }
+
+        $this->setEntity($class);
         $this->from($this->table);
         parent::__construct($pdo);
     }

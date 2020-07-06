@@ -12,8 +12,8 @@ class FaqController extends BaseController
 {
     public function index()
     {
-        $this->repository->getClass(Faq::class);
-        $questions = $this->repository->findAll();
+        $this->entityManager->getClass(Faq::class);
+        $questions = $this->entityManager->findAll();
         $questions = !empty($questions) ? $questions : [];
 
         return $this->renderer->render("admin/faq/index", [
@@ -31,7 +31,7 @@ class FaqController extends BaseController
 
         if ($request->getMethod() == "POST" && $form->isValid()) {
             /** @var Table $em */
-            $em = ConfigHandler::get("repository");
+            $em = ConfigHandler::get("entityManager");
             $em->persist($faq);
             $em->flush();
             $this->redirect->redirectToRoute("admin_faq_list");
@@ -49,7 +49,7 @@ class FaqController extends BaseController
         $form->handleRequest($request);
 
         if ($request->getMethod() == "POST" && $form->isValid()) {
-            $em = ConfigHandler::get("repository");
+            $em = ConfigHandler::get("entityManager");
             $em->persist($faq);
             $em->flush();
             $this->redirect->redirectToRoute("admin_faq_list");
@@ -63,7 +63,7 @@ class FaqController extends BaseController
 
     public function delete(Faq $faq)
     {
-        $em = ConfigHandler::get("repository");
+        $em = ConfigHandler::get("entityManager");
         $em->from('faq')->delete($faq->getId());
         $this->redirect->redirectToRoute("admin_faq_list");
     }

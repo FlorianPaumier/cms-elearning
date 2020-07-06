@@ -4,13 +4,15 @@
 namespace App\Entity;
 
 
-use App\Core\Helpers\ArrayCollection;
+use App\Core\Collections\ArrayCollection;
+use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
 
 class LessonChapter
 {
 
     use Entity;
+    use TimestampableEntity;
 
     /** @var Lesson
      */
@@ -19,19 +21,14 @@ class LessonChapter
     /** @var string */
     protected $title;
 
-    /** @var array */
-    protected $blocks;
+    /** @var string */
+    protected $content;
 
     /** @var int */
     protected $position;
 
-    public function __construct()
-    {
-        $this->blocks = new ArrayCollection();
-    }
-
     /**
-     * @return int
+     * @return Lesson|null
      */
     public function getLesson(): ?Lesson
     {
@@ -67,7 +64,7 @@ class LessonChapter
     }
 
     /**
-     * @return array
+     * @return ArrayCollection|null
      */
     public function getBlocks(): ?ArrayCollection
     {
@@ -75,24 +72,20 @@ class LessonChapter
     }
 
     /**
-     * @param array $blocks
-     * @return LessonChapter
+     * @return string
      */
-    public function addBlock(LessonChapterBlock $block): LessonChapter
+    public function getContent(): ?string
     {
-        if (!$this->blocks->contain($block)) {
-            $this->blocks->add($block);
-        }
-        return $this;
+        return $this->content;
     }
 
     /**
-     * @param array $blocks
+     * @param string $content
      * @return LessonChapter
      */
-    public function removeBlock(LessonChapterBlock $block): LessonChapter
+    public function setContent(string $content): LessonChapter
     {
-        $this->blocks = $this->removeElement($this->blocks, $block);
+        $this->content = $content;
         return $this;
     }
 

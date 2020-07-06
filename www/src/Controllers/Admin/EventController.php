@@ -15,7 +15,7 @@ class EventController extends BaseController
 
     public function list(Request $request)
     {
-        return $this->render("admin/events/index", ["list" => $this->repository->setEntity(Event::class)->findAll()]);
+        return $this->render("admin/events/index", ["list" => $this->entityManager->setEntity(Event::class)->findAll()]);
     }
 
     public function new(Request $request)
@@ -26,8 +26,8 @@ class EventController extends BaseController
 
         if($request->getMethod() == "POST" && $form->isValid()){
             $event->setSlug(StringTransformer::slugify($event->getTitle()));
-            $this->repository->persist($event);
-            $this->repository->flush();
+            $this->entityManager->persist($event);
+            $this->entityManager->flush();
 
             $this->redirect->redirectToRoute("admin_events_list");
         }
@@ -42,8 +42,8 @@ class EventController extends BaseController
 
         if($request->getMethod() == "POST" && $form->isValid()){
             $event->setSlug(StringTransformer::slugify($event->getTitle()));
-            $this->repository->persist($event);
-            $this->repository->flush();
+            $this->entityManager->persist($event);
+            $this->entityManager->flush();
 
             $this->redirect->redirectToRoute("admin_events_list");
         }

@@ -51,8 +51,8 @@ class UserController extends BaseController
                 $user->setPassword(md5($password));
                 $user->updateTimestamps();
                 
-                $this->repository->persist($user);
-                $this->repository->flush();
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
 
                 $this->redirect->redirectToRoute("app_user_login");
             } else {
@@ -124,9 +124,9 @@ class UserController extends BaseController
 
         if(empty($currentUser)) $this->redirect->redirectToRoute('app_user_login');
 
-        $user = $this->repository->setEntity(User::class)->findBy(["email" => $currentUser["user"]]);
+        $user = $this->entityManager->setEntity(User::class)->findBy(["email" => $currentUser["user"]]);
 
-        if($this->repository->from("user")->delete($user->getId())) {
+        if($this->entityManager->from("user")->delete($user->getId())) {
             $this->session->offsetUnset("app.user");
         }else{
                 $this->redirect->redirectToRoute("app_user_profile");

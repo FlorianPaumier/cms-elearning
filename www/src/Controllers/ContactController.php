@@ -13,15 +13,19 @@ use App\Core\Mailer\MailerHandler;
 use App\Core\Mailer\MailerMessage;
 use App\Core\Request\Request;
 use App\Entity\SiteConfiguration;
+use App\Repository\ContactInputRepository;
+use App\Repository\ContactFormRepository;
 use PHPUnit\Util\Configuration;
 
 class ContactController extends BaseController
 {
 
-    public function index(Request $request, MailerHandler $mailer)
+    public function index(Request $request, MailerHandler $mailer, ContactFormRepository $repository)
     {
         /** @var ContactForm $contactForm */
-        $contactForm = $this->repository->setEntity(ContactForm::class)->from("contact_form")->findBy(["enabled" => true])[0];
+        $contactForm = $repository->findOneBy(["enabled" => true]);
+
+        if(is_null($contactForm)) $this->redirect->redirectToRoute("app_home");
 
         $form = $this->createForm($contactForm->getPath());
         $form->handleRequest($request);
@@ -31,12 +35,13 @@ class ContactController extends BaseController
 
             $contact = new ContactObject();
             $contact->setContactForm($contactForm);
-            $this->repository->persist($contact);
+            $this->entityManager->persist($contact);
 
             foreach ($data as $key => $value) {
                 $field = new ContactMeta();
                 $name = explode("_",$key);
-                $input = $this->repository->setEntity(ContactInput::class)->from("contact_input")->findOneBy([
+                $inputRepo = new ContactInputRepository();
+                $input = $inputRepo->findOneBy([
                     "form_key" => end($name),
                     "contact_form" => $contactForm->getId()
                 ]);
@@ -45,11 +50,11 @@ class ContactController extends BaseController
                 $field->setValue($value);
 
                 $field->setContact($contact);
-                $this->repository->persist($field);
+                $this->entityManager->persist($field);
             }
 
-            $this->repository->flush();
-            $dest = $this->repository->clear()->setEntity(SiteConfiguration::class)->from("site_configuration")->find(16);
+            $this->entityManager->flush();
+            $dest = $this->entityManager->clear()->setEntity(SiteConfiguration::class)->from("site_configuration")->find(16);
 
             $message = new MailerMessage();
             $message->setDest($dest->getContact());

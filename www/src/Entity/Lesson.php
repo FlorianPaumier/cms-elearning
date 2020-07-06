@@ -4,18 +4,15 @@
 namespace App\Entity;
 
 
-use App\Core\Helpers\ArrayCollection;
+use App\Core\Collections\ArrayCollection;
+use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
 
 class Lesson
 {
 
     use Entity;
-
-    /**
-     * @var
-     */
-    protected $idAuthor;
+    use TimestampableEntity;
 
     /**
      * @var string
@@ -32,27 +29,17 @@ class Lesson
      */
     protected $chapters;
 
+    protected $slug;
+
+    protected $thumbnail;
+
+    protected $user;
+
+    protected $content;
+
     public function __construct(int $id = null)
     {
         $this->chapters = new ArrayCollection();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIdAuthor(): ?int
-    {
-        return $this->idAuthor;
-    }
-
-    /**
-     * @param mixed $idAuthor
-     * @return Lesson
-     */
-    public function setIdAuthor($idAuthor)
-    {
-        $this->idAuthor = $idAuthor;
-        return $this;
     }
 
     /**
@@ -105,7 +92,7 @@ class Lesson
      */
     public function addChapters(LessonChapter $chapters): Lesson
     {
-        if (!$this->chapters->contain($chapters)) {
+        if (!$this->chapters->contains($chapters)) {
             $this->chapters->add($chapters);
         }
         return $this;
@@ -118,9 +105,81 @@ class Lesson
      */
     public function removeChapters(LessonChapter $chapter): Lesson
     {
-        if ($this->chapters->contain($chapter)) {
+        if ($this->chapters->contains($chapter)) {
             $this->chapters->removeElement($chapter);
         }
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     * @return Lesson
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getThumbnail()
+    {
+        return $this->thumbnail;
+    }
+
+    /**
+     * @param mixed $thumbnail
+     * @return Lesson
+     */
+    public function setThumbnail($thumbnail)
+    {
+        $this->thumbnail = $thumbnail;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     * @return Lesson
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param mixed $content
+     * @return Lesson
+     */
+    public function setContent(string $content)
+    {
+        $this->content = $content;
         return $this;
     }
 }

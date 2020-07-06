@@ -6,13 +6,14 @@ namespace App\Core\Cache;
 
 use App\Core\Cache\CacheHandler;
 use App\Core\Database\QueryBuilder;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Events\EventEmmiter;
 use App\Core\Exceptions\ExceptionHandler;
 use App\Core\Form\FormFactory;
 use App\Core\Formatter\Serializer;
 use App\Core\Logger\AbstractLogger;
 use App\Core\Mailer\MailerHandler;
+use App\Core\Mailer\MailerMessage;
 use App\Core\Request\Request;
 use App\Core\Router\Router;
 use App\Core\Security\UserManager;
@@ -37,6 +38,7 @@ class ConfigHandler
     {
         define("VIEW_PATH", ROOT_PATH . "/public/views");
         define("FORM_PATH", ROOT_PATH . "/src/Core/Form");
+        define("REPOSITORY_PATH", ROOT_PATH . "/src/Repository");
         define("CACHE_PATH", ROOT_PATH . "/app/cache");
         define("CONFIG_PATH", ROOT_PATH . "/app/config");
         define("ROUTING_PATH", ROOT_PATH . "/app/routing");
@@ -67,8 +69,7 @@ class ConfigHandler
         
         self::bind("request", Request::createFromGlobals());
         self::bind("session", new PHPSession());
-        self::bind("repository", new Table());
-        self::bind("entityManager", new QueryBuilder());
+        self::bind("entityManager", new EntityManager());
         self::bind("userManager", new UserManager());
         self::bind("router", new Router());
         self::bind("logger", AbstractLogger::getInstance());

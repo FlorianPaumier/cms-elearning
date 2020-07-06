@@ -37,15 +37,30 @@
                 <li class="profile user-menu acilir">
                     <span class="icon"><i class="fa fa-user"></i></span>
                     <div class="login-menu">
-                        <a href="@path(app_user_login)">Se connecter</a>
-                        <a href="@path(app_user_register)">S'inscrire</a>
-                        <a href="@path(app_user_logout)">Déconnexion</a>
+                        <?php
+                        if ($_SESSION["app.user"]):
+                            ?>
+                            <a href="@path(app_user_logout)">Déconnexion</a>
+                        <?php
+                        else:
+                            ?>
+                            <a href="@path(app_user_login)">Se connecter</a>
+                            <a href="@path(app_user_register)">S'inscrire</a>
+                        <?php
+                        endif;
+                        ?>
                     </div>
                 </li>
                 <li class="profile-mobile">
-                    <a href="@path(app_user_login)"><button class="btn btn-primary btn-ghost btn-slide">Se connecter</button></a>
-                    <a href="@path(app_user_register)"><button class="btn btn-primary btn-ghost btn-slide">S'inscrire</button> </a>
-                    <a href="@path(app_user_logout))"><button class="btn btn-primary btn-ghost btn-slide">Déconnexion</button> </a>
+                    <a href="@path(app_user_login)">
+                        <button class="btn btn-primary btn-ghost btn-slide">Se connecter</button>
+                    </a>
+                    <a href="@path(app_user_register)">
+                        <button class="btn btn-primary btn-ghost btn-slide">S'inscrire</button>
+                    </a>
+                    <a href="@path(app_user_logout))">
+                        <button class="btn btn-primary btn-ghost btn-slide">Déconnexion</button>
+                    </a>
                 </li>
             </ul>
         </nav>
@@ -55,17 +70,17 @@
 
 <?php
 
-if(isset($session))
-
-if(isset($flash)){
-    if(isset($flash["success"])){
-        foreach ($flash["success"] as $key => $message){
-            echo "<div class='alert alert-sucess'>$message</div>";
+if (isset($session)) {
+    if (isset($flash)) {
+        if (isset($flash["success"])) {
+            foreach ($flash["success"] as $key => $message) {
+                echo "<div class='alert alert-sucess'>$message</div>";
+            }
         }
-    }
-    if(isset($flash["error"])){
-        foreach ($flash["error"] as $key => $message){
-            echo "<div class='alert alert-error'>$message</div>";
+        if (isset($flash["error"])) {
+            foreach ($flash["error"] as $key => $message) {
+                echo "<div class='alert alert-error'>$message</div>";
+            }
         }
     }
 }

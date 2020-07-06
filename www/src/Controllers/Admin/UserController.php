@@ -7,44 +7,53 @@ namespace App\Controllers\Admin;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Database\Hydrator;
 use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
+use App\Entity\Lesson;
 use App\Entity\User;
-use App\Form\UserDeleteUserForm;
+use App\Form\AdminUserForm;
+use App\Repository\UserRepository;
 
 class UserController extends BaseController
 {
 
-    public function indexUser()
+    public function indexUser(UserRepository $repository)
     {
-        $this->repository->getClass(User::class);
-        $users = $this->repository->findAll();
+        $users = $repository->paginate(5);
 
         return $this->renderer->render("admin/users/user", [
-            "Users" => $users,
+            "users" => $users,
             'title' => "Listes des utilisateurs"
         ]);
     }
 
-    public function new(Request $request)
+    public function newUser(Request $request)
     {
-        $lesson = new Lesson();
-
-        $form = $this->createForm(LessonForm::class, $lesson);
+        $user = new user();
+        $form = $this->createForm(AdminUserForm::class, $user);
         $form->handleRequest($request);
 
-        if ($request->getMethod() == "POST" && $form->isValid()) {
-            /** @var Table $em */
-            $em = ConfigHandler::get("repository");
-            $em->persist($lesson);
-            $em->flush();
-            $this->redirect->redirectToRoute("admin_lesson_list");
+        if ($this->query->getMethod() == "POST") {
+
+            if ($form->isValid()) {
+                $password = $user->getPassword();
+                $user->setPassword(md5($password));
+
+
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
+
+                $this->redirect->redirectToRoute("admin_user_list");
+            } else {
+                $this->session->set("app.flash", ["error" => $form->getErrors()]);
+            }
         }
 
-
-        return $this->renderer->render("admin/lessons/new", [
+        return $this->renderer->render("admin/users/new", [
             "form" => $form->createView(),
-            'title' => "Création d'un Cour"
+            "errors" => $form->getErrorFeedback(),
+            'title' => "Création d'un Utilisateur"
         ]);
     }
 
@@ -79,20 +88,12 @@ class UserController extends BaseController
         ]);
     }
 
-    public function deleteUser(Request $request)
-    {
-        $currentUser = $this->getUser();
 
-        if(empty($currentUser)) $this->redirect->redirectToRoute('admin_user_list');
 
-        $user = $this->repository->setEntity(User::class)->findBy(["email" => $currentUser["user"]]);
+    public function deleteUser(Request $request, User $user){
 
-        if($this->repository->from("user")->delete($user->getId())) {
-            $this->session->offsetUnset("app.user");
-        }
-
+        $this->entityManager->delete($user);
 
         $this->redirect->redirectToRoute("admin_user_list");
-
     }
 }

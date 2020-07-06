@@ -178,6 +178,10 @@ class FormBuilder
         }
     }
 
+    public function getErrors()
+    {
+    }
+
     /**
      * @param string $key
      * @return mixed|string|null

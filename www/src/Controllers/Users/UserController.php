@@ -37,9 +37,6 @@ class UserController extends BaseController
 
     public function register(Request $request)
     {
-        /*if($this->userManager->isConnected()){
-        $this->redirect->redirectToRoute("app_home");
-        }*/
         $user = new user();
         $form = $this->createForm(UserRegisterForm::class, $user);
         $form->handleRequest($request);

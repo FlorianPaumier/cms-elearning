@@ -6,7 +6,7 @@ admin_user_list:
 
 
 admin_user_new:
-  path: "admin/user/new"
+  path: "/admin/user/new"
   controller: App\Controllers\Admin\User:newUser
   method: [GET, POST]
 
@@ -14,7 +14,7 @@ admin_user_new:
 
 
 admin_user_edit:
-  path: "admin/user/edit/{id}"
+  path: "/admin/user/edit/{id}"
   controller: App\Controllers\Admin\User:editUser
   method: [GET, POST]
 
@@ -22,7 +22,7 @@ admin_user_edit:
 
 
 admin_user_delete:
-  path: "admin/user/delete/{id}"
+  path: "/admin/user/delete/{id}"
   controller: App\Controllers\Admin\User:deleteUser
   method: [GET]
 

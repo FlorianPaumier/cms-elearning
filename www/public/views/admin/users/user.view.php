@@ -13,29 +13,33 @@
         <thead>
         <tr>
             <th>Id</th>
-            <th>title</th>
+            <th>Username</th>
             <th>Action</th>
         </tr>
         </thead>
         <tbody>
         <?php
-        foreach( $users as $user):
+        foreach( $users["data"] as $user):
+
             ?>
             <tr>
                 <td><?= $user->getId(); ?></td>
                 <td><?= $user->getUsername(); ?></td>
-                <td>
+                <td class="row">
                     <a href="@path(admin_user_edit, <?= $user->getId(); ?>)">
                         <button class="btn btn-succes">Modifier</button>
                     </a>
-                    <form action="/admin/user/delete<?= $user->getId() ?>">
+                    <form action="@path(admin_user_delete, <?= $user->getId() ?>)">
                         <button id="delete-lesson" class="btn btn-danger">Delete</button>
-                    </form></td>
+                    </form>
+                </td>
             </tr>
         <?php
         endforeach;
         ?>
         </tbody>
     </table>
+
+    <?= $lessons["links"] ?>
 </section>
 @endsection

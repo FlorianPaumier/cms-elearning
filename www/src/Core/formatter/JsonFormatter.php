@@ -15,7 +15,21 @@ class JsonFormatter implements FormatterInterface
 
     public function serialize()
     {
-        return json_encode($this->data);
+        $json = [];
+
+        if(empty($this->data) || is_null($this->data)) return json_encode("");
+
+        foreach ($this->data as $value){
+            if (gettype($value) == "object"){
+                $array = Hydrator::getData($value);
+            }else{
+                $array = $value;
+            }
+
+            $json[] = $array;
+        }
+
+        return json_encode($json, JSON_FORCE_OBJECT);
     }
 
     public function deserialize(string $class = null)
@@ -23,7 +37,7 @@ class JsonFormatter implements FormatterInterface
         if(!is_null($class) && !class_exists($class)){
             throw new ClassNotFoundException();
         }
-        $array = json_decode($this->data);
+        $array = json_decode($this->data, true);
 
         if(is_null($class)){
             return $array;

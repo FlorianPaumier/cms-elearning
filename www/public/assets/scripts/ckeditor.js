@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
     createCkeditor($(".form-container"));
 });

@@ -13,14 +13,14 @@ use App\Core\Helpers\StringTransformer;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
 use App\Repository\ContactInputRepository;
-use App\Repository\ContactRepository;
+use App\Repository\ContactFormRepository;
 
 class ContactController extends BaseController
 {
-    public function index(Request $request)
+    public function index(Request $request, ContactFormRepository $repository)
     {
         return $this->renderer->render("admin/contact/index", [
-            "forms" => $this->entityManager->setEntity(ContactForm::class)->findAll()
+            "forms" => $repository->findAll()
         ]);
     }
 
@@ -49,7 +49,7 @@ class ContactController extends BaseController
     }
 
     public function edit(Request $request,Serializer $serializer, ContactForm $contactForm, ContactInputRepository $contactInputRepository){
-        $inputs = $contactInputRepository->orderBy("position", "ASC")->findBy(["contact_form" => $contactForm->getId()]);
+        $inputs = $contactInputRepository->orderBy("position", "ASC")->findBy(["contact_form_id" => $contactForm->getId()]);
         $json = $serializer->serialize($inputs, "json");
 
         if($request->getMethod() == "POST"){

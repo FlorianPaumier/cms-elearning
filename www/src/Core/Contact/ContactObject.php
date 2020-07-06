@@ -19,7 +19,7 @@ class ContactObject
     /** @var bool */
     private $enabled;
     /**
-     * @var FormBuilder
+     * @var ContactForm
      */
     private $contactForm;
 

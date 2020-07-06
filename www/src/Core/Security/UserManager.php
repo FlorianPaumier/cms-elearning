@@ -86,6 +86,7 @@ class UserManager
             session_start();
         }
 
+
         /*if (!isset($_SESSION['auth'])) {
         throw new ForbiddenException();
         }*/
@@ -95,6 +96,9 @@ class UserManager
         } else {
             return true;
         }
+
+        dump("Login");
+        dump($this->session->get("app.user"));
 
         return false;
     }

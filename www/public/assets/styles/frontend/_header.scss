@@ -1,5 +1,39 @@
-@mixin transition($time) {
-  transition: all $time cubic-bezier(0.175, 0.885, 0.32, 1.275);
+%searchForm {
+  position: relative;
+
+  input {
+    background-color: #faf9f9;
+    border: 1px solid #e0e0e0;
+    color: #8f8f8f;
+    padding: 13px 50px 13px 20px;
+    border-radius: 20px;
+    width: 360px;
+
+    &:focus {
+      border: 1px solid $blue;
+    }
+
+    &::placeholder {
+      color: #8f8f8f;
+    }
+  }
+
+  button {
+    background-color: transparent;
+    border: 0;
+    color: $blue;
+    font-size: 22px;
+    right: 4vw;
+    top: 6vh;
+    position: absolute;
+    cursor: pointer;
+
+    @media screen and (min-width: $mobileWidth) {
+      flex-direction: row;
+      right: 0;
+      top: 1vh;
+    }
+  }
 }
 
 #header {
@@ -9,36 +43,67 @@
   align-items: center;
   vertical-align: center;
 
-  @media all and (min-width: 800px) {
+  @media screen and (min-width: $mobileWidth) {
     flex-direction: row;
-    .hamburger {
-      display: none;
-    }
   }
 
-  #menu {
-    @media all and (max-width: 720px){
-      display: none;
+  #nav-header {
+    display: none;
+    background-color: $blue;
+
+    &.is-open {
+      display: flex;
+      height: calc(100vh - 75px);
+      width: 100vw;
+
+      nav {
+        > ul {
+          display: flex;
+
+          .profile {
+            display: none;
+          }
+        }
+      }
     }
 
-    width: 55vw;
-    background-color: $blue;
+    @media screen and (min-width: $mobileWidth) {
+      width: 55vw;
+      display: flex;
+    }
 
     nav {
       > ul {
+        display: none;
         height: 75px;
         margin: 0;
         padding: 0;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
+        flex-direction: column;
+        justify-content: space-between;
         align-items: center;
         vertical-align: center;
         list-style: none;
         color: #FFF;
-        font-size: 18px;
 
         li {
+          text-align: center;
+          width: 100vw;
+          font-size: 20px;
+          padding: 1.75rem 0;
+
+          &.search-mobile {
+            @extend %searchForm;
+            padding-bottom: 1rem;
+            flex-direction: row;
+            justify-content: space-between;
+            vertical-align: middle;
+            align-items: center;
+
+            @media screen and (min-width: $mobileWidth){
+              display: none;
+            }
+          }
+
           &.link {
             text-decoration: underline;
 
@@ -48,10 +113,20 @@
           }
 
           &.profile {
-            height: 35px;
 
-            .login-menu-mobile {
-              display: none;
+            &-mobile{
+              justify-content: space-around;
+              display: flex;
+              padding: 0;
+              button {
+                background-color: $dark-blue;
+                color: white;
+                border-color: $blue;
+              }
+
+              @media screen and (min-width: $mobileWidth){
+                display: none;
+              }
             }
 
             .icon {
@@ -80,7 +155,9 @@
                 transition: all .3s;
                 visibility: visible;
                 opacity: 1;
-                top: 6vh;
+                top: 5rem;
+                width: 180px;
+                padding: 15px;
               }
 
               a {
@@ -102,8 +179,6 @@
 
               .login-menu {
                 position: absolute;
-                width: 180px;
-                padding: 15px;
                 display: flex;
                 flex-direction: column;
                 border: 1px solid #d6d6d6;
@@ -168,50 +243,19 @@
               }
             }
           }
-        }
-      }
-    }
 
-    &.is-active {
-      display: flex;
-      justify-content: center;
-      align-content: center;
-      align-items: center;
-      width: 100vw;
-      @include transition(0.2s);
-
-      nav > ul {
-        width: 100vw;
-        height: calc(100vh - 75px);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-
-        a{
-          font-size: 2rem;
         }
 
-        li {
-          &.profile {
-            .icon {
-              display: none;
-            }
 
-            .login-menu {
-              display: none;
-            }
+        @media screen and (min-width: $mobileWidth) {
+          width: 55vw;
+          display: flex;
+          flex-direction: row;
+          font-size: 1rem;
+          padding: 1rem;
 
-            .login-menu-mobile {
-              width: 100vw;
-              display: flex;
-              flex-direction: row;
-              justify-content: space-around;
-              a {
-                padding: 15px;
-                background-color: $dark-blue;
-                color: white;
-              }
-            }
+          li {
+            width: auto;
           }
         }
       }
@@ -220,21 +264,23 @@
 
 
   #search {
-    width: 45vw;
+    width: 100vw;
     height: 75px;
-    background-color: $light-blue;
-    display: inherit;
+    background-color: $dark-blue;
     flex-direction: row;
     justify-content: space-between;
     vertical-align: middle;
     align-items: center;
     padding: 0 1%;
+    display: flex;
 
-    @media all and (max-width: 720px){
-      width: 100vw;
-      .hamburger .line {
-        background-color: $dark-blue;
+    @media all and (min-width: $mobileWidth) {
+      .hamburger {
+        display: none;
       }
+
+      width: 45vw;
+      background-color: $light-blue;
     }
 
     img {
@@ -242,38 +288,11 @@
     }
 
     .search {
-      @media all and (max-width: 720px){
-        display: none;
+      display: none;
+      @media screen and (min-width: $mobileWidth){
+        display: flex;
       }
-      position: relative;
-
-      input {
-        background-color: #faf9f9;
-        border: 1px solid #e0e0e0;
-        color: #8f8f8f;
-        padding: 13px 50px 13px 20px;
-        border-radius: 20px;
-        width: 360px;
-
-        &:focus {
-          border: 1px solid $blue;
-        }
-
-        &:placeholder {
-          color: #8f8f8f;
-        }
-      }
-
-      button {
-        background-color: transparent;
-        border: 0;
-        color: $blue;
-        font-size: 22px;
-        position: absolute;
-        right: 10px;
-        top: 8px;
-        cursor: pointer;
-      }
+      @extend %searchForm;
     }
   }
 

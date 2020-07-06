@@ -1,0 +1,35 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: SERIAL
+      options:
+
+        - PRIMARY KEY
+        - NOT NULL
+    title:
+      name: title
+      type: character varying
+      options:
+        - UNIQUE
+    slug:
+      name: slug
+      type: character varying
+      options:
+        - UNIQUE
+    position:
+      name: position
+      type: int
+    content:
+      name: content
+      type: text
+    lesson:
+      name: lesson_id
+      type: int
+    created_at:
+      name: created_at
+      type: timestamp
+    updated_at:
+      name: updated_at
+      type: timestamp

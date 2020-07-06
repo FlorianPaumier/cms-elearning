@@ -1,6 +1,7 @@
 $bg-error:rgba(217, 53, 46, 0.7);
 $border-error: rgb(191, 0, 6);
 
+//color
 $blue: #87B7FF;
 $gray: #4F4F4F;
 $black:#000;
@@ -10,7 +11,7 @@ $dark-blue:#364885;
 $dark-red:#F00;
 $dark-vert: #006800;
 $light-blue: #D0EDFF;
-$light-gray:#AAA;
+$light-gray: #aaaaaa;
 $light-red: rgba(255, 60, 52, 0.79);
 $light-vert: rgba(0, 255, 0, 0.5);
 $orange: #ffbf2e;
@@ -18,13 +19,15 @@ $white: #FFF;
 $background : #364885;
 $checkbox-activeColor: #27ae60; //green
 $checkbox-darkenColor: darken($checkbox-activeColor, 20%);
-$colset: 12;
-$shadow : 0 4px 4px rgba(0, 0, 0, 0.5);
-
-//color
-$buttonSize: 50px;
-$sidebarSize: 200px;
 $colorDarkBlue: #364885;
 $colorBlue: #7695ff;
 $colorLightBlue: #87b7ff;
 $colorSkyBlue: #edf8ff;
+
+
+
+$colset: 12;
+$shadow : 0 4px 4px rgba(0, 0, 0, 0.5);
+$buttonSize: 50px;
+$sidebarSize: 200px;
+$mobileWidth: 720px;

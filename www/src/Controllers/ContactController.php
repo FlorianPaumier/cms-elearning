@@ -10,17 +10,20 @@ use App\Core\Contact\ContactMeta;
 use App\Core\Contact\ContactObject;
 use App\Core\Interfaces\BaseController;
 use App\Core\Mailer\MailerHandler;
+use App\Core\Mailer\MailerMessage;
 use App\Core\Request\Request;
 use App\Entity\SiteConfiguration;
+use App\Repository\ContactInputRepository;
+use App\Repository\ContactRepository;
 use PHPUnit\Util\Configuration;
 
 class ContactController extends BaseController
 {
 
-    public function index(Request $request, MailerHandler $handler)
+    public function index(Request $request, MailerHandler $mailer, ContactRepository $repository)
     {
         /** @var ContactForm $contactForm */
-        $contactForm = $this->repository->setEntity(ContactForm::class)->from("contact_form")->findBy(["enabled" => true])[0];
+        $contactForm = $repository->findOneBy(["enabled" => true]);
 
         $form = $this->createForm($contactForm->getPath());
         $form->handleRequest($request);
@@ -35,7 +38,8 @@ class ContactController extends BaseController
             foreach ($data as $key => $value) {
                 $field = new ContactMeta();
                 $name = explode("_",$key);
-                $input = $this->repository->setEntity(ContactInput::class)->from("contact_input")->findOneBy([
+                $inputRepo = new ContactInputRepository();
+                $input = $inputRepo->findOneBy([
                     "form_key" => end($name),
                     "contact_form" => $contactForm->getId()
                 ]);
@@ -50,11 +54,12 @@ class ContactController extends BaseController
             $this->repository->flush();
             $dest = $this->repository->clear()->setEntity(SiteConfiguration::class)->from("site_configuration")->find(16);
 
-            $handler->setDest($dest->getContact());
-            $handler->setBody("New Contact");
-            $handler->send();
+            $message = new MailerMessage();
+            $message->setDest($dest->getContact());
+            $message->setBody("New Contact");
+            $mailer->send($message);
 
-            $this->redirect->redirectToRoute("app_contact");
+            $this->redirect->redirectToRoute("frontend_form_contact");
         }
 
         return $this->render("contact", [

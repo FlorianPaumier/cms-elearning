@@ -4,6 +4,7 @@
 namespace App\Controllers;
 
 
+use App\Core\Cache\ConfigHandler;
 use App\Core\Formatter\Serializer;
 use App\Core\Interfaces\BaseController;
 
@@ -16,59 +17,61 @@ class TestController extends BaseController
         "array" => ["key" => "value"]
     ];
 
+
     public function simpleRouting()
     {
         return "Ok";
     }
 
-    public function complexTeouting($id)
+    public function complexRouting($id)
     {
         return $id;
     }
 
     public function forbidden($id)
     {
+        ConfigHandler::get("eventEmmiter")->emit("error.403");
         return $id;
     }
 
     public function errorView()
     {
-        $this->renderer->render("homee");
+        return $this->render("homee");
     }
 
     public function toJson()
     {
         $serializer = new Serializer();
         $json = $serializer->serialize(self::array, "json");
-        dump($json);
         $array = $serializer->deserialize($json, "json");
-        dump($array);
+        return $array;
     }
 
     public function toIni()
     {
         $serializer = new Serializer();
         $ini = $serializer->serialize(self::array, "ini");
-        dump($ini);
         $array = $serializer->deserialize($ini, "ini");
-        dump($array);
+        return $array;
     }
 
     public function toXml()
     {
         $serializer = new Serializer();
         $xml = $serializer->serialize(self::array, "xml");
-        dump($xml, "Encode");
         $array = $serializer->deserialize($xml, "xml");
-        dump($array);
+        return $array;
     }
 
     public function toYaml()
     {
         $serializer = new Serializer();
         $yaml = $serializer->serialize(self::array, "yaml");
-        dump($yaml);
         $array = $serializer->deserialize($yaml, "yaml");
-        dump($array);
+        return $array;
+    }
+
+    public function testPathFunction(){
+        return $this->render("test/path");
     }
 }

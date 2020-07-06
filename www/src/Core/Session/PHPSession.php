@@ -4,14 +4,17 @@ namespace App\Core\Session;
 
 use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
+use App\Core\Request\SessionBag;
 
-class PHPSession implements SessionInterface, \ArrayAccess
+class PHPSession implements \ArrayAccess
 {
 
+    /** @var SessionBag */
     private $session;
 
     public function __construct()
     {
+        $this->ensureStarted();
         $this->session = ConfigHandler::get("request")->getSession();
     }
 
@@ -21,49 +24,11 @@ class PHPSession implements SessionInterface, \ArrayAccess
     private function ensureStarted()
     {
         if (session_status() === PHP_SESSION_NONE) {
-            session_start();
+//            session_start();
         }
     }
 
-    /**
-     * Récupère une information en Session
-     *
-     * @param  string $key
-     * @param  mixed  $default
-     * @return mixed
-     */
-    public function get(string $key, $default = null)
-    {
-        $this->ensureStarted();
-        if (array_key_exists($key, $this->session)) {
-            return $this->session[$key];
-        }
-        return $default;
-    }
 
-    /**
-     * Ajoute une information en Session
-     *
-     * @param  string $key
-     * @param  $value
-     * @return mixed
-     */
-    public function set(string $key, $value): void
-    {
-        $this->ensureStarted();
-        $this->session[$key] = $value;
-    }
-
-    /**
-     * Supprime une clef en session
-     *
-     * @param string $key
-     */
-    public function delete(string $key): void
-    {
-        $this->ensureStarted();
-        unset($this->session[$key]);
-    }
 
     /**
      * Whether a offset exists
@@ -81,7 +46,7 @@ class PHPSession implements SessionInterface, \ArrayAccess
     public function offsetExists($offset)
     {
         $this->ensureStarted();
-        return array_key_exists($offset, $this->session);
+        return $this->session->exist($offset);
     }
 
     /**
@@ -96,7 +61,10 @@ class PHPSession implements SessionInterface, \ArrayAccess
      */
     public function offsetGet($offset)
     {
-        return $this->get($offset);
+        if ($this->session->exist($offset)) {
+            return $this->session->get($offset);
+        }
+        return [];
     }
 
     /**
@@ -117,7 +85,7 @@ class PHPSession implements SessionInterface, \ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        return $this->set($offset, $value);
+        return $this->session->set($offset, $value);
     }
 
     /**
@@ -132,6 +100,34 @@ class PHPSession implements SessionInterface, \ArrayAccess
      */
     public function offsetUnset($offset)
     {
-        $this->delete($offset);
+        $this->session->delete($offset);
+    }
+
+    /**
+     * @param string $key
+     * @param mixed|null $default
+     * @return mixed
+     */
+    public function get(string $key, $default = null)
+    {
+        // TODO: Implement get() method.
+    }
+
+    /**
+     * @param string $key
+     * @param $value
+     * @return mixed|void
+     */
+    public function set(string $key, $value): void
+    {
+        // TODO: Implement set() method.
+    }
+
+    /**
+     * @param string $key
+     */
+    public function delete(string $key): void
+    {
+        // TODO: Implement delete() method.
     }
 }

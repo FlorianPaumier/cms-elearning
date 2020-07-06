@@ -8,11 +8,11 @@ admin_contact_new:
   method: [GET,POST]
 
 admin_contact_edit:
-  path: /admin/contact/edit/{id<\\d+>}
+  path: /admin/contact/edit/{id}
   controller: App\Controllers\Admin\Contact:edit
   method: [GET,POST]
 
 admin_contact_delete:
-  path: /admin/contact/delete/{id<\\d+>}
+  path: /admin/contact/delete/{id}
   controller: App\Controllers\Admin\Contact:delete
   method: [DELETE]

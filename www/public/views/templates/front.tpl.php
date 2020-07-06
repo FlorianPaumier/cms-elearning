@@ -9,33 +9,18 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>
-        <?php
-        if(isset($title)){
-            echo $title;
-        }else{
-            echo "Accueil";
-        }
-        ?></title>
+    <title>{{ title }}</title>
 
     <meta lang="fr">
 
-
-    <?php
-    if(isset($styles)){
-        foreach ($styles as $style) {
-            echo "<link rel='stylesheet' href='$style'/>";
-        }
-    }
-
-    ?>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="assets/styles/frontend/main.css" rel="stylesheet">
+    <link href="/assets/styles/frontend/main.css" rel="stylesheet">
+    <link href="/assets/styles/globals/collapsible.css" rel="stylesheet">
     @section(style)
 </head>
 
@@ -47,10 +32,12 @@
     @section(body)
 </main>
 
-@include(partials/modal)
+
 @include(partials/footer)
 
+<script src="/assets/scripts/global.js"></script>
 <script src="/assets/scripts/header.js"></script>
+<script src="/assets/scripts/collapsible.js"></script>
 @section(javascript)
 </body>
 </html>

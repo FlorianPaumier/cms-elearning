@@ -22,7 +22,9 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>tests/</directory>
+<!--            <file>tests/QueryBuilderTest.php</file>-->
+<!--            <file>tests/TableTest.php</file>-->
+<!--            <file>tests/RoutingTest.php</file>-->
         </testsuite>
     </testsuites>
 </phpunit>

@@ -1,3 +1,4 @@
 admin_home:
   path: /admin
   controller: App\Controllers\Admin\Home:index
+  roles: ["ROLE_ADMIN"]

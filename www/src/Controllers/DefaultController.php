@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
+use App\Form\ChapterBlockForm;
+use App\Repository\UserRepository;
 
 class DefaultController extends BaseController
 {

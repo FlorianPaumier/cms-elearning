@@ -62,8 +62,8 @@ class RequestHandler
         array $cookies = [],
         array $files = [],
         array $server = [],
-        $content = null,
-        array $session = []
+        array $session = [],
+        $content = null
     ) {
         $this->query = new ParameterBag($query);
         $this->request = new ParameterBag($request);
@@ -73,7 +73,7 @@ class RequestHandler
         $this->server = $server;
         $this->content = $content;
         $this->contentType = isset($this->server["CONTENT_TYPE"]) ?: null;
-        $this->session = $session;
+        $this->session = new SessionBag($session);
 
         return $this;
     }

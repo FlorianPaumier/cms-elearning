@@ -1,9 +1,8 @@
 <?php
-
 namespace App\Core\Interfaces;
 
 use App\Core\Cache\ConfigHandler;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Form\FormBuilder;
 use App\Core\Form\Validator\Validator;
 use App\Core\Render\RenderView;
@@ -27,7 +26,7 @@ abstract class BaseController
     protected $renderer;
 
     /**
-     * @var Table
+     * @var EntityManager
      */
     protected $repository;
 
@@ -63,21 +62,27 @@ abstract class BaseController
          * @deprected use render function
          */
         $this->renderer = new RenderView();
-        $this->repository = ConfigHandler::get('repository');
+        $this->repository = ConfigHandler::get('entityManager');
         $this->userManager = ConfigHandler::get("userManager");
         $this->query = ConfigHandler::get("request");
         $this->session = ConfigHandler::get("session");
         $this->redirect = new RedirectionHandler();
     }
 
-
+    /** Return current log in user */
+    protected function getUser(){
+        dump($_SESSION);
+        return $this->session->offsetGet("app.user");
+    }
 
     /**
      * Creates and returns a Form instance from the type of the form.
      */
     protected function createForm(string $type, &$data = null, array $options = []): FormBuilder
     {
-        if(!class_exists($type)) throw new \Exception();
+        if (!class_exists($type)) {
+            throw new \Exception();
+        }
 
         $form = (new $type);
         $formBuilder = (new FormBuilder($data))->setParent($type)->setFormType($form);

@@ -1,5 +1,8 @@
 @extend(templates/back)
 
+@section(styles)
+<link rel="stylesheet" href="/assets/styles/admin/form.css">
+@endsection
 
 @section(body)
 <section>
@@ -16,7 +19,8 @@
         </thead>
         <tbody>
         <?php
-        foreach( $lessons as $lesson):
+        foreach( $lessons["data"] as $lesson):
+
             ?>
             <tr>
                 <td><?= $lesson->getId(); ?></td>
@@ -34,5 +38,7 @@
         ?>
         </tbody>
     </table>
+
+    <?= $lessons["links"] ?>
 </section>
 @endsection

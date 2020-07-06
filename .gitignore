@@ -119,3 +119,5 @@ docker/postgres/data
 .vscode/
 .phpunit.*
 builds
+www/lib/PHPMailer/vendor
+node_modules

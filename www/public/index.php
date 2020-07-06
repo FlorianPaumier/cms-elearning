@@ -14,7 +14,7 @@ $env="dev";
 if($env == "dev"){
     $debug=true;
     //Display All Php errors
-    ini_set("display_errors", 1);
+    ini_set('display_errors', true);
 }
 
 //Create new Environment

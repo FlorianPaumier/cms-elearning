@@ -6,10 +6,14 @@ use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 use App\Core\database\Hydrator;
 use App\Core\Database\QueryBuilder;
-use App\Core\Database\Table;
-use App\Entity\User;
+use App\Core\Database\EntityManager;
+use App\Core\Mailer\MailerHandler;
+use App\Core\Mailer\MailerMessage;
+use App\Core\Request\ParameterBag;
 use App\Core\Request\Request;
 use App\Core\Session\PHPSession;
+use App\Entity\User;
+use App\Repository\UserRepository;
 
 class UserManager
 {
@@ -19,7 +23,7 @@ class UserManager
     private $entityManager;
 
     /**
-     * @var Table
+     * @var EntityManager
      */
     private $repository;
 
@@ -33,9 +37,10 @@ class UserManager
     public function __construct()
     {
         $this->entityManager = ConfigHandler::get("entityManager");
-        $this->repository = ConfigHandler::get('repository');
-        $this->session  = ConfigHandler::get("session");
-        $this->security  = CacheHandler::get("security");
+        $this->repository =  new UserRepository();
+        $this->session = ConfigHandler::get("session");
+        $this->security = CacheHandler::get("security");
+
     }
 
     /**
@@ -43,22 +48,23 @@ class UserManager
      */
     public function connectUser(?string $username, ?string $password): bool
     {
-        $q = $this->repository->from("user")->findBy([
+        $q = $this->repository->setEntity(User::class)->findBy([
             "username" => $username,
             "password" => md5($password),
-            "enable" => true,
-            ]);
+            //            "enable" => true,
+        ]);
 
         $response = false;
 
-        if($q !== false){
+        if (!empty($q)) {
             $response = true;
-            $this->session->set("app.user", [
-                "user" => $q->email,
-                "roles" => $q->roles,
-                "timestamp" => time() + 2*60*60,
+            $this->session->offsetSet("app.user", [
+                "user" => $q->getEmail(),
+                "roles" => $q->getRoles(),
+                "timestamp" => time() + 2 * 60 * 60,
             ]);
         }
+
         return $response;
     }
 
@@ -67,7 +73,7 @@ class UserManager
      */
     public function disconnectUser()
     {
-        $this->session->delete("app.user");
+        $this->session->offsetUnset("app.user");
     }
 
     /**
@@ -80,17 +86,16 @@ class UserManager
         }
 
         /*if (!isset($_SESSION['auth'])) {
-            throw new ForbiddenException();
+        throw new ForbiddenException();
         }*/
 
-        if($this->session->get("app.user")["timestamp"] < time()){
+        if ($this->session->offsetGet("app.user")["timestamp"] < time()) {
             $this->disconnectUser();
-        }else{
+        } else {
             return true;
         }
 
         return false;
-
     }
 
     /**
@@ -98,27 +103,29 @@ class UserManager
      * @return mixed
      * @throws \App\Core\Exception\NoRecordException
      */
-    public function getUser(){
+    public function getUser()
+    {
         $session = $this->session->offsetGet("app.user");
-        $user = $this->repository->from('user')->findBy(["email" => $session["user"]]);
-        return $this->repository->hydrate(new User(), $user);
+        //        $user = $this->repository->from('user')->findBy(["email" => $session["user"]]);
+        return $session;
     }
+
     /**
      * Test if the current user had the right roles to this request
      */
     public function isAllowed(array $route)
     {
         foreach ($this->security["firewall"]["access_control"] as $firewall) {
-            $reg = str_replace("/", "\/",$firewall["path"]);
+            $reg = str_replace("/", "\/", $firewall["path"]);
 
-            if(preg_match("/${reg}/", $route["path"])){
-                if(!in_array("IS_AUTHENTICATED_ANONYMOUSLY",$firewall["roles"])){
-                    if(!$this->isConnected()){
+            if (preg_match("/${reg}/", $route["path"])) {
+                if (!in_array("IS_AUTHENTICATED_ANONYMOUSLY", $firewall["roles"])) {
+                    if (!$this->isConnected()) {
                         return false;
-                    }else{
+                    } else {
                         $haveRoles = false;
-                        foreach ($this->getUser()->getRoles() as $roles){
-                            if(in_array($roles, $firewall["roles"])){
+                        foreach ($this->getUser()->getRoles() as $roles) {
+                            if (in_array($roles, $firewall["roles"])) {
                                 $haveRoles = true;
                             };
                         }
@@ -133,7 +140,6 @@ class UserManager
 
     public function updateUser()
     {
-
     }
 
     /**
@@ -147,11 +153,11 @@ class UserManager
 
         $error = [];
 
-        if($this->repository->from("user")->findBy(["email" => $value["email"]])){
+        if ($this->repository->findBy(["email" => $value["email"]])) {
             return "Votre email exist déjà. Veuillez le modifier";
         }
 
-        if($this->repository->from("user")->insert($value)){
+        if ($this->entityManager->persist($value)) {
             return true;
         }
 
@@ -162,6 +168,34 @@ class UserManager
      * Send a new password to the email if exists
      */
     public function forgetPassword(string $email)
+    {
+        if ($this->repository->from("user")->exists(["email" => $email])) {
+
+            $user = $this->repository->setEntity(User::class)->findBy(["email" => $email]);
+            $user->setForgetPasswordToken(bin2hex(random_bytes(32)));
+
+            $server = ConfigHandler::get("request")->getServer();
+            $mailer = new MailerHandler();
+            $message = (new MailerMessage())
+                ->setSubjet("Forget Password")
+                ->setBody("<a href='".$server['HTTP_HOST']."/reset-token?token=".$user->getForgetPasswordToken()."'>Reset Password</a>")
+                ->setDest($email)
+                ->setContentType("text/html")
+                ;
+                if($mailer->send($message)){
+                    return "un mail a été envoyé";
+                }
+
+                return "Un problème est survenue lors de l'envoi";
+        }
+
+        return "Aucun utilisateur ne correspond à cette email";
+    }
+
+    /**
+     * delete user with email
+     */
+    public function deleteUser(string $email)
     {
     }
 }

@@ -14,7 +14,7 @@ app_user_login_check:
   method: [POST]
 
 app_user_logout:
-  path: "/user-logout"
+  path: "/logout"
   controller: App\Controllers\Users\User:logout
   method: [GET]
 
@@ -22,6 +22,16 @@ app_user_forget_password:
   path: "/forget_password"
   controller: App\Controllers\Users\User:forgetPassword
   method: [GET, POST]
+
+app_user_delete_user:
+  path: "/user/delete"
+  controller: App\Controllers\Users\User:deleteUser
+  method: [GET, POST]
+
+app_user_profile:
+  path: "/me"
+  controller: App\Controllers\Users\User:profile
+  method: [GET]
 
 
 

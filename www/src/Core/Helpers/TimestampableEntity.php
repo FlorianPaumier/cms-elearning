@@ -22,7 +22,7 @@ trait TimestampableEntity
     /**
      * @return \DateTime
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->created_at;
     }
@@ -30,7 +30,7 @@ trait TimestampableEntity
     /**
      * @return \DateTime
      */
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updated_at;
     }

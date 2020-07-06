@@ -1,3 +1,6 @@
 $(document).ready(function () {
-    $("select.select-two").select2()
+    $("select.select-two").each((key, ele) => {
+        console.log({ele})
+        $(ele).select2()
+    });
 })

@@ -5,7 +5,8 @@ namespace App\Core\Router;
 
 
 use App\Core\Cache\ConfigHandler;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
+use App\Core\Database\Repository\AbstractRepository;
 use App\Core\Kernel\Kernel;
 
 class DependencyInjection
@@ -27,23 +28,31 @@ class DependencyInjection
         }
 
         $parameters = [];
+
         try {
             $functionParams = new \ReflectionMethod($this->controller, $this->action);
             foreach ($functionParams->getParameters() as $parameter) {
                 $name = $parameter->getName();
 
+
                 if (!is_null($var = ConfigHandler::get($parameter->getName()))) {
                     array_splice($parameters, $parameter->getPosition(), 0, [$var]);
                 } else {
                     try {
+                        if(is_null($parameter->getClass())){
+                            array_splice($parameters, $parameter->getPosition(), 0, [$args[$name]]);
+                            continue;
+                        }
+
                         $className = $parameter->getClass()->getName();
                         $class = new $className();
 
                         if (!empty($args)) {
-                            /** @var Table $repo */
-                            $repo = ConfigHandler::get("repository");
-                            $repo->getClass($className);
-                            $class = $repo->setEntity($className)->findBy($args)[0];
+                            /** @var AbstractRepository $repo */
+                            $repo = ConfigHandler::get("entityManager")->getRepository($className."Repository");
+
+                            if(!is_null($repo))
+                                $class = $repo->findBy($args);
                         }
                         array_splice($parameters, $parameter->getPosition(), 0, [$name => $class]);
                     } catch (\Exception $e) {

@@ -1,59 +1,68 @@
 <?php
+
 namespace App\Controllers\Users;
 
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Entity\User;
+use App\Form\UserDeleteUserForm;
+use App\Form\UserForgetpasswordForm;
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
 
 class UserController extends BaseController
 {
 
-    public function login()
+    public function login(Request $request)
     {
         if ($this->userManager->isConnected()) {
             (new RedirectionHandler())
                 ->redirectToRoute("app_home");
         }
 
-        $form = $this->createForm(UserLoginForm::class);
-        
+
+        $user = new User();
+        $form = $this->createForm(UserLoginForm::class, $user);
+
+
         return $this->renderer->render(
-            "security/frontend/login", [
+            "security/login",
+            [
                 "form" => $form->createView(),
                 "errors" => [],
             ]
         );
     }
 
-    public function register()
+    public function register(Request $request)
     {
         /*if($this->userManager->isConnected()){
-            $this->redirect->redirectToRoute("app_home");
+        $this->redirect->redirectToRoute("app_home");
         }*/
-
-        $form = (new UserRegisterForm())->buildForm();
+        $user = new user();
+        $form = $this->createForm(UserRegisterForm::class, $user);
+        $form->handleRequest($request);
 
         if ($this->query->getMethod() == "POST") {
-            $validator = $this->getValidator()->buildValidator(UserRegisterForm::getConstraint());
 
-            if ($validator->isValid()) {
+            if ($form->isValid()) {
+                $password = $user->getPassword();
+                $user->setPassword(md5($password));
+                
+                $this->repository->persist($user);
+                $this->repository->flush();
 
-                if (($response = $this->userManager->createUser($this->query)) !== true) {
-                    $this->session->set("app.flash", ["error" => [$response]]);
-                } else {
-                    $this->redirect->redirectToRoute("app_user_login");
-                }
+                $this->redirect->redirectToRoute("app_user_login");
             } else {
-                $this->session->set("app.flash", ["error" => $validator->getErrors()]);
+                $this->session->set("app.flash", ["error" => $form->getErrors()]);
             }
         }
 
-        $this->renderer->render(
-            ROOT_PATH . "/public/views/security/register", [
-                "form" => $this->form->createView(),
+        return $this->renderer->render(
+            ROOT_PATH . "/public/views/security/frontend/register",
+            [
+                "form" => $form->createView(),
             ]
         );
     }
@@ -64,14 +73,13 @@ class UserController extends BaseController
         $form = $this->createForm(UserLoginForm::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            if ($this->userManager->connectUser($this->query->getRequest()->get("username"), $this->query->getRequest()->get("password"))) {
-                $this->redirect->redirectToRoute("app_home");
+
+        if ($this->query->getMethod() == "POST" && $form->isValid()) {
+            if (($response = $this->userManager->connectUser($user->getUsername(), $user->getPassword())) !== true) {
+                $this->session->set("app.flash", ["error" => [$response]]);
             } else {
-                $this->session->set("app.flash", ["error" => ["Votre username ou votre mot de passe est incorrect"]]);
+                $this->redirect->redirectToRoute("app_home");
             }
-        } else {
-            $this->session->set("app.flash", ["error" => $form->getErrorFeedback()]);
         }
 
         $this->redirect->redirectToRoute("app_user_login");
@@ -83,8 +91,49 @@ class UserController extends BaseController
         $this->redirect->redirectToRoute("app_home");
     }
 
-    public function forgotpassword()
+    public function forgetPassword(Request $request)
     {
-        $this->renderer->render("security/frontend/forget_password");
+        $form = $this->createForm(UserForgetpasswordForm::class);
+        $form->handleRequest($request);
+
+        if ($this->query->getMethod() == "POST" && $form->isValid()) {
+                $email = $form->get("email");
+
+                if (($response = $this->userManager->forgetPassword($email)) !== true) {
+
+                    $this->session->set("app.flash", ["error" => [$response]]);
+
+                } else {
+                    $this->redirect->redirectToRoute("app_home");
+                }
+
+        }
+
+        return $this->renderer->render(
+            "security/frontend/forget_password",
+            [
+                "form" => $form->createView(),
+            ]
+        );
     }
+
+    public function deleteUser(Request $request)
+    {
+        $currentUser = $this->getUser();
+
+        if(empty($currentUser)) $this->redirect->redirectToRoute('app_user_login');
+
+        $user = $this->repository->setEntity(User::class)->findBy(["email" => $currentUser["user"]]);
+
+        if($this->repository->from("user")->delete($user->getId())) {
+            $this->session->offsetUnset("app.user");
+        }else{
+                $this->redirect->redirectToRoute("app_user_profile");
+        }
+
+
+            $this->redirect->redirectToRoute("app_home");
+
+        }
+
 }

@@ -6,19 +6,21 @@ namespace App\Controllers\Admin;
 
 use App\Core\Contact\ContactForm;
 use App\Core\Contact\ContactInput;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Form\FormTypeBuilderServices;
 use App\Core\Formatter\Serializer;
 use App\Core\Helpers\StringTransformer;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
+use App\Repository\ContactInputRepository;
+use App\Repository\ContactRepository;
 
 class ContactController extends BaseController
 {
     public function index(Request $request)
     {
         return $this->renderer->render("admin/contact/index", [
-            "forms" => $this->repository->from("contact")->findAll()
+            "forms" => $this->repository->setEntity(ContactForm::class)->findAll()
         ]);
     }
 
@@ -46,9 +48,8 @@ class ContactController extends BaseController
         return $this->render("admin/contact/new", []);
     }
 
-    public function edit(Request $request,Serializer $serializer, ContactForm $contactForm){
-
-        $inputs = $this->repository->from("contact_input")->orderBy("position", "ASC")->findBy(["contact_form" => $contactForm->getId()]);
+    public function edit(Request $request,Serializer $serializer, ContactForm $contactForm, ContactInputRepository $contactInputRepository){
+        $inputs = $contactInputRepository->orderBy("position", "ASC")->findBy(["contact_form" => $contactForm->getId()]);
         $json = $serializer->serialize($inputs, "json");
 
         if($request->getMethod() == "POST"){
@@ -63,8 +64,6 @@ class ContactController extends BaseController
                 $this->repository->from("contact_input")->persist($input);
             }
             $this->repository->flush();
-
-            die;
         }
         return $this->render("admin/contact/edit", ["inputs" => $json, "form" => $contactForm]);
     }

@@ -12,7 +12,3 @@
     {{ form }}
 </section>
 @endsection
-
-@section(javascripts)
-<script src="/assets/scripts/ckeditor.js"></script>
-@endsection

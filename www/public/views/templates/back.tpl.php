@@ -53,7 +53,9 @@ if ($errors) {
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script src="/assets/scripts/core/observer.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/17.0.0/classic/ckeditor.js"></script>
 <script src="/assets/scripts/ckfinder/ckfinder.js"></script>
+<script src="/assets/scripts/ckeditor.js"></script>
 
 @section(javascripts)
 

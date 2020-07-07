@@ -56,8 +56,10 @@ class EntityManager extends QueryBuilder
     {
         foreach ($this->queries as $query) {
             try {
+
                 $this->execute($query["sql"], $query["data"]);
-//                dump($query["sql"])1;
+
+//                dump($query["sql"]);
 //                dump($query["data"]);
 
                 if (is_null($query["object"]->getId())) {

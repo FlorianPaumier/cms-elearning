@@ -29,7 +29,8 @@ class CoursController extends BaseController
         return $this->render("lessons/show", [
             "lesson" => $lesson,
             "chapters" => $chapters,
-            "chapter" => $request->get("chapter")
+            "chapter" => $request->get("chapter"),
+            "end" => count($chapters),
         ]);
     }
 }

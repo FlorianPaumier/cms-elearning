@@ -58,8 +58,7 @@ class EntityManager extends QueryBuilder
             try {
 
                 $this->execute($query["sql"], $query["data"]);
-
-//                dump($query["sql"]);
+//                dump($query["sql"])1;
 //                dump($query["data"]);
 
                 if (is_null($query["object"]->getId())) {
@@ -147,7 +146,7 @@ class EntityManager extends QueryBuilder
         if (!is_callable([$object, 'getId'])) {
             throw new \Exception("No id in object");
         }
-
+        $this->from(EntityHelper::getClass($object));
         $this->method = "DELETE";
 
         $this->where("id = :id")

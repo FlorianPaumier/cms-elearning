@@ -33,9 +33,9 @@ class ContactObject
 
     /**
      * @param string $name
-     * @return ContactObject
+     * @return EvaluationObject
      */
-    public function setName(string $name): ContactObject
+    public function setName(string $name): EvaluationObject
     {
         $this->name = $name;
         return $this;
@@ -51,9 +51,9 @@ class ContactObject
 
     /**
      * @param bool $enabled
-     * @return ContactObject
+     * @return EvaluationObject
      */
-    public function setEnabled(bool $enabled): ContactObject
+    public function setEnabled(bool $enabled): EvaluationObject
     {
         $this->enabled = $enabled;
         return $this;

@@ -48,7 +48,6 @@ class ConfigHandler
         define("PATH_FORM", ROOT_PATH . "/src/Core/Form/Templates");
     }
 
-
     /**
      * This function is call when a web application is start
      * Put all the  default class to  make the app working

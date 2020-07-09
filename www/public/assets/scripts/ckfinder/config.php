@@ -52,7 +52,7 @@ $config['privateDir'] = array(
 /*============================ Images and Thumbnails ==================================*/
 // https://ckeditor.com/docs/ckfinder/ckfinder3-php/configuration.html#configuration_options_images
 
-$config['images'] = array(
+$config['uploads'] = array(
     'maxWidth'  => 1600,
     'maxHeight' => 1200,
     'quality'   => 80,
@@ -69,8 +69,8 @@ $config['images'] = array(
 $config['backends'][] = array(
     'name'         => 'upload',
     'adapter'      => 'local',
-    'baseUrl'      => '/assets/images/',
-    'root'         => ROOT_PATH.'/public/assets/images/',
+    'baseUrl'      => '/assets/uploads/',
+    'root'         => '/var/www/html/www/public/assets/uploads/',
     'chmodFiles'   => 0755,
     'chmodFolders' => 0777,
     'filesystemEncoding' => 'UTF-8',
@@ -102,7 +102,7 @@ $config['resourceTypes'][] = array(
 
 $config['resourceTypes'][] = array(
     'name'              => 'Images',
-    'directory'         => 'images',
+    'directory'         => 'uploads',
     'maxSize'           => 0,
     'allowedExtensions' => 'bmp,gif,jpeg,jpg,png',
     'deniedExtensions'  => '',

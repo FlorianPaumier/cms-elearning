@@ -33,7 +33,7 @@ class LessonForm extends AbstractForm
             ])
             ->add("thumbnail", ImageType::class, [
                 "label" => "Thumbnail",
-                "required" => true,
+                "required" => false,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
             ->add("description", TextAreaType::class, [
@@ -41,29 +41,6 @@ class LessonForm extends AbstractForm
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12 ckeditor",
             ])
-            ->add("content", TextAreaType::class, [
-                "label" => "Introduction du cours",
-                "required" => true,
-                "class" => "col-md-6 col-lg-6 col-sm-12 ckeditor",
-                ])
-            ->add("chapters", SelectType::class, [
-                "label" => "Chapitres",
-                "required" => false,
-                "choices" => [
-                    "1" => "one",
-                    "2" => "two",
-                    "3" => "three",
-                ],
-                "class" => "col-md-6 col-lg-6 col-sm-12 select-two",
-            ])
-//            ->add("chapters", EntityType::class, [
-//                "label" => "Chapitres",
-//                "required" => false,
-//                "multiple" => true,
-//                "entry_type" => LessonChapter::class,
-//                "choice_label" => "title",
-//                "class" => "col-md-6 col-lg-6 col-sm-12 select-two",
-//            ])
             ->add("valider", ButtonType::class, [
                 "label" => "Valider",
                 "class" => "btn-submit",

@@ -113,6 +113,10 @@ img {
   border-bottom: 1px black solid;
 }
 
+ul.list-unstyle {
+  list-style: none;
+}
+
 .buttons {
   display: flex;
   height: 100vh;

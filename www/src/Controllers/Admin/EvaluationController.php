@@ -63,8 +63,8 @@ class EvaluationController extends BaseController
         $json = $serializer->serialize($inputs, "json");
 
         if($request->getMethod() == "POST"){
-            dump($request->getRequest()->all());
-            $formTypeBuilder = (new FormTypeBuilderServices($request->getRequest()->get("admin_evaluation")))->generateContact(EvaluationInput::class, $inputs);
+//            dump($request->getRequest()->all());
+            $formTypeBuilder = (new FormTypeBuilderServices($request->getRequest()->get("admin_evaluation")))->generateContact(EvaluationInput::class, $evaluation);
 
             $inputs = $formTypeBuilder->getInputs();
             $form = $formTypeBuilder->createFormTypeClass($request->getRequest()->all(),Evaluation::class, $evaluation);
@@ -75,6 +75,7 @@ class EvaluationController extends BaseController
                 $this->entityManager->persist($input);
             }
             $this->entityManager->flush();
+            $this->redirect->redirectToRoute("admin_evaluation_list");
         }
 
         return $this->render("admin/evaluation/edit", [

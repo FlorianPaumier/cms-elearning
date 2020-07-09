@@ -8,6 +8,8 @@ use App\Core\Cache\ConfigHandler;
 use App\Core\Collections\ArrayCollection;
 use App\Core\Database\EntityManager;
 use App\Core\Form\Fields\ButtonType;
+use App\Core\Form\Fields\CheckboxType;
+use App\Core\Form\Fields\ChoiceInputType;
 use App\Core\Form\Fields\ChoiceType;
 use App\Core\Form\Fields\CollectionType;
 use App\Core\Form\Fields\DateType;
@@ -339,6 +341,8 @@ class FormBuilder
             $field->translate($options);
             if ($field instanceof SelectType) {
                 $this->createSelectType($field, $args);
+            }else{
+                $this->createChoiceInput($field, $args);
             }
         } else {
             if ($field instanceof EntityType) {
@@ -561,6 +565,30 @@ class FormBuilder
         }
 
         $field->addData("optionsHTML", implode("", $options));
+    }
+
+    private function createChoiceInput(ChoiceType $field, array $args)
+    {
+        $inputs = "";
+        foreach ($args["choices"] as $key => $choice){
+
+            $params = [
+                "label" => $choice,
+                "value" => $key,
+                "placeholder" => $choice,
+                "class" => "form-control",
+                "type" => $field->getBlockName(),
+            ];
+
+            $inputs .= $this->render->renderHtmlElement($field, $params);
+        }
+
+        $container = new ChoiceInputType();
+        $args["inputs"] = $inputs;
+
+        $field->setHtml($this->render->renderHtmlElement($container, $args));
+
+        return $field;
     }
 
 }

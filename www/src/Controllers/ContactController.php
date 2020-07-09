@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Core\Contact\ContactForm;
 use App\Core\Contact\ContactInput;
 use App\Core\Contact\ContactMeta;
+use App\Core\Contact\ContactObject;
 use App\Core\Contact\EvaluationObject;
 use App\Core\Interfaces\BaseController;
 use App\Core\Mailer\MailerHandler;
@@ -34,7 +35,7 @@ class ContactController extends BaseController
         if ($request->getMethod() == "POST" && $form->isValid()) {
             $data = $request->getRequest()->all();
 
-            $contact = new EvaluationObject();
+            $contact = new ContactObject();
             $contact->setContactForm($contactForm);
             $this->entityManager->persist($contact);
 

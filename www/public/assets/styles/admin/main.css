@@ -2454,6 +2454,26 @@ img {
   }
 }
 
+.container-form {
+  width: 70vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+.container-form .form {
+  height: 80vh;
+  overflow-y: auto;
+}
+.container-form .form ul.list-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 3%;
+  border: 1px solid black;
+}
+.container-form .form ul.list-input li {
+  list-style-type: none;
+}
+
 nav {
   display: flex;
   flex-direction: column;

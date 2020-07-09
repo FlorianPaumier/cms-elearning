@@ -18,6 +18,10 @@
             <label for="FORM_ID[__INDEX__][label_input]">Label</label>
             <input type="text" id="FORM_ID[__INDEX__][label_input]" name="FORM_ID[__INDEX__][label_input]">
         </li>
+        <li class="choices d-none">
+            <label for="FORM_ID[__INDEX__][choice_input]">Choix (format valeur:label séparer de virgule)</label>
+            <input type="text" id="FORM_ID[__INDEX__][choice_input]" name="FORM_ID[__INDEX__][choice_input]">
+        </li>
         <li>
         <li class="tg-list-item row">
             <span>Required</span>

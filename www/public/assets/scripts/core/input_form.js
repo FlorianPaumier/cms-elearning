@@ -26,9 +26,17 @@ $(document).ready(function () {
             resetPosition(".list-input");
         })
 
+        const select = input.find("select").change((ele) => {
+            const value = ele.target.value
+            if(value === "checkbox" || value === "select" || value === "radio"){
+                input.find(".choices").toggleClass("d-none")
+            }
+        })
+
         $(".form").append(input);
         length += 1;
         $(e.target).data("length", length);
+
 
         (() => {
             enableDragSort('drag-sort-enable')
@@ -43,8 +51,9 @@ $(document).ready(function () {
 
         const form = document.querySelector("form");
         const id = $(form).data("id");
+
         for (const jsonKey in json) {
-            console.log(json[jsonKey], jsonKey)
+
             let ele = json[jsonKey]
             add.click()
             const length = $(".list-input").length;
@@ -66,7 +75,29 @@ $(document).ready(function () {
                 if (inputs[i].id === `${id}[${length}][placeholder_input]`) {
                     inputs[i].value = ele.placeholder
                 }
+
+                if (inputs[i].id === `${id}[${length}][choice_input]`) {
+                    let choices = JSON.parse(ele.choices);
+
+                    let count = 1;
+                    let choicesLength = Object.keys(choices).length
+                    console.log(choices)
+
+                    for (key in choices){
+                        inputs[i].value += key+":"+choices[key]
+
+                        if(count < choicesLength){
+                            inputs[i].value += ","
+                        }
+
+                        count++
+                    }
+
+                }
             }
+
+            if($(html).find("select")[0].value === "checkbox")
+                $(html).find(".choices").toggleClass("d-none")
 
             $(html).find(".input-id")[0].value = ele.id;
         }

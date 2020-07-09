@@ -47,7 +47,7 @@ abstract class Hydrator
 
             $method = self::getSetter($key);
 
-            if (!method_exists($instance, $method)) {
+            if (!method_exists($instance, $method) || !is_callable([$instance, $method])) {
                 continue;
             }
 
@@ -63,10 +63,13 @@ abstract class Hydrator
                         $repo = ConfigHandler::get("entityManager")->getRepository($class . "Repository");
                         $value = $repo->find($value);
                     }
-
                 }
+
                 self::$recursif = false;
                 ConfigHandler::get("entityManager")->setEntity(get_class($instance));
+            }else if(!is_null($type) && self::isRecursif()){
+                $class = $type->getName();
+                $value = (new $class())->setId($value);
 
             }
 
@@ -74,7 +77,7 @@ abstract class Hydrator
                 $value = $serializer->deserialize($value, "json");
             }
 
-            if (!is_null($type) && $type->getName() == "DateTime") {
+            if (!is_null($type) && $type->getName() == "DateTime" || $type == "datetime") {
                 $value = new \DateTime($value);
             }
 
@@ -98,7 +101,7 @@ abstract class Hydrator
         $data = [];
 
         $principalClass = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($object));
-        $principalKey = $principalClass . "s_";
+        $principalKey = $principalClass . "_";
 
         foreach ($array as $row) {
             foreach ($row as $key => $value) {
@@ -118,6 +121,9 @@ abstract class Hydrator
                     }
 
                     $method = self::getSetter($propertie);
+
+                    if(!is_callable([$instance,$method])) continue;
+
                     $type = self::getParameterType($data[$id], $method);
                     if (is_null($type)) {
                         $data[$id]->$method($value);
@@ -194,13 +200,14 @@ abstract class Hydrator
 
             if (!is_null($value)) {
                 if ($value instanceof \DateTime) {
-                    $value = $value->format("Y-m-d");
+                    $value = $value->format("Y-m-d H:m:i");
                 }
 
                 if (gettype($value) == "object") {
                     if(get_class($value) == ArrayCollection::class)
                         continue;
 
+                    $key .= "_id";
                     $value = $value->getId();
                 } elseif (gettype($value) == "boolean") {
                     $value = (int)$value;
@@ -212,6 +219,7 @@ abstract class Hydrator
                 $params[$key] = $value;
             }
         };
+
         return $params;
 
     }
@@ -226,16 +234,18 @@ abstract class Hydrator
 
     private static function getParameterType(object $instance, string $method)
     {
+        if(in_array($method, ["setCreatedAt", "setUpdatedAt"])) return "datetime";
+
         $reflection = new \ReflectionMethod($instance, $method);
 
         /** @var \ReflectionParameter $parameter */
-        return $reflection->getParameters()[0]->getClass();
+        return !is_null($reflection->getParameters()[0]) ? $reflection->getParameters()[0]->getClass() : null;
     }
 
     private static function isTypeArray(object $instance, string $method)
     {
         $reflection = new \ReflectionMethod($instance, $method);
-        return $reflection->getParameters()[0]->isArray();
+        return !is_null($reflection->getParameters()[0]) ? $reflection->getParameters()[0]->isArray() : null;
     }
 
     /**

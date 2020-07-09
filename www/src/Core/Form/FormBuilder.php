@@ -5,16 +5,22 @@ namespace App\Core\Form;
 
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\Collections\ArrayCollection;
 use App\Core\Database\EntityManager;
 use App\Core\Form\Fields\ButtonType;
+use App\Core\Form\Fields\CheckboxType;
+use App\Core\Form\Fields\ChoiceInputType;
 use App\Core\Form\Fields\ChoiceType;
 use App\Core\Form\Fields\CollectionType;
 use App\Core\Form\Fields\DateType;
 use App\Core\Form\Fields\EntityType;
 use App\Core\Form\Fields\FieldsInterface;
+use App\Core\Form\Fields\ImageType;
 use App\Core\Form\Fields\OptionType;
+use App\Core\Form\Fields\SelectType;
+use App\Core\Form\Fields\SubmitType;
 use App\Core\Form\Validator\Validator;
-use App\Core\Helpers\ArrayCollection;
+use App\Core\Helpers\FileUploader;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Render\RenderView;
 use App\Core\Request\ParameterBag;
@@ -139,11 +145,19 @@ class FormBuilder
                 }
             }
 
+
             if (is_null($value)) {
-                break;
+                if (!key_exists($requestKey, $request->getFile())) {
+                    break;
+                }
+
+                if (!empty($request->getFile()[$requestKey]) && $request->getFile()[$requestKey]["size"] > 0) {
+                    $value = FileUploader::UploadFile($request->getFile()[$requestKey]);
+                } else {
+                    continue;
+                }
             }
 
-            #TODO : Transforme les Entity / Collection Type
             if (is_null($this->entity) || is_array($this->entity)) {
                 $this->entity[$key] = $value;
             } else {
@@ -176,6 +190,7 @@ class FormBuilder
                 }
             }
         }
+
     }
 
     /**
@@ -296,6 +311,7 @@ class FormBuilder
             "form_view" => $html,
             "method" => "POST",
             "action" => $this->action,
+            "enctype" => "multipart/form-data"
         ], true);
     }
 
@@ -310,8 +326,7 @@ class FormBuilder
         $index = "${prefix}_${key}";
 
 
-
-     return $this->request->get($index);
+        return $this->request->get($index);
     }
 
 
@@ -324,6 +339,11 @@ class FormBuilder
             ];
 
             $field->translate($options);
+            if ($field instanceof SelectType) {
+                $this->createSelectType($field, $args);
+            }else{
+                $this->createChoiceInput($field, $args);
+            }
         } else {
             if ($field instanceof EntityType) {
                 $this->createEntityType($field, $args);
@@ -340,7 +360,7 @@ class FormBuilder
     {
         $options = (new $this->formType)->getOptions();
 
-        if (!key_exists("data_class", $options) || $field === ButtonType::class || $args["mapped"] === false) {
+        if (!key_exists("data_class", $options) || in_array($field, [ButtonType::class, SubmitType::class]) || $args["mapped"] === false) {
             return true;
         }
 
@@ -373,7 +393,7 @@ class FormBuilder
         $choiceLabel = $args["choice_label"] ? "get" . ucfirst($args["choice_label"]) : "getId";
         /** @var EntityManager $repository */
         $em = ConfigHandler::get('entityManager');
-        $repository = $em->getRepository($args["entry_type"]."Repository");
+        $repository = $em->getRepository($args["entry_type"] . "Repository");
 
         $items = $repository->select('id', $args["choice_label"])->findAll();
         $options = [];
@@ -495,18 +515,18 @@ class FormBuilder
     {
         /** @var EntityManager $repository */
         $em = ConfigHandler::get('entityManager');
-        $repository = $em->getRepository($this->fields[$key]["args"]["entry_type"]."Repository");
+        $repository = $em->getRepository($this->fields[$key]["args"]["entry_type"] . "Repository");
 
         if (gettype($value) == "array") {
             $method = "add";
             $items = [];
             foreach ($value as $id) {
-                $result = $repository->select($this->fields[$key]["args"]["choice_label"] ?? "id")->find($id);
+                $result = $repository->select("id", $this->fields[$key]["args"]["choice_label"])->find($id);
                 $items[] = $result;
             }
             $value = $items;
         } else {
-            $value = $repository->select($this->fields[$key]["args"]["choice_label"] ?? "id")->find($value);
+            $value = $repository->select("id", $this->fields[$key]["args"]["choice_label"])->find($value);
         }
 
         return $value;
@@ -516,4 +536,59 @@ class FormBuilder
     {
         return new \DateTime($value);
     }
+
+    private function createSelectType(SelectType $field, array $args)
+    {
+        $items = $args["choices"];
+        $options = [];
+
+        foreach ($items as $key => $item) {
+            $type = new OptionType();
+            $type->setParent($field);
+
+            $select = "";
+
+            if (!is_null($args["value"])) {
+                if ($args["value"] == $key) {
+                    $select = "selected";
+                }
+            }
+
+            $type->setOptions($key, $args);
+            $type->addArgs([
+                "value" => $item,
+                "key" => $key,
+                "selected" => $select ?? "",
+            ]);
+
+            $options[] = $type->renderElement();
+        }
+
+        $field->addData("optionsHTML", implode("", $options));
+    }
+
+    private function createChoiceInput(ChoiceType $field, array $args)
+    {
+        $inputs = "";
+        foreach ($args["choices"] as $key => $choice){
+
+            $params = [
+                "label" => $choice,
+                "value" => $key,
+                "placeholder" => $choice,
+                "class" => "form-control",
+                "type" => $field->getBlockName(),
+            ];
+
+            $inputs .= $this->render->renderHtmlElement($field, $params);
+        }
+
+        $container = new ChoiceInputType();
+        $args["inputs"] = $inputs;
+
+        $field->setHtml($this->render->renderHtmlElement($container, $args));
+
+        return $field;
+    }
+
 }

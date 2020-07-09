@@ -1,7 +1,9 @@
 @extend(templates/back)
 
 @section(body)
-
+<section>
+    <a href="@path(admin_contact_new)" id="add-contact" class="btn c-blue">Ajout</a>
+</section>
 <table>
     <thead>
     <tr>

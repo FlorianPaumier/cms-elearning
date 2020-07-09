@@ -120,3 +120,5 @@ docker/postgres/data
 .phpunit.*
 builds
 www/lib/PHPMailer/vendor
+node_modules
+www/public/assets/images/

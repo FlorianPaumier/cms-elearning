@@ -113,6 +113,10 @@ img {
   border-bottom: 1px black solid;
 }
 
+ul.list-unstyle {
+  list-style: none;
+}
+
 .buttons {
   display: flex;
   height: 100vh;
@@ -2513,11 +2517,11 @@ img {
 #header #nav-header nav > ul li {
   text-align: center;
   width: 100vw;
-  font-size: 20px;
+  font-size: 1rem;
   padding: 1.75rem 0;
 }
 #header #nav-header nav > ul li.search-mobile {
-  padding-bottom: 1rem;
+  padding-bottom: 1.5rem;
   flex-direction: row;
   justify-content: space-between;
   vertical-align: middle;
@@ -3145,6 +3149,72 @@ main #newsletter div .btn-news {
 }
 #section-lessons .pagination ul li a.disable {
   pointer-events: none;
+}
+
+#show-lesson {
+  display: flex;
+  flex-direction: column;
+}
+@media screen and (min-width: 720px) {
+  #show-lesson {
+    flex-direction: row;
+    min-height: 70vh;
+  }
+}
+#show-lesson .nav {
+  width: 100vw;
+  background-color: #364885;
+}
+#show-lesson .nav ul {
+  display: none;
+  background-color: #87B7FF;
+  height: 100%;
+  margin: 0;
+}
+#show-lesson .nav ul.active {
+  display: flex;
+}
+@media screen and (min-width: 720px) {
+  #show-lesson .nav {
+    width: 15vw;
+    background-color: #fff;
+  }
+  #show-lesson .nav .hamburger {
+    display: none;
+  }
+  #show-lesson .nav ul {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+  #show-lesson .nav ul li {
+    margin: 1rem 0;
+    text-align: center;
+    justify-content: center;
+  }
+  #show-lesson .nav ul li a {
+    color: white;
+    text-decoration: none;
+  }
+}
+#show-lesson #lesson {
+  padding: 0 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#show-lesson #lesson #content {
+  min-height: 50vh;
+}
+#show-lesson #lesson #content h1 {
+  text-align: center;
+}
+#show-lesson #lesson #pagination {
+  display: flex;
+  justify-content: center;
+}
+#show-lesson #lesson #pagination .btn-pagination {
+  background-color: #006800;
 }
 
 footer {

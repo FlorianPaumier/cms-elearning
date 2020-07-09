@@ -11,7 +11,7 @@ class Sondage
 {
 
     use Entity;
-    use TimestampableEntity;
+//    use TimestampableEntity;
 
     /** @var string */
     protected $question;
@@ -28,10 +28,7 @@ class Sondage
     /** @var string */
     protected $optionFour;
 
-    public function __construct(){
-        $this->optionThree = "";
-        $this->optionFour = "";
-    }
+    public function __construct(){}
 
     /**
      * @return string
@@ -99,7 +96,7 @@ class Sondage
      * @param string $optionThree
      * @return Sondage
      */
-    public function setOptionThree(string $optionThree): Sondage
+    public function setOptionThree(?string $optionThree): Sondage
     {
         $this->optionThree = $optionThree;
         return $this;
@@ -117,7 +114,7 @@ class Sondage
      * @param string $optionFour
      * @return Sondage
      */
-    public function setOptionFour(string $optionFour): Sondage
+    public function setOptionFour(?string $optionFour): Sondage
     {
         $this->optionFour = $optionFour;
         return $this;

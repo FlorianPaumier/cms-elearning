@@ -6,9 +6,10 @@ namespace App\Core\Contact;
 
 use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
+use App\Core\Interfaces\GenerateFormInterface;
 use phpDocumentor\Reflection\Types\This;
 
-class ContactForm
+class ContactForm implements GenerateFormInterface
 {
     use Entity;
     use TimestampableEntity;

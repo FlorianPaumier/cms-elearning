@@ -4,7 +4,7 @@ namespace App\Core\Database;
 
 use PDO;
 
-class Migration extends Table
+class Migration extends EntityManager
 {
     /** @var string $tableName */
     protected $tableName = "";

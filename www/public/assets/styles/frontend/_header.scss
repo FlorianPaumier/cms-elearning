@@ -88,12 +88,12 @@
         li {
           text-align: center;
           width: 100vw;
-          font-size: 20px;
+          font-size: 1rem;
           padding: 1.75rem 0;
 
           &.search-mobile {
             @extend %searchForm;
-            padding-bottom: 1rem;
+            padding-bottom: 1.5rem;
             flex-direction: row;
             justify-content: space-between;
             vertical-align: middle;

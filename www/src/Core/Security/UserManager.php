@@ -6,13 +6,14 @@ use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 use App\Core\database\Hydrator;
 use App\Core\Database\QueryBuilder;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Mailer\MailerHandler;
 use App\Core\Mailer\MailerMessage;
 use App\Core\Request\ParameterBag;
 use App\Core\Request\Request;
 use App\Core\Session\PHPSession;
 use App\Entity\User;
+use App\Repository\UserRepository;
 
 class UserManager
 {
@@ -22,7 +23,7 @@ class UserManager
     private $entityManager;
 
     /**
-     * @var Table
+     * @var EntityManager
      */
     private $repository;
 
@@ -36,9 +37,10 @@ class UserManager
     public function __construct()
     {
         $this->entityManager = ConfigHandler::get("entityManager");
-        $this->repository = ConfigHandler::get('repository');
+        $this->entityManager =  new UserRepository();
         $this->session = ConfigHandler::get("session");
         $this->security = CacheHandler::get("security");
+
     }
 
     /**
@@ -46,12 +48,13 @@ class UserManager
      */
     public function connectUser(?string $username, ?string $password): bool
     {
-        $q = $this->repository->setEntity(User::class)->findBy([
+        $q = $this->entityManager->setEntity(User::class)->findBy([
             "username" => $username,
             "password" => md5($password),
             //            "enable" => true,
         ]);
 
+//        dump(empty($q));
         $response = false;
 
         if (!empty($q)) {
@@ -83,6 +86,7 @@ class UserManager
             session_start();
         }
 
+
         /*if (!isset($_SESSION['auth'])) {
         throw new ForbiddenException();
         }*/
@@ -92,6 +96,9 @@ class UserManager
         } else {
             return true;
         }
+
+        dump("Login");
+        dump($this->session->get("app.user"));
 
         return false;
     }
@@ -104,7 +111,7 @@ class UserManager
     public function getUser()
     {
         $session = $this->session->offsetGet("app.user");
-        //        $user = $this->repository->from('user')->findBy(["email" => $session["user"]]);
+        //        $user = $this->entityManager->from('user')->findBy(["email" => $session["user"]]);
         return $session;
     }
 
@@ -151,15 +158,13 @@ class UserManager
 
         $error = [];
 
-        if ($this->repository->from("user")->findBy(["email" => $value["email"]])) {
+        if ($this->entityManager->findBy(["email" => $user->getEmail()])) {
             return "Votre email exist déjà. Veuillez le modifier";
         }
 
-        if ($this->repository->from("user")->insert($value)) {
-            return true;
-        }
-
-        return "Une erreur estr survenue. Veuilliez réessayer. Si l'erreur persist contacter l'admin";
+        $this->entityManager->persist($user)->flush();
+die;
+        return "Une erreur est survenue. Veuilliez réessayer. Si l'erreur persist contacter l'admin";
     }
 
     /**
@@ -167,9 +172,9 @@ class UserManager
      */
     public function forgetPassword(string $email)
     {
-        if ($this->repository->from("user")->exists(["email" => $email])) {
+        if ($this->entityManager->from("user")->exists(["email" => $email])) {
 
-            $user = $this->repository->setEntity(User::class)->findBy(["email" => $email]);
+            $user = $this->entityManager->setEntity(User::class)->findBy(["email" => $email]);
             $user->setForgetPasswordToken(bin2hex(random_bytes(32)));
 
             $server = ConfigHandler::get("request")->getServer();

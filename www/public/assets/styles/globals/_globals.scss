@@ -93,3 +93,9 @@ img {
 .border-bottom {
   border-bottom: 1px black solid;
 }
+
+ul {
+  &.list-unstyle {
+    list-style: none;
+  }
+}

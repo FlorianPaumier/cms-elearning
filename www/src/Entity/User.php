@@ -2,11 +2,14 @@
 
 namespace App\Entity;
 
+use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
+use phpDocumentor\Reflection\Types\This;
 
 class User
 {
     use Entity;
+    use TimestampableEntity;
 
     protected $username;
     protected $password;
@@ -62,9 +65,10 @@ class User
         return $this->email;
     }
 
-    public function setEmail($email): void
+    public function setEmail($email): self
     {
         $this->email = $email;
+        return $this;
     }
 
 
@@ -110,7 +114,7 @@ class User
     /**
      * @return string
      */
-    public function getForgetPasswordToken(): string
+    public function getForgetPasswordToken()
     {
         return $this->forgetPasswordToken;
     }
@@ -118,7 +122,7 @@ class User
     /**
      * @param string $forgetPasswordToken
      */
-    public function setForgetPasswordToken( string $forgetPasswordToken): User
+    public function setForgetPasswordToken(?string $forgetPasswordToken): User
     {
         $this->forgetPasswordToken = $forgetPasswordToken;
         $this->setForgetPasswordTokenAvailable();
@@ -128,7 +132,7 @@ class User
     /**
      * @return \DateTime
      */
-    public function getForgetPasswordTokenAvailable(): \DateTime
+    public function getForgetPasswordTokenAvailable()
     {
         return $this->forgetPasswordTokenAvailable;
     }
@@ -141,6 +145,4 @@ class User
         $this->forgetPasswordTokenAvailable = new \DateTime("+ 5 minutes");
         return $this;
     }
-
-
 }

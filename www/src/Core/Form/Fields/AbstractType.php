@@ -17,7 +17,7 @@ abstract class AbstractType implements FieldsInterface
     private $name;
 
     /** @var string */
-    private $html;
+    protected $html;
 
     /** @var array */
     private $constraints = [];
@@ -36,6 +36,7 @@ abstract class AbstractType implements FieldsInterface
         'extended' => false,
         'choice_label' => "id",
         'multiple' => false,
+        'placeholder' => "",
     ];
 
     public function __construct()

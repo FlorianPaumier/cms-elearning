@@ -64,7 +64,7 @@ class SondageController extends BaseController
     public function delete(Sondage $sondage)
     {
         $em = ConfigHandler::get("entityManager");
-        $em->from('sondage')->delete($sondage->getId());
+        $em->from('sondage')->delete($sondage);
         $this->redirect->redirectToRoute("admin_sondage_list");
     }
 }

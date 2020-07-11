@@ -54,18 +54,9 @@ class TeztsForm extends AbstractForm
                 ;
     }
 
-
-    /**
-    * @inheritDoc
-    */
-    public function setBlockPrefix(string $prefix = null)
-    {
-        $this->prefix = "tezts";
-    }
-
     public function getBlockPrefix(): string
     {
-        return $this->prefix;
+        return "tezts";
     }
 
 

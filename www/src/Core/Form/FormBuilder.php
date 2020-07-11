@@ -104,7 +104,6 @@ class FormBuilder
             ConfigHandler::get("eventEmmiter")->emit("error.500", "Field $key don't exist");
         }
 
-        #Todo : Get data from Request ou Entity
         $args["value"] = $this->setValue($key);
         $args["type"] = $args["type"] ?? $field->getBlockType();
         $args["key"] = $key;
@@ -215,6 +214,7 @@ class FormBuilder
 
     public function isValid()
     {
+        if(ConfigHandler::get("request")->getMethod() != "POST") return false;
         $validator = new Validator($this->fields);
         $this->errors = $validator->getErrors();
 
@@ -578,6 +578,7 @@ class FormBuilder
                 "placeholder" => $choice,
                 "class" => "form-control",
                 "type" => $field->getBlockName(),
+                "name" => $this->formType->getBlockPrefix() ."_" .$args["key"]
             ];
 
             $inputs .= $this->render->renderHtmlElement($field, $params);

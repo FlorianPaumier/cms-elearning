@@ -70,7 +70,7 @@ class Router
         if (!isset($this->matchRoute["method"]) || in_array($this->request->getMethod(), $this->matchRoute["method"])) {
             $match = true;
         } else {
-            ConfigHandler::get("eventEmmiter")->emit("error.405", "La méthode ".$this->request->getMethod()." n'est pas autorisée pour cette route");
+            ConfigHandler::get("eventEmmiter")->emit("error.405", "La méthode " . $this->request->getMethod() . " n'est pas autorisée pour cette route");
         }
 
         if (!$match) {
@@ -92,8 +92,8 @@ class Router
 
         #TODO : denied access with wrong role
 
-        if(!RolesManager::routeAllowed($this->matchRoute, 'roles')){
-            ConfigHandler::get("eventEmmiter")->emit("error.403","Vous n'avez pas les droits nécessaire à l'accès de cette page");
+        if (!RolesManager::routeAllowed($this->matchRoute, 'roles')) {
+            ConfigHandler::get("eventEmmiter")->emit("error.403", "Vous n'avez pas les droits nécessaire à l'accès de cette page");
         };
 
         $class = "$controllerParam[0]Controller";
@@ -109,7 +109,7 @@ class Router
                 ConfigHandler::get("eventEmmiter")->emit("error.404", "Action $action not found");
             }
         } else {
-            ConfigHandler::get("eventEmmiter")->emit("error.404","Class $class not found");
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "Class $class not found");
         }
     }
 
@@ -118,24 +118,34 @@ class Router
      * @param string $route
      * @return string|null
      */
-    public function getPath(string $route, string $param = null): ?string
+    public function getPath(string $route, string $params = null): ?string
     {
         $path = key_exists($route, $this->routes) ? $this->routes[$route]["path"] : null;
 
-        if(is_null($path)){
+        if (is_null($path)) {
             ConfigHandler::get("eventEmmiter")->emit("error.404", "La route $route n'exsite pas");
         }
 
-        if(!is_null($param)){
+        if (!is_null($params)) {
             $pathTab = explode("/", $path);
-            foreach ($pathTab as $key => $item) {
-                // If the uri the element don't math with the current route, stop
-                if ($this->hadParams($item)) {
-                    $pathTab[$key] = trim($param);
+
+            if (strpos($params, "[") !== false) {
+                $params = json_decode($params);
+            } else {
+                $params = [$params];
+            }
+
+            foreach ($params as $param) {
+                foreach ($pathTab as $key => $item) {
+                    // If the uri the element don't math with the current route, stop
+                    if ($this->hadParams($item)) {
+                        $pathTab[$key] = trim($param);
+                        break;
+                    }
                 }
             }
 
-            $path = implode("/",$pathTab);
+            $path = implode("/", $pathTab);
         }
 
         return $path;
@@ -233,8 +243,10 @@ class Router
             } else {
                 ConfigHandler::get("eventEmmiter")->emit("error.500", "La paramètre $params ne correspond pas au type demandé");
             }
-        }else if (isset($pregParameters[1][0])){
-            return [$pregParameters[1][0] => $params];
+        } else {
+            if (isset($pregParameters[1][0])) {
+                return [$pregParameters[1][0] => $params];
+            }
         }
 
         return [];

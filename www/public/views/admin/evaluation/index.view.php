@@ -4,6 +4,7 @@
 <section>
     <a href="@path(admin_evaluation_new)" id="add-evaluation" class="btn c-blue">Ajout</a>
 </section>
+
 <table>
     <thead>
     <tr>
@@ -13,12 +14,14 @@
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($forms as $form): ?>
+        <?php foreach ($evaluations["data"] as $evaluation): ?>
             <tr>
-                <td><?= $form->getId() ?></td>
-                <td><?= $form->getName() ?></td>
+                <td><?= $evaluation->getId() ?></td>
+                <td><?= $evaluation->getName() ?></td>
                 <td>
-                    <a href="@path(admin_evaluation_edit, <?= $form->getId() ?>)">Edit</a><a href="@path(admin_evaluation_delete, <?= $form->getId() ?>)">Delete</a>
+                    <a href="@path(admin_evaluation_edit, <?= $evaluation->getId() ?>)">Edit</a>
+                    <a href="@path(admin_notation_index, <?= $evaluation->getId() ?>)">Notations</a>
+                    <a href="@path(admin_evaluation_delete, <?= $evaluation->getId() ?>)">Delete</a>
                 </td>
             </tr>
         <?php endforeach; ?>

@@ -17,7 +17,7 @@ class EvaluationMeta
     private $value;
 
     /** @var EvaluationObject */
-    private $contact;
+    private $evaluationObject;
 
     /**
      * @return string
@@ -58,18 +58,18 @@ class EvaluationMeta
     /**
      * @return EvaluationObject
      */
-    public function getContact(): ?EvaluationObject
+    public function getEvaluationObject(): ?EvaluationObject
     {
-        return $this->contact;
+        return $this->evaluationObject;
     }
 
     /**
-     * @param EvaluationObject $contact
+     * @param EvaluationObject $evaluationObject
      * @return EvaluationMeta
      */
-    public function setContact(EvaluationObject $contact): self
+    public function setEvaluationObject(EvaluationObject $evaluationObject): self
     {
-        $this->contact = $contact;
+        $this->evaluationObject = $evaluationObject;
         return $this;
     }
 

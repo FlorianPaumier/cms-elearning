@@ -7,6 +7,7 @@ namespace App\Core\Evaluation;
 use App\Core\Form\FormBuilder;
 use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
+use App\Entity\User;
 
 class EvaluationObject
 {
@@ -23,6 +24,9 @@ class EvaluationObject
      */
     private $evaluation;
 
+    /** @var User */
+    private $user;
+
     /**
      * @return string
      */
@@ -35,7 +39,7 @@ class EvaluationObject
      * @param string $name
      * @return EvaluationObject
      */
-    public function setName(string $name): EvaluationObject
+    public function setName(?string $name): EvaluationObject
     {
         $this->name = $name;
         return $this;
@@ -53,7 +57,7 @@ class EvaluationObject
      * @param bool $enabled
      * @return EvaluationObject
      */
-    public function setEnabled(bool $enabled): EvaluationObject
+    public function setEnabled(?bool $enabled): EvaluationObject
     {
         $this->enabled = $enabled;
         return $this;
@@ -72,4 +76,24 @@ class EvaluationObject
     {
         return $this->evaluation;
     }
+
+    /**
+     * @return User
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     * @return EvaluationObject
+     */
+    public function setUser(User $user): EvaluationObject
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+
 }

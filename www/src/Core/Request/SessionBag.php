@@ -8,7 +8,7 @@ class SessionBag
 {
     private $session;
 
-    public function __construct(array $session)
+    public function __construct(array &$session)
     {
         $this->session = $session;
     }

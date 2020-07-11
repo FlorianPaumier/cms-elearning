@@ -25,7 +25,7 @@ class EvaluationController extends BaseController
     public function index(Request $request, EvaluationRepository $repository)
     {
         return $this->renderer->render("admin/evaluation/index", [
-            "forms" => $repository->findAll()
+            "evaluations" => $repository->paginate(15)
         ]);
     }
 
@@ -56,7 +56,6 @@ class EvaluationController extends BaseController
             "lessons" => (new LessonRepository())->findAll(),
         ]);
     }
-
 
     public function edit(Request $request,Serializer $serializer, Evaluation $evaluation, EvaluationInputRepository $evaluationInputRepository){
         $inputs = $evaluationInputRepository->orderBy("position", "ASC")->findBy(["evaluation_id" => $evaluation->getId()]);

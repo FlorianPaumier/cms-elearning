@@ -128,7 +128,7 @@ class TemplateEngine
     private function _parseTemplate()
     {
         preg_match_all("/{{\s?(\w+)\s?}}/m", $this->content, $this->fieldEntries, PREG_SET_ORDER, 0);
-        preg_match_all("/@(\w+)\((.*?)(,(.*?))?\)/m", $this->content, $this->methodEntries, PREG_SET_ORDER, 0);
+        preg_match_all("/@(\w+)\((.*?)(,(\[?.*?\]?))?\)/m", $this->content, $this->methodEntries, PREG_SET_ORDER, 0);
     }
 
     /**
@@ -290,6 +290,7 @@ class TemplateEngine
         $tmp = tmpfile();
         fwrite($tmp, $content);
         extract($data);
+        extract($this->data["config"]);
 
         require stream_get_meta_data($tmp)['uri'];
         return ob_get_clean();

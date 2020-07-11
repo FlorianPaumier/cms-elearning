@@ -7,6 +7,7 @@ namespace App\Form;
 use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\CheckboxType;
+use App\Core\Form\Fields\ImageType;
 use App\Core\Form\Fields\RadioType;
 use App\Core\Form\Fields\SelectType;
 use App\Core\Form\Fields\TextAreaType;
@@ -17,50 +18,27 @@ use App\Repository\CategoryRepository;
 
 class ArticleForm extends AbstractForm
 {
-    public static function getConstraint(): array
-    {
-        return [
-            [
-                "title" => [
-                    "empty" => false,
-                    "required" => true,
-                    "exists" => true,
-                ]
-            ],
-            [
-                "description" => [
-                    "empty" => false,
-                    "required" => true,
-                    "exists" => true,
-                ]
-            ]
-        ];
-    }
-
     public function buildForm(FormBuilder $builder): FormBuilder
     {
-        $categoryRepository = new CategoryRepository();
-        $categoriesAll = $categoryRepository->findAll();
-
-        foreach($categoriesAll as $category) {
-            $categories[$category->getId()] = $category->getCategory();
-        }
-
         return $builder
+            ->add("image", ImageType::class, [
+                "label" => "image",
+                "required" => true,
+                "class" => "col-md-6 col-lg-6 col-sm-12",
+            ])
             ->add("title", TextType::class,[
                 "label" => "Titre",
                 "placeholder" => "Titre",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->add("visible", RadioType::class,[
-                "label" => "Visible",
+            ->add("visible", CheckboxType::class,[
+                "label" => "",
                 "placeholder" => "Visible",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
                 "choices" => [
-                    true => 'show',
-                    false => 'hide'
+                    true => 'show'
                 ]
             ])
             ->add("idCategory", SelectType::class, [
@@ -68,7 +46,7 @@ class ArticleForm extends AbstractForm
                 "placeholder" => "Catégorie",
                 "required" => false,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
-                "choices" => $categories
+                "choices" => (new CategoryRepository())->findCategories()
             ])
             ->add("content", TextAreaType::class, [
                 "label" => "Contenu",

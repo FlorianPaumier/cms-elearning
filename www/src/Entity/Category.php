@@ -16,19 +16,17 @@ class Category
 
     /**
      * @param string $category
-     * @return string
+     * @return void
      */
-    public function setCategory(string $category): string
+    public function setCategory(?string $category): void
     {
         $this->category = $category;
-
-        return $this->category;
     }
 
     /**
      * @return string
      */
-    public function getCategory(): string
+    public function getCategory(): ?string
     {
         return $this->category;
     }

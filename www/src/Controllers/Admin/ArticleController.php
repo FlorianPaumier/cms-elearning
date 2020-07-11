@@ -45,7 +45,8 @@ class ArticleController extends BaseController
 
         if($request->getMethod() == "POST" && $form->isValid()) {
             $em = ConfigHandler::get("entityManager");
-            $em->persist($article)->flush();
+            $em->persist($article);
+            $em->flush();
             $this->redirect->redirectToRoute("admin_article_list");
         }
 

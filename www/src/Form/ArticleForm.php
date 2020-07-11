@@ -6,12 +6,14 @@ namespace App\Form;
 
 use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
-use App\Core\Form\Fields\EntityType;
+use App\Core\Form\Fields\CheckboxType;
+use App\Core\Form\Fields\RadioType;
+use App\Core\Form\Fields\SelectType;
 use App\Core\Form\Fields\TextAreaType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
 use App\Entity\Article;
-use App\Entity\Category;
+use App\Repository\CategoryRepository;
 
 class ArticleForm extends AbstractForm
 {
@@ -37,6 +39,13 @@ class ArticleForm extends AbstractForm
 
     public function buildForm(FormBuilder $builder): FormBuilder
     {
+        $categoryRepository = new CategoryRepository();
+        $categoriesAll = $categoryRepository->findAll();
+
+        foreach($categoriesAll as $category) {
+            $categories[$category->getId()] = $category->getCategory();
+        }
+
         return $builder
             ->add("title", TextType::class,[
                 "label" => "Titre",
@@ -44,17 +53,28 @@ class ArticleForm extends AbstractForm
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->add("description", TextAreaType::class, [
-                "label" => "Description",
-                "placeholder" => "Description",
+            ->add("visible", RadioType::class,[
+                "label" => "Visible",
+                "placeholder" => "Visible",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
+                "choices" => [
+                    true => 'show',
+                    false => 'hide'
+                ]
+            ])
+            ->add("idCategory", SelectType::class, [
+                "label" => "Catégorie",
+                "placeholder" => "Catégorie",
+                "required" => false,
+                "class" => "col-md-6 col-lg-6 col-sm-12",
+                "choices" => $categories
             ])
             ->add("content", TextAreaType::class, [
                 "label" => "Contenu",
                 "placeholder" => "Contenu",
                 "required" => true,
-                "class" => "col-md-6 col-lg-6 col-sm-12",
+                "class" => "col-md-6 col-lg-6 col-sm-12 ckeditor",
             ])
             ->add("valider", ButtonType::class, [
                 "label" => "Valider",
@@ -70,7 +90,7 @@ class ArticleForm extends AbstractForm
 
     public function getBlockPrefix(): string
     {
-        return $this->prefix ?? "admin_article";
+        return "admin_article";
     }
 
     /**

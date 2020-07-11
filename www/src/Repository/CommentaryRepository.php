@@ -4,7 +4,9 @@
 namespace App\Repository;
 
 
-class CommentaryRepository
+use App\Core\Database\Repository\AbstractRepository;
+
+class CommentaryRepository extends AbstractRepository
 {
 
 }

@@ -4,7 +4,9 @@
 namespace App\Repository;
 
 
-class ArticleRepository
+use App\Core\Database\Repository\AbstractRepository;
+
+class ArticleRepository extends AbstractRepository
 {
 
 }

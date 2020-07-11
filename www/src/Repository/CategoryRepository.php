@@ -4,7 +4,9 @@
 namespace App\Repository;
 
 
-class CategoryRepository
+use App\Core\Database\Repository\AbstractRepository;
+
+class CategoryRepository extends AbstractRepository
 {
 
 }

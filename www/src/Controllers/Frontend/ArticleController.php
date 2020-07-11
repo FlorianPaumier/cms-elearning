@@ -2,55 +2,37 @@
 
 namespace App\Controllers\Frontend;
 
+use App\Core\Cache\ConfigHandler;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
 use App\Entity\Article;
 use App\Form\ArticleForm;
+use App\Repository\ArticleRepository;
+use App\Repository\CategoryRepository;
+use App\Repository\CommentaryRepository;
 
 class ArticleController extends BaseController
 {
-    public function index(Request $request)
+    public function index(ArticleRepository $repository)
     {
-        return $this->renderer->render("admin/article/article",[
-            "method" => $request->getMethod(),
-            "title" => "Index"
+        $articles = $repository->paginate(5);
+
+        return $this->renderer->render("frontend/article/index",[
+            "articles" => $articles,
+            "title" => "Liste d'articles"
         ]);
     }
 
-    public function list()
+    public function view(Request $request, ArticleRepository $repository,Article $article, CategoryRepository $category, CommentaryRepository $commentary)
     {
-        return $this->renderer->render("admin/article/article_list",[
-            "title" => "Liste d'article"
+        $comments = $commentary->findBy(['id_article' => $article->getId()]);
+        $category = $category->findBy(['id' => $article->getIdCategory()]);
+
+        return $this->renderer->render("frontend/article/view", [
+            "category" => $category,
+            "commentary" => $comments,
+            "article" => $article,
+            "title" => "Modification de l'article"
         ]);
-    }
-
-    public function create()
-    {
-        $form = $this->createForm(ArticleForm::class);
-        return $this->renderer->render("admin/article/article_create",[
-            "title" => "Création d'article",
-            "form" => $form->createView()
-        ]);
-    }
-
-    public function modify()
-    {
-        $article = new Article();
-        $form = $this->createForm(ArticleForm::class, $article);
-        return $this->renderer->render("admin/article/article_modify",[
-            "title" => "Modification d'article"
-        ]);
-    }
-
-    public function design()
-    {
-        return $this->renderer->render("admin/article/article_design",[
-            "title" => "Design d'article"
-        ]);
-    }
-
-    public function destroy()
-    {
-
     }
 }

@@ -18,32 +18,67 @@ class Article
     protected $content;
 
     /** @var int */
-    protected $category;
+    protected $idCategory;
 
     /** @var string */
     protected $image;
 
     /** @var string */
-    protected $creationDate;
+    protected $createDate;
 
     /** @var string */
     protected $editDate;
 
+    /** @var int */
+    protected $idUser;
+
+    /** @var int */
+    protected $visible;
+
+    /**
+     * @return int
+     */
+    public function getVisible(): ?int
+    {
+        return $this->visible;
+    }
+
+    /**
+     * @param int $visible
+     */
+    public function setVisible(?int $visible): void
+    {
+        $this->visible = $visible;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdUser(): ?int
+    {
+        return $this->idUser;
+    }
+
+    /**
+     * @param int $idUser
+     */
+    public function setIdUser(int $idUser): void
+    {
+        $this->idUser = $idUser;
+    }
+
     /**
      * @param string $title
-     * @return string
      */
-    public function setTitle(string $title): string
+    public function setTitle(string $title): void
     {
         $this->title = $title;
-
-        return $this->title;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -51,61 +86,58 @@ class Article
     /**
      * @return string
      */
-    public function getContent(): string
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
     /**
      * @param string $content
-     * @return string
      */
-    public function setContent(string $content): string
+    public function setContent(?string $content): void
     {
         $this->content = $content;
-
-        return $this->content;
     }
 
-    public function getCategory(): int
+    public function getIdCategory(): ?int
     {
-        return $this->category;
+        return $this->idCategory;
     }
 
-    public function setCategory(int $category): int
+    public function setIdCategory(?int $idCategory): void
     {
-        $this->category;
-
-        return $this->category;
+        $this->idCategory = $idCategory;
     }
 
-    public function getImage(): int
+    public function getImage(): ?int
     {
         return $this->image;
     }
 
-    public function setImage(string $image): int
+    public function setImage(?string $image): void
     {
         $this->image = $image;
-
-        return $this->image;
     }
 
-    public function getCreationDate(): string
+    public function getCreateDate(): ?string
     {
-        return $this->creationDate;
+        return $this->createDate;
     }
 
-    public function setEditDate(string $editDate): string
+    public function setCreateDate(?string $createDate): void
+    {
+        $this->createDate = $createDate;
+    }
+
+    public function setEditDate(?string $editDate): void
     {
         $this->editDate = $editDate;
-
-        return $this->editDate;
     }
 
-    public function getEditDate(string $editDate): string
+    public function getEditDate(): ?string
     {
         return $this->editDate;
-
     }
+
+
 }

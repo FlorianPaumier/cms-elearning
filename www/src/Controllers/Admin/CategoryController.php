@@ -11,16 +11,20 @@ use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\Commentary;
 use App\Form\ArticleForm;
+use App\Form\CategoryForm;
 use App\Repository\CategoryRepository;
+use Exception;
 
 class CategoryController extends BaseController
 {
 
-    public function index(Request $request)
+    public function index(CategoryRepository $repository)
     {
-        return $this->renderer->render("admin/category/category",[
-            "method" => $request->getMethod(),
-            "title" => "Index"
+        $category = $repository->paginate(5);
+
+        return $this->renderer->render("admin/category/index",[
+            "categories" => $category,
+            "title" => "Liste d'articles"
         ]);
     }
 
@@ -49,7 +53,7 @@ class CategoryController extends BaseController
         if($request->getMethod() == "POST" && $form->isValid()) {
             $em = ConfigHandler::get("entityManager");
             $em->persist($article)->flush();
-            $this->redirect->redirectToRoute("admin_category_list");
+            $this->redirect->redirectToRoute("admin_category");
         }
 
         return $this->renderer->render("admin/category/new",[

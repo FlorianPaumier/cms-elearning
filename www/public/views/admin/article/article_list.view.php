@@ -18,36 +18,25 @@
                 <th>visible</th>
                 <th>action</th>
             </tr>
-            <tr>
-                <td class="list-content list-checkbox">
-                    <label>
-                        <input type="checkbox">
-                    </label>
-                </td>
-                <td class="list-content list-id">
-                    1
-                </td>
-                <td class="list-content list-title">
-                    Article 1
-                </td>
-                <td class="list-content list-date">
-                    10/01/2020
-                </td>
-                <td class="list-content list-date">
-                    10/01/2020
-                </td>
-                <td class="list-content list-visible">
-                    true
-                </td>
-                <td>
-                    <a href="#">
-                        edit
-                    </a>
-                    <a href="#">
-                        delete
-                    </a>
-                </td>
-            </tr>
+            <?php foreach( $articles['data'] as $article):
+                $id = $article->getId()?>
+                <tr>
+                    <td class="list-content"><input type="checkbox"></td>
+                    <td class="list-content"><?= $article->getId()?></td>
+                    <td class="list-content"><?= $article->getTitle(); ?></td>
+                    <td class="list-content"><?= $article->getCreateDate(); ?></td>
+                    <td class="list-content"><?= $article->getEditDate(); ?></td>
+                    <td class="list-content"><?= 'ok' ?></td>
+                    <td class="list-content">
+                        <a href="/admin/article/edit/<?= $id; ?>">
+                            <button class="btn btn-succes">Modifier</button>
+                        </a>
+                        <a href="/admin/article/delete/<?= $id; ?>">
+                            <button id="delete-lesson" class="btn btn-danger">Delete</button>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
             <?php /* ?>
                 foreach( $articles as $key => $article  ) {
                     <div>

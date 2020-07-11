@@ -1,23 +1,24 @@
 admin_article:
-    path: /admin/article/index
-    controller: App\Controllers\Article\Article:index
+    path: /admin/article
+    controller: App\Controllers\Admin\Article:index
 
 admin_article_list:
     path: /admin/article/list
-    controller: App\Controllers\Article\Article:list
+    controller: App\Controllers\Admin\Article:list
 
-admin_article_create:
+admin_article_new:
     path: /admin/article/new
-    controller: App\Controllers\Article\Article:new
+    controller: App\Controllers\Admin\Article:new
 
 admin_article_modify:
-    path: "/admin/article/edit/{id<\\d+>}"
-    controller: App\Controllers\Article\Article:edit
+    path: /admin/article/edit/{id}
+    controller: App\Controllers\Admin\Article:edit
     method: [GET]
 
 admin_article_design:
     path: /admin/article/design
-    controller: App\Controllers\Article\Article:design
-admin_article_destroy:
-    path: /admin/article/delete
-    controller: App\Controllers\Article\Article:delete
+    controller: App\Controllers\Admin\Article:design
+
+admin_article_delete:
+    path: /admin/article/delete/{id}
+    controller: App\Controllers\Admin\Article:delete

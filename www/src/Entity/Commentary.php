@@ -12,11 +12,11 @@ class Commentary
     /** @var string */
     protected $commentary;
 
-    /** @var string */
-    protected $user;
+    /** @var int */
+    protected $idUser;
 
-    /** @var string */
-    protected $article;
+    /** @var int */
+    protected $idArticle;
 
     /** @var string */
     protected $createDate;
@@ -24,24 +24,53 @@ class Commentary
     /** @var string */
     protected $editDate;
 
-    public function setCommentary(string $commentary){
+    public function setCommentary(?string $commentary): void
+    {
         $this->commentary = $commentary;
+    }
 
+    public function getCommentary(): ?string
+    {
         return $this->commentary;
     }
 
-    public function getCommentary(){
-        return $this->commentary;
+    public function setIdUser(?int $idUser): void
+    {
+        $this->idUser = $idUser;
     }
 
-    public function getUser() {
-        return $this->user;
+    public function getIdUser(): ?int
+    {
+        return $this->idUser;
     }
 
-    public function getArticle() {
-        return $this->article;
+    public function setIdArticle(?int $idArticle): void
+    {
+        $this->idArticle = $idArticle;
     }
 
+    public function getIdArticle(): ?int
+    {
+        return $this->idArticle;
+    }
 
+    public function setCreateDate(?string $createDate): void
+    {
+        $this->createDate = $createDate;
+    }
 
+    public function getCreateDate(): ?string
+    {
+        return $this->createDate;
+    }
+
+    public function setEditDate(?string $editDate): void
+    {
+        $this->editDate = $editDate;
+    }
+
+    public function getEditDate(): ?string
+    {
+        return $this->editDate;
+    }
 }

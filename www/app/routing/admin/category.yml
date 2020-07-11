@@ -1,16 +1,21 @@
 admin_category:
+  path: /admin/category
+  controller: App\Controllers\Admin\Category:index
+
+admin_category_index:
   path: /admin/category/index
-  controller: App\Controllers\Category\Category:index
+  controller: App\Controllers\Admin\Category:index
 
-admin_category_create:
+admin_category_new:
   path: /admin/category/new
-  controller: App\Controllers\Category\Category:new
+  controller: App\Controllers\Admin\Category:new
 
-admin_category_modify:
-  path: "/admin/category/edit/{id<\\d+>}"
-  controller: App\Controllers\Category\Category:edit
+admin_category_edit:
+  path: /admin/category/edit/{id}
+  controller: App\Controllers\Admin\Category:edit
   method: [GET]
 
-admin_category_destroy:
-  path: /admin/category/delete
-  controller: App\Controllers\Category\Category:delete
+admin_category_delete:
+  path: /admin/category/delete/{id}
+  controller: App\Controllers\Admin\Category:delete
+  method: [GET]

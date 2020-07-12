@@ -8,6 +8,8 @@ use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\CollectionType;
 use App\Core\Form\Fields\EntityType;
+use App\Core\Form\Fields\ImageType;
+use App\Core\Form\Fields\SelectType;
 use App\Core\Form\Fields\TextAreaType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
@@ -29,24 +31,16 @@ class LessonForm extends AbstractForm
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
+            ->add("thumbnail", ImageType::class, [
+                "label" => "Thumbnail",
+                "required" => false,
+                "class" => "col-md-6 col-lg-6 col-sm-12",
+            ])
             ->add("description", TextAreaType::class, [
                 "label" => "Description",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12 ckeditor",
             ])
-            ->add("content", TextAreaType::class, [
-                "label" => "Introduction du cours",
-                "required" => true,
-                "class" => "col-md-6 col-lg-6 col-sm-12 ckeditor",
-            ])
-//            ->add("chapters", EntityType::class, [
-//                "label" => "Chapitres",
-//                "required" => false,
-//                "multiple" => true,
-//                "entry_type" => LessonChapter::class,
-//                "choice_label" => "title",
-//                "class" => "col-md-6 col-lg-6 col-sm-12 select-two",
-//            ])
             ->add("valider", ButtonType::class, [
                 "label" => "Valider",
                 "class" => "btn-submit",

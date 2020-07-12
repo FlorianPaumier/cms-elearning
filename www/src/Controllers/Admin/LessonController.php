@@ -62,6 +62,7 @@ class LessonController extends BaseController
         $form->handleRequest($request);
 
         if ($request->getMethod() == "POST" && $form->isValid()) {
+
             /** @var EntityManager $em */
             $em = ConfigHandler::get("entityManager");
             $em->persist($lesson);
@@ -72,7 +73,8 @@ class LessonController extends BaseController
 
         return $this->renderer->render("admin/lessons/new", [
             "form" => $form->createView(),
-            'title' => "Création d'un Cour"
+            'title' => "Création d'un Cour",
+            "errors" => $form->getErrorFeedback(),
         ]);
     }
 

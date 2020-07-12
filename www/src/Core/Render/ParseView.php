@@ -67,7 +67,7 @@ class ParseView
             }
 
             if (!is_null($html)) {
-                $regex = addcslashes($tag[0], "/|()");
+                $regex = addcslashes($tag[0], "/|()[]");
                 $functions[$regex] = $html;
             }
         }

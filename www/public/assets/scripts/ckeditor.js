@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
     createCkeditor($(".form-container"));
 });
@@ -8,19 +7,13 @@ function createCkeditor(container){
     let component = $(container).find(".ckeditor");
 
     component.each((key,element) => {
-        ClassicEditor
-            .create( element , {
-                filebrowserBrowseUrl: '/assets/scripts/ckfinder/ckfinder.html',
-                filebrowserImageBrowseUrl: '/assets/scripts/ckfinder/ckfinder.html?type=Images',
-                filebrowserUploadUrl: '/assets/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
-                filebrowserImageUploadUrl: '/assets/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
-                ckfinder: {
-                    openerMethod: 'popup',
-                    uploadUrl: '/assets/scripts/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json'
-                }
-            })
-            .catch( error => {
-                console.error( error );
-            } );
-    })
+        $(element).froalaEditor({
+            // Set the file upload URL.
+            imageUploadURL: '/upload/file',
+
+            imageUploadParams: {
+                id: 'my_editor'
+            }
+        })
+    });
 }

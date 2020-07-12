@@ -33,8 +33,6 @@ abstract class EntityHelper
 
         $reflection = new \ReflectionClass($object);
 
-        dump($reflection->getProperties());
-
         return [];
     }
 }

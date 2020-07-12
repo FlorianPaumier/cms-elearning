@@ -63,10 +63,13 @@ abstract class Hydrator
                         $repo = ConfigHandler::get("entityManager")->getRepository($class . "Repository");
                         $value = $repo->find($value);
                     }
-
                 }
+
                 self::$recursif = false;
                 ConfigHandler::get("entityManager")->setEntity(get_class($instance));
+            }else if(!is_null($type) && self::isRecursif()){
+                $class = $type->getName();
+                $value = (new $class())->setId($value);
 
             }
 

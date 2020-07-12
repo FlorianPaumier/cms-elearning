@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Users;
 
+use App\Core\Cache\ConfigHandler;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
@@ -37,6 +38,9 @@ class UserController extends BaseController
 
     public function register(Request $request)
     {
+        /*if($this->userManager->isConnected()){
+        $this->redirect->redirectToRoute("app_home");
+        }*/
         $user = new user();
         $form = $this->createForm(UserRegisterForm::class, $user);
         $form->handleRequest($request);
@@ -46,7 +50,6 @@ class UserController extends BaseController
             if ($form->isValid()) {
                 $password = $user->getPassword();
                 $user->setPassword(md5($password));
-                $user->updateTimestamps();
                 
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();

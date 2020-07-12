@@ -38,7 +38,7 @@
                     <span class="icon"><i class="fa fa-user"></i></span>
                     <div class="login-menu">
                         <?php
-                        if ($_SESSION["app.user"]):
+                        if ($session):
                             ?>
                             <a href="@path(app_user_logout)">Déconnexion</a>
                         <?php
@@ -68,8 +68,9 @@
 
 </section>
 
-<?php
 
+<?php
+dump($session);
 if (isset($session)) {
     if (isset($flash)) {
         if (isset($flash["success"])) {

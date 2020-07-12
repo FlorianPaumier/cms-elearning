@@ -25,15 +25,11 @@ class <?= $class_name ?> extends AbstractForm
     /**
     * @inheritDoc
     */
-    public function setBlockPrefix(string $prefix = null)
+    public function getBlockPrefix()
     {
-        $this->prefix = "<?= $prefix ?>";
+        return "<?= $prefix ?>";
     }
 
-    public function getBlockPrefix(): string
-    {
-        return $this->prefix;
-    }
 
 
 }

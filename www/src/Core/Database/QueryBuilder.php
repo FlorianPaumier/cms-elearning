@@ -69,6 +69,7 @@ abstract class QueryBuilder
     protected $entity = null;
 
     protected $relations = [];
+    protected $orWhere = [];
 
     public function __construct(\PDO $pdo = null)
     {
@@ -138,6 +139,16 @@ abstract class QueryBuilder
     public function andWhere(string $condition): self
     {
         $this->where[] = $condition;
+
+        return $this;
+    }
+    /**
+     * @param string $condition
+     * @return $this
+     */
+    public function orWhere(string $condition): self
+    {
+        $this->orWhere[] = $condition;
 
         return $this;
     }
@@ -269,6 +280,12 @@ abstract class QueryBuilder
                 foreach ($this->where as $selector) {
                     $sql .= " AND " . $selector;
                 }
+            }
+        }
+
+        if(!empty($this->orWhere)){
+            foreach ($this->orWhere as $or){
+                $sql .= " OR ". $or;
             }
         }
 

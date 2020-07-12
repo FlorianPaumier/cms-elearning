@@ -15,4 +15,4 @@ admin_contact_edit:
 admin_contact_delete:
   path: /admin/contact/delete/{id}
   controller: App\Controllers\Admin\Contact:delete
-  method: [DELETE]
+  method: [GET]

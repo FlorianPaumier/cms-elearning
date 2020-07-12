@@ -27,7 +27,7 @@ services:
       POSTGRES_USER: utilisateur
       POSTGRES_DB: project_cms
     volumes:
-      - db_data:/var/lib/postgres
+      - ./db_data:/var/lib/postgresql
     ports:
       - 5432:5432
   php:
@@ -59,4 +59,4 @@ services:
     depends_on:
       - postgres
 volumes:
-  db_data: {}
+  db_data:

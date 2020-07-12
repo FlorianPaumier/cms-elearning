@@ -70,7 +70,7 @@
 
 
 <?php
-dump($session);
+
 if (isset($session)) {
     if (isset($flash)) {
         if (isset($flash["success"])) {

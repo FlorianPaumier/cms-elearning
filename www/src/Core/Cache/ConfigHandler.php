@@ -64,7 +64,7 @@ class ConfigHandler
             self::bind("mailer", new MailerMessage());
         }
 
-        self::bind("session", new PHPSession());
+        self::bind("session",new PHPSession());
         self::bind("entityManager", new EntityManager());
         self::bind("userManager", new UserManager());
         self::bind("router", new Router());

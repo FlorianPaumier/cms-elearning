@@ -10,6 +10,9 @@ class RequestHandler
         "DELETE"
     ];
 
+    /**
+     * @var
+     */
     protected $query;
     protected $request;
     protected $attribute;

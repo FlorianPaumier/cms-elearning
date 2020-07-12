@@ -9,17 +9,10 @@ use App\Core\Request\SessionBag;
 class PHPSession implements \ArrayAccess
 {
 
-    /** @var SessionBag */
-    private $session;
-
-    public function __construct()
-    {
-        $this->session = ConfigHandler::get("request")->getSession();
-    }
 
     public function getSession()
     {
-        return $this->session->all();
+        return $_SESSION;
     }
 
     /**
@@ -37,7 +30,7 @@ class PHPSession implements \ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return $this->session->exist($offset);
+        return array_key_exists($offset, $_SESSION);
     }
 
     /**
@@ -52,8 +45,8 @@ class PHPSession implements \ArrayAccess
      */
     public function offsetGet($offset)
     {
-        if ($this->session->exist($offset)) {
-            return $this->session->get($offset);
+        if ($this->offsetExists($offset)) {
+            return $_SESSION[$offset];
         }
         return false;
     }
@@ -76,7 +69,7 @@ class PHPSession implements \ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        return $this->session->set($offset, $value);
+        return $_SESSION[$offset] =  $value;
     }
 
     /**
@@ -91,6 +84,6 @@ class PHPSession implements \ArrayAccess
      */
     public function offsetUnset($offset)
     {
-        $this->session->delete($offset);
+        unset($_SESSION[$offset]);
     }
 }

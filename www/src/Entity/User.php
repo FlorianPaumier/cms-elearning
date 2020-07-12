@@ -7,6 +7,7 @@ use App\Core\Interfaces\Entity;
 class User
 {
     use Entity;
+    use TimestampableEntity;
 
     protected $username;
     protected $password;
@@ -110,7 +111,7 @@ class User
     /**
      * @return string
      */
-    public function getForgetPasswordToken()
+    public function getForgetPasswordToken(): string
     {
         return $this->forgetPasswordToken;
     }
@@ -118,7 +119,7 @@ class User
     /**
      * @param string $forgetPasswordToken
      */
-    public function setForgetPasswordToken(string $forgetPasswordToken): User
+    public function setForgetPasswordToken( string $forgetPasswordToken): User
     {
         $this->forgetPasswordToken = $forgetPasswordToken;
         $this->setForgetPasswordTokenAvailable();
@@ -128,7 +129,7 @@ class User
     /**
      * @return \DateTime
      */
-    public function getForgetPasswordTokenAvailable()
+    public function getForgetPasswordTokenAvailable(): \DateTime
     {
         return $this->forgetPasswordTokenAvailable;
     }
@@ -141,4 +142,6 @@ class User
         $this->forgetPasswordTokenAvailable = new \DateTime("+ 5 minutes");
         return $this;
     }
+
+
 }

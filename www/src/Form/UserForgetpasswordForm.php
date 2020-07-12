@@ -19,6 +19,7 @@ class UserForgetpasswordForm extends AbstractForm
                     'type' => 'email',
                     'required' => true,
                     'label' => 'Email',
+                    'placeholder' => 'exemple@gmail.com',
                     "class" => "form-control form-control-user",
                     "before" => "<i class=\"fa fa-user\"></i>",
                 ]

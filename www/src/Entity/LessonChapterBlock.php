@@ -11,8 +11,8 @@ class LessonChapterBlock
 
     use Entity;
 
-    /** @var int */
-    protected $idChapter;
+    /** @var LessonChapter */
+    protected $chapter;
 
     /** @var string */
     protected $title;
@@ -21,22 +21,23 @@ class LessonChapterBlock
     protected $content;
 
     /**
-     * @return int
+     * @return LessonChapter
      */
-    public function getIdChapter(): int
+    public function getChapter(): LessonChapter
     {
-        return $this->idChapter;
+        return $this->chapter;
     }
 
     /**
-     * @param int $idChapter
+     * @param LessonChapter $chapter
      * @return LessonChapterBlock
      */
-    public function setIdChapter(int $idChapter): LessonChapterBlock
+    public function setChapter(LessonChapter $chapter): LessonChapterBlock
     {
-        $this->idChapter = $idChapter;
+        $this->chapter = $chapter;
         return $this;
     }
+
 
     /**
      * @return string

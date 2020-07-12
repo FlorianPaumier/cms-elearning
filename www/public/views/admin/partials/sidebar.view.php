@@ -36,7 +36,7 @@
                 <span>Cours</span>
                 <ul class="submenu">
                     <a href="@path(admin_lesson_list)"><li>Cours</li></a>
-                    <a href="@path(admin_lesson_chapter_list)"><li>Chapitre</li></a>
+                    <a href="@path(admin_lesson_chapter_index)"><li>Chapitre</li></a>
                 </ul>
             </li>
             <li class="item">

@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Users;
 
+use App\Core\Cache\ConfigHandler;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
@@ -27,7 +28,7 @@ class UserController extends BaseController
 
 
         return $this->renderer->render(
-            "security/login",
+            ROOT_PATH . "/public/views/security/frontend/login",
             [
                 "form" => $form->createView(),
                 "errors" => [],
@@ -48,11 +49,10 @@ class UserController extends BaseController
 
             if ($form->isValid()) {
                 $password = $user->getPassword();
-                $user->setPassword(md5($password));
-
-
-                $this->repository->persist($user);
-                $this->repository->flush();
+                $user->setPassword(password_hash($password, PASSWORD_BCRYPT));
+                
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
 
                 $this->redirect->redirectToRoute("app_user_login");
             } else {
@@ -79,6 +79,7 @@ class UserController extends BaseController
             if (($response = $this->userManager->connectUser($user->getUsername(), $user->getPassword())) !== true) {
                 $this->session->set("app.flash", ["error" => [$response]]);
             } else {
+//                dump(ConfigHandler::get("session")->getSession());
                 $this->redirect->redirectToRoute("app_home");
             }
         }
@@ -124,9 +125,9 @@ class UserController extends BaseController
 
         if(empty($currentUser)) $this->redirect->redirectToRoute('app_user_login');
 
-        $user = $this->repository->setEntity(User::class)->findBy(["email" => $currentUser["user"]]);
+        $user = $this->entityManager->setEntity(User::class)->findBy(["email" => $currentUser["user"]]);
 
-        if($this->repository->from("user")->delete($user->getId())) {
+        if($this->entityManager->from("user")->delete($user->getId())) {
             $this->session->offsetUnset("app.user");
         }else{
                 $this->redirect->redirectToRoute("app_user_profile");

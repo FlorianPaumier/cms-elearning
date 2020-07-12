@@ -14,21 +14,13 @@ class PHPSession implements \ArrayAccess
 
     public function __construct()
     {
-        $this->ensureStarted();
         $this->session = ConfigHandler::get("request")->getSession();
     }
 
-    /**
-     * Assure que la Session est démarrée
-     */
-    private function ensureStarted()
+    public function getSession()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-//            session_start();
-        }
+        return $this->session->all();
     }
-
-
 
     /**
      * Whether a offset exists
@@ -45,7 +37,6 @@ class PHPSession implements \ArrayAccess
      */
     public function offsetExists($offset)
     {
-        $this->ensureStarted();
         return $this->session->exist($offset);
     }
 
@@ -64,7 +55,7 @@ class PHPSession implements \ArrayAccess
         if ($this->session->exist($offset)) {
             return $this->session->get($offset);
         }
-        return [];
+        return false;
     }
 
     /**
@@ -101,33 +92,5 @@ class PHPSession implements \ArrayAccess
     public function offsetUnset($offset)
     {
         $this->session->delete($offset);
-    }
-
-    /**
-     * @param string $key
-     * @param mixed|null $default
-     * @return mixed
-     */
-    public function get(string $key, $default = null)
-    {
-        // TODO: Implement get() method.
-    }
-
-    /**
-     * @param string $key
-     * @param $value
-     * @return mixed|void
-     */
-    public function set(string $key, $value): void
-    {
-        // TODO: Implement set() method.
-    }
-
-    /**
-     * @param string $key
-     */
-    public function delete(string $key): void
-    {
-        // TODO: Implement delete() method.
     }
 }

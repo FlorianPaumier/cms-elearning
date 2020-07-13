@@ -41,6 +41,9 @@ abstract class Hydrator
         $serializer = new Serializer();
 
         foreach ($array as $key => $value) {
+
+            if (is_null($value)) continue;
+
             if (self::$relations) {
                 $key = str_replace(EntityHelper::getClass($instance) . "s_", "", $key);
             }

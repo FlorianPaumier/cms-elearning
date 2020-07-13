@@ -57,34 +57,21 @@ class UserController extends BaseController
         ]);
     }
 
-    public function edit(Request $request, Lesson $lesson)
+    public function editUser(Request $request, User $user)
     {
-        $chapters = $this->repository
-            ->from("lesson_chapter", "lc")
-            ->select("id","title")
-            ->join("INNER JOIN", "lesson on lc.lesson_id = lesson.id")
-            ->where("lesson.id = :id")
-            ->setParam("id", $lesson->getId())
-            ->fetchOrFail();
-
-        foreach ($chapters as $chapter){
-            $lesson->addChapters(Hydrator::hydrate($chapter, LessonChapter::class));
-        }
-
-        $form = $this->createForm(LessonForm::class, $lesson);
+        $form = $this->createForm(AdminUserForm::class, $user);
         $form->handleRequest($request);
 
         if ($request->getMethod() == "POST" && $form->isValid()) {
-            $em = ConfigHandler::get("repository");
-            $em->persist($lesson);
+            $em = ConfigHandler::get("entityManager");
+            $em->persist($user);
             $em->flush();
-            $this->redirect->redirectToRoute("admin_lesson_list");
+            $this->redirect->redirectToRoute("admin_user_list");
         }
 
-
-        return $this->renderer->render("admin/lessons/new", [
-            "form" => $form->createView(),
-            'title' => "Création d'un Cour"
+        return $this->renderer->render("admin/users/new", [
+            'form' => $form->createView(),
+            'title' => "Modification d'un utilisateur"
         ]);
     }
 

@@ -202,4 +202,26 @@ class UserManager
     public function deleteUser(string $email)
     {
     }
+
+    public function confirmRegister(string $email)
+    {
+        if ($this->entityManager->from("user")->exists(["email" => $email])) {
+
+            $user = $this->entityManager->setEntity(User::class)->findBy(["email" => $email]);
+            $user->setconfirmationToken(bin2hex(random_bytes(32)));
+
+            $server = ConfigHandler::get("request")->getServer();
+            $mailer = new MailerHandler();
+            $message = (new MailerMessage())
+                ->setSubjet("Confirmation de l'inscription")
+                ->setBody("<a href='" . $server['HTTP_HOST'] . "/confirmation=" . $user->getconfirmationToken() . "'>Confirmation de votre inscription</a>")
+                ->setDest($email)
+                ->setContentType("text/html");
+            if ($mailer->send($message)) {
+                return "un mail a été envoyé";
+            }
+
+            return "Un problème est survenue lors de l'envoi";
+        }
+    }
 }

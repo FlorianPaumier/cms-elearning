@@ -25,7 +25,8 @@
             <tr>
                 <td><?= $user->getId(); ?></td>
                 <td><?= $user->getUsername(); ?></td>
-                <td class="row position-btn">
+
+                <td class="row">
                     <a href="@path(admin_user_edit, <?= $user->getId(); ?>)">
                         <button class="btn btn-succes">Modifier</button>
                     </a>

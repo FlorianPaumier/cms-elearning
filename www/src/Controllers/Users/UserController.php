@@ -58,6 +58,21 @@ class UserController extends BaseController
             } else {
                 $this->session->set("app.flash", ["error" => $form->getErrors()]);
             }
+
+            $email = $user->get("email");
+
+            if (($response = $this->userManager->confirmRegister($email)) !== true) {
+
+                $this->session->set("app.flash", ["error" => [$response]]);
+
+                if (($response = $this->userManager->confirmRegister($email)) == true) {
+
+                   $user->setRoles(1);
+
+                }
+            } else {
+                $this->redirect->redirectToRoute("app_home");
+            }
         }
 
         return $this->renderer->render(

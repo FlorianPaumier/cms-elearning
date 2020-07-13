@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
+use App\Core\Form\Fields\CheckboxType;
 use App\Core\Form\Fields\PasswordType;
 use App\Core\Form\Fields\SelectType;
 use App\Core\Form\Fields\TextType;
@@ -55,10 +56,29 @@ class AdminUserForm extends AbstractForm
                     "mapped" => false,
                 ]
             )
+            /*->add(
+                "roles", SelectType::class, [
+                    'required' => true,
+                    'choices' => ['ROLE_USER'=> 'utilisateur', 'ROLE_ADMIN' => 'admin'],
+                    'label' => 'Choix du rôle',
+                    'multiple' => true,
+                    'placeholder' => '',
+                    "class" => "form-control form-control-user select-two",
+                ]
+            )*/
+            ->add(
+                "status", CheckboxType::class, [
+                    'required' => true,
+                    'choices' => [true => 'choix du status'],
+                    'label' => '',
+                    'placeholder' => '',
+                    "class" => "form-control form-control-user",
+                ]
+            )
             ->add(
                 "submit", ButtonType::class, [
                     'type' => 'submit',
-                    'label' => "S'inscrire",
+                    'label' => "Valider",
                     "class" => "btn",
                 ]
             );

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
 
 class User
@@ -23,6 +24,23 @@ class User
 
     protected $roles = ["ROLE_USER"];
 
+    protected $confirmationToken;
+
+    /**
+     * @return mixed
+     */
+    public function getConfirmationToken()
+    {
+        return $this->confirmationToken;
+    }
+
+    /**
+     * @param mixed $confirmationToken
+     */
+    public function setConfirmationToken($confirmationToken): void
+    {
+        $this->confirmationToken = $confirmationToken;
+    }
 
     /**
      * @return mixed
@@ -63,20 +81,10 @@ class User
         return $this->email;
     }
 
-    public function setEmail($email): void
+    public function setEmail($email): User
     {
         $this->email = $email;
-    }
-
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function setId($id): void
-    {
-        $this->id = $id;
+        return $this;
     }
 
 
@@ -93,7 +101,7 @@ class User
     /**
      * @return string[]
      */
-    public function getRoles(): array
+    public function getRoles(): ?array
     {
         return $this->roles;
     }
@@ -111,7 +119,7 @@ class User
     /**
      * @return string
      */
-    public function getForgetPasswordToken(): string
+    public function getForgetPasswordToken(): ?string
     {
         return $this->forgetPasswordToken;
     }
@@ -119,7 +127,7 @@ class User
     /**
      * @param string $forgetPasswordToken
      */
-    public function setForgetPasswordToken( string $forgetPasswordToken): User
+    public function setForgetPasswordToken( ?string $forgetPasswordToken): User
     {
         $this->forgetPasswordToken = $forgetPasswordToken;
         $this->setForgetPasswordTokenAvailable();
@@ -129,7 +137,7 @@ class User
     /**
      * @return \DateTime
      */
-    public function getForgetPasswordTokenAvailable(): \DateTime
+    public function getForgetPasswordTokenAvailable(): ?\DateTime
     {
         return $this->forgetPasswordTokenAvailable;
     }

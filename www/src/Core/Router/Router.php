@@ -118,7 +118,7 @@ class Router
      * @param string $route
      * @return string|null
      */
-    public function getPath(string $route, string $params = null): ?string
+    public function getPath(string $route, $params = null): ?string
     {
         $path = key_exists($route, $this->routes) ? $this->routes[$route]["path"] : null;
 
@@ -129,10 +129,12 @@ class Router
         if (!is_null($params)) {
             $pathTab = explode("/", $path);
 
-            if (strpos($params, "[") !== false) {
-                $params = json_decode($params);
-            } else {
-                $params = [$params];
+            if (gettype($params) === "string") {
+                if (strpos($params, "[") !== false) {
+                    $params = json_decode($params);
+                } else {
+                    $params = [$params];
+                }
             }
 
             foreach ($params as $param) {

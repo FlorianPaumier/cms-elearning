@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
 
 class User

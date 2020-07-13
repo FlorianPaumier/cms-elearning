@@ -9,6 +9,6 @@ app_catalogue_show:
   method: [GET]
 
 app_catalogue_notate:
-  path: "/cours/{id}"
-  controller: App\Controllers\Cours:show
+  path: "/cours/{id}/notation"
+  controller: App\Controllers\Cours:notation
   method: [GET]

@@ -10,6 +10,7 @@ use App\Core\Evaluation\EvaluationObject;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
 use App\Core\Router\Router;
+use App\Repository\EvaluationMetaRepository;
 use App\Repository\EvaluationObjectRepository;
 
 class NotationController extends BaseController
@@ -29,10 +30,21 @@ class NotationController extends BaseController
         ]);
     }
 
-    public function edit(Request $request,EvaluationObject $evaluationObject, EvaluationObjectRepository $repository)
+    public function edit(Request $request,EvaluationObject $evaluationObject, EvaluationMetaRepository $repository)
     {
+        if($request->getMethod() == "POST"){
+            $rate = $request->getRequest()->get("rating");
+            $evaluationObject->setRating($rate);
+
+            $this->entityManager->persist($evaluationObject)->flush();
+
+            $this->redirect->redirectToRoute("admin_notation_index", ["id" => $evaluationObject->getEvaluation()->getId()]);
+        }
+
         return $this->render("admin/notation/edit",  [
-            "evaluation" => $repository->findWithMeta($evaluationObject),
+            "eval" => $evaluationObject->getEvaluation(),
+            "evaluation" => $evaluationObject,
+            "inputs" => $repository->findBy(["evaluation_object_id" => $evaluationObject->getId()]),
         ]);
     }
 

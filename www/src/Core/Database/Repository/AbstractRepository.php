@@ -79,7 +79,7 @@ abstract class AbstractRepository extends QueryBuilder
         }
 
         $this->setParameters($params);
-        return $this->fetch();
+        return $this->fetch() ?? [];
     }
 
     /**

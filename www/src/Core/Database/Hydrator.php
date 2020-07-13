@@ -41,9 +41,6 @@ abstract class Hydrator
         $serializer = new Serializer();
 
         foreach ($array as $key => $value) {
-
-            if (is_null($value)) continue;
-
             if (self::$relations) {
                 $key = str_replace(EntityHelper::getClass($instance) . "s_", "", $key);
             }
@@ -84,6 +81,8 @@ abstract class Hydrator
                 $value = new \DateTime($value);
             }
 
+            if (is_null($value)) continue;
+
             $instance->$method($value);
 
             $i++;
@@ -108,6 +107,8 @@ abstract class Hydrator
 
         foreach ($array as $row) {
             foreach ($row as $key => $value) {
+                if (is_null($value)) continue;
+
                 if (strpos($key, $principalKey) !== false) {
                     $propertie = str_replace($principalKey, "", $key);
                     $id = $principalKey . $row[$principalKey . "id"];
@@ -150,10 +151,9 @@ abstract class Hydrator
                         foreach ($array as $row) {
                             $currentInstance = new $typeName();
                             foreach ($row as $fieldName => $value) {
-                                $parentId = $joinClass . "s_" . $principalClass . "_id";
-
-                                if (strpos($fieldName, $joinClass . "s_") !== false) {
-                                    $propertie = str_replace($joinClass . "s_", "", $fieldName);
+                                $parentId = $joinClass . "_" . $principalClass . "_id";
+                                if (strpos($fieldName, $joinClass . "_") !== false) {
+                                    $propertie = str_replace($joinClass . "_", "", $fieldName);
                                     $method = self::getSetter($propertie);
                                     if (method_exists($currentInstance, $method)) {
                                         $type = self::getParameterType($currentInstance, $method);

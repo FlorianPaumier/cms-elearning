@@ -367,7 +367,7 @@ abstract class QueryBuilder
                     $alias = $this->alias;
                     if(!in_array("*", $this->select))
                         $this->select = array_map(function ($value) use ($alias) {
-                            return  "$alias.$value";
+                            return  "$value";
                         }, $this->select);
                 } elseif ($this->relations) {
                     $this->alias = $this->from;

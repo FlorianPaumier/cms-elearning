@@ -4,6 +4,7 @@
 namespace App\Core\Evaluation;
 
 
+use App\Core\Collections\ArrayCollection;
 use App\Core\Form\FormBuilder;
 use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
@@ -24,8 +25,14 @@ class EvaluationObject
      */
     private $evaluation;
 
+    /** @var ArrayCollection */
+    private $evaluationMeta;
+
     /** @var User */
     private $user;
+
+    /** @var integer */
+    private $rating;
 
     /**
      * @return string
@@ -95,5 +102,31 @@ class EvaluationObject
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getRating(): ?int
+    {
+        return $this->rating;
+    }
 
+    /**
+     * @param int $rating
+     * @return EvaluationObject
+     */
+    public function setRating(int $rating): EvaluationObject
+    {
+        $this->rating = $rating;
+        return $this;
+    }
+
+    public function addEvaluationMeta(EvaluationMeta $evaluationMeta)
+    {
+        $this->evaluationMeta[] = $evaluationMeta;
+    }
+
+    public function getEvaluationMeta()
+    {
+        return $this->evaluationMeta;
+    }
 }

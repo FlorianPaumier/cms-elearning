@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Users;
 
+use App\Core\Cache\ConfigHandler;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
@@ -48,7 +49,7 @@ class UserController extends BaseController
 
             if ($form->isValid()) {
                 $password = $user->getPassword();
-                $user->setPassword(md5($password));
+                $user->setPassword(password_hash($password, PASSWORD_BCRYPT));
                 
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
@@ -78,6 +79,7 @@ class UserController extends BaseController
             if (($response = $this->userManager->connectUser($user->getUsername(), $user->getPassword())) !== true) {
                 $this->session->set("app.flash", ["error" => [$response]]);
             } else {
+//                dump(ConfigHandler::get("session")->getSession());
                 $this->redirect->redirectToRoute("app_home");
             }
         }

@@ -4,9 +4,11 @@
 namespace App\Core\Evaluation;
 
 
+use App\Core\Collections\ArrayCollection;
 use App\Core\Form\FormBuilder;
 use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
+use App\Entity\User;
 
 class EvaluationObject
 {
@@ -23,6 +25,15 @@ class EvaluationObject
      */
     private $evaluation;
 
+    /** @var ArrayCollection */
+    private $evaluationMeta;
+
+    /** @var User */
+    private $user;
+
+    /** @var integer */
+    private $rating;
+
     /**
      * @return string
      */
@@ -35,7 +46,7 @@ class EvaluationObject
      * @param string $name
      * @return EvaluationObject
      */
-    public function setName(string $name): EvaluationObject
+    public function setName(?string $name): EvaluationObject
     {
         $this->name = $name;
         return $this;
@@ -53,7 +64,7 @@ class EvaluationObject
      * @param bool $enabled
      * @return EvaluationObject
      */
-    public function setEnabled(bool $enabled): EvaluationObject
+    public function setEnabled(?bool $enabled): EvaluationObject
     {
         $this->enabled = $enabled;
         return $this;
@@ -71,5 +82,51 @@ class EvaluationObject
     public function getEvaluation(): ?Evaluation
     {
         return $this->evaluation;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     * @return EvaluationObject
+     */
+    public function setUser(User $user): EvaluationObject
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRating(): ?int
+    {
+        return $this->rating;
+    }
+
+    /**
+     * @param int $rating
+     * @return EvaluationObject
+     */
+    public function setRating(int $rating): EvaluationObject
+    {
+        $this->rating = $rating;
+        return $this;
+    }
+
+    public function addEvaluationMeta(EvaluationMeta $evaluationMeta)
+    {
+        $this->evaluationMeta[] = $evaluationMeta;
+    }
+
+    public function getEvaluationMeta()
+    {
+        return $this->evaluationMeta;
     }
 }

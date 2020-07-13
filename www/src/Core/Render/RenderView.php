@@ -24,43 +24,9 @@ class RenderView
     public function __construct()
     {
         $this->templateEngine = new TemplateEngine();
-        $this->defaultData["session"] = ConfigHandler::get("session");
+        $this->defaultData["session"] = ConfigHandler::get("session")->getSession();
     }
 
-    /**
-     * @param string $template
-     * @param array $param
-     * @return false|string
-     */
-//    public static function include(string $template, array $param = [])
-//    {
-//        $defaultData = [
-//            "session" => ConfigHandler::get("session")->offsetGet("app.user") ? ["connected" => true, "roles" => null] : ["connected" => false, "roles" => null],
-//            "flash" => ConfigHandler::get("session")->get("app.flash") ?? "",
-//        ];
-//
-//        ob_start();
-//
-//        extract($param, EXTR_OVERWRITE);
-//        extract($defaultData, EXTR_SKIP);
-//
-//        $includeEngine = new TemplateEngine();
-//
-//        if($includeEngine->setView($template)) {
-//            $includeEngine->setData(["parameter" => $param, "config" => $param]);
-//            $includeEngine->generate_markup();
-//            $includeEngine->compile(false);
-//        }else{
-//            ExceptionHandler::defaultRequestHandler("View Not Found");
-//        }
-//
-//        $ret = ob_get_contents();
-//        ob_end_clean();
-//
-//        return $ret;
-//
-//    }
-//
 
     /**
      * Parse and Include the file
@@ -107,7 +73,7 @@ class RenderView
 
             if($display){
                 if(ConfigHandler::get("session")){
-                    ConfigHandler::get("session")->set("app.flash", null);
+                    ConfigHandler::get("session")->offsetSet("app.flash", null);
                 }
                 return $this->templateEngine->compile($display);
             }

@@ -55,6 +55,6 @@ abstract class FileUploader
 
         move_uploaded_file($tmpName, self::$rootPath.$dir.$fileName);
 
-        return self::$rootUri.$dir."/".$fileName;
+        return self::$rootUri.$dir.$fileName;
     }
 }

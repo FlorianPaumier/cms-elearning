@@ -29,16 +29,20 @@ class RolesManager
     {
         $user = $this->userManager->getUser();
 
-        if(!key_exists($key, $this->container["allow"]) && !key_exists($key, $this->container["deny"])){
+        if (!key_exists($key, $this->container["allow"]) && !key_exists($key, $this->container["deny"])) {
             return true;
         }
 
         $allow = $this->offsetExist($this->container["allow"], $key, $user);
         $deny = $this->offsetExist($this->container["deny"], $key, $user);
 
-        if($allow && !$deny) return false;
+        if ($allow && !$deny) {
+            return false;
+        }
 
-        if(!$allow && $deny) return false;
+        if (!$allow && $deny) {
+            return false;
+        }
 
         return true;
     }
@@ -48,7 +52,8 @@ class RolesManager
         $this->container["allow"][$key] = $roles;
     }
 
-    public function denied(string $key, $roles){
+    public function denied(string $key, $roles)
+    {
         $this->container["deny"][$key] = $roles;
     }
 
@@ -59,32 +64,42 @@ class RolesManager
 
         $role = "";
 
-        if(!empty($user)){
+        if (!empty($user)) {
             $role = $user["roles"];
         }
 
-        if(key_exists($key, $route)){
-            $roles =  $route[$key];
+        if ($role == "ROLE_ADMIN" || in_array("ROLE_ADMIN", $role)) {
+            return true;
+        }
 
-            if(gettype($roles) === "string"){
-                return $roles ==  $role;
-            }else{
-                $role = array_search($role, $roles);
-                return $role !== false;
+        if (key_exists($key, $route)) {
+            $roles = $route[$key];
+
+            if (is_string($roles)) {
+                return $roles == $role;
+            } else {
+                $hasRole = false;
+                foreach ($role as $value) {
+                    if (in_array($value, $roles)) {
+                        $hasRole = true;
+                        break;
+                    }
+                }
+                return $hasRole;
             }
         }
 
         return true;
     }
 
-    private function offsetExist(array $container, string $key, $value):bool
+    private function offsetExist(array $container, string $key, $value): bool
     {
-        if(key_exists($key,  $container)){
-            $roles =  $container[$key];
+        if (key_exists($key, $container)) {
+            $roles = $container[$key];
 
-            if(gettype($roles) === "string"){
-                return $roles ==  $value;
-            }else{
+            if (gettype($roles) === "string") {
+                return $roles == $value;
+            } else {
                 $role = array_search($value, $roles);
                 return $role !== false;
             }

@@ -13,13 +13,27 @@ class User
     protected $username;
     protected $password;
     protected $email;
-    protected $id;
     protected $status;
 
-    /** @var string */
+    /** @var string|null */
+    protected $avatar;
+
+    /** @var string|null */
+    protected $lastname;
+
+    /** @var string|null */
+    protected $firstname;
+
+    /** @var \DateTime|null */
+    protected $age;
+
+    /** @var string|null */
+    protected $description;
+
+    /** @var string|null */
     protected $forgetPasswordToken;
 
-    /** @var \DateTime */
+    /** @var \DateTime|null */
     protected $forgetPasswordTokenAvailable;
 
     protected $roles = ["ROLE_USER"];
@@ -112,7 +126,7 @@ class User
     /**
      * @return string
      */
-    public function getForgetPasswordToken(): string
+    public function getForgetPasswordToken(): ?string
     {
         return $this->forgetPasswordToken;
     }
@@ -130,7 +144,7 @@ class User
     /**
      * @return \DateTime
      */
-    public function getForgetPasswordTokenAvailable(): \DateTime
+    public function getForgetPasswordTokenAvailable(): ?\DateTime
     {
         return $this->forgetPasswordTokenAvailable;
     }
@@ -144,5 +158,93 @@ class User
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
 
+    /**
+     * @param string $avatar
+     * @return User
+     */
+    public function setAvatar(string $avatar): User
+    {
+        $this->avatar = $avatar;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     * @return User
+     */
+    public function setDescription(string $description): User
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @param string|null $lastname
+     * @return User
+     */
+    public function setLastname(?string $lastname): User
+    {
+        $this->lastname = $lastname;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * @param string|null $firstname
+     * @return User
+     */
+    public function setFirstname(?string $firstname): User
+    {
+        $this->firstname = $firstname;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getAge(): ?\DateTime
+    {
+        return $this->age;
+    }
+
+    /**
+     * @param \DateTime|null $age
+     * @return User
+     */
+    public function setAge(?\DateTime $age): User
+    {
+        $this->age = $age;
+        return $this;
+    }
 }

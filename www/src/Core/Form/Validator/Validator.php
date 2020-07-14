@@ -37,7 +37,7 @@ class Validator
     private $entityManager;
 
     /** @var array */
-    private $errors;
+    private $errors = [];
 
     /**
      * @var array
@@ -226,9 +226,21 @@ class Validator
     {
         $value = $this->getValue($key);
         $valueConfirm = $this->getValue($key . '_confirmation');
-        if ($valueConfirm !== $value) {
-            $this->addError($key, 'confirmation');
+        $prefix = $this->parent->getBlockPrefix();
+        $index = explode($prefix . "_", $key, 2)[1];
+
+        $method = "get" . ucfirst(StringTransformer::toPascalCase($index));
+
+        if (is_callable([$this->entity, $method])) {
+            $prevValue = $this->entity->$method();
+            if ($prevValue !== $value && !password_verify($value, $this->entity->$method())) {
+                if ($valueConfirm !== $value) {
+                    $this->addError($index, 'confirmation');
+                }
+            }
         }
+
+
         return $this;
     }
 

@@ -17,6 +17,7 @@ use App\Core\Form\Fields\EntityType;
 use App\Core\Form\Fields\FieldsInterface;
 use App\Core\Form\Fields\ImageType;
 use App\Core\Form\Fields\OptionType;
+use App\Core\Form\Fields\PasswordType;
 use App\Core\Form\Fields\SelectType;
 use App\Core\Form\Fields\SubmitType;
 use App\Core\Form\Validator\Validator;
@@ -222,7 +223,6 @@ class FormBuilder
         $isValid = $validator->isValid();
         $this->errors = $validator->getErrors();
         $validator->resetErrors();
-
         return $isValid;
     }
 
@@ -513,6 +513,10 @@ class FormBuilder
             return $this->transformDate($key, $value);
         }
 
+        if ($this->fields[$key]["type"] == PasswordType::class) {
+            return $this->transformPassword($value);
+        }
+
         return $value;
     }
 
@@ -600,6 +604,11 @@ class FormBuilder
         $field->setHtml($this->render->renderHtmlElement($container, $args));
 
         return $field;
+    }
+
+    private function transformPassword($value)
+    {
+        return password_hash($value, PASSWORD_BCRYPT);
     }
 
 }

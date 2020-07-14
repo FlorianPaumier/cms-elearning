@@ -21,7 +21,7 @@
     <!-- Custom styles for this template-->
     <link href="/assets/styles/frontend/main.css" rel="stylesheet">
     <link href="/assets/styles/globals/collapsible.css" rel="stylesheet">
-    @section(style)
+    @yield(style)
 </head>
 
 <body id="page-top">
@@ -35,7 +35,7 @@ if ($errors) {
 }
 ?>
 <main>
-    @section(body)
+    @yield(body)
 </main>
 
 
@@ -44,7 +44,7 @@ if ($errors) {
 <script src="/assets/scripts/global.js"></script>
 <script src="/assets/scripts/header.js"></script>
 <script src="/assets/scripts/collapsible.js"></script>
-@section(javascript)
+@yield(javascript)
 </body>
 </html>
 

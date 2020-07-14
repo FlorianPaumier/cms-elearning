@@ -1,6 +1,6 @@
-@extend(templates/front)
+@extend(user/user)
 
-@section(body)
+@section(content)
 
     <section class="container">
         {{ form }}

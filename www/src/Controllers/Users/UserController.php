@@ -8,6 +8,7 @@ use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Entity\User;
 use App\Form\UserDeleteUserForm;
+use App\Form\UserEditForm;
 use App\Form\UserForgetpasswordForm;
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
@@ -138,4 +139,27 @@ class UserController extends BaseController
 
         }
 
+    public function profile(Request $request)
+    {
+        return $this->render("user/profile", [
+            "user" => $this->getUser(),
+        ]);
+    }
+
+    public function edit(Request $request)
+    {
+        $user = $this->getUser();
+        $form = $this->createForm(UserEditForm::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isValid()){
+            $this->entityManager->persist($user)->flush();
+            $this->redirect->redirectToRoute("app_user_update");
+        }
+
+        return $this->render("user/edit", [
+            "form" => $form->createView(),
+            "errors" => $form->getErrorFeedback(),
+        ]);
+    }
 }

@@ -88,7 +88,7 @@ class FormBuilder
         return $this;
     }
 
-    public function add(string $key, string $field, array $args)
+    public function add(string $key, string $field, array $args = [])
     {
         if (!class_exists($field)) {
             throw new \Exception();
@@ -214,11 +214,14 @@ class FormBuilder
 
     public function isValid()
     {
-        if(ConfigHandler::get("request")->getMethod() != "POST") return false;
-        $validator = new Validator($this->fields);
+        if (ConfigHandler::get("request")->getMethod() != "POST") {
+            return false;
+        }
+
+        $validator = new Validator($this->fields, $this->parent);
         $this->errors = $validator->getErrors();
 
-        return $validator->isValid();
+        return $validator->isValid($this->entity);
     }
 
     public function setFormParentType(string $class)
@@ -341,7 +344,7 @@ class FormBuilder
             $field->translate($options);
             if ($field instanceof SelectType) {
                 $this->createSelectType($field, $args);
-            }else{
+            } else {
                 $this->createChoiceInput($field, $args);
             }
         } else {
@@ -570,7 +573,13 @@ class FormBuilder
     private function createChoiceInput(ChoiceType $field, array $args)
     {
         $inputs = "";
-        foreach ($args["choices"] as $key => $choice){
+        foreach ($args["choices"] as $key => $choice) {
+
+            if ($field->getBlockName() == "checkbox") {
+                $name = $this->formType->getBlockPrefix() . "_" . $args["key"] . "[]";
+            }else{
+                $name = $this->formType->getBlockPrefix() . "_" . $args["key"];
+            }
 
             $params = [
                 "label" => $choice,
@@ -578,7 +587,7 @@ class FormBuilder
                 "placeholder" => $choice,
                 "class" => "form-control",
                 "type" => $field->getBlockName(),
-                "name" => $this->formType->getBlockPrefix() ."_" .$args["key"]
+                "name" => $name
             ];
 
             $inputs .= $this->render->renderHtmlElement($field, $params);

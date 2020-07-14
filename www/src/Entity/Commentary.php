@@ -3,11 +3,13 @@
 
 namespace App\Entity;
 
+use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
 
 class Commentary
 {
     use Entity;
+    use TimestampableEntity;
 
     /** @var string */
     protected $commentary;
@@ -18,11 +20,6 @@ class Commentary
     /** @var int */
     protected $idArticle;
 
-    /** @var string */
-    protected $createDate;
-
-    /** @var string */
-    protected $editDate;
 
     public function setCommentary(?string $commentary): void
     {
@@ -52,25 +49,5 @@ class Commentary
     public function getIdArticle(): ?int
     {
         return $this->idArticle;
-    }
-
-    public function setCreateDate(?string $createDate): void
-    {
-        $this->createDate = $createDate;
-    }
-
-    public function getCreateDate(): ?string
-    {
-        return $this->createDate;
-    }
-
-    public function setEditDate(?string $editDate): void
-    {
-        $this->editDate = $editDate;
-    }
-
-    public function getEditDate(): ?string
-    {
-        return $this->editDate;
     }
 }

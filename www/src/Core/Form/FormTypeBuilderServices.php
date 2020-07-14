@@ -11,6 +11,7 @@ use App\Core\Evaluation\Evaluation;
 use App\Core\Form\Fields\AddressType;
 use App\Core\Form\Fields\CaptchaType;
 use App\Core\Form\Fields\CheckboxType;
+use App\Core\Form\Fields\SimpleCheckboxType;
 use App\Core\Form\Fields\DateType;
 use App\Core\Form\Fields\EmailType;
 use App\Core\Form\Fields\IntegerType;

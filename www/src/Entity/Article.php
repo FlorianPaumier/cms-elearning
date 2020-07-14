@@ -5,11 +5,13 @@ namespace App\Entity;
 
 
 use App\Core\Interfaces\Entity;
+use App\Core\Helpers\TimestampableEntity;
 
 class Article
 {
 
     use Entity;
+    use TimestampableEntity;
 
     /** @var string */
     protected $title;
@@ -62,7 +64,7 @@ class Article
     /**
      * @param int $idUser
      */
-    public function setIdUser(int $idUser): void
+    public function setIdUser(?int $idUser): void
     {
         $this->idUser = $idUser;
     }
@@ -109,7 +111,7 @@ class Article
         $this->idCategory = $idCategory;
     }
 
-    public function getImage(): ?int
+    public function getImage(): ?string
     {
         return $this->image;
     }

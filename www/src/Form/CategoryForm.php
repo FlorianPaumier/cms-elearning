@@ -6,28 +6,12 @@ namespace App\Form;
 
 use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
-use App\Core\Form\Fields\EntityType;
-use App\Core\Form\Fields\TextAreaType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
-use App\Entity\Article;
 use App\Entity\Category;
 
 class CategoryForm extends AbstractForm
 {
-    public static function getConstraint(): array
-    {
-        return [
-            [
-                "category" => [
-                    "empty" => false,
-                    "required" => true,
-                    "exists" => true,
-                ]
-            ],
-        ];
-    }
-
     public function buildForm(FormBuilder $builder): FormBuilder
     {
         return $builder

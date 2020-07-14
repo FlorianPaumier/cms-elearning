@@ -57,14 +57,10 @@ class ArticleController extends BaseController
         ]);
     }
 
-    public function edit(Request $request, ArticleRepository $repository, Article $article)
+    public function edit(Request $request, ArticleRepository $repository, Article $articles)
     {
-        $lesson = $repository
-            ->leftJoin("category", "category")
-            ->where("article.id = :id")
-            ->setParameter("id", $article->getId())
-            ->fetch();
-
+        $article = $repository->findBy(['id' => $articles->getId()]);
+        dump($article);
         $form = $this->createForm(ArticleForm::class, $article);
         $form->handleRequest($request);
 
@@ -75,7 +71,7 @@ class ArticleController extends BaseController
             $this->redirect->redirectToRoute("admin_article_list");
         }
 
-        return $this->renderer->render("admin/articles/new", [
+        return $this->renderer->render("admin/article/new", [
             "form" => $form->createView(),
             "title" => "Modification de l'article"
         ]);

@@ -10,10 +10,10 @@ admin_article_new:
     path: /admin/article/new
     controller: App\Controllers\Admin\Article:new
 
-admin_article_modify:
+admin_article_edit:
     path: /admin/article/edit/{id}
     controller: App\Controllers\Admin\Article:edit
-    method: [GET]
+    method: [GET,POST]
 
 admin_article_design:
     path: /admin/article/design

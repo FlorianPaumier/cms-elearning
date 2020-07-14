@@ -281,8 +281,9 @@ class Validator
 
     public function getErrors()
     {
+        $errors = $this->errors;
         $this->errors = [];
-        return $this->errors;
+        return $errors;
     }
 
     /**

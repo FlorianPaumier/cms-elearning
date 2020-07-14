@@ -575,13 +575,10 @@ class FormBuilder
         $inputs = "";
         foreach ($args["choices"] as $key => $choice) {
 
-            if ($field->getBlockName() == "checkbox") {
-                $name = $this->formType->getBlockPrefix() . "_" . $args["key"] . "[]";
-            }else{
-                $name = $this->formType->getBlockPrefix() . "_" . $args["key"];
-            }
+            $name = $this->formType->getBlockPrefix() . "_" . $args["key"];
 
             $params = [
+                "key" => $args["key"],
                 "label" => $choice,
                 "value" => $key,
                 "placeholder" => $choice,
@@ -589,6 +586,8 @@ class FormBuilder
                 "type" => $field->getBlockName(),
                 "name" => $name
             ];
+
+            if($params["type"] == "checkbox") $params["name"] .= "[]";
 
             $inputs .= $this->render->renderHtmlElement($field, $params);
         }

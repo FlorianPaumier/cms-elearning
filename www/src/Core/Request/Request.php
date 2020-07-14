@@ -29,16 +29,7 @@ class Request extends RequestHandler
      */
     public static function createFromGlobals()
     {
-        $request = (new Request())->createRequest($_GET, $_POST, [], $_COOKIE, $_FILES, $_SERVER, $_SESSION);
-
-        /*if (0 === strpos($request->contentType, 'application/x-www-form-urlencoded')
-            && \in_array(strtoupper($request->getMethod()), ['GET', 'PUT', 'DELETE', 'PATCH'])
-        ) {
-            parse_str($request->getContent(), $data);
-            $request->request = new ParameterBag($data);
-        }*/
-
-        return $request;
+        return (new Request())->createRequest($_GET, $_POST, [], $_COOKIE, $_FILES, $_SERVER, $_SESSION);
     }
 
     public function get(string $key){

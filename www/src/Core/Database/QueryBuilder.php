@@ -69,6 +69,7 @@ abstract class QueryBuilder
     protected $entity = null;
 
     protected $relations = [];
+    protected $orWhere = [];
 
     public function __construct(\PDO $pdo = null)
     {
@@ -138,6 +139,16 @@ abstract class QueryBuilder
     public function andWhere(string $condition): self
     {
         $this->where[] = $condition;
+
+        return $this;
+    }
+    /**
+     * @param string $condition
+     * @return $this
+     */
+    public function orWhere(string $condition): self
+    {
+        $this->orWhere[] = $condition;
 
         return $this;
     }
@@ -272,6 +283,12 @@ abstract class QueryBuilder
             }
         }
 
+        if(!empty($this->orWhere)){
+            foreach ($this->orWhere as $or){
+                $sql .= " OR ". $or;
+            }
+        }
+
         $alias = $this->alias;
         if (!empty($this->order)) {
             $sql .= " ORDER BY " . implode(', ', array_map(function ($key, $value) use ($alias) {
@@ -350,7 +367,7 @@ abstract class QueryBuilder
                     $alias = $this->alias;
                     if(!in_array("*", $this->select))
                         $this->select = array_map(function ($value) use ($alias) {
-                            return  "$alias.$value";
+                            return  "$value";
                         }, $this->select);
                 } elseif ($this->relations) {
                     $this->alias = $this->from;

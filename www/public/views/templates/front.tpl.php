@@ -27,7 +27,13 @@
 <body id="page-top">
 
 @include(partials/header)
-
+<?php
+if ($errors) {
+    foreach ($errors as $error) {
+        var_dump($error);
+    }
+}
+?>
 <main>
     @section(body)
 </main>

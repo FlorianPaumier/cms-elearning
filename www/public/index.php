@@ -1,11 +1,11 @@
 <?php
 
+session_start();
 use App\Core\Kernel\Kernel;
 
 define("ROOT_PATH", dirname(__DIR__));
 
 require ROOT_PATH.'/src/Core/Helpers/autoloader.php';
-require ROOT_PATH . "/vendor/autoload.php";
 
 //Define ENV TYPE
 #Todo : Use config var

@@ -32,6 +32,13 @@ app_user_profile:
   path: "/me"
   controller: App\Controllers\Users\User:profile
   method: [GET]
+  roles: [ROLE_USER]
+
+app_user_update:
+  path: "/me/edit"
+  controller: App\Controllers\Users\User:edit
+  method: [GET, POST]
+  roles: [ROLE_USER]
 
 
 

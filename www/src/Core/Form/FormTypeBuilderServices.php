@@ -50,7 +50,7 @@ class FormTypeBuilderServices
         $this->serializer = new Serializer();
     }
 
-    public function generateContact(string $class, GenerateFormInterface $form = null): self
+    public function generateForm(string $class, GenerateFormInterface $form = null): self
     {
         foreach ($this->data as $field) {
             $slug = StringTransformer::slugify($field["label_input"]);

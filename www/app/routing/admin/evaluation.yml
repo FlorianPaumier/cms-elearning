@@ -15,4 +15,4 @@ admin_evaluation_edit:
 admin_evaluation_delete:
   path: /admin/evaluation/delete/{id}
   controller: App\Controllers\Admin\Evaluation:delete
-  method: [DELETE]
+  method: [GET]

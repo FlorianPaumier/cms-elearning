@@ -6,7 +6,11 @@ namespace App\Core\Form\Validator;
 
 use App\Core\Cache\ConfigHandler;
 use App\Core\Database\EntityManager;
+use App\Core\Database\Repository\AbstractRepository;
+use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
+use App\Core\Helpers\EntityHelper;
+use App\Core\Helpers\StringTransformer;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Request\ParameterBag;
 use App\Core\Request\Request;
@@ -39,14 +43,22 @@ class Validator
      * @var array
      */
     private $form;
+    /**
+     * @var AbstractForm
+     */
+    private $parent;
+
+    private $entity;
 
     /**
      * Validator constructor.
      * @param array
+     * @param string $parent
      */
-    public function __construct(array $form)
+    public function __construct(array $form, string $parent = null)
     {
         $this->form = $form;
+        $this->parent = new $parent;
         $this->entityManager = ConfigHandler::get("entityManager");
         $this->request = ConfigHandler::get("request");
 
@@ -60,15 +72,18 @@ class Validator
     public function buildValidator()
     {
         foreach ($this->form as $input => $constraint) {
-            if($constraint["type"] == ButtonType::class) continue;
+            if ($constraint["type"] == ButtonType::class) {
+                continue;
+            }
             foreach ($constraint["args"] as $param => $value) {
                 switch ($param) {
                     case "length":
                         $this->length($input, $value["min"], isset($value["max"]) ?: null);
                         break;
                     case "required":
-                        if(!$value)
+                        if (!$value) {
                             break;
+                        }
                         $this->required($input);
                         break;
                     case "empty":
@@ -84,10 +99,10 @@ class Validator
                         $this->confirm($input);
                         break;
                     case "exist":
-                        $this->exists($input, $value["table"]);
+                        $this->exists($input, $value);
                         break;
                     case "unique":
-                        $this->unique($input, $value["table"]);
+                        $this->unique($input);
                         break;
                     case "regex":
                         $this->regex($input);
@@ -100,20 +115,23 @@ class Validator
     }
 
     /**
+     * @param object|null $entity
      * @return bool
      */
-    public function isValid(): bool
+    public function isValid(?object $entity): bool
     {
+        $this->entity = $entity;
         return empty($this->errors);
     }
 
     /**
      * @return array
      */
-    public function getFormData(){
+    public function getFormData()
+    {
         $values = [];
 
-        foreach($this->form->getInputs() as $input){
+        foreach ($this->form->getInputs() as $input) {
             $values[$input] = $this->getValue($input);
         };
 
@@ -126,7 +144,7 @@ class Validator
      * @param int|null $max
      * @return $this
      */
-    private function length(string $key,?int $min,?int $max): self
+    private function length(string $key, ?int $min, ?int $max): self
     {
         $value = $this->getValue($key);
         $length = mb_strlen($value);
@@ -228,24 +246,26 @@ class Validator
      * @param int|null $exclude
      * @return $this
      */
-    private function unique(string $key,string $target, ?int $exclude = null)
+    private function unique(string $key)
     {
+        /** @var AbstractRepository $repo */
+        $repo = $this->entityManager->getRepository(EntityHelper::getClassName($this->parent->getOptions()["data_class"]) . "Repository");
+        $prefix = $this->parent->getBlockPrefix();
+        $index = explode($prefix . "_", $key, 2)[1];
         $value = $this->getValue($key);
-        $this->entityManager
-            ->select("id")
-            ->table($target)
-            ->where("$key = :$key")
-            ->setParameters($key, $value);
 
-        if ($exclude !== null) {
-            $this->entityManager->andWhere("id != :id")
-            ->setParameters("id", $exclude);
+        $method = "get" . ucfirst(StringTransformer::toPascalCase($index));
 
+        if (is_callable([$this->entity, $method])) {
+            $prevValue = $this->entity->$method();
+            if ($prevValue === $value) {
+                return $this;
+            }
         }
-        $statement = $this->entityManager->fetchOrFail();
 
-        if ($statement !== false && (is_array($statement) && count($statement) > 0)) {
-            $this->addError($key, 'unique', [$value]);
+
+        if ($repo->exists([$index => $value]) !== false) {
+            $this->addError($index, 'unique', [$value]);
         }
         return $this;
     }
@@ -261,14 +281,16 @@ class Validator
 
     public function getErrors()
     {
+        $this->errors = [];
         return $this->errors;
     }
+
     /**
      * Ajoute une erreur
      *
      * @param string $key
      * @param string $rule
-     * @param array  $attributes
+     * @param array $attributes
      */
     private function addError(string $key, string $rule, array $attributes = []): void
     {

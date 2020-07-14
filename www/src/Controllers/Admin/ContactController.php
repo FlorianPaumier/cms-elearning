@@ -27,7 +27,7 @@ class ContactController extends BaseController
     public function new(Request $request)
     {
         if($request->getMethod() == "POST" ){
-            $formTypeBuilder = (new FormTypeBuilderServices($request->getRequest()->get("admin_contact")))->generateContact(ContactInput::class);
+            $formTypeBuilder = (new FormTypeBuilderServices($request->getRequest()->get("admin_contact")))->generateForm(ContactInput::class);
 
             $inputs = $formTypeBuilder->getInputs();
             $form = $formTypeBuilder->createFormTypeClass($request->getRequest()->all(), ContactForm::class);
@@ -53,7 +53,7 @@ class ContactController extends BaseController
         $json = $serializer->serialize($inputs, "json");
 
         if($request->getMethod() == "POST"){
-            $formTypeBuilder = (new FormTypeBuilderServices($request->getRequest()->get("admin_contact")))->generateContact(ContactInput::class, $contactForm);
+            $formTypeBuilder = (new FormTypeBuilderServices($request->getRequest()->get("admin_contact")))->generateForm(ContactInput::class, $contactForm);
 
             $inputs = $formTypeBuilder->getInputs();
             $form = $formTypeBuilder->createFormTypeClass($request->getRequest()->all(),ContactForm::class, $contactForm);

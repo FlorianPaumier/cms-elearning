@@ -42,3 +42,15 @@
     roles:
       name: roles
       type: json
+    firstname:
+      name: firstname
+      type: character varying
+    laststname:
+      name: laststname
+      type: character varying
+    age:
+      name: age
+      type: date
+    description:
+      name: description
+      type: text

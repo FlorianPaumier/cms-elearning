@@ -160,6 +160,7 @@ class UserController extends BaseController
         return $this->render("user/edit", [
             "form" => $form->createView(),
             "errors" => $form->getErrorFeedback(),
+            "user" => $user,
         ]);
     }
 }

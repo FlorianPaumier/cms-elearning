@@ -37,7 +37,7 @@ class Validator
     private $entityManager;
 
     /** @var array */
-    private $errors;
+    private $errors = [];
 
     /**
      * @var array
@@ -55,10 +55,11 @@ class Validator
      * @param array
      * @param string $parent
      */
-    public function __construct(array $form, string $parent = null)
+    public function __construct(array $form,object $entity = null, string $parent = null)
     {
         $this->form = $form;
         $this->parent = new $parent;
+        $this->entity = $entity;
         $this->entityManager = ConfigHandler::get("entityManager");
         $this->request = ConfigHandler::get("request");
 
@@ -118,9 +119,8 @@ class Validator
      * @param object|null $entity
      * @return bool
      */
-    public function isValid(?object $entity): bool
+    public function isValid(): bool
     {
-        $this->entity = $entity;
         return empty($this->errors);
     }
 
@@ -226,9 +226,21 @@ class Validator
     {
         $value = $this->getValue($key);
         $valueConfirm = $this->getValue($key . '_confirmation');
-        if ($valueConfirm !== $value) {
-            $this->addError($key, 'confirmation');
+        $prefix = $this->parent->getBlockPrefix();
+        $index = explode($prefix . "_", $key, 2)[1];
+
+        $method = "get" . ucfirst(StringTransformer::toPascalCase($index));
+
+        if (is_callable([$this->entity, $method])) {
+            $prevValue = $this->entity->$method();
+            if ($prevValue !== $value && !password_verify($value, $this->entity->$method())) {
+                if ($valueConfirm !== $value) {
+                    $this->addError($index, 'confirmation');
+                }
+            }
         }
+
+
         return $this;
     }
 
@@ -281,9 +293,12 @@ class Validator
 
     public function getErrors()
     {
-        $errors = $this->errors;
+        return $this->errors;
+    }
+
+    public function resetErrors()
+    {
         $this->errors = [];
-        return $errors;
     }
 
     /**

@@ -218,10 +218,12 @@ class FormBuilder
             return false;
         }
 
-        $validator = new Validator($this->fields, $this->parent);
+        $validator = new Validator($this->fields, $this->entity, $this->parent);
+        $isValid = $validator->isValid();
         $this->errors = $validator->getErrors();
+        $validator->resetErrors();
 
-        return $validator->isValid($this->entity);
+        return $isValid;
     }
 
     public function setFormParentType(string $class)

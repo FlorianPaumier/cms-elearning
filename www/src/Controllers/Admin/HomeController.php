@@ -19,7 +19,6 @@ class HomeController extends BaseController
         $configs = $this->entityManager->getRepository(SiteConfigurationRepository::class)->findAll();
 
         foreach ($request->getRequest()->all() as $key => $value){
-            dump([$key, $value]);
             foreach ($configs as $config){
 
             }

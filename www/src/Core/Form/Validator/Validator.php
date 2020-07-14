@@ -55,10 +55,11 @@ class Validator
      * @param array
      * @param string $parent
      */
-    public function __construct(array $form, string $parent = null)
+    public function __construct(array $form,object $entity = null, string $parent = null)
     {
         $this->form = $form;
         $this->parent = new $parent;
+        $this->entity = $entity;
         $this->entityManager = ConfigHandler::get("entityManager");
         $this->request = ConfigHandler::get("request");
 
@@ -118,9 +119,8 @@ class Validator
      * @param object|null $entity
      * @return bool
      */
-    public function isValid(?object $entity): bool
+    public function isValid(): bool
     {
-        $this->entity = $entity;
         return empty($this->errors);
     }
 
@@ -281,9 +281,12 @@ class Validator
 
     public function getErrors()
     {
-        $errors = $this->errors;
+        return $this->errors;
+    }
+
+    public function resetErrors()
+    {
         $this->errors = [];
-        return $errors;
     }
 
     /**

@@ -62,10 +62,12 @@ class RolesManager
         $userManager = new UserManager();
         $user = $userManager->getUser();
 
-        $role = "";
-
         if (!empty($user)) {
             $role = $user["roles"];
+        } elseif (key_exists($key, $route) && empty($user)) {
+            return false;
+        } elseif (!key_exists($key, $route)) {
+            return true;
         }
 
         if ($role == "ROLE_ADMIN" || in_array("ROLE_ADMIN", $role)) {

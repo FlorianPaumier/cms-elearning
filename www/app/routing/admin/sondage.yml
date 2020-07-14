@@ -1,18 +1,22 @@
 admin_sondage_list:
   path: /admin/sondage
   controller: App\Controllers\Admin\Sondage:index
+#  roles: ["ROLE_ADMIN"]
 
 admin_sondage_new:
   path: /admin/sondage/new
   controller: App\Controllers\Admin\Sondage:new
   method: [GET,POST]
+#  roles: ["ROLE_ADMIN"]
 
 admin_sondage_edit:
   path: /admin/sondage/edit/{id}
   controller: App\Controllers\Admin\Sondage:edit
   method: [GET,POST]
+#  roles: ["ROLE_ADMIN"]
 
 admin_sondage_delete:
   path: /admin/sondage/delete/{id}
   controller: App\Controllers\Admin\Sondage:delete
   method: [GET,POST]
+#  roles: ["ROLE_ADMIN"]

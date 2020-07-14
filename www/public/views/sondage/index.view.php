@@ -14,7 +14,8 @@
                     <div class="card__content">
                         <div class="card__title"><?=$question->getQuestion();?></div>
                             <p class="padding-top:50px; padding-bottom: 50px;">
-                                <form action="" method="POST">
+                                <form action="/sondage/vote" method="POST">
+                                    <input type="hidden" name="id" value="<?=$question->getId();?>">
                                     <label for="option1"><?=$question->getOptionOne();?></label><input type="radio" name="option" id="option1" value="1"><br>
                                     <label for="option2"><?=$question->getOptionTwo();?></label><input type="radio" name="option" id="option2" value="2"><br>
                                     <?php

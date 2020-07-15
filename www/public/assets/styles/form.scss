@@ -1,0 +1,74 @@
+@import "variables";
+@import "buttons";
+$bg: #987;
+$text: lighten($bg,35%);
+
+.roundedborder {
+
+}
+
+.form {
+  padding: 10px;
+  background-color: #EDF8FF;
+  border-radius: 10px;
+}
+
+input[type=text] {
+  width: 98%;
+  border: none;
+  padding-left: 8px;
+  line-height: 1em * 2;
+  border-radius: 5px;
+  margin: 3px;
+}
+
+input[type=date] {
+  width: 98%;
+  border: none;
+  padding-left: 8px;
+  height: 1em * 2;
+  border-radius: 5px;
+  margin: 3px;
+}
+
+input[type=radio] {
+  background-color: white;
+}
+
+input[type=checkbox] {
+
+}
+
+input[type=checkbox]:checked:after {
+
+}
+
+select {
+  width: 99%;
+  border: none;
+  height: 1em * 2;
+  border-radius: 5px;
+  margin: 3px;
+  background-color: white;
+
+  .default {
+    color: lightgrey;
+  }
+}
+
+/* Text Area */
+textarea {
+
+}
+
+input[type='submit'] {
+
+}
+input[type='submit']:hover {
+
+}
+
+.btn[type='submit'] {
+  background-color: #0ad406;
+  border: 1px #0ad406 solid;
+}

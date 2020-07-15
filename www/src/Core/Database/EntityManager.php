@@ -48,7 +48,6 @@ class EntityManager extends QueryBuilder
         } else {
             $this->update($objet);
         }
-
         return $this;
     }
 

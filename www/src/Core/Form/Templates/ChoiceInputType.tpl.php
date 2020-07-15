@@ -10,11 +10,13 @@
 
 @block(checkbox)
 <div class="form-group">
-    <label for="{{prefix}}_{{key}}">{{label}}</label>
-    <input type="checkbox"
-           id="{{prefix}}_{{key}}"
-           class="{{class}} " placeholder="{{placeholder}}"
-           name="{{name}}" value="{{value}}" @isRequired(required)>
+    <label class="switch" for="{{prefix}}_{{key}}">{{label}}
+        <input type="checkbox"
+               id="{{prefix}}_{{key}}"
+               class="{{class}} " placeholder="{{placeholder}}"
+               name="{{name}}" value="{{value}}" @isRequired(required)>
+        <div class="slider round"></div>
+    </label>
 </div>
 @endblock
 

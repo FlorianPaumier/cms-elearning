@@ -3196,6 +3196,9 @@ main #newsletter div .btn-news {
     color: white;
     text-decoration: none;
   }
+  #show-lesson .nav ul li a.active {
+    color: black;
+  }
 }
 #show-lesson #lesson {
   padding: 0 1rem;

@@ -55,7 +55,7 @@ class Validator
      * @param array
      * @param string $parent
      */
-    public function __construct(array $form,object $entity = null, string $parent = null)
+    public function __construct(array $form, $entity = null, string $parent = null)
     {
         $this->form = $form;
         $this->parent = new $parent;

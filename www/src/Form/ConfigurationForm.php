@@ -5,8 +5,11 @@ namespace App\Form;
 
 
 use App\Core\Form\AbstractForm;
+use App\Core\Form\Fields\CheckboxType;
 use App\Core\Form\Fields\CollectionType;
+use App\Core\Form\Fields\EmailType;
 use App\Core\Form\Fields\RadioType;
+use App\Core\Form\Fields\SubmitType;
 use App\Core\Form\Fields\TextAreaType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
@@ -26,23 +29,55 @@ class ConfigurationForm extends AbstractForm
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->add("email", TextType::class, [
+            ->add("slogan", TextType::class, [
+                "label" => "Petit slogan pour expliquer votre site",
+                "required" => false,
+                "class" => "col-md-6 col-lg-6 col-sm-12",
+            ])
+            ->add("email", EmailType::class, [
                 "label" => "Email",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
+            ->add("server_mail_url", EmailType::class, [
+                "label" => "Serveur Mail",
+                "required" => false,
+                "class" => "col-md-6 col-lg-6 col-sm-12",
+            ])
+            ->add("server_mail_port", EmailType::class, [
+                "label" => "Port du Serveur",
+                "required" => false,
+                "class" => "col-md-6 col-lg-6 col-sm-12",
+            ])
+            ->add("server_mail_identifiant", EmailType::class, [
+                "label" => "Serveur identifiant",
+                "required" => false,
+                "class" => "col-md-6 col-lg-6 col-sm-12",
+            ])
+            ->add("server_mail_password", EmailType::class, [
+                "label" => "Serveur mot de passe",
+                "required" => false,
+                "class" => "col-md-6 col-lg-6 col-sm-12",
+            ])
             ->add("maintenance", RadioType::class, [
                 "label" => "Maintenance",
-                "required" => true,
+                "required" => false,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
                 "choices" => [
                     true => "Oui",
                     false => "Non"
                 ]
             ])
-            ->add("valider", TextType::class, [
+            ->add("indexation", CheckboxType::class, [
+                "label" => "Visibilité pour les moteurs de recherche",
+                "required" => false,
+                "class" => "col-md-6 col-lg-6 col-sm-12",
+                "choices" => [
+                    true => "Oui",
+                ]
+            ])
+            ->add("valider", SubmitType::class, [
                 "label" => "Valider",
-                "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
             ;

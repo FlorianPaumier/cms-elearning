@@ -16,7 +16,7 @@ class ArticleController extends BaseController
 {
     public function index(ArticleRepository $repository)
     {
-        $articles = $repository->paginate(5);
+        $articles = $repository->where("visible = true")->paginate(5);
 
         return $this->renderer->render("frontend/article/index",[
             "articles" => $articles,
@@ -26,6 +26,10 @@ class ArticleController extends BaseController
 
     public function view(Request $request, ArticleRepository $repository,Article $article, CategoryRepository $category, CommentaryRepository $commentary)
     {
+        if(!$article->getVisible()){
+            $this->redirect->redirectToRoute("article_list");
+        }
+
         $comment = new Commentary();
 
         $commentForm = $this->createForm(CommentaryForm::class, $comment);
@@ -35,7 +39,7 @@ class ArticleController extends BaseController
             $em = ConfigHandler::get("entityManager");
             $em->persist($comment);
             $em->flush();
-            $this->redirect->redirectToRoute("article");
+            $this->redirect->redirectToRoute("article_view", ['id' =>$article->getId()]);
         }
 
         $comments = $commentary->findBy(['id_article' => $article->getId()]);

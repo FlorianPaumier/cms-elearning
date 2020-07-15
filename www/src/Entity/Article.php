@@ -48,7 +48,7 @@ class Article
     /**
      * @param int $visible
      */
-    public function setVisible(?int $visible): void
+    public function setVisible(?int $visible = 0): void
     {
         $this->visible = $visible;
     }

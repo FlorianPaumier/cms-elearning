@@ -1,10 +1,13 @@
 @extend(templates/front)
 
 @section(styles)
+<link rel="stylesheet" href="../../../assets/styles/frontend/commentary.css">
 @endsection
 
 @section(body)
-<div>
+
+<section class="container">
+    <img src="<?= $article->getImage()?>">
     <h1>
         <?= $article->getTitle() ?>
     </h1>
@@ -15,5 +18,5 @@
         {{ commentaryForm }}
     </div>
 
-</div>
+</section>
 @endsection

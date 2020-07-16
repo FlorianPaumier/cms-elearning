@@ -2983,5 +2983,34 @@ form .slider.round:before {
   height: 500px;
 }
 */
+.pagination {
+  list-style: none;
+}
+.pagination li {
+  min-width: 38px;
+  min-height: 38px;
+  margin: 0 5px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: center;
+  background-color: transparent;
+}
+.pagination a {
+  background-color: blue;
+  padding: 8px 14px;
+  min-width: 38px;
+  min-height: 38px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 5px;
+  vertical-align: center;
+}
+.pagination .active {
+  width: 38px;
+}
+.pagination .active a {
+  background-color: gray;
+}
 
 /*# sourceMappingURL=main.css.map */

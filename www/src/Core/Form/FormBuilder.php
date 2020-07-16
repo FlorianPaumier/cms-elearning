@@ -190,7 +190,6 @@ class FormBuilder
                 }
             }
         }
-
     }
 
     /**
@@ -218,7 +217,7 @@ class FormBuilder
         if (ConfigHandler::get("request")->getMethod() != "POST") {
             return false;
         }
-
+        
         $validator = new Validator($this->fields, $this->entity, $this->parent);
         $isValid = $validator->isValid();
         $this->errors = $validator->getErrors();

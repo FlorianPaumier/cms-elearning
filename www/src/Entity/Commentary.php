@@ -15,11 +15,15 @@ class Commentary
     protected $commentary;
 
     /** @var int */
-    protected $idUser;
+    protected $id_user;
 
     /** @var int */
-    protected $idArticle;
+    protected $id_article;
 
+    public function __construct()
+    {
+        $this->id_user = 1;
+    }
 
     public function setCommentary(?string $commentary): void
     {
@@ -31,23 +35,18 @@ class Commentary
         return $this->commentary;
     }
 
-    public function setIdUser(?int $idUser): void
-    {
-        $this->idUser = $idUser;
-    }
-
     public function getIdUser(): ?int
     {
-        return $this->idUser;
+        return $this->id_user;
     }
 
     public function setIdArticle(?int $idArticle): void
     {
-        $this->idArticle = $idArticle;
+        $this->id_article = $id_article;
     }
 
     public function getIdArticle(): ?int
     {
-        return $this->idArticle;
+        return $this->id_article;
     }
 }

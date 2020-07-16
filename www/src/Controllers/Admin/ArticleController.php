@@ -15,7 +15,7 @@ class ArticleController extends BaseController
 {
     public function index(Request $request)
     {
-        return $this->renderer->render("admin/article/article",[
+        return $this->renderer->render("admin/article/view",[
             "method" => $request->getMethod(),
             "title" => "Index"
         ]);
@@ -25,7 +25,7 @@ class ArticleController extends BaseController
     {
         $articles = $repository->paginate(5);
 
-        return $this->renderer->render("admin/article/article_list",[
+        return $this->renderer->render("admin/article/list",[
             "articles" => $articles,
             "title" => "Liste d'articles"
         ]);
@@ -43,7 +43,8 @@ class ArticleController extends BaseController
         $form = $this->createForm(ArticleForm::class, $article);
         $form->handleRequest($request);
 
-        if($request->getMethod() == "POST" && $form->isValid()) {
+        if($form->isValid()) {
+
             $em = ConfigHandler::get("entityManager");
             $em->persist($article);
             $em->flush();
@@ -71,7 +72,7 @@ class ArticleController extends BaseController
             $this->redirect->redirectToRoute("admin_article_list");
         }
 
-        return $this->renderer->render("admin/article/new", [
+        return $this->renderer->render("admin/article/edit", [
             "form" => $form->createView(),
             "title" => "Modification de l'article"
         ]);
@@ -82,24 +83,11 @@ class ArticleController extends BaseController
         $this->redirect->redirectToRoute("admin_article_index");
     }
 
-    public function modify()
-    {
-        $article = new Article();
-        $form = $this->createForm(ArticleForm::class, $article);
-        return $this->renderer->render("admin/article/article_modify",[
-            "title" => "Modification d'article"
-        ]);
-    }
-
     public function design()
     {
-        return $this->renderer->render("admin/article/article_design",[
+        return $this->renderer->render("admin/article/design",[
             "title" => "Design d'article"
         ]);
     }
 
-    public function destroy()
-    {
-
-    }
 }

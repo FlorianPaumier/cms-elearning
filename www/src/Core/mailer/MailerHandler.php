@@ -32,10 +32,8 @@ class MailerHandler
         }
     }
 
-    #Todo : Add Attachement
     public function send(MailerMessage $message)
     {
-
         $this->mail->setFrom($this->sender);
 
         $this->setDest($message->getDest());
@@ -103,7 +101,9 @@ class MailerHandler
         $config = CacheHandler::get("config")["mailer"];
         $mail = new PHPMailer(true);
 
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
+        $this->sender = $config["username"];
+        $this->replyTo = $config["username"];
+        $mail->SMTPDebug = SMTP::DEBUG_OFF;                      // Enable verbose debug output
         $mail->isSMTP();                                            // Send using SMTP
         $mail->Host = $config["host"];                    // Set the SMTP server to send through
         $mail->SMTPAuth = $config["transport"] == "smtp";                                   // Enable SMTP authentication
@@ -162,4 +162,16 @@ class MailerHandler
             dump($exception->getMessage());
         }
     }
+
+    public function sendTest()
+    {
+        $msg = (new MailerMessage())
+            ->setDest($this->sender)
+            ->setBody("Ceci est un test du mailer. Il fonctionne !")
+            ->setSubjet("Test du mailer")
+        ;
+
+        return $this->send($msg);
+    }
+
 }

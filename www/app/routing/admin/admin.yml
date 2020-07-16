@@ -6,3 +6,7 @@ admin_home:
 admin_config:
   path: /admin/configuration
   controller: App\Controllers\Admin\Home:configuration
+
+admin_test_mailer:
+  path: /admin/mailer-test
+  controller: App\Controllers\Admin\Home:testMailer

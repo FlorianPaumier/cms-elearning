@@ -5,9 +5,12 @@ namespace App\Form;
 
 
 use App\Core\Form\AbstractForm;
+use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\CheckboxType;
 use App\Core\Form\Fields\CollectionType;
 use App\Core\Form\Fields\EmailType;
+use App\Core\Form\Fields\IntegerType;
+use App\Core\Form\Fields\PasswordType;
 use App\Core\Form\Fields\RadioType;
 use App\Core\Form\Fields\SubmitType;
 use App\Core\Form\Fields\TextAreaType;
@@ -39,12 +42,12 @@ class ConfigurationForm extends AbstractForm
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->add("server_mail_url", EmailType::class, [
+            ->add("server_mail_host", TextType::class, [
                 "label" => "Serveur Mail",
                 "required" => false,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->add("server_mail_port", EmailType::class, [
+            ->add("server_mail_port", IntegerType::class, [
                 "label" => "Port du Serveur",
                 "required" => false,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
@@ -54,8 +57,14 @@ class ConfigurationForm extends AbstractForm
                 "required" => false,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->add("server_mail_password", EmailType::class, [
+            ->add("server_mail_password", PasswordType::class, [
                 "label" => "Serveur mot de passe",
+                "required" => false,
+                "class" => "col-md-6 col-lg-6 col-sm-12",
+            ])
+            ->add("server_mail_test", ButtonType::class, [
+                "label" => "Tester les informations",
+                "type" => "button",
                 "required" => false,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])

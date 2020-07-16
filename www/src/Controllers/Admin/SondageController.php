@@ -14,6 +14,7 @@ class SondageController extends BaseController
     public function index(SondageRepository $sondageRepository)
     {
         $questions = $sondageRepository->findAll();
+
         $questions = !is_null($questions) ? $questions : [];
 
         return $this->renderer->render("admin/sondage/index", [

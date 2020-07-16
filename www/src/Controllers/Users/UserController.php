@@ -78,7 +78,7 @@ class UserController extends BaseController
 
         if ($this->query->getMethod() == "POST" && $form->isValid()) {
             if (($response = $this->userManager->connectUser($user->getUsername(), $user->getPassword())) !== true) {
-                $this->session->set("app.flash", ["error" => [$response]]);
+                $this->session->offsetSet("app.flash", ["error" => [$response]]);
             } else {
 //                dump(ConfigHandler::get("session")->getSession());
                 $this->redirect->redirectToRoute("app_home");

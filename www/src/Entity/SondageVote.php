@@ -13,29 +13,32 @@ class SondageVote
     use Entity;
 //    use TimestampableEntity;
 
-    /** @var string */
-    protected $idVote;
+    /** @var Sondage */
+    protected $sondage;
 
     /** @var string */
     protected $choix;
 
+    /** @var User */
+    protected $user;
+
     public function __construct(){}
 
     /**
-     * @return int
+     * @return Sondage
      */
-    public function getIdVote(): ?int
+    public function getSondage(): ?Sondage
     {
-        return $this->idVote;
+        return $this->sondage;
     }
 
     /**
-     * @param int $idVote
+     * @param int $sondage
      * @return SondageVote
      */
-    public function setIdVote(int $idVote): SondageVote
+    public function setSondage(Sondage $sondage): SondageVote
     {
-        $this->idVote = $idVote;
+        $this->sondage = $sondage;
         return $this;
     }
 
@@ -56,4 +59,24 @@ class SondageVote
         $this->choix = $choix;
         return $this;
     }
+
+    /**
+     * @return User
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     * @return SondageVote
+     */
+    public function setUser(User $user): SondageVote
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+
 }

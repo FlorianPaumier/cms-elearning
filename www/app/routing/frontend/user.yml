@@ -35,8 +35,8 @@ app_user_profile:
   roles: [ROLE_USER]
 
 app_user_lessons:
-  path: "/me/edit"
-  controller: App\Controllers\Users\User:edit
+  path: "/me/lessons"
+  controller: App\Controllers\Users\User:lessons
   method: [GET]
   roles: [ROLE_USER]
 

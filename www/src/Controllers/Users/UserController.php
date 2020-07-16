@@ -3,15 +3,20 @@
 namespace App\Controllers\Users;
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\Evaluation\EvaluationObject;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Entity\User;
+use App\Entity\UserLesson;
 use App\Form\UserDeleteUserForm;
 use App\Form\UserEditForm;
 use App\Form\UserForgetpasswordForm;
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
+use App\Repository\EvaluationObjectRepository;
+use App\Repository\LessonRepository;
+use App\Repository\UserLessonRepository;
 
 class UserController extends BaseController
 {
@@ -160,6 +165,49 @@ class UserController extends BaseController
         return $this->render("user/edit", [
             "form" => $form->createView(),
             "errors" => $form->getErrorFeedback(),
+            "user" => $user,
+        ]);
+    }
+
+    public function lessons(Request $request, UserLessonRepository $userLessonRepository, EvaluationObjectRepository $evaluationObjectRepository, LessonRepository $lessonRepository)
+    {
+        $user = $this->getUser();
+        /** @var UserLesson[] $lessons */
+        $lessons = $userLessonRepository
+            ->where("user_id = :id")
+            ->orderBy("lesson_id", "ASC")
+            ->setParameter("id", $user->getId())
+            ->fetch();
+
+        /** @var EvaluationObject[] $evaluation */
+        $evaluations = $evaluationObjectRepository->where("user_id = :id")->setParameter("id", $user->getId())->fetch();
+
+        if (!is_array($evaluations)) $evaluations = [$evaluations];
+        if (!is_array($lessons)) $lessons = [$lessons];
+
+        foreach ($evaluations as $evaluation){
+            $evaluation->getEvaluation()->setLesson($lessonRepository->find($evaluation->getEvaluation()->getLesson()->getId()));
+        }
+
+        $cours = [];
+        foreach ($lessons as $lesson){
+            $id = $lesson->getLesson()->getId();
+
+            $cours[$id]["title"] = $lesson->getLesson()->getTitle();
+            if($lesson->getChapter() == 0){
+                $cours[$id]["start"] = $lesson->getCreatedAt()->format("d-m-Y");
+            }
+
+            $cours[$id]["over"] = $lesson->getIsOver() ? "Oui" : "Non";
+
+            if($cours[$id]["chapter"] < $lesson->getChapter()){
+                $cours[$id]["chapter"] = $lesson->getChapter();
+            }
+        }
+
+        return $this->render("user/lessons", [
+            "lessons" => $cours,
+            "evaluations" => $evaluations,
             "user" => $user,
         ]);
     }

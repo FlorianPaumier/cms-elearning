@@ -223,6 +223,8 @@ class TemplateEngine
             $html = null;
             $this->content = RenderFunction::extend($value, $this->content);
         }
+
+        if(preg_match("#@extend\(([^)]*)\)#m", $this->content)) $this->_extendFile();
     }
 
     /**

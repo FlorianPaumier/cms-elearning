@@ -158,8 +158,9 @@ abstract class AbstractRepository extends QueryBuilder
 
         return [
             "data" => $this->setMaxResult($length)
+                ->orderBy("id" , "ASC")
                 ->page($page)
-                ->findAll(),
+                ->fetch(),
             "total" => $count,
             "per_page" => $length,
             "links" => $links,
@@ -271,23 +272,24 @@ abstract class AbstractRepository extends QueryBuilder
             $this->select($target);
         }
     }
+
     private function createLinkPagination(string $url, int $page, int $start, int $end)
     {
 
-        $link = '<nav aria-label="Page navigation example">';
-        $link .= '<ul class="pagination">';
-        $link .= '<li class="page-item ' . (($page - 1) < 1 ? "disabled" : "" ). '"><a rel="external" class="page-link" href="' . $url . ($page - 1) . '" > Previous</a></li>';
+        $link = '<nav aria-label="Page navigation example" class="pagination-bar">';
+        $link .= '<ul class="pagination list-unstyle">';
+        $link .= '<li class="page-item ' . (($page - 1) < 1 ? "disabled" : "" ). '"><a '.(($page - 1) < 1 ? "disabled" : "" ).' rel="external" class="page-link" href="' . $url . ($page - 1) . '" ><span>Previous</span></a></li>';
         $link .= '<li class="page-item ' . (($page - 1) <= 1 ? "disabled" : "" ) . '">';
-        $link .= '<a class="page-link" rel="external" href="' . $url . '1" aria-label="Previous">';
-        $link .= '<span aria-hidden="true">&laquo;</span></a></li>';//<span class="sr-only"> Previous</span>
+        $link .= '<a class="page-link" rel="external" href="' . $url . '1" aria-label="Previous" '.(($page - 1) < 1 ? "disabled" : "" ).'>';
+        $link .= '<span aria-hidden="true">←</span></a></li>';//<span class="sr-only"> Previous</span>
         for ($i = $start; $i <= $end; $i++) {
-            $link .= '<li class="page-item ' . (($page == $i) ? "active" : "" ) . '"><a rel="external" class="page-link" href="' . $url . $i . '">' . $i . '</a></li>';
+            $link .= '<li class="page-item ' . (($page == $i) ? "active disabled" : "" ) . '"><a rel="external" class="page-link" href="' . $url . $i . '">' . $i . '</a></li>';
 
         }
-        $link .= '<li class="page-item ' . (($page + 1) === $end ? "disabled" : "" ). '">';
-        $link .= '<a rel="external" class="page-link" href = "' . $url . $end . '" aria-label="Next" >';
-        $link .= '<span aria-hidden="true">&laquo;</span></a></li>';//<span class="sr-only"> Next</span>
-        $link .= '<li class="page-item ' .(($page + 1) > $end ? "disabled" : "" ) . '"><a rel="external" class="page-link" href = "' . $url . ($page + 1) . '"> Next</a></li>';
+        $link .= '<li class="page-item ' . (($page + 1) > $end ? "disabled" : "" ). '">';
+        $link .= '<a rel="external" class="page-link" href = "' . $url . $end . '" aria-label="Next" '.(($page + 1) > $end ? "disabled" : "" ).'>';
+        $link .= '<span aria-hidden="true">→</span></a></li>';//<span class="sr-only"> Next</span>
+        $link .= '<li class="page-item ' .(($page + 1) > $end ? "disabled" : "" ) . '"><a rel="external" class="page-link" href = "' . $url . ($page + 1) . '" '.(($page - 1) < 1 ? "disabled" : "" ).'><span>Next</span></a></li>';
         $link .= '</ul>';
         return $link;
     }

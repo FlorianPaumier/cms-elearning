@@ -17,6 +17,7 @@ use App\Core\Form\Fields\EntityType;
 use App\Core\Form\Fields\FieldsInterface;
 use App\Core\Form\Fields\ImageType;
 use App\Core\Form\Fields\OptionType;
+use App\Core\Form\Fields\PasswordType;
 use App\Core\Form\Fields\SelectType;
 use App\Core\Form\Fields\SubmitType;
 use App\Core\Form\Validator\Validator;
@@ -72,7 +73,7 @@ class FormBuilder
     /**
      * FormBuilder constructor.
      */
-    public function __construct(object $entity = null)
+    public function __construct($entity = null)
     {
         $this->entity = $entity;
         $this->render = new RenderView();
@@ -88,7 +89,7 @@ class FormBuilder
         return $this;
     }
 
-    public function add(string $key, string $field, array $args)
+    public function add(string $key, string $field, array $args = [])
     {
         if (!class_exists($field)) {
             throw new \Exception();
@@ -214,11 +215,15 @@ class FormBuilder
 
     public function isValid()
     {
-        if(ConfigHandler::get("request")->getMethod() != "POST") return false;
-        $validator = new Validator($this->fields);
-        $this->errors = $validator->getErrors();
+        if (ConfigHandler::get("request")->getMethod() != "POST") {
+            return false;
+        }
 
-        return $validator->isValid();
+        $validator = new Validator($this->fields, $this->entity, $this->parent);
+        $isValid = $validator->isValid();
+        $this->errors = $validator->getErrors();
+        $validator->resetErrors();
+        return $isValid;
     }
 
     public function setFormParentType(string $class)
@@ -341,7 +346,7 @@ class FormBuilder
             $field->translate($options);
             if ($field instanceof SelectType) {
                 $this->createSelectType($field, $args);
-            }else{
+            } else {
                 $this->createChoiceInput($field, $args);
             }
         } else {
@@ -493,6 +498,8 @@ class FormBuilder
 
         if (method_exists($this->entity, $method)) {
             return $this->entity->$method();
+        }else if(is_array($this->entity)) {
+            return $this->entity[$key] ?? null;
         }
 
         return "";
@@ -506,6 +513,10 @@ class FormBuilder
 
         if ($this->fields[$key]["type"] == DateType::class) {
             return $this->transformDate($key, $value);
+        }
+
+        if ($this->fields[$key]["type"] == PasswordType::class) {
+            return $this->transformPassword($value);
         }
 
         return $value;
@@ -570,16 +581,21 @@ class FormBuilder
     private function createChoiceInput(ChoiceType $field, array $args)
     {
         $inputs = "";
-        foreach ($args["choices"] as $key => $choice){
+        foreach ($args["choices"] as $key => $choice) {
+
+            $name = $this->formType->getBlockPrefix() . "_" . $args["key"];
 
             $params = [
+                "key" => $args["key"],
                 "label" => $choice,
                 "value" => $key,
                 "placeholder" => $choice,
                 "class" => "form-control",
                 "type" => $field->getBlockName(),
-                "name" => $this->formType->getBlockPrefix() ."_" .$args["key"]
+                "name" => $name
             ];
+
+            if($params["type"] == "checkbox") $params["name"] .= "[]";
 
             $inputs .= $this->render->renderHtmlElement($field, $params);
         }
@@ -590,6 +606,11 @@ class FormBuilder
         $field->setHtml($this->render->renderHtmlElement($container, $args));
 
         return $field;
+    }
+
+    private function transformPassword($value)
+    {
+        return password_hash($value, PASSWORD_BCRYPT);
     }
 
 }

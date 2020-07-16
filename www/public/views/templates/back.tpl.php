@@ -28,10 +28,7 @@
 
     <!-- Custom styles for this template-->
     <link href="/assets/styles/admin/main.css" rel="stylesheet">
-
-    @section(styles)
-
-    @section(styles)
+    @yield(styles)
 
 </head>
 
@@ -48,7 +45,8 @@ if ($errors) {
     }
 }
 ?>
-@section(body)
+
+@yield(body)
 
 
 @include(partials/modal)
@@ -68,7 +66,7 @@ if ($errors) {
 <script src="/assets/scripts/ckfinder/ckfinder.js"></script>
 <script src="/assets/scripts/ckeditor.js"></script>
 
-@section(javascripts)
+@yield(javascripts)
 
 @include(admin/partials/footer)
 

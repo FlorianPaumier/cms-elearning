@@ -20,7 +20,7 @@ class StreamInscription
     protected $user;
 
     /** @var boolean */
-    protected $hadCame;
+    protected $hasCame = false;
     /**
      * @return Stream
      */
@@ -60,18 +60,18 @@ class StreamInscription
     /**
      * @return bool
      */
-    public function isHadCame(): bool
+    public function isHasCame(): bool
     {
-        return $this->hadCame;
+        return $this->hasCame;
     }
 
     /**
-     * @param bool $hadCame
+     * @param bool $hasCame
      * @return StreamInscription
      */
-    public function setHadCame(bool $hadCame): StreamInscription
+    public function setHasCame(bool $hasCame): StreamInscription
     {
-        $this->hadCame = $hadCame;
+        $this->hasCame = $hasCame;
         return $this;
     }
 }

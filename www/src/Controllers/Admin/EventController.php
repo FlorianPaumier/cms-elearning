@@ -68,7 +68,9 @@ class EventController extends BaseController
         $form->handleRequest($request);
 
         if($form->isValid()){
-            $this->entityManager->persist($stream)->flush();
+            $event->setStream($stream);
+            $this->entityManager->persist($event)->persist($stream)->flush();
+            $this->redirect->redirectToRoute("admin_events_list");
         }
 
         return $this->render("admin/events/stream", [
@@ -78,7 +80,14 @@ class EventController extends BaseController
 
     public function delete(Event $event)
     {
-
+        $this->entityManager->delete($event);
+        $this->redirect->redirectToRoute("admin_events_list");
     }
 
+    public function deleteStream(Event $event, Stream $stream)
+    {
+        $event->setStream(null);
+        $this->entityManager->persist($event)->delete($stream);
+        $this->redirect->redirectToRoute("admin_events_list");
+    }
 }

@@ -16,6 +16,7 @@ use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
 use App\Repository\EvaluationObjectRepository;
 use App\Repository\LessonRepository;
+use App\Repository\StreamInscriptionRepository;
 use App\Repository\UserLessonRepository;
 
 class UserController extends BaseController
@@ -143,10 +144,12 @@ class UserController extends BaseController
 
         }
 
-    public function profile(Request $request)
+    public function profile(Request $request, StreamInscriptionRepository $repository)
     {
+        $events = $repository->findBy(["user_id" => $this->getUser()->getId()]);
         return $this->render("user/profile", [
             "user" => $this->getUser(),
+            "events" => is_array($events) > 1 ?: [$events],
         ]);
     }
 

@@ -106,8 +106,8 @@ class FormBuilder
             ConfigHandler::get("eventEmmiter")->emit("error.500", "Field $key don't exist");
         }
 
-        $args["value"] = $this->setValue($key);
         $args["type"] = $args["type"] ?? $field->getBlockType();
+        $args["value"] = $this->setValue($key, $args["type"]);
         $args["key"] = $key;
 
         $field = $this->translateField($field, $args);
@@ -494,17 +494,24 @@ class FormBuilder
         return $args;
     }
 
-    private function setValue(string $key)
+    private function setValue(string $key, ?string $type)
     {
-        $method = "get" . ucfirst($key);
+        $method = "get" . ucfirst(StringTransformer::toPascalCase($key));
+
+        $value = "";
 
         if (method_exists($this->entity, $method)) {
-            return $this->entity->$method();
-        }else if(is_array($this->entity)) {
-            return $this->entity[$key] ?? null;
+            $value = $this->entity->$method();
+            if (is_object($value)) {
+                $value = $type == "date" ? $value->format("Y-m-d") : $value->format("Y-m-d\TH:i");
+            }
+        } else {
+            if (is_array($this->entity)) {
+                $value = $this->entity[$key] ?? null;
+            }
         }
 
-        return "";
+        return $value;
     }
 
     private function transformValue(string $key, $value)
@@ -597,7 +604,9 @@ class FormBuilder
                 "name" => $name
             ];
 
-            if($params["type"] == "checkbox") $params["name"] .= "[]";
+            if ($params["type"] == "checkbox") {
+                $params["name"] .= "[]";
+            }
 
             $inputs .= $this->render->renderHtmlElement($field, $params);
         }

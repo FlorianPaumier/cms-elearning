@@ -16,6 +16,8 @@ abstract class Hydrator
 {
     static $relations = false;
     static $recursif = false;
+    static $parents = [];
+    static $count = 0;
 
 
     /**
@@ -42,7 +44,7 @@ abstract class Hydrator
 
         foreach ($array as $key => $value) {
             if (self::$relations) {
-                $key = str_replace(EntityHelper::getClass($instance) . "s_", "", $key);
+                $key = str_replace(EntityHelper::getClass($instance) . "_", "", $key);
             }
 
             $method = self::getSetter($key);
@@ -58,7 +60,9 @@ abstract class Hydrator
 
                 if (!($value instanceof $class)) {
                     if (gettype($value) == "integer") {
+                        self::$parents[] = get_class($instance);
                         self::$recursif = true;
+                        ++self::$count;
                         /** @var AbstractRepository $repo */
                         $repo = ConfigHandler::get("entityManager")->getRepository($class . "Repository");
                         $value = $repo->find($value);
@@ -70,7 +74,15 @@ abstract class Hydrator
             } else {
                 if (!is_null($type) && self::isRecursif()) {
                     $class = $type->getName();
-                    if ($class !== \DateTime::class) {
+                    ++self::$count;
+                    if ($class !== \DateTime::class && !in_array($class, self::$parents)  && self::$count < 6) {
+
+                        /** @var AbstractRepository $repo */
+                        $repo = ConfigHandler::get("entityManager")->getRepository($class . "Repository");
+                        $value = $repo->find($value);
+
+                        self::$parents[] = $class;
+                    } elseif ($class !== \DateTime::class) {
                         $value = (new $class())->setId($value);
                     }
                 }
@@ -80,7 +92,7 @@ abstract class Hydrator
                 $value = $serializer->deserialize($value, "json");
             }
 
-            if (!is_null($type) && $type->getName() == "DateTime" || $type == "datetime") {
+            if (!is_null($type) && ($type->getName() == "DateTime" || $type == "datetime")) {
                 $value = new \DateTime($value);
             }
 

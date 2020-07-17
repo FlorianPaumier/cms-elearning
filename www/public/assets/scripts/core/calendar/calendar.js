@@ -1,13 +1,14 @@
 class Calendar {
 
-
     constructor(target, events) {
+        console.log({events})
         this.getConstant()
         this.dateFormat = "Y-MM-DD"
         this.eventsArray = {}
         if (events !== undefined) {
             this.createEvent(events);
         }
+        console.log(this.eventsArray)
         this.target = $(target)
         this.month = moment();
     }
@@ -21,23 +22,32 @@ class Calendar {
     createEvent(events) {
 
         for (const arrayKey in events) {
-            if (this.eventsArray[events[arrayKey].happen_at] == undefined)
-                this.eventsArray[events[arrayKey].happen_at] = [];
+            const happenAt = moment(events[arrayKey].happen_at).format(this.dateFormat)
+            if (this.eventsArray[happenAt] == undefined)
+                this.eventsArray[happenAt] = [];
 
-            this.eventsArray[events[arrayKey].happen_at].push({
-                "date": events[arrayKey].happen_at,
+            let stream = "";
+            if(events[arrayKey].stream_id && moment(happenAt) > moment()){
+                stream = "<button class='btn btn-primary btn-stream-subscribe'>Inscription</button>"
+            }
+
+            this.eventsArray[happenAt].push({
+                "date": happenAt,
                 "id": events[arrayKey].id,
                 "content": events[arrayKey].content,
                 "title": events[arrayKey].title,
+                "stream": stream,
+                "stream_id" : events[arrayKey].stream_id,
                 "event": this.createElement(
                     "div",
                     events[arrayKey].title,
                     {
                         "class": "event",
-                        "data-date": events[arrayKey].happen_at,
+                        "data-date": happenAt,
                         "data-id": events[arrayKey].id
                     })
             })
+
         }
     }
 
@@ -233,7 +243,7 @@ class Calendar {
         let event;
 
         for (const eventsKey in this.eventsArray[target.getAttribute("data-date")]) {
-            if(target.getAttribute("data-id") == this.eventsArray[target.getAttribute("data-date")][eventsKey].id){
+            if (target.getAttribute("data-id") == this.eventsArray[target.getAttribute("data-date")][eventsKey].id) {
                 event = this.eventsArray[target.getAttribute("data-date")][eventsKey];
             }
         }
@@ -243,9 +253,26 @@ class Calendar {
         let title = modal.querySelector(".modal-title");
         let body = modal.querySelector(".modal-body");
         title.innerHTML = event.title;
-        body.innerHTML = event.content;
+        body.innerHTML = event.content + " <br>" + event.stream;
 
         modal.classList.remove("hide")
+
+        $("button.btn-stream-subscribe").each(function(key,btn) {
+
+            console.log(event)
+            console.log(btn)
+            $(btn).click(function(){
+                fetch("/events/stream/"+event.stream_id+"/inscription", {
+                    method: "post"
+                }).then(res => {
+                    return res.json();
+                }).then(res => {
+                    alert(res.message);
+                }).catch(err => {
+                    alert("Une erreur est survenue. Veuilliez recommencer plus tard ou conctater l'adminstrateur");
+                })
+            })
+        })
     }
 
     addEvent(day) {

@@ -74,7 +74,7 @@ class FormBuilder
     /**
      * FormBuilder constructor.
      */
-    public function __construct(object $entity = null)
+    public function __construct($entity = null)
     {
         $this->entity = $entity;
         $this->render = new RenderView();
@@ -500,6 +500,8 @@ class FormBuilder
 
         if (method_exists($this->entity, $method)) {
             return $this->entity->$method();
+        }else if(is_array($this->entity)) {
+            return $this->entity[$key] ?? null;
         }
 
         return "";

@@ -58,8 +58,8 @@ class EntityManager extends QueryBuilder
             try {
 
                 $this->execute($query["sql"], $query["data"]);
-//                dump($query["sql"]);
-//                dump($query["data"]);
+                dump($query["sql"]);
+                dump($query["data"]);
 
                 if (is_null($query["object"]->getId())) {
                     $query["object"]->setId($this->pdo->lastInsertId());

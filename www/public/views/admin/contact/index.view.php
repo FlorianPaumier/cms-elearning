@@ -13,7 +13,7 @@
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($forms as $form): ?>
+        <?php foreach ($forms["data"] as $form): ?>
             <tr>
                 <td><?= $form->getId() ?></td>
                 <td><?= $form->getName() ?></td>
@@ -24,5 +24,7 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<?= $forms["links"]?>
 
 @endsection

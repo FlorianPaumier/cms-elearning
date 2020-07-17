@@ -22,6 +22,7 @@ use App\Core\Form\Fields\SelectType;
 use App\Core\Form\Fields\SubmitType;
 use App\Core\Form\Validator\Validator;
 use App\Core\Helpers\FileUploader;
+use App\Core\Helpers\StringTransformer;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Render\RenderView;
 use App\Core\Request\ParameterBag;
@@ -169,7 +170,8 @@ class FormBuilder
 
                     $property = $this->fields[$key]["key"];
 
-                    $method .= ucfirst($property);
+                    $method .= StringTransformer::toPascalCase($property);
+
                     if (method_exists($this->entity, $method)) {
                         //                        /** @var \ReflectionMethod $methodReflection */
                         //                        $methodReflection = new \ReflectionMethod($this->entity, $method);
@@ -513,9 +515,9 @@ class FormBuilder
             return $this->transformDate($key, $value);
         }
 
-        if ($this->fields[$key]["type"] == PasswordType::class) {
-            return $this->transformPassword($value);
-        }
+//        if ($this->fields[$key]["type"] == PasswordType::class) {
+////            return $this->transformPassword($value);
+//        }
 
         return $value;
     }

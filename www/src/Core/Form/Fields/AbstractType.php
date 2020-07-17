@@ -37,6 +37,7 @@ abstract class AbstractType implements FieldsInterface
         'choice_label' => "id",
         'multiple' => false,
         'placeholder' => "",
+        "class" => "",
     ];
 
     public function __construct()

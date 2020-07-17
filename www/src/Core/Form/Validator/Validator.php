@@ -30,7 +30,7 @@ class Validator
         'pdf' => 'application/pdf'
     ];
 
-    /** @var ParameterBag */
+    /** @var Request */
     private $request;
 
     /** @var EntityManager */

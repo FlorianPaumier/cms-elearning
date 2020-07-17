@@ -160,7 +160,7 @@ abstract class AbstractRepository extends QueryBuilder
             "data" => $this->setMaxResult($length)
                 ->orderBy("id" , "ASC")
                 ->page($page)
-                ->fetch(),
+                ->fetch() ?? [],
             "total" => $count,
             "per_page" => $length,
             "links" => $links,

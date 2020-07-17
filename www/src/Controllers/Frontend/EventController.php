@@ -18,4 +18,12 @@ class EventController extends BaseController
 
         return $this->render("frontend/events/calendar", ["events" => $serializer->serialize($events, 'json')]);
     }
+
+    public function stream(Request $request)
+    {
+        return $this->render("frontend/events/stream", [
+           "stream" => "dev_geek",
+           "host" => "localhost"
+        ]);
+    }
 }

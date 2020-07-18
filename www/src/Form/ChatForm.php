@@ -7,23 +7,10 @@ use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
+use App\Entity\Chat;
 
 class ChatForm extends AbstractForm
 {
-
-    public static function getConstraint(): array
-    {
-        return [
-            [
-                "message" => [
-                    "empty" => false,
-                    "required" => true,
-                    "exists" => true,
-                ]
-            ]
-        ];
-    }
-
     public function buildForm(FormBuilder $builder): FormBuilder
     {
         return $builder
@@ -47,6 +34,16 @@ class ChatForm extends AbstractForm
 
     public function getBlockPrefix(): string
     {
-        return $this->prefix ?? "chat";
+        return "frontend_chat";
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function configureOptions()
+    {
+        $this->options = [
+            "data_class" => Chat::class
+        ];
     }
 }

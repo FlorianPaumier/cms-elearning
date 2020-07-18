@@ -1,0 +1,8 @@
+article_list:
+  path: /chat
+  controller: App\Controllers\Frontend\Chat:index
+
+article_view:
+  path: /chat/session/{id}
+  controller: App\Controllers\Frontend\Chat:session
+  method: [GET,POST]

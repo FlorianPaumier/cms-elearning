@@ -4,40 +4,38 @@
 namespace App\Entity;
 
 
+use App\Core\Helpers\TimestampableEntity;
 use App\Core\Interfaces\Entity;
 
 class ChatMessage
 {
     use Entity;
+    use TimestampableEntity;
 
-    protected $id;
-
-    protected $idUser;
+    protected $user;
 
     protected $message;
 
-    protected $messageDate;
-
-    protected $idSession;
+    protected $chatSession;
 
     /**
-     * @return mixed
+     * @return User
      */
-    public function getIdUser()
+    public function getUser(): User
     {
-        return $this->idUser;
+        return $this->user;
     }
 
     /**
-     * @param mixed $idUser
+     * @param User $user
      */
-    public function setIdUser(int $idUser): void
+    public function setUser(User $user): void
     {
-        $this->idUser = $idUser;
+        $this->user = $user;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getMessage()
     {
@@ -45,7 +43,7 @@ class ChatMessage
     }
 
     /**
-     * @param mixed $message
+     * @param string $message
      */
     public function setMessage(string $message): void
     {
@@ -53,35 +51,19 @@ class ChatMessage
     }
 
     /**
-     * @return mixed
+     * @return ChatSession
      */
-    public function getMessageDate()
+    public function getChatSession(): ChatSession
     {
-        return $this->messageDate;
+        return $this->chatSession;
     }
 
     /**
-     * @param mixed $messageDate
+     * @param ChatSession $chatSession
      */
-    public function setMessageDate($messageDate): void
+    public function setIdSession(ChatSession $chatSession): void
     {
-        $this->messageDate = $messageDate;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIdSession()
-    {
-        return $this->idSession;
-    }
-
-    /**
-     * @param mixed $idSession
-     */
-    public function setIdSession($idSession): void
-    {
-        $this->idSession = $idSession;
+        $this->chatSession = $chatSession;
     }
 
 

@@ -24,6 +24,9 @@
 .pagination .active {
   width: 38px;
 }
+.pagination .active a {
+  background-color: gray;
+}
 
 .article {
   margin: auto;

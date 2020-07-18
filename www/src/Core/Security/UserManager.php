@@ -68,8 +68,8 @@ class UserManager
                 "roles" => $q->getRoles(),
                 "timestamp" => time() + 2 * 60 * 60,
             ]);
-        }
 
+        }
 
 //        dump($this->session->getSession());
         return $response;

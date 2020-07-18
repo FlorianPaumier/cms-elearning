@@ -3,13 +3,11 @@
 namespace App\Core\Render;
 
 use App\Core\Cache\ConfigHandler;
-use App\Core\Exceptions\AbsctractException;
-use App\Core\Exceptions\ExceptionHandler;
-use App\Core\Kernel\Kernel;
 use App\Core\Session\PHPSession;
 
 class RenderView
 {
+
     /**
      * @var PHPSession
      */
@@ -21,6 +19,9 @@ class RenderView
     /** @var TemplateEngine  */
     private $templateEngine;
 
+    /**
+     * RenderView constructor.
+     */
     public function __construct()
     {
         $this->templateEngine = new TemplateEngine();
@@ -37,10 +38,10 @@ class RenderView
      */
     public static function include(string $template, array $args = [])
     {
-        $defaultData = [];
-//            "session" => ConfigHandler::get("session")->offsetGet("app.user") ? ["connected" => true, "roles" => null] : ["connected" => false, "roles" => null],
-//            "flash" => ConfigHandler::get("session")->get("app.flash") ?? "",
-//        ];
+        $defaultData = [
+            "session" => ConfigHandler::get("session")->offsetGet("app.user") ? ["connected" => true, "roles" => null] : ["connected" => false, "roles" => null],
+            "flash" => ConfigHandler::get("session")->offsetGet("app.flash") ?? "",
+        ];
 
         $includeEngine = new TemplateEngine();
 
@@ -121,6 +122,12 @@ class RenderView
         return $this->templateEngine->compile();
     }
 
+    /**
+     * Render en pretty error to the user
+     * @param string $view
+     * @param \Exception $exception
+     * @throws \Exception
+     */
     public function renderErrors(string $view,\Exception $exception)
     {
         if($_SERVER["APP_ENV"] == "dev"){

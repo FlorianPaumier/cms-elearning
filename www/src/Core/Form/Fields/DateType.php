@@ -12,6 +12,10 @@ class DateType extends AbstractType
         return PATH_FORM."/DateType.tpl.php";
     }
 
+    public function getBlockType(){
+        return "date";
+    }
+
     public function getBlockName(){
         return "date";
     }

@@ -23,7 +23,7 @@ class ArticleForm extends AbstractForm
         return $builder
             ->add("image", ImageType::class, [
                 "label" => "Image",
-                "required" => true,
+                "required" => false,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
             ->add("visible", CheckboxType::class, [
@@ -38,7 +38,7 @@ class ArticleForm extends AbstractForm
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->add("idCategory", SelectType::class, [
+            ->add("category", SelectType::class, [
                 "label" => "Catégorie",
                 "placeholder" => "Catégorie",
                 "required" => true,

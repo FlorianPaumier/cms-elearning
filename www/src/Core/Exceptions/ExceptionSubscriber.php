@@ -68,6 +68,9 @@ class ExceptionSubscriber implements SubscriberInterface
         $this->throwException(MethodNotAllowedAbsctractException::class, $message, $code);
     }
 
+    /**
+     * Throw exception or a pretty page
+     */
     private function throwException(string $exception, string $message, int $code){
         if($_SERVER["APP_ENV"] === "dev"){
             try{

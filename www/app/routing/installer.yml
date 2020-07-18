@@ -1,0 +1,15 @@
+installer_index:
+  path: /installer
+  controller: App\Controllers\Installer:index
+
+installer_configuration:
+  path: /installer
+  controller: App\Controllers\Installer:configuration
+
+installer_configuration_database:
+  path: /installer/configuration
+  controller: App\Controllers\Installer:database
+
+installer_configuration_admin:
+  path: /installer/configuration/admin
+  controller: App\Controllers\Installer:admin

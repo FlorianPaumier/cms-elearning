@@ -21,6 +21,7 @@ use App\Core\Request\Request;
  */
 class Validator
 {
+    #region field
     /**
      *
      */
@@ -48,7 +49,12 @@ class Validator
      */
     private $parent;
 
+    /**
+     * @var null
+     */
     private $entity;
+
+    #endregion
 
     /**
      * Validator constructor.
@@ -139,6 +145,7 @@ class Validator
     }
 
     /**
+     * Test the length of the value from the constraint input
      * @param string $key
      * @param int|null $min
      * @param int|null $max
@@ -171,6 +178,7 @@ class Validator
     }
 
     /**
+     * Test the present of the key
      * @param string ...$keys
      * @return $this
      */
@@ -201,6 +209,7 @@ class Validator
     }
 
     /**
+     * Test if the value is a valid email
      * @param string $key
      * @return mixed
      */
@@ -219,6 +228,7 @@ class Validator
     }
 
     /**
+     * Test the confirmation of the key
      * @param string $key
      * @return $this
      */
@@ -253,6 +263,7 @@ class Validator
     }
 
     /**
+     * Test if the value doesn't exist in the bdd
      * @param string $key
      * @param string $target
      * @param int|null $exclude
@@ -291,11 +302,17 @@ class Validator
         return $this->request->get($key);
     }
 
+    /**
+     * @return array
+     */
     public function getErrors()
     {
         return $this->errors;
     }
 
+    /**
+     *
+     */
     public function resetErrors()
     {
         $this->errors = [];

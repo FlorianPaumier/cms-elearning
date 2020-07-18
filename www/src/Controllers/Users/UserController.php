@@ -22,6 +22,11 @@ use App\Repository\UserLessonRepository;
 class UserController extends BaseController
 {
 
+    /**
+     * @param Request $request
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws \Exception
+     */
     public function login(Request $request)
     {
         if ($this->userManager->isConnected()) {
@@ -43,6 +48,11 @@ class UserController extends BaseController
         );
     }
 
+    /**
+     * @param Request $request
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws \Exception
+     */
     public function register(Request $request)
     {
         /*if($this->userManager->isConnected()){
@@ -75,6 +85,10 @@ class UserController extends BaseController
         );
     }
 
+    /**
+     * @param Request $request
+     * @throws \Exception
+     */
     public function loginCheck(Request $request)
     {
         $user = new User();
@@ -93,12 +107,20 @@ class UserController extends BaseController
         $this->redirect->redirectToRoute("app_user_login");
     }
 
+    /**
+     * @throws \Exception
+     */
     public function logout()
     {
         $this->userManager->disconnectUser();
         $this->redirect->redirectToRoute("app_home");
     }
 
+    /**
+     * @param Request $request
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws \Exception
+     */
     public function forgetPassword(Request $request)
     {
         $form = $this->createForm(UserForgetpasswordForm::class);
@@ -125,6 +147,10 @@ class UserController extends BaseController
         );
     }
 
+    /**
+     * @param Request $request
+     * @throws \Exception
+     */
     public function deleteUser(Request $request)
     {
         $currentUser = $this->getUser();
@@ -144,6 +170,13 @@ class UserController extends BaseController
 
         }
 
+    /**
+     * Show user profile
+     * @param Request $request
+     * @param StreamInscriptionRepository $repository
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws \App\Core\Exception\NoRecordException
+     */
     public function profile(Request $request, StreamInscriptionRepository $repository)
     {
         $events = $repository->findBy(["user_id" => $this->getUser()->getId()]);
@@ -153,6 +186,12 @@ class UserController extends BaseController
         ]);
     }
 
+    /**
+     * Edition of some informations of the user profile
+     * @param Request $request
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws \Exception
+     */
     public function edit(Request $request)
     {
         $user = $this->getUser();
@@ -171,6 +210,15 @@ class UserController extends BaseController
         ]);
     }
 
+    /**
+     * Show all the lessons start by the user
+     * @param Request $request
+     * @param UserLessonRepository $userLessonRepository
+     * @param EvaluationObjectRepository $evaluationObjectRepository
+     * @param LessonRepository $lessonRepository
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws \Exception
+     */
     public function lessons(Request $request, UserLessonRepository $userLessonRepository, EvaluationObjectRepository $evaluationObjectRepository, LessonRepository $lessonRepository)
     {
         $user = $this->getUser();

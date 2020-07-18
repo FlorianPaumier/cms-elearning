@@ -10,14 +10,21 @@ use Exception;
 abstract class FileUploader
 {
 
+    #region field
     /** @var string */
     private static $rootPath = ROOT_PATH. "/public/assets/images/uploads";
 
     /** @var string */
     private static $rootUri = "/assets/images/uploads";
 
+    /**
+     * @var
+     */
     private static $file;
 
+    /**
+     * @var int
+     */
     private static $maxUpload = 100000000;
 
     /** @var string[]  */
@@ -26,9 +33,19 @@ abstract class FileUploader
         "mpc","mpeg","mpg","ods","odt","pdf","png","ppt","pptx","pxd","qt","ram","rar","rm","rmi","rmvb","rtf","sdc", "svg","sitd","swf",
         "sxc","sxw","tar","tgz","tif","tiff","txt","vsd","wav","wma","wmv","xls","xlsx","zip"];
 
+    /**
+     * @var string[]
+     */
     private static $allowedMimeTypes = array("image/gif", "image/jpeg", "image/pjpeg", "image/x-png", "image/png", "image/svg+xml");
 
+    #endregion
 
+    /**
+     * @param array $file
+     * @param string $dir
+     * @return string
+     * @throws Exception
+     */
     public static function UploadFile(array $file, string $dir = "/"): string
     {
 

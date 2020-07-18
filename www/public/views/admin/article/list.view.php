@@ -1,7 +1,6 @@
 @extend(templates/back)
 
 @section(styles)
-<link rel="stylesheet" href="../../../assets/styles/admin/pagination.css">
 @endsection
 
 @section(body)
@@ -24,8 +23,8 @@
                     <td class="list-content"><input type="checkbox"></td>
                     <td class="list-content"><?= $article->getId()?></td>
                     <td class="list-content"><?= $article->getTitle(); ?></td>
-                    <td class="list-content"><?= $article->getCreateDate(); ?></td>
-                    <td class="list-content"><?= $article->getEditDate(); ?></td>
+                    <td class="list-content"><?= $article->getCreatedAt()->format('d/m/Y'); ?></td>
+                    <td class="list-content"><?= $article->getUpdatedAt()->format('d/m/Y'); ?></td>
                     <td class="list-content"><?= 'ok' ?></td>
                     <td class="list-content">
                         <a href="/admin/article/edit/<?= $id; ?>">
@@ -65,17 +64,7 @@
                 }
             <?php */ ?>
         </table>
-        <div class="pagination-section">
-            <ul class="pagination second">
-                <li><a href="#">Prev</a></li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">Next</a></li>
-            </ul>
-        </div>
+        <?= $articles["links"] ?>
     </div>
 </section>
 

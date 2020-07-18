@@ -162,11 +162,17 @@ abstract class AbstractRepository extends QueryBuilder
             $links = $this->createLinkPagination("http://".$server["HTTP_HOST"]. explode("?", $server["REQUEST_URI"], 2)[0]. "?page=", $page, $start, $end);
         }
 
-        return [
-            "data" => $this->setMaxResult($length)
+        $data = $this->setMaxResult($length)
                 ->orderBy("id" , "ASC")
                 ->page($page)
-                ->fetch() ?? [],
+                ->fetch();
+
+        if(!is_array($data)){
+            $data = [$data];
+        }
+
+        return [
+            "data" => $data,
             "total" => $count,
             "per_page" => $length,
             "links" => $links,

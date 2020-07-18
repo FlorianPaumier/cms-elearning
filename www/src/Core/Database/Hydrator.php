@@ -114,7 +114,7 @@ abstract class Hydrator
                 $value = $serializer->deserialize($value, "json");
             }
 
-            if (!is_null($type) && ($type->getName() == "DateTime" || $type == "datetime")) {
+            if (!is_null($type) && ($type == "datetime" || $type->getName() == "DateTime")) {
                 $value = new \DateTime($value);
             }
 
@@ -306,10 +306,6 @@ abstract class Hydrator
      */
     private static function getParameterType(object $instance, string $method)
     {
-        if (in_array($method, ["setCreatedAt", "setUpdatedAt"])) {
-            return "datetime";
-        }
-
         $reflection = new \ReflectionMethod($instance, $method);
 
         /** @var \ReflectionParameter $parameter */

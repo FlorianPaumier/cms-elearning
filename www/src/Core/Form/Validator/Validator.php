@@ -9,6 +9,7 @@ use App\Core\Database\EntityManager;
 use App\Core\Database\Repository\AbstractRepository;
 use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
+use App\Core\Form\Fields\ImageType;
 use App\Core\Helpers\EntityHelper;
 use App\Core\Helpers\StringTransformer;
 use App\Core\Interfaces\FormTypeInterface;
@@ -81,6 +82,8 @@ class Validator
         foreach ($this->form as $input => $constraint) {
             if ($constraint["type"] == ButtonType::class) {
                 continue;
+            } else if ($constraint["type"] == ImageType::class) {
+
             }
             foreach ($constraint["args"] as $param => $value) {
                 switch ($param) {
@@ -91,6 +94,11 @@ class Validator
                         if (!$value) {
                             break;
                         }
+                        if ($constraint["type"] == ImageType::class) {
+                            $this->requiredImage($input);
+                            break;
+                        }
+                        
                         $this->required($input);
                         break;
                     case "empty":
@@ -338,4 +346,8 @@ class Validator
 
     }
 
+    private function requiredImage(string $key){
+
+        isset($this->request->getFile()[$key])?:$this->addError($key, 'required');
+    }
 }

@@ -6,6 +6,7 @@ use App\Core\Database\EntityManager;
 use App\Core\Events\EventEmmiter;
 use App\Core\Formatter\Serializer;
 use App\Core\Logger\AbstractLogger;
+use App\Core\Mailer\MailerHandler;
 use App\Core\Mailer\MailerMessage;
 use App\Core\Request\Request;
 use App\Core\Router\Router;
@@ -57,7 +58,7 @@ class ConfigHandler
 
         if (file_exists(ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php")) {
             require_once ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php";
-            self::bind("mailer", new MailerMessage());
+            self::bind("mailer", new MailerHandler());
         }
 
         self::bind("session", new PHPSession());

@@ -1,33 +1,36 @@
 $(document).ready(function () {
-    if(false === true){
-        //setInterval(showTestimonies, 3000);
-    }
+    setInterval(showTestimonies, 3000);
 });
 
-function showTestimonies() {
-    let testimonies = $(".testimonies-carousel").children();
-    let indexTestimony = 0;
+function startCarousel() {
+    $(".carousel").each(function (carousel) {
 
-    testimonies.map(key => {
-        if ($(testimonies[key])[0].classList.contains("active")) {
-            indexTestimony = key;
-        }
+        const carouselChild = $(carousel).children();
+
+        let indexTestimony = 0;
+
+        carouselChild.map(key => {
+            if ($(carouselChild[key])[0].classList.contains("active")) {
+                indexTestimony = key;
+            }
+        });
+
+        carouselChild.map(key => {
+            if ($(carouselChild[key])[0].classList.contains("active")) {
+                indexTestimony = key;
+            }
+        });
+
+        let length = carouselChild.length;
+
+        $(carouselChild[indexTestimony])[0].classList.remove("active");
+
+        if(!$(carouselChild[indexTestimony + 1])[0]){
+            indexTestimony = -1;
+        };
+
+        $(carouselChild[indexTestimony + 1])[0].classList.add("active");
     });
 
-    testimonies.map(key => {
-        if ($(testimonies[key])[0].classList.contains("active")) {
-            indexTestimony = key;
-        }
-    });
-
-    let length = testimonies.length;
-
-    $(testimonies[indexTestimony])[0].classList.remove("active");
-
-    if(!$(testimonies[indexTestimony + 1])[0]){
-        indexTestimony = -1;
-    };
-
-    $(testimonies[indexTestimony + 1])[0].classList.add("active");
 
 }

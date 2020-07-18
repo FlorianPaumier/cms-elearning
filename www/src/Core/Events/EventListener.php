@@ -7,12 +7,13 @@ namespace App\Core\Events;
 class EventListener
 {
 
-
     /**
      * @var callable
      */
     private $callable;
+
     /**
+     * order to call the different function
      * @var int
      */
     private $priority;
@@ -36,12 +37,23 @@ class EventListener
     private $calls = 0;
 
 
+    /**
+     * EventListener constructor.
+     * @param callable $callable
+     * @param int $priority
+     */
     public function __construct(callable $callable, int $priority)
     {
         $this->callable = $callable;
         $this->priority = $priority;
     }
 
+    /**
+     * If the method need to be called once, don't call the method
+     * Call the function given and inject parameters and increment counter
+     * @param array $args
+     * @return mixed|null
+     */
     public function handle(array $args){
 
         if($this->once && $this->calls > 0){
@@ -61,7 +73,9 @@ class EventListener
         return $this->priority;
     }
 
-    /**  */
+    /**
+     * Set the function to be called just one time
+     */
     public function once(): EventListener
     {
         $this->once = true;
@@ -75,6 +89,9 @@ class EventListener
         return $this;
     }
 
+    /**
+     * @return callable
+     */
     public function getCallback()
     {
         return $this->callable;

@@ -19,20 +19,14 @@ class Article
     /** @var string */
     protected $content;
 
-    /** @var int */
-    protected $idCategory;
+    /** @var Category */
+    protected $category;
 
     /** @var string */
     protected $image;
 
-    /** @var string */
-    protected $createDate;
-
-    /** @var string */
-    protected $editDate;
-
-    /** @var int */
-    protected $idUser;
+    /** @var User */
+    protected $user;
 
     /** @var int */
     protected $visible;
@@ -54,19 +48,11 @@ class Article
     }
 
     /**
-     * @return int
+     * @return User
      */
-    public function getIdUser(): ?int
+    public function getUser(): ?User
     {
-        return $this->idUser;
-    }
-
-    /**
-     * @param int $idUser
-     */
-    public function setIdUser(?int $idUser): void
-    {
-        $this->idUser = $idUser;
+        return $this->user;
     }
 
     /**
@@ -101,14 +87,17 @@ class Article
         $this->content = $content;
     }
 
-    public function getIdCategory(): ?int
+    /**
+     * @return Category|null
+     */
+    public function getCategory(): ?Category
     {
-        return $this->idCategory;
+        return $this->category;
     }
 
-    public function setIdCategory(?int $idCategory): void
+    public function setCategory(Category $category): void
     {
-        $this->idCategory = $idCategory;
+        $this->category = $category;
     }
 
     public function getImage(): ?string
@@ -120,26 +109,4 @@ class Article
     {
         $this->image = $image;
     }
-
-    public function getCreateDate(): ?string
-    {
-        return $this->createDate;
-    }
-
-    public function setCreateDate(?string $createDate): void
-    {
-        $this->createDate = $createDate;
-    }
-
-    public function setEditDate(?string $editDate): void
-    {
-        $this->editDate = $editDate;
-    }
-
-    public function getEditDate(): ?string
-    {
-        return $this->editDate;
-    }
-
-
 }

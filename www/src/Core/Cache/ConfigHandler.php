@@ -1,15 +1,9 @@
 <?php
 
-
 namespace App\Core\Cache;
 
-
-use App\Core\Cache\CacheHandler;
-use App\Core\Database\QueryBuilder;
 use App\Core\Database\EntityManager;
 use App\Core\Events\EventEmmiter;
-use App\Core\Exceptions\ExceptionHandler;
-use App\Core\Form\FormFactory;
 use App\Core\Formatter\Serializer;
 use App\Core\Logger\AbstractLogger;
 use App\Core\Mailer\MailerHandler;
@@ -18,7 +12,6 @@ use App\Core\Request\Request;
 use App\Core\Router\Router;
 use App\Core\Security\UserManager;
 use App\Core\Session\PHPSession;
-use App\Core\Kernel\Kernel;
 
 class ConfigHandler
 {
@@ -29,11 +22,15 @@ class ConfigHandler
      */
     private $path;
 
-    /*
+    /**
      * The container application
+     * @var array
      */
     protected static $container = [];
 
+    /**
+     * ConfigHandler constructor. Define all constant required path for the application
+     */
     public function __construct()
     {
         define("VIEW_PATH", ROOT_PATH . "/public/views");
@@ -61,10 +58,10 @@ class ConfigHandler
 
         if (file_exists(ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php")) {
             require_once ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php";
-            self::bind("mailer", new MailerMessage());
+            self::bind("mailer", new MailerHandler());
         }
 
-        self::bind("session",new PHPSession());
+        self::bind("session", new PHPSession());
         self::bind("entityManager", new EntityManager());
         self::bind("userManager", new UserManager());
         self::bind("router", new Router());

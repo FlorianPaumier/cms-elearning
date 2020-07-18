@@ -14,6 +14,12 @@ use PHPUnit\Util\Exception;
 class Kernel
 {
 
+    /**
+     * Kernel constructor.
+     * Set value for running server + had anonyme functions
+     * @param string $env
+     * @param bool $debug
+     */
     public function __construct(string $env, bool $debug = false)
     {
         $_SERVER["APP_ENV"] = $env;
@@ -50,7 +56,6 @@ class Kernel
         if($response instanceof RenderView){
             $view = $response->compile();
         }
-
 
         echo $view;
     }

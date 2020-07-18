@@ -2,11 +2,25 @@
 
 namespace App\Core\Cache;
 
+/**
+ * Class CacheHandler
+ * @package App\Core\Cache
+ */
 abstract class CacheHandler
 {
 
+    /**
+     * @var string[]
+     */
     private static $configFile = ["config", "routing", "security", "subscriber", "dashboard"];
 
+    /**
+     * Create a file cache for the data
+     * @param string $key
+     * @param $data
+     * @return mixed
+     * @throws \Exception
+     */
     public static function set(string $key, $data)
     {
         $cacheFile = CACHE_PATH . "/" . md5($key) . "Cache.php";
@@ -33,11 +47,19 @@ abstract class CacheHandler
         return null;
     }
 
+
+    /**
+     * @param string $key
+     * @return bool
+     */
     public static function exist(string $key)
     {
         return file_exists(CACHE_PATH . "/" . md5($key) . "Cache.php");
     }
 
+    /**
+     *
+     */
     public function clear()
     {
     }

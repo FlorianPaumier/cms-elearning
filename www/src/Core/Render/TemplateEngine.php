@@ -10,6 +10,7 @@ use App\Core\Cache\ConfigHandler;
 
 class TemplateEngine
 {
+    #region Field
     private const TPL_EXT = [
         ".view.php",
         ".tpl.php",
@@ -52,6 +53,8 @@ class TemplateEngine
 
     /** @var bool */
     private $rendering;
+
+    #endregion
 
     public function __construct()
     {
@@ -177,7 +180,9 @@ class TemplateEngine
 
         if ($tags) {
             $this->content = $this->getParsePhpView($this->content, $this->data["parameter"]);
-//            CacheHandler::set($this->view, $this->content);
+            if ($_SERVER["APP_ENV"] == "prod") {
+                CacheHandler::set($this->view, $this->content);
+            }
 
             if (count($this->fieldEntries) > 0) {
                 $this->_parseTags();
@@ -224,7 +229,9 @@ class TemplateEngine
             $this->content = RenderFunction::extend($value, $this->content);
         }
 
-        if(preg_match("#@extend\(([^)]*)\)#m", $this->content)) $this->_extendFile();
+        if (preg_match("#@extend\(([^)]*)\)#m", $this->content)) {
+            $this->_extendFile();
+        }
     }
 
     /**
@@ -286,6 +293,12 @@ class TemplateEngine
         }
     }
 
+    /**
+     * Execute the php in the file
+     * @param string $content
+     * @param array $data
+     * @return false|string
+     */
     private function getParsePhpView(string $content, array $data)
     {
         ob_start();

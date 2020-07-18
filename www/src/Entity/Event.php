@@ -28,6 +28,9 @@ class Event
     /** @var \DateTime */
     private $happenAt;
 
+    /** @var Stream */
+    protected $stream;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
@@ -125,4 +128,21 @@ class Event
         return $this;
     }
 
+    /**
+     * @return Stream
+     */
+    public function getStream(): ?Stream
+    {
+        return $this->stream;
+    }
+
+    /**
+     * @param Stream $stream
+     * @return Event
+     */
+    public function setStream(?Stream $stream): Event
+    {
+        $this->stream = $stream;
+        return $this;
+    }
 }

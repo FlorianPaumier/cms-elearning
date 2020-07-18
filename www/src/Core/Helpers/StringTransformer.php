@@ -7,6 +7,10 @@ namespace App\Core\Helpers;
 abstract class StringTransformer
 {
 
+    /**
+     * @param string $value
+     * @return string
+     */
     public static function PascalCaseToSnakeCase(string $value)
     {
         $snake = preg_replace('/[A-Z]/', '_$0', $value);
@@ -15,6 +19,12 @@ abstract class StringTransformer
         return $snake;
     }
 
+    /**
+     * transform a string into a slug
+     * @param string $value
+     * @param string $delimiter
+     * @return string
+     */
     public static function slugify(string $value, string $delimiter = "_"){
         preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $value, $matches);
         $ret = $matches[0];
@@ -24,6 +34,10 @@ abstract class StringTransformer
         return implode($delimiter, $ret);
     }
 
+    /**
+     * @param string $value
+     * @return string
+     */
     public static function toPascalCase(string $value)
     {
         $pascal = preg_replace('/[_-]/', ' ', $value);

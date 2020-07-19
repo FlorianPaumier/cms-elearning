@@ -97,6 +97,24 @@ li.sidebar-divider.solid {
 li.sidebar-divider.dashed {
   border-style: dashed;
 }
+li.disabled a {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+}
+li.active {
+  background-color: #87B7FF;
+}
+li.active a {
+  color: black;
+}
+li a:disabled {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+}
 
 .text-center {
   align-items: center;
@@ -520,6 +538,53 @@ ul.list-unstyle {
   position: absolute;
   bottom: 0;
   right: 0;
+}
+
+nav.pagination-bar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 2vh 0;
+}
+nav.pagination-bar ul.pagination {
+  display: flex;
+  flex-direction: row;
+}
+nav.pagination-bar ul.pagination li {
+  min-width: 2vh;
+  padding: 0.5rem;
+  border: 1px solid #D0EDFF;
+}
+nav.pagination-bar ul.pagination li:first-child {
+  border-radius: 15px 0 0 15px;
+}
+nav.pagination-bar ul.pagination li:last-child {
+  border-radius: 0 15px 15px 0;
+}
+nav.pagination-bar ul.pagination li a {
+  color: black;
+  text-decoration: none;
+  width: 100%;
+}
+nav.pagination-bar ul.pagination li.disabled {
+  pointer-events: none;
+}
+nav.pagination-bar ul.pagination li.disabled a {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+}
+nav.pagination-bar ul.pagination li.active {
+  background-color: blue;
+}
+nav.pagination-bar ul.pagination li.active a {
+  color: white;
+  opacity: 1;
+}
+nav.pagination-bar ul.pagination li:hover {
+  background-color: #D0EDFF;
 }
 
 @keyframes jittery {
@@ -2765,39 +2830,39 @@ table td {
   background: green;
 }
 
-form {
+.form {
   background-color: #edf8ff;
   margin: 0 20px;
   padding: 25px;
   min-height: 800px;
 }
-form input, form textarea, form select {
+.form input, .form textarea, .form select {
   background-color: white;
   width: 100%;
   border-radius: 5px;
   border: none;
 }
-form input {
+.form input {
   line-height: 30px;
   height: 30px;
 }
-form input[type=file] {
+.form input[type=file] {
   display: none;
 }
-form select {
+.form select {
   line-height: 30px;
   height: 30px;
 }
-form textarea {
+.form textarea {
   resize: none;
   height: 350px;
   line-height: 1.25em;
 }
-form button {
+.form button {
   border: none;
   border-radius: 5px;
 }
-form button[type=submit] {
+.form button[type=submit] {
   background-color: limegreen;
   border-radius: 5px;
   line-height: 2em;
@@ -2807,10 +2872,10 @@ form button[type=submit] {
   align-items: flex-end;
   justify-content: center;
 }
-form .form-group {
+.form .form-group {
   margin: 20px 0;
 }
-form #file-button {
+.form #file-button {
   background-color: green;
   padding: 10px;
   margin: 20px 0;
@@ -2818,22 +2883,22 @@ form #file-button {
   color: white;
   font-weight: bold;
 }
-form #file-button:hover {
+.form #file-button:hover {
   background-color: #009e00;
 }
-form #file-button:active {
+.form #file-button:active {
   background-color: #015501;
 }
-form .switch {
+.form .switch {
   display: inline-block;
   height: 34px;
   position: relative;
   width: 60px;
 }
-form .switch input {
+.form .switch input {
   display: none;
 }
-form .slider {
+.form .slider {
   background-color: #ccc;
   cursor: pointer;
   position: absolute;
@@ -2841,7 +2906,7 @@ form .slider {
   height: 34px;
   width: 60px;
 }
-form .slider:before {
+.form .slider:before {
   background-color: #fff;
   bottom: 4px;
   content: "";
@@ -2851,16 +2916,16 @@ form .slider:before {
   transition: 0.4s;
   width: 26px;
 }
-form input:checked + .slider {
+.form input:checked + .slider {
   background-color: #66bb6a;
 }
-form input:checked + .slider:before {
+.form input:checked + .slider:before {
   transform: translateX(26px);
 }
-form .slider.round {
+.form .slider.round {
   border-radius: 34px;
 }
-form .slider.round:before {
+.form .slider.round:before {
   border-radius: 50%;
 }
 

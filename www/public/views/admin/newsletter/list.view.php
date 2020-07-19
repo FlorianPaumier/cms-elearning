@@ -24,9 +24,8 @@
                     <td class="list-content"><?= $newsletter->getId()?></td>
                     <td class="list-content"><?= $newsletter->getTitle(); ?></td>
                     <td class="list-content"><?= $newsletter->getContent(); ?></td>
-                    <td class="list-content"><?= $newsletter->getCreateDate(); ?></td>
-                    <td class="list-content"><?= $newsletter->getEditDate(); ?></td>
-                    <td class="list-content"><?= 'ok' ?></td>
+                    <td class="list-content"><?= $newsletter->getCreatedAt()->format("d-m-Y"); ?></td>
+                    <td class="list-content"><?= $newsletter->getUpdatedAt()->format("d-m-Y"); ?></td>
                     <td class="list-content">
                         <a href="/admin/newsletter/edit/<?= $id; ?>">
                             <button class="btn btn-succes">Modifier</button>

@@ -39,7 +39,7 @@ class NewsletterController extends BaseController
     /**
      * @param Request $request
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public function new(Request $request)
     {

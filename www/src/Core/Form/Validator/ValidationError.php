@@ -5,9 +5,19 @@ namespace App\Core\Form\Validator;
 class ValidationError
 {
 
+    #region field
+    /**
+     * @var string
+     */
     private $key;
+    /**
+     * @var string
+     */
     private $rule;
 
+    /**
+     * @var string[]
+     */
     private $messages = [
         'required' => 'Le champs %s est requis',
         'empty' => 'Le champs %s ne peut être vide',
@@ -28,6 +38,14 @@ class ValidationError
      */
     private $attributes;
 
+    #endregion
+
+    /**
+     * ValidationError constructor.
+     * @param string $key
+     * @param string $rule
+     * @param array $attributes
+     */
     public function __construct(string $key, string $rule, array $attributes = [])
     {
         $this->key = $key;
@@ -35,6 +53,10 @@ class ValidationError
         $this->attributes = $attributes;
     }
 
+    /**
+     * Transform the key into a error message
+     * @return string
+     */
     public function __toString()
     {
         if (!array_key_exists($this->rule, $this->messages)) {

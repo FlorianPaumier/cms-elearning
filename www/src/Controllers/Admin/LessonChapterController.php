@@ -56,14 +56,6 @@ class LessonChapterController extends BaseController
 
     public function edit(Request $request, LessonChapter $chapter)
     {
-        $blocs = $this->entityManager->setEntity(LessonChapterBlock::class)->select("id, title, content, lesson_chapter_id")
-            ->where("lesson_chapter_id = :id")
-            ->setParam("id", $chapter->getId())
-            ->fetchOrFail();
-
-        foreach ($blocs as $bloc){
-            $chapter->addBlock($bloc);
-        }
         $form = $this->createForm(ChapterForm::class, $chapter);
         $form->handleRequest($request);
 
@@ -71,7 +63,7 @@ class LessonChapterController extends BaseController
             $em = ConfigHandler::get("entityManager");
             $em->persist($chapter);
             $em->flush();
-            $this->redirect->redirectToRoute("admin_chapter_index");
+            $this->redirect->redirectToRoute("admin_lesson_chapter_index");
         }
 
 

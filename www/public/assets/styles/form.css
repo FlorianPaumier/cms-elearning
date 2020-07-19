@@ -1,17 +1,47 @@
-/* Error: Can't find stylesheet to import.
- *   ,
- * 1 | @import "variables";
- *   |         ^^^^^^^^^^^
- *   '
- *   form.scss 1:9  root stylesheet */
-
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: "Error: Can't find stylesheet to import.\a   \2577 \a 1 \2502  @import \"variables\";\a   \2502          ^^^^^^^^^^^\a   \2575 \a   form.scss 1:9  root stylesheet";
+.form {
+  padding: 10px;
+  background-color: #EDF8FF;
+  border-radius: 10px;
 }
+
+input[type=text] {
+  width: 98%;
+  border: none;
+  padding-left: 8px;
+  line-height: 2em;
+  border-radius: 5px;
+  margin: 3px;
+}
+
+input[type=date] {
+  width: 98%;
+  border: none;
+  padding-left: 8px;
+  height: 2em;
+  border-radius: 5px;
+  margin: 3px;
+}
+
+input[type=radio] {
+  background-color: white;
+}
+
+select {
+  width: 99%;
+  border: none;
+  height: 2em;
+  border-radius: 5px;
+  margin: 3px;
+  background-color: white;
+}
+select .default {
+  color: lightgrey;
+}
+
+/* Text Area */
+.btn[type=submit] {
+  background-color: #0ad406;
+  border: 1px #0ad406 solid;
+}
+
+/*# sourceMappingURL=form.css.map */

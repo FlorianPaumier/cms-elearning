@@ -5,8 +5,10 @@ if (!function_exists('dump')) {
      * @param  $value
      * @author Nicolas Grekas <p@tchwork.com>
      */
-    function dump($data, $title="", $background="#EEEEEE", $color="#000000")
+    function dump($data, $title = "", $background = "#EEEEEE", $color = "#000000")
     {
+        if($_SERVER["APP_ENV"] !== "dev") return;
+
         //=== Style
         echo "  
     <style>
@@ -52,33 +54,38 @@ if (!function_exists('dump')) {
         }  
     </style>
     ";
-        if($_SERVER["APP_ENV"] == "dev") {
 
-            //=== Content
-            echo "<pre style='background:$background; color:$color; padding:10px 20px; border:2px inset $color'>";
-            echo    "<h2>$title</h2>";
-            var_dump($data);
-            echo "</pre>";
-        }
+
+        //=== Content
+        echo "<pre style='background:$background; color:$color; padding:10px 20px; border:2px inset $color'>";
+        echo "<h2>$title</h2>";
+        var_dump($data);
+        echo "</pre>";
+
     }
 
-    function dd($data, $title =""){
+    function dd($data, $title = "")
+    {
         dump($data, $title);
         die;
     }
+
     function output($data)
     {
         var_dump($data);
     }
 
-    function parms($string,$data)
+    function parms($string, $data)
     {
-        $indexed=$data==array_values($data);
-        foreach($data as $k=>$v) {
-            if(is_string($v)) { $v="'$v'";
+        $indexed = $data == array_values($data);
+        foreach ($data as $k => $v) {
+            if (is_string($v)) {
+                $v = "'$v'";
             }
-            if($indexed) { $string=preg_replace('/\?/', $v, $string, 1);
-            } else { $string=str_replace(":$k", $v, $string);
+            if ($indexed) {
+                $string = preg_replace('/\?/', $v, $string, 1);
+            } else {
+                $string = str_replace(":$k", $v, $string);
             }
         }
     }

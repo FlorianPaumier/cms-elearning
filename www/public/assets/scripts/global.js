@@ -15,8 +15,7 @@ $(document).ready(function () {
     })
 
     $('.close').click((e) => {
-        const target = e.target.closest("."+e.target.getAttribute("data-dismiss"))
+        const target = e.target.closest("div."+ $(e.target).parent().data("dismiss"))
         target.classList.add("hide")
-
     });
 });

@@ -97,6 +97,24 @@ li.sidebar-divider.solid {
 li.sidebar-divider.dashed {
   border-style: dashed;
 }
+li.disabled a {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+}
+li.active {
+  background-color: #87B7FF;
+}
+li.active a {
+  color: black;
+}
+li a:disabled {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+}
 
 .text-center {
   align-items: center;
@@ -520,6 +538,53 @@ ul.list-unstyle {
   position: absolute;
   bottom: 0;
   right: 0;
+}
+
+nav.pagination-bar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 2vh 0;
+}
+nav.pagination-bar ul.pagination {
+  display: flex;
+  flex-direction: row;
+}
+nav.pagination-bar ul.pagination li {
+  min-width: 2vh;
+  padding: 0.5rem;
+  border: 1px solid #D0EDFF;
+}
+nav.pagination-bar ul.pagination li:first-child {
+  border-radius: 15px 0 0 15px;
+}
+nav.pagination-bar ul.pagination li:last-child {
+  border-radius: 0 15px 15px 0;
+}
+nav.pagination-bar ul.pagination li a {
+  color: black;
+  text-decoration: none;
+  width: 100%;
+}
+nav.pagination-bar ul.pagination li.disabled {
+  pointer-events: none;
+}
+nav.pagination-bar ul.pagination li.disabled a {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+}
+nav.pagination-bar ul.pagination li.active {
+  background-color: blue;
+}
+nav.pagination-bar ul.pagination li.active a {
+  color: white;
+  opacity: 1;
+}
+nav.pagination-bar ul.pagination li:hover {
+  background-color: #D0EDFF;
 }
 
 @keyframes jittery {
@@ -3195,6 +3260,9 @@ main #newsletter div .btn-news {
   #show-lesson .nav ul li a {
     color: white;
     text-decoration: none;
+  }
+  #show-lesson .nav ul li a.active {
+    color: black;
   }
 }
 #show-lesson #lesson {

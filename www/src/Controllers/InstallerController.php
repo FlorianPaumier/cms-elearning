@@ -197,13 +197,20 @@ class InstallerController extends BaseController
     }
 
     public function success() {
+/*
+        $serializer = new Serializer();
+        $config = $serializer->deserialize(file_get_contents(ROOT_PATH . "/app/config/config.yml"), "yaml");
+        $config["install"]["state"] = true;
+        $config = $serializer->serialize($config, "yaml");
+
+        file_put_contents(ROOT_PATH . "/app/config/config.yml", $config);
 
         $siteConfig = (new SiteConfiguration())
             ->setKey('install')
             ->setValue(1);
         $this->entityManager->persist($siteConfig);
         $this->entityManager->flush();
-
+*/
         return $this->renderer->render("installer/success",[
             "title" => "Configuration success"
         ]);

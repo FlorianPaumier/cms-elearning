@@ -7,6 +7,14 @@ admin_config:
   path: /admin/configuration
   controller: App\Controllers\Admin\Home:configuration
 
+admin_config_database:
+  path: /admin/configuration/database
+  controller: App\Controllers\Admin\Home:database
+
+admin_config_create_admin:
+  path: /admin/configuration/admin
+  controller: App\Controllers\Admin\Home:createAdmin
+
 admin_test_mailer:
   path: /admin/mailer-test
   controller: App\Controllers\Admin\Home:testMailer

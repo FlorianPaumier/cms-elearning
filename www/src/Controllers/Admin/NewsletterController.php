@@ -90,15 +90,15 @@ class NewsletterController extends BaseController
     public function send(Newsletter $newsletter, MailerHandler $mailer, NewsletterEmailRepository $emailRepository)
     {
         $emails = $emailRepository->findAll();
-        dump($newsletter->getId());
 
         foreach($emails as $email) {
-            $message = new MailerMessage();
-
-            $message->setDest($email->getEmail());
-            $message->setSubjet($newsletter->getTitle());
-            $message->setBody($newsletter->getContent());
+            $message = (new MailerMessage())
+                ->setDest($email->getEmail())
+                ->setSubjet($newsletter->getTitle())
+                ->setBody($newsletter->getContent());
             $mailer->send($message);
         }
+
+        $this->redirect->redirectToRoute("admin_newsletter_list");
     }
 }

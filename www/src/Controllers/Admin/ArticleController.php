@@ -44,6 +44,7 @@ class ArticleController extends BaseController
         $form->handleRequest($request);
 
         if($form->isValid()) {
+            $article->setUser($this->getUser());
 
             $em = ConfigHandler::get("entityManager");
             $em->persist($article);
@@ -61,7 +62,7 @@ class ArticleController extends BaseController
     public function edit(Request $request, ArticleRepository $repository, Article $articles)
     {
         $article = $repository->findBy(['id' => $articles->getId()]);
-        dump($article);
+
         $form = $this->createForm(ArticleForm::class, $article);
         $form->handleRequest($request);
 

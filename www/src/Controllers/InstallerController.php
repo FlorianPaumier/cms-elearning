@@ -4,19 +4,18 @@
 namespace App\Controllers;
 
 
+use App\Core\Cache\ConfigHandler;
 use App\Core\Formatter\Serializer;
 use App\Core\Interfaces\BaseController;
 use App\Core\Mailer\MailerHandler;
 use App\Core\Request\Request;
 use App\Entity\SiteConfiguration;
 use App\Entity\User;
-use App\Form\ConfigurationAdminForm;
-use App\Form\ConfigurationDatabaseForm;
-use App\Form\ConfigurationForm;
 use App\Form\InstallerAdminForm;
 use App\Form\InstallerConfigurationForm;
 use App\Form\InstallerDatabaseForm;
 use App\Repository\SiteConfigurationRepository;
+use PDO;
 
 class InstallerController extends BaseController
 {
@@ -147,6 +146,7 @@ class InstallerController extends BaseController
                 $config["database"]["username"] = $databaseInfo["server_database_username"];
                 $config["database"]["password"] = $databaseInfo["server_database_password"];
                 $config["database"]["charset"] = $databaseInfo["server_database_charset"];
+                $config["database"]["prefix"] = $databaseInfo["server_database_prefix"];
                 $config = $serializer->serialize($config, "yaml");
 
                 file_put_contents(ROOT_PATH . "/app/config/config.yml", $config);
@@ -155,7 +155,7 @@ class InstallerController extends BaseController
             }
 
             $this->entityManager->flush();
-            $this->redirect->redirectToRoute("installer_config_admin");
+            $this->initDatabase($databaseInfo["server_database_dbname"]);
         }
         return $this->render("installer/database", [
             "form" => $form->createView(),
@@ -179,7 +179,7 @@ class InstallerController extends BaseController
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            $this->redirect->redirectToRoute("installer_config_success");
+            $this->redirect->redirectToRoute("installer_configuration_success");
         } else {
             $this->session->set("app.flash", ["error" => $form->getErrors()]);
         }
@@ -207,6 +207,14 @@ class InstallerController extends BaseController
         return $this->renderer->render("installer/success",[
             "title" => "Configuration success"
         ]);
+    }
+
+    public function initDatabase($dbName) {
+        $sql = "CREATE DATABASE $dbName";
+
+        ConfigHandler::get("entityManager")->getPdo()->exec($sql);
+
+        $this->redirect->redirectToRoute("installer_configuration_admin");
     }
 
 }

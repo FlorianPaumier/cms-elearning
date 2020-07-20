@@ -62,6 +62,11 @@ class InstallerDatabaseForm extends AbstractForm
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
+            ->add("server_database_prefix", TextType::class, [
+                "label" => "Prefix",
+                "required" => true,
+                "class" => "col-md-6 col-lg-6 col-sm-12",
+            ])
             ->add("valider", SubmitType::class, [
                 "label" => "Valider",
                 "class" => "col-md-6 col-lg-6 col-sm-12",

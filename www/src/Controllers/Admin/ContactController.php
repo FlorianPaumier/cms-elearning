@@ -20,7 +20,7 @@ class ContactController extends BaseController
     public function index(Request $request, ContactFormRepository $repository)
     {
         return $this->renderer->render("admin/contact/index", [
-            "forms" => $repository->findAll()
+            "forms" => $repository->paginate(10)
         ]);
     }
 

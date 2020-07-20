@@ -46,4 +46,26 @@ class ChatController extends BaseController
             ]
         );
     }
+
+    public function session()
+    {
+
+    }
+
+    public function chat()
+    {
+
+    }
+
+    public function delete()
+    {
+
+    }
+
+    public function report()
+    {
+        //liste les reports
+    }
+
+
 }

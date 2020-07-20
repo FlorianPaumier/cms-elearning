@@ -68,8 +68,8 @@ class UserManager
                 "roles" => $q->getRoles(),
                 "timestamp" => time() + 2 * 60 * 60,
             ]);
-        }
 
+        }
 
 //        dump($this->session->getSession());
         return $response;
@@ -89,12 +89,13 @@ class UserManager
     public function isConnected()
     {
         if ($this->session->offsetGet("app.user")) {
-
             if (!$this->session->offsetGet("app.user")["timestamp"] < time()) {
                 $this->disconnectUser();
             } else {
                 return true;
             }
+        }else{
+            return false;
         }
 
         return false;

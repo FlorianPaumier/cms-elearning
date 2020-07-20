@@ -57,9 +57,13 @@ class CoursController extends BaseController
 
         $userLesson = null;
 
+        if(is_null($this->getUser())){
+            header('Status: 200 Sucess', false, 200);
+            return json_encode(["message" => true]);
+        }
         $userLesson = $userLessonRepository->findOneBy(["lesson_id" => $lesson->getId(), "user_id" => $this->getUser()->getId(), "chapter" => $chapter]);
 
-        if(!is_null($userLesson)){
+        if (!is_null($userLesson)) {
             header('Status: 200 Sucess', false, 200);
             return json_encode(["message" => true]);
         }
@@ -92,16 +96,20 @@ class CoursController extends BaseController
         /** @var LessonChapter[] $chapters */
         $chapters = $chapterRepository
             ->orderBy("position", "ASC")
-            ->findBy(["lesson_id" => $lesson->getId()]);
+            ->findBy(["lesson_id" => $lesson->getId()]) ?? [];
 
-        /** @var UserLesson[] $lessonUsers */
-        $lessonUsers =$lessonRepository->findBy(["lesson_id" => $lesson->getId(), "user_id" => $this->getUser()->getId()]);
+        if (!is_null($this->getUser())) {
+            /** @var UserLesson[] $lessonUsers */
+            $lessonUsers = $lessonRepository->findBy(["lesson_id" => $lesson->getId(), "user_id" => $this->getUser()->getId()]);
+        } else {
+            $lessonUsers = [];
+        }
 
-        $nav=[];
+        $nav = [];
 
-        foreach ($chapters as $chapter){
-            foreach ($lessonUsers as $lessonUser){
-                if($lessonUser->getChapter() == $chapter->getPosition()){
+        foreach ($chapters as $chapter) {
+            foreach ($lessonUsers as $lessonUser) {
+                if ($lessonUser->getChapter() == $chapter->getPosition()) {
                     $nav[$chapter->getId()] = [
                         "chapter" => $chapter,
                         "active" => true,
@@ -109,7 +117,7 @@ class CoursController extends BaseController
                 }
             }
 
-            if(!key_exists($chapter->getId(), $nav)){
+            if (!key_exists($chapter->getId(), $nav)) {
                 $nav[$chapter->getId()] = [
                     "chapter" => $chapter,
                     "active" => false,

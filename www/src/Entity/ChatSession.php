@@ -9,58 +9,40 @@ class ChatSession
 {
     use Entity;
 
-    protected $id;
+    protected $user;
 
-    protected $idUser;
-
-    protected $idSession;
+    protected $tokenSession;
 
     /**
-     * @return mixed
+     * @return User
      */
-    public function getId()
+    public function getUser(): User
     {
-        return $this->id;
+        return $this->user;
     }
 
     /**
-     * @param mixed $id
+     * @param User $user
      */
-    public function setId($id): void
+    public function setUser(User $user): void
     {
-        $this->id = $id;
+        $this->user = $user;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getIdUser()
+    public function getTokenSession(): string
     {
-        return $this->idUser;
+        return $this->tokenSession;
     }
 
     /**
-     * @param mixed $idUser
+     * @param string $tokenSession
      */
-    public function setIdUser($idUser): void
+    public function setTokenSession(string $tokenSession): void
     {
-        $this->idUser = $idUser;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIdSession()
-    {
-        return $this->idSession;
-    }
-
-    /**
-     * @param mixed $idSession
-     */
-    public function setIdSession($idSession): void
-    {
-        $this->idSession = $idSession;
+        $this->tokenSession = $tokenSession;
     }
 
 }

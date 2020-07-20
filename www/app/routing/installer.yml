@@ -3,13 +3,21 @@ installer_index:
   controller: App\Controllers\Installer:index
 
 installer_configuration:
-  path: /installer
+  path: /installer/configuration
   controller: App\Controllers\Installer:configuration
 
 installer_configuration_database:
-  path: /installer/configuration
+  path: /installer/configuration/database
   controller: App\Controllers\Installer:database
 
 installer_configuration_admin:
   path: /installer/configuration/admin
-  controller: App\Controllers\Installer:admin
+  controller: App\Controllers\Installer:createAdmin
+
+installer_configuration_success:
+  path: /installer/configuration/success
+  controller: App\Controllers\Installer:success
+
+installer_configuration_migration:
+  path: /installer/configuration/migration
+  controller: App\Controllers\InstallerMigration:index

@@ -19,17 +19,17 @@ class JsonFormatter implements FormatterInterface
 
         if(empty($this->data) || is_null($this->data)) return json_encode("");
 
-        foreach ($this->data as $key => $value){
+        foreach ($this->data as $value){
             if (gettype($value) == "object"){
                 $array = Hydrator::getData($value);
             }else{
                 $array = $value;
             }
 
-            $json[$key] = $array;
+            $json[] = $array;
         }
 
-        return json_encode($json,  true);
+        return json_encode($json, JSON_FORCE_OBJECT);
     }
 
     public function deserialize(string $class = null)

@@ -68,7 +68,7 @@ class HomeController extends BaseController
                 $config["mailer"]["username"] = $emailInfo["server_mail_identifiant"];
                 $config["mailer"]["password"] = $emailInfo["server_mail_password"];
                 $config = $serializer->serialize($config, "yaml");
-                dump($config);
+
                 file_put_contents(ROOT_PATH."/app/config/config.yml",$config);
             }
             $this->entityManager->flush();

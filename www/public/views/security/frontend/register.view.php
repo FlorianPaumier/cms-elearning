@@ -14,12 +14,6 @@
         <div class="text-center">
             <a class="small" href=" @path(app_user_login)"><strong>Vous avez déjà un compte ? Connectez-vous !</strong></a>
         </div>
-        <a href="{{ app_home|path }}" class="btn btn-google btn-user btn-block">
-            <i class="fab fa-google fa-fw"></i><strong>S'inscrire avec Google</strong>
-        </a>
-        <a href="{{ app_home|path }}" class="btn btn-facebook btn-user btn-block">
-            <i class="fab fa-facebook-f fa-fw"></i><strong>S'inscrire avec Facebook</strong>
-        </a>
         <hr>
 
     </div>

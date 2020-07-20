@@ -47,4 +47,6 @@ class RedirectionHandler
     public function getPreviousPath()
     {
     }
+
+
 }

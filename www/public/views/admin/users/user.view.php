@@ -41,6 +41,6 @@
         </tbody>
     </table>
 
-    <?= $lessons["links"] ?>
+    <?= $users["links"] ?>
 </section>
 @endsection

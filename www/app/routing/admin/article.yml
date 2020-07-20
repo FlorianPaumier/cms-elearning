@@ -1,6 +1,6 @@
 admin_article:
   path: /admin/article
-  controller: App\Controllers\Admin\Article:index
+  controller: App\Controllers\Admin\Article:list
 
 admin_article_list:
   path: /admin/article/list
@@ -13,7 +13,6 @@ admin_article_new:
 admin_article_edit:
   path: /admin/article/edit/{id}
   controller: App\Controllers\Admin\Article:edit
-  method: [GET,POST]
 
 admin_article_design:
   path: /admin/article/design

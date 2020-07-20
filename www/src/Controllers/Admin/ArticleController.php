@@ -66,7 +66,7 @@ class ArticleController extends BaseController
         $form = $this->createForm(ArticleForm::class, $article);
         $form->handleRequest($request);
 
-        if ($request->getMethod() == "POST" && $form->isValid()) {
+        if ($form->isValid()) {
             $em = ConfigHandler::get("entityManager");
             $em->persist($article);
             $em->flush();
@@ -81,6 +81,7 @@ class ArticleController extends BaseController
 
     public function delete(Request $request, Article $article)
     {
+        $this->entityManager->delete($article);
         $this->redirect->redirectToRoute("admin_article_index");
     }
 

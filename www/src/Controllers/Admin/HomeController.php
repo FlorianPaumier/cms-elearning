@@ -51,25 +51,18 @@ class HomeController extends BaseController
                     $siteConfig->setValue($value);
                 }
 
-                if (in_array($index, ["server_mail_host", "server_mail_port", "server_mail_identifiant", "server_mail_password"])) {
-                    if ($siteConfig->getValue() !== $value) {
-                        $emailInfo[$index] = $value;
-                    }
-                }
-
                 $this->entityManager->persist($siteConfig);
             }
 
-            if (count($emailInfo) >= 3) {
-                $serializer = new Serializer();
-                $config = $serializer->deserialize(file_get_contents(ROOT_PATH."/app/config/config.yml"), "yaml");
-                $config["mailer"]["host"] = $emailInfo["server_mail_host"];
-                $config["mailer"]["port"] = $emailInfo["server_mail_port"];
-                $config["mailer"]["username"] = $emailInfo["server_mail_identifiant"];
-                $config["mailer"]["password"] = $emailInfo["server_mail_password"];
-                $config = $serializer->serialize($config, "yaml");
-                file_put_contents(ROOT_PATH."/app/config/config.yml",$config);
-            }
+            $serializer = new Serializer();
+            $config = $serializer->deserialize(file_get_contents(ROOT_PATH."/app/config/config.yml"), "yaml");
+            $config["mailer"]["host"] = $emailInfo["server_mail_host"];
+            $config["mailer"]["port"] = $emailInfo["server_mail_port"];
+            $config["mailer"]["username"] = $emailInfo["server_mail_identifiant"];
+            $config["mailer"]["password"] = $emailInfo["server_mail_password"];
+            $config = $serializer->serialize($config, "yaml");
+            file_put_contents(ROOT_PATH."/app/config/config.yml",$config);
+
             $this->entityManager->flush();
             $this->redirect->redirectToRoute("admin_config");
         }

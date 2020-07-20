@@ -261,6 +261,7 @@ class FormBuilder
         $isValid = $validator->isValid();
         $this->errors = $validator->getErrors();
         $validator->resetErrors();
+
         return $isValid;
     }
 

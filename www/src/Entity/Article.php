@@ -56,6 +56,14 @@ class Article
     }
 
     /**
+     * @param User $user
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
      * @param string $title
      */
     public function setTitle(string $title): void

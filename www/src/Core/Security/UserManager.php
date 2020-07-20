@@ -89,12 +89,13 @@ class UserManager
     public function isConnected()
     {
         if ($this->session->offsetGet("app.user")) {
-
             if (!$this->session->offsetGet("app.user")["timestamp"] < time()) {
                 $this->disconnectUser();
             } else {
                 return true;
             }
+        }else{
+            return false;
         }
 
         return false;

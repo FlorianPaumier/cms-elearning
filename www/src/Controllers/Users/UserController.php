@@ -73,7 +73,7 @@ class UserController extends BaseController
 
                 $this->redirect->redirectToRoute("app_user_login");
             } else {
-                $this->session->set("app.flash", ["error" => $form->getErrors()]);
+                $this->session->offsetSet("app.flash", ["error" => $form->getErrorFeedback()]);
             }
         }
 

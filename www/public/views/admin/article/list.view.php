@@ -6,6 +6,7 @@
 @section(body)
 
 <section>
+    <a href="/admin/article/new">Ajouter</a>
     <div>
         <table>
             <tr>
@@ -17,15 +18,16 @@
                 <th>visible</th>
                 <th>action</th>
             </tr>
+            <?php if($articles['data'][0] !== null): ?>
             <?php foreach( $articles['data'] as $article):
                 $id = $article->getId()?>
                 <tr>
                     <td class="list-content"><input type="checkbox"></td>
-                    <td class="list-content"><?= $article->getId()?></td>
+                    <td class="list-content"><?= $id ?></td>
                     <td class="list-content"><?= $article->getTitle(); ?></td>
                     <td class="list-content"><?= $article->getCreatedAt()->format('d/m/Y'); ?></td>
                     <td class="list-content"><?= $article->getUpdatedAt()->format('d/m/Y'); ?></td>
-                    <td class="list-content"><?= 'ok' ?></td>
+                    <td class="list-content"><?= $article->getVisible() ?></td>
                     <td class="list-content">
                         <a href="/admin/article/edit/<?= $id; ?>">
                             <button class="btn btn-succes">Modifier</button>
@@ -36,35 +38,11 @@
                     </td>
                 </tr>
             <?php endforeach; ?>
-            <?php /* ?>
-                foreach( $articles as $key => $article  ) {
-                    <div>
-                        <?= $article['id'] ?>
-                    </div>
-                    <div>
-                        <?= $article['title'] ?>
-                    </div>
-                    <div>
-                        <?= $article['date_add'] ?>
-                    </div>
-                    <div>
-                        <?= $article['date_edit'] ?>
-                    </div>
-                    <div>
-                        <?= $article['visible'] ?>
-                    </div>
-                    <div>
-                        <a href="/admin/article/modify/<?= $article['id'] ?>">
-                            edit
-                        </a>
-                        <a href="/admin/article/destroy/<?= $article['id'] ?>">
-                            delete
-                        </a>
-                    </div>
-                }
-            <?php */ ?>
+            <?php endif; ?>
+
+            <?= $articles['link']; ?>
+
         </table>
-        <?= $articles["links"] ?>
     </div>
 </section>
 

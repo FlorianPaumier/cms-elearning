@@ -7,6 +7,7 @@ namespace App\Form;
 use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\CheckboxType;
+use App\Core\Form\Fields\EntityType;
 use App\Core\Form\Fields\ImageType;
 use App\Core\Form\Fields\RadioType;
 use App\Core\Form\Fields\SelectType;
@@ -14,6 +15,7 @@ use App\Core\Form\Fields\TextAreaType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
 use App\Entity\Article;
+use App\Entity\Category;
 use App\Repository\CategoryRepository;
 
 class ArticleForm extends AbstractForm
@@ -38,12 +40,12 @@ class ArticleForm extends AbstractForm
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->add("category", SelectType::class, [
+            ->add("category", EntityType::class, [
                 "label" => "Catégorie",
-                "placeholder" => "Catégorie",
+                "choice_label" => "category",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
-                "choices" => (new CategoryRepository())->findCategories()
+                "entry_type" => Category::class
             ])
             ->add("content", TextAreaType::class, [
                 "label" => "Contenu",

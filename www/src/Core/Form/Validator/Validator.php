@@ -82,10 +82,11 @@ class Validator
         foreach ($this->form as $input => $constraint) {
             if ($constraint["type"] == ButtonType::class) {
                 continue;
-            } else if ($constraint["type"] == ImageType::class) {
-
             }
+
             foreach ($constraint["args"] as $param => $value) {
+
+//                dump($param);
                 switch ($param) {
                     case "length":
                         $this->length($input, $value["min"], isset($value["max"]) ?: null);
@@ -98,7 +99,6 @@ class Validator
                             $this->requiredImage($input);
                             break;
                         }
-                        
                         $this->required($input);
                         break;
                     case "empty":
@@ -250,14 +250,11 @@ class Validator
         $method = "get" . ucfirst(StringTransformer::toPascalCase($index));
 
         if (is_callable([$this->entity, $method])) {
-            $prevValue = $this->entity->$method();
-            if ($prevValue !== $value && !password_verify($value, $this->entity->$method())) {
-                if ($valueConfirm !== $value) {
-                    $this->addError($index, 'confirmation');
-                }
+
+            if ($valueConfirm !== $value) {
+                $this->addError($index, 'confirmation');
             }
         }
-
 
         return $this;
     }
@@ -335,6 +332,13 @@ class Validator
      */
     private function addError(string $key, string $rule, array $attributes = []): void
     {
+        foreach ($this->form as $index => $form){
+            if($form["key"] == $key)
+            {
+                $this->form[$index]["args"]["class"] .= " input-invalid";
+            }
+        }
+
         $this->errors[$key] = (new ValidationError($key, $rule, $attributes))->__toString();
     }
 

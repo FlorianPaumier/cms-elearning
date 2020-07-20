@@ -80,7 +80,7 @@ class CategoryController extends BaseController
         ]);
     }
 
-    public function delete(Request $request, Category $category)
+    public function delete(Category $category)
     {
         $this->entityManager->delete($category);
         $this->redirect->redirectToRoute("admin_category");

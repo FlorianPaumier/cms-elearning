@@ -1,0 +1,18 @@
+admin_lesson_list:
+  path: /admin/lesson
+  controller: App\Controllers\Admin\Lesson:index
+
+admin_lesson_new:
+  path: /admin/lesson/new
+  controller: App\Controllers\Admin\Lesson:new
+  method: [GET,POST]
+
+admin_lesson_edit:
+  path: /admin/lesson/edit/{id}
+  controller: App\Controllers\Admin\Lesson:edit
+  method: [GET,POST]
+
+admin_lesson_delete:
+  path: /admin/lesson/delete/{id}
+  controller: App\Controllers\Admin\Lesson:delete
+  method: [DELETE]

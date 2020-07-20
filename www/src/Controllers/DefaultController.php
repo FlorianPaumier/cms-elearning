@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Core\Interfaces\BaseController;
-use App\Core\renderer\Nodes\CaptchaNode;
-use App\Core\Renderer\RenderView;
 use App\Core\Request\Request;
+use App\Form\ChapterBlockForm;
+use App\Repository\UserRepository;
 
 class DefaultController extends BaseController
 {
@@ -14,8 +15,9 @@ class DefaultController extends BaseController
             "method" => $request->getMethod(),
         ]);
     }
+
     public function doc()
     {
-        $this->renderer->render("doc");
+        return $this->renderer->render("doc");
     }
 }

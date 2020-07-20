@@ -1,0 +1,39 @@
+$title-barSize: 50px;
+
+.title-bar {
+  height: $title-barSize;
+  h2 {
+    margin-left: 20px;
+    display: inline-block;
+    line-height: $title-barSize;
+    vertical-align: top;
+  }
+
+  .title-underline {
+    height: 2px;
+    width: 20px;
+    margin-left: 10px;
+    background-color: $colorDarkBlue;
+    transform: translateY(-10px);
+  }
+
+  .search-button {
+    position: absolute;
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    background-color: #1e5799;
+    border-radius: 3px;
+    margin: 10px 40px 10px 10px;
+    right: 0;
+    &-icon{
+      height: 20px;
+      width: 20px;
+      transform: translateX(-20%);
+    }
+
+    .fa-search {
+      color: white;
+    }
+  }
+}

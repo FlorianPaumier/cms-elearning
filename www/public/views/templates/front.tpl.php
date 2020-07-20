@@ -9,65 +9,42 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>
-        <?php
-        if(isset($title)){
-            echo $title;
-        }else{
-            echo "Accueil";
-        }
-        ?></title>
+    <title>{{ title }}</title>
 
     <meta lang="fr">
 
-
-    <?php
-    if(isset($styles)){
-        foreach ($styles as $style) {
-            echo "<link rel='stylesheet' href='$style'/>";
-        }
-    }
-
-    ?>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="assets/styles/css/sb-admin-2.min.css" rel="stylesheet">
-
+    <link href="/assets/styles/frontend/main.css" rel="stylesheet">
+    <link href="/assets/styles/globals/collapsible.css" rel="stylesheet">
+    @section(style)
 </head>
 
 <body id="page-top">
 
-{{ @View/partials/header|include }}
-
+@include(partials/header)
 <?php
-
-if(isset($session))
-    include ("nav.view.php");
-
-if(isset($flash)){
-    if(isset($flash["success"])){
-        foreach ($flash["success"] as $key => $message){
-            echo "<div class='alert alert-sucess'>$message</div>";
-        }
-    }
-    if($flash["error"]){
-        foreach ($flash["error"] as $key => $message){
-            echo "<div class='alert alert-error'>$message</div>";
-        }
+if ($errors) {
+    foreach ($errors as $error) {
+        var_dump($error);
     }
 }
-
 ?>
+<main>
+    @section(body)
+</main>
 
-@section(body)
 
-{{ @View/partials/modal|include }}
-{{ @View/partials/footer|include }}
+@include(partials/footer)
 
+<script src="/assets/scripts/global.js"></script>
+<script src="/assets/scripts/header.js"></script>
+<script src="/assets/scripts/collapsible.js"></script>
+@section(javascript)
 </body>
 </html>
 

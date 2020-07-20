@@ -108,12 +108,15 @@ vendor/
 www/public/vendor/
 
 www/app/config/config.yml
+.phpunit.result.cache
 www/package.json
 www/node_modules/*
 www/app/cache
 www/src/Core/assets/fonts
-db_data
-docker/postgres/data
-
+dist
 .vscode/
 .phpunit.*
+builds
+www/lib/PHPMailer/vendor
+node_modules
+www/public/assets/images/

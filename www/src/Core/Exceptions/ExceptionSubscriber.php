@@ -55,32 +55,29 @@ class ExceptionSubscriber implements SubscriberInterface
         $this->throwException(NotFoundAbsctractException::class, $message, $code);
     }
 
-    public function notAuthorizedException(string $message = "Vous n'êtes pas autoriser à être ici", int $code = 401){
+    public function notAuthorizedException(string $message = "Vous n'êtes pas autoriser à être ici", int $code = 401)
+    {
         $this->throwException(ForbiddenException::class, $message, $code);
     }
 
-    public function forbiddenException(string $message = "Vous devez vous connecter", int $code = 403){
+    public function forbiddenException(string $message = "Vous devez vous connecter", int $code = 403)
+    {
         $redirect = new RedirectionHandler();
         $redirect->redirectToRoute("app_home");
     }
 
-    public function methodNotAllowedException(string $message = "Méthod non autoriser", int $code = 405){
+    public function methodNotAllowedException(string $message = "Méthod non autoriser", int $code = 405)
+    {
         $this->throwException(MethodNotAllowedAbsctractException::class, $message, $code);
     }
 
     /**
      * Throw exception or a pretty page
      */
-    private function throwException(string $exception, string $message, int $code){
-        if($_SERVER["APP_ENV"] === "dev"){
-            try{
-                //throw new $exception($message, $code);
-            }catch (AbsctractException $e){
-                (new RenderView())->renderErrors("errors/errors",$e);
-            }
-        }
-
+    private function throwException(string $exception, string $message, int $code)
+    {
         http_response_code($code);
-        throw new $exception($message, $code);
+        (new RenderView())->renderErrors("Errors/errors", new $exception($message, $code));
+        exit;
     }
 }

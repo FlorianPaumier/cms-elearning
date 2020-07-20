@@ -16,7 +16,7 @@ class RenderView
     /** @var array */
     private $defaultData = [];
 
-    /** @var TemplateEngine  */
+    /** @var TemplateEngine */
     private $templateEngine;
 
     /**
@@ -49,12 +49,12 @@ class RenderView
 
         $args["render"] = true;
 
-        if($includeEngine->setView($template)){
+        if ($includeEngine->setView($template)) {
             $includeEngine->setData($args);
             $includeEngine->generate_markup();
             return $includeEngine->compile(false);
-        }else{
-            ConfigHandler::get("eventEmmiter")->emit("error.404","View Not Found");
+        } else {
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "View Not Found");
         }
     }
 
@@ -68,12 +68,12 @@ class RenderView
      */
     public function render(string $template, array $param = [], bool $display = false)
     {
-        if($this->templateEngine->setView($template)) {
+        if ($this->templateEngine->setView($template)) {
             $this->templateEngine->setData(["parameter" => $param, "config" => $this->defaultData, "render" => $display]);
             $this->templateEngine->generate_markup();
 
-            if($display){
-                if(ConfigHandler::get("session")){
+            if ($display) {
+                if (ConfigHandler::get("session")) {
                     ConfigHandler::get("session")->offsetSet("app.flash", null);
                 }
                 return $this->templateEngine->compile($display);
@@ -94,23 +94,23 @@ class RenderView
      */
     public function renderHtmlElement($type, array $options)
     {
-        if(!gettype($type) == "object"){
-            if(class_exists($type)){
+        if (!gettype($type) == "object") {
+            if (class_exists($type)) {
                 $type = new $type;
             }
         }
 
-        $view = gettype($type) == "object" ? $type::getTemplate() : FORM_PATH."/input.tpl.php";
+        $view = gettype($type) == "object" ? $type::getTemplate() : FORM_PATH . "/input.tpl.php";
         $options["prefix"] = "app_form";
 
 
         $this->templateEngine->setData(["parameter" => $options]);
-        if($this->templateEngine->setView($view)){
+        if ($this->templateEngine->setView($view)) {
             $html = $this->templateEngine->renderHtmlElement($type);
             return $html;
         };
 
-        ConfigHandler::get("eventEmmiter")->emit("error.404","View Not Found");
+        ConfigHandler::get("eventEmmiter")->emit("error.404", "View Not Found");
     }
 
     /**
@@ -118,7 +118,8 @@ class RenderView
      * @return string|string[]|null
      * @throws \Exception
      */
-    public function compile(){
+    public function compile()
+    {
         return $this->templateEngine->compile();
     }
 
@@ -128,15 +129,14 @@ class RenderView
      * @param \Exception $exception
      * @throws \Exception
      */
-    public function renderErrors(string $view,\Exception $exception)
+    public function renderErrors(string $view, \Exception $exception)
     {
-        if($_SERVER["APP_ENV"] == "dev"){
-            echo $this->render($view, [
-                "message" => $exception->getMessage(),
-                "line" => $exception->getLine(),
-                "trace" => $exception->getTrace(),
-                "code" => $exception->getCode(),
-            ])->compile();
-        }
+        echo $this->render($view, [
+            "message" => $exception->getMessage(),
+            "line" => $exception->getLine(),
+            "trace" => $exception->getTrace(),
+            "code" => $exception->getCode(),
+        ])->compile();
+
     }
 }

@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../../../../../www/public/assets/scripts/core/observer.js"],"names":["updateElements","container","createCkeditor"],"mappings":";AACA,SAASA,cAAT,CAAwBC,SAAxB,EAAmC;AAC/BC,mBAAeD,SAAf;AACH","file":"observer.js","sourcesContent":["\nfunction updateElements(container) {\n    createCkeditor(container);\n}"]}

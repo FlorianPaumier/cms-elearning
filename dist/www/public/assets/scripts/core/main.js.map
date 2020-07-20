@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../../../../../www/public/assets/scripts/core/main.js"],"names":["_","require"],"mappings":"AAAA,IAAIA,IAAIC,QAAQ,QAAR,CAAR;AACA,OAAO,WAAP;AACA,OAAO,SAAP;AACA,OAAO,YAAP;AACA,OAAO,cAAP","file":"main.js","sourcesContent":["var _ = require('lodash');\nimport \"@ckeditor\"\nimport \"chartjs\"\nimport \"./observer\";\nimport \"./collection\";\n"]}

@@ -1,9 +1,0 @@
-
-category_index:
-  path: /category
-  controller: App\Controllers\Category:index
-
-category_view:
-  path: /category/{id}
-  controller: App\Controllers\category:view
-  method: [GET]

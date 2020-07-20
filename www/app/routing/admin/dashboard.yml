@@ -1,7 +1,3 @@
 app_dashboard:
   path: /dashboard
-  controller: App\Controllers\Dashboard\Dashboard:index
-
-app_dashboard_design:
-  path: /admin/design
-  controller: App\Controllers\Dashboard\Dashboard:design
+  controller: App\Controller\Dashboard\Dashboard:index

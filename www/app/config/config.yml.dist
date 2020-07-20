@@ -1,17 +1,9 @@
 env: 'dev'
 database:
-    driver: pgsql
-    host: postgres
+    driver: mysql
+    host: localhost
     port: null
-    dbname: project_cms
-    username: utilisateur
-    password: motdepasse
-    charset: UTF8
-phpmailer:
-    transport: smtp
-    host: smtp.gmail.com
-    port: null
-    encryption: ssl
-    username: null
+    dbname: projet-cms
+    username: user
     password: null
-    spool: { type: memory }
+    charset: UTF8

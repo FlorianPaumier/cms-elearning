@@ -1,5 +1,4 @@
-@extend(template/back)
-@section(body)
+<?php require(DEFAULT_VIEW_DIR . "/partials/header.view.php");  ?>
 
     <h2>User List</h2>
     <table>
@@ -28,4 +27,5 @@
 
         </tbody>
     </table>
-@endsection
+
+<?php require(DEFAULT_VIEW_DIR . "/partials/footer.view.php") ?>

@@ -2,64 +2,77 @@
 
 namespace App\Form;
 
-use App\Core\Cache\ConfigHandler;
-use App\Core\Form\AbstractForm;
-use App\Core\Form\Fields\ButtonType;
-use App\Core\Form\Fields\PasswordType;
-use App\Core\Form\Fields\TextType;
-use App\Core\Form\FormBuilder;
-use App\Entity\User;
 
-class UserLoginForm extends AbstractForm
+use App\Core\Form\FormType;
+use App\Core\Kernel\Kernel;
+
+class UserLoginForm extends FormType
 {
-
-    public function buildForm(FormBuilder $builder): FormBuilder
-    {
-        return $builder
-            ->setAction(ConfigHandler::get("router")->getPath("app_user_login_check"))
-            ->add(
-                "username", TextType::class, [
-                    'type' => 'text',
-                    'required' => true,
-                    'label' => 'Identifiant',
-                    'placeholder' => 'Votre identifiant',
-                    "class" => "form-control form-control-user",
-                    "before" => "<i class=\"fa fa-user\"></i>",
-                ]
-            )
-            ->add(
-                "password", PasswordType::class, [
-                    'required' => false,
-                    'label' => 'Mot de passe',
-                    'placeholder' => 'Votre mot de passe',
-                    "class" => "form-control form-control-user",
-                ]
-            )
-            ->add(
-                "submit", ButtonType::class, [
-                    'type' => 'submit',
-                    'label' => "Se connecter",
-                    "class" => "btn",
-                ]
-            );
-    }
-
     /**
-     * @inheritDoc
+     * @return array|void
      */
-    public function getBlockPrefix(): string
+    public static function getConstraint()
     {
-        return "app_register";
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function configureOptions()
-    {
-        $this->options = [
-            "data_class" => User::class,
+        return [
+            [
+                "username" => [
+                    "empty" => false,
+                    "required" => true,
+                    "exists" => true,
+                ]
+            ],
+            [
+                "password" => [
+                    "empty" => false,
+                    "required" => true,
+                    "exists" => true,
+                ]
+            ]
         ];
     }
 
+    public function buildForm()
+    {
+        $this->formBuilder
+            ->setAction(Kernel::get("router")->getPath("app_user_login_check"))
+            ->input(
+                "username", [
+                    'type' => 'text',
+                    'required' => true,
+                    'label' => 'Username',
+                    "class" => "form-control form-control-user"
+                ]
+            )
+            ->input(
+                "password",  [
+                    'type' => 'password',
+                    'required' => true,
+                    'label' => 'Password',
+                    "class" => "form-control form-control-user",
+                    "before" => "<i class=\"fa fa-key\"></i>"
+                ]
+            )
+            ->checkbox(
+                "remember_me",  [
+                    'required' => true,
+                    'label' => 'Ce souvenir de moi',
+                    "type" => "checkbox",
+                    "class" => "col-1"
+                ]
+            )
+            ->button(
+                "submit", [
+                    'label' => "Se connecter",
+                    "type" => "submit",
+                    "class" => "btn btn-primary btn-user btn-block"
+                ]
+            );
+
+        return $this->formBuilder;
+    }
+
+    public function getBlockPrefix()
+    {
+        $this->prefix = "app_login";
+    }
 }

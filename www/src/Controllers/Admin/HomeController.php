@@ -53,8 +53,8 @@ class HomeController extends BaseController
 
                 if (in_array($index, ["server_mail_host", "server_mail_port", "server_mail_identifiant", "server_mail_password"])) {
                     if ($siteConfig->getValue() !== $value) {
+                        $emailInfo[$index] = $value;
                     }
-                    $emailInfo[$index] = $value;
                 }
 
                 $this->entityManager->persist($siteConfig);
@@ -68,7 +68,6 @@ class HomeController extends BaseController
                 $config["mailer"]["username"] = $emailInfo["server_mail_identifiant"];
                 $config["mailer"]["password"] = $emailInfo["server_mail_password"];
                 $config = $serializer->serialize($config, "yaml");
-                dump($config);
                 file_put_contents(ROOT_PATH."/app/config/config.yml",$config);
             }
             $this->entityManager->flush();

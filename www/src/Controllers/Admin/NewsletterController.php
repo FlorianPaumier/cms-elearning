@@ -9,7 +9,6 @@ use App\Core\Interfaces\BaseController;
 use App\Core\Mailer\MailerHandler;
 use App\Core\Mailer\MailerMessage;
 use App\Core\Request\Request;
-use App\Entity\Article;
 use App\Entity\Newsletter;
 use App\Entity\NewsletterEmail;
 use App\Form\NewsletterForm;
@@ -82,8 +81,9 @@ class NewsletterController extends BaseController
         ]);
     }
 
-    public function delete(Request $request, Article $article)
+    public function delete(Newsletter $newsletter)
     {
+        $this->entityManager->delete($newsletter);
         $this->redirect->redirectToRoute("admin_newsletter_list");
     }
 

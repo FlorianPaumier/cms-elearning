@@ -23,7 +23,7 @@ class CommentaryController extends BaseController
         ]);
     }
 
-    public function delete(Request $request, Commentary $commentary)
+    public function delete(Commentary $commentary)
     {
         $this->entityManager->delete($commentary);
         $this->redirect->redirectToRoute("admin_commentary_list");

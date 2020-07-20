@@ -3,7 +3,6 @@
 namespace App\Controllers\Admin;
 
 use App\Core\Interfaces\BaseController;
-use App\Core\Interfaces\Entity;
 use App\Core\Request\Request;
 use App\Entity\Article;
 use App\Form\ArticleForm;
@@ -79,7 +78,7 @@ class ArticleController extends BaseController
         ]);
     }
 
-    public function delete(Request $request, Article $article)
+    public function delete(Article $article)
     {
         $this->entityManager->delete($article);
         $this->redirect->redirectToRoute("admin_article_index");

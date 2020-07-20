@@ -96,7 +96,7 @@ Pour voir le [Issue click here](/issue.md)
 Pour voir le [merge click here](/merge.md)
 
 ### Routing
-Pour voir le [routing click here](/documentation/Routing.md)
+Pour voir le [routing click here](/Routing.md)
 
 ### How to contribute ?
 Click [here](/CONTRIBUTING.md)

@@ -1,4 +1,0 @@
-frontend_form_contact:
-  path: "/contact"
-  controller: App\Controllers\Contact:index
-  method: [GET, POST]

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="description" content="Description">
     <title>Title</title>
-    <link rel="stylesheet" href="assets/styles/frontend/main.css">
+    <link rel="stylesheet" href="assets/styles/main.css">
 </head>
 <body id="doc">
 

@@ -1,4 +1,0 @@
-frontend_event_calendar:
-  controller: App\Controllers\Frontend\Event:index
-  method: [GET]
-  path: /events

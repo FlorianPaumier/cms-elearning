@@ -61,7 +61,7 @@ class ChatMessage
     /**
      * @param ChatSession $chatSession
      */
-    public function setIdSession(ChatSession $chatSession): void
+    public function setChatSession(ChatSession $chatSession): void
     {
         $this->chatSession = $chatSession;
     }

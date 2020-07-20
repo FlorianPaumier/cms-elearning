@@ -11,7 +11,7 @@ class ChatSession
 
     protected $user;
 
-    protected $sessionToken;
+    protected $tokenSession;
 
     /**
      * @return User
@@ -32,17 +32,17 @@ class ChatSession
     /**
      * @return string
      */
-    public function getSession(): string
+    public function getTokenSession(): string
     {
-        return $this->sessionToken;
+        return $this->tokenSession;
     }
 
     /**
-     * @param string $sessionToken
+     * @param string $tokenSession
      */
-    public function setSession(string $sessionToken): void
+    public function setTokenSession(string $tokenSession): void
     {
-        $this->session = $sessionToken;
+        $this->tokenSession = $tokenSession;
     }
 
 }

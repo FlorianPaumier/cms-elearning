@@ -28,9 +28,7 @@ class EvaluationController extends BaseController
             $eval->setEvaluation($evaluation);
             $eval->setName($evaluation->getName());
             $eval->setUser($this->getUser());
-            $this->entityManager->persist($eval);
-
-            $fields = [];
+            $this->entityManager->persist($eval)->flush();
 
             foreach ($data as $key => $value) {
                 $field = new EvaluationMeta();
@@ -50,14 +48,12 @@ class EvaluationController extends BaseController
                 $field->setInput($input);
                 $field->setValue($value);
 
-                $fields[end($name)] = $value;
-
                 $field->setEvaluationObject($eval);
                 $this->entityManager->persist($field);
             }
 
             $this->entityManager->flush();
-            $this->redirect->redirectToRoute("frontend_form_contact");
+            $this->redirect->redirectToRoute("app_catalogue_show", ["id" => $evaluation->getId()]);
         }
 
         return $this->render("frontend/evaluation/index", [

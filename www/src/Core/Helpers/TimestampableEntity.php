@@ -45,4 +45,19 @@ trait TimestampableEntity
         return $this;
     }
 
+    /**
+     * @param \DateTime $created_at
+     */
+    public function setCreatedAt(\DateTime $created_at): void
+    {
+        $this->created_at = $created_at;
+    }
+
+    /**
+     * @param \DateTime $updated_at
+     */
+    public function setUpdatedAt(\DateTime $updated_at): void
+    {
+        $this->updated_at = $updated_at;
+    }
 }

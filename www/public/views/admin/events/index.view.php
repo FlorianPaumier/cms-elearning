@@ -15,8 +15,7 @@
     </tr>
     </thead>
     <tbody>
-    <?php if($list): ?>
-    <?php foreach ($list as $event): ?>
+    <?php foreach ($list["data"] as $event): ?>
         <tr>
             <td><?= $event->getTitle() ?></td>
             <td><?= $event->getCreatedAt()->format("d-m-Y") ?></td>
@@ -24,11 +23,13 @@
             <td><?= $event->getHappenAt()->format("d-m-Y") ?></td>
             <td>
                 <a href="@path(admin_events_edit, <?= $event->getId() ?>)">Edit</a>
+                <a href="@path(admin_events_stream, <?= $event->getId() ?>)">Ajout d'un stream</a>
                 <a href="@path(admin_events_delete, <?= $event->getId() ?>)">Delete</a>
             </td>
         </tr>
     <?php endforeach; ?>
-    <?php endif; ?>
     </tbody>
 </table>
+
+<?= $list["link"] ?>
 @endsection

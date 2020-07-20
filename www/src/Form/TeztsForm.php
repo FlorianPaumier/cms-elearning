@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Core\Form\Fields\RadioType;
 use App\Core\Form\FormBuilder;
 use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\CheckboxType;
@@ -16,12 +15,12 @@ class TeztsForm extends AbstractForm
     public function buildForm(FormBuilder $builder): FormBuilder
     {
         return $builder
-                        ->add('qsdqsd', RadioType::class , array (
+                        ->add('qsdqsd', CheckboxType::class , array (
   'require' => false,
   'placeholder' => 'Placehokldr',
   'label' => 'qsdqsd',
   'key' => 'qsdqsd',
-  'position' => '1',
+  'position' => '0',
   'choices' => 
   array (
     0 => 'non',
@@ -34,7 +33,7 @@ class TeztsForm extends AbstractForm
   'placeholder' => 'Placehodlder',
   'label' => 'Label',
   'key' => 'label',
-  'position' => '2',
+  'position' => '1',
   'choices' => 
   array (
     0 => 'null',
@@ -45,7 +44,7 @@ class TeztsForm extends AbstractForm
   'placeholder' => 'Submit',
   'label' => 'Submit',
   'key' => 'submit',
-  'position' => '3',
+  'position' => '2',
   'choices' => 
   array (
     0 => 'null',
@@ -54,10 +53,15 @@ class TeztsForm extends AbstractForm
                 ;
     }
 
-    public function getBlockPrefix(): string
+
+    /**
+    * @inheritDoc
+    */
+    public function getBlockPrefix()
     {
         return "tezts";
     }
+
 
 
 }

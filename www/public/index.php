@@ -6,12 +6,15 @@ use App\Core\Kernel\Kernel;
 define("ROOT_PATH", dirname(__DIR__));
 
 require ROOT_PATH.'/src/Core/Helpers/autoloader.php';
-require ROOT_PATH . "/vendor/autoload.php";
 
-//Define ENV TYPE
-#Todo : Use config var
-$env="dev";
+//Define ENV TYPE from configuration file
+$env = yaml_parse_file(ROOT_PATH."/app/config/config.yml")["env"];
 
+$debug = false;
+
+/**
+ * If env is dev, enable display error and make application to development work
+ */
 if($env == "dev"){
     $debug=true;
     //Display All Php errors
@@ -25,4 +28,4 @@ $kernel = new Kernel($env, $debug);
 $kernel->init();
 
 //Process the request
-Kernel::resolve();
+$kernel->resolve();

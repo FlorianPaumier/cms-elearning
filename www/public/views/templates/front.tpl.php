@@ -21,15 +21,21 @@
     <!-- Custom styles for this template-->
     <link href="/assets/styles/frontend/main.css" rel="stylesheet">
     <link href="/assets/styles/globals/collapsible.css" rel="stylesheet">
-    @section(style)
+    @yield(style)
 </head>
 
 <body id="page-top">
 
 @include(partials/header)
-
+<?php
+if ($errors) {
+    foreach ($errors as $error) {
+        var_dump($error);
+    }
+}
+?>
 <main>
-    @section(body)
+    @yield(body)
 </main>
 
 
@@ -38,7 +44,7 @@
 <script src="/assets/scripts/global.js"></script>
 <script src="/assets/scripts/header.js"></script>
 <script src="/assets/scripts/collapsible.js"></script>
-@section(javascript)
+@yield(javascript)
 </body>
 </html>
 

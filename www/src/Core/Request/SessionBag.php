@@ -4,8 +4,11 @@
 namespace App\Core\Request;
 
 
-class SessionBag
+class SessionBag implements \ArrayAccess
 {
+    /**
+     * @var array
+     */
     private $session;
 
     public function __construct(array &$session)
@@ -14,41 +17,50 @@ class SessionBag
     }
 
     /**
-     * Return the data in the request if the key exist
-     * @param $key
-     * @return mixed
-     */
-    public function get($key)
-    {
-        if (preg_match("/\[\]/", $key)) {
-            $key = preg_replace("/\[\]/", "", $key);
-        }
-        return $this->exist($key) ? $this->session[$key] : null;
-    }
-
-    /**
      * Return the Session array
      * @return array
      */
-    public function all()
+    public function getSession()
     {
         return $this->session;
     }
 
-    /** Add or update entry in session */
-    public function set(string $key, $value)
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
     {
-        return $this->session[$key] = $value;
+        return key_exists($offset, $this->session);
     }
 
-    /** If key exist delete entry */
-    public function delete(string $key){
-        if($this->exist($key)) unset($this->session[$key]);
+    /**
+     * @param mixed $offset
+     * @return mixed
+     */
+    public function offsetGet($offset)
+    {
+        if (preg_match("/\[\]/", $offset)) {
+            $offset = preg_replace("/\[\]/", "", $offset);
+        }
+        return $this->offsetExists($offset) ? $this->session[$offset] : null;
     }
 
-    /** Search if key exist in session */
-    public function exist(string $key)
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
+    public function offsetSet($offset, $value)
     {
-        return key_exists($key, $this->session);
+        return $this->session[$offset] = $value;
     }
+
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset($offset)
+    {
+        if($this->offsetExists($offset)) unset($this->session[$offset]);
+    }
+
 }

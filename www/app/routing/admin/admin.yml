@@ -2,3 +2,11 @@ admin_home:
   path: /admin
   controller: App\Controllers\Admin\Home:index
   roles: ["ROLE_ADMIN"]
+
+admin_config:
+  path: /admin/configuration
+  controller: App\Controllers\Admin\Home:configuration
+
+admin_test_mailer:
+  path: /admin/mailer-test
+  controller: App\Controllers\Admin\Home:testMailer

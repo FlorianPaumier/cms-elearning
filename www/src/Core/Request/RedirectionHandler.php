@@ -31,14 +31,16 @@ class RedirectionHandler
      * @param string $name
      * @throws \Exception
      */
-    public function redirectToRoute(string $name)
+    public function redirectToRoute(string $name, array $params = [])
     {
-        $route = CacheHandler::get("routing")[$name];
+        $route = ConfigHandler::get("router")->getPath($name, $params);
 
         if (is_null($route)) {
             throw new \Exception("La route $name n'a pas été trouvé");
         }
-        $this->redirectTo($route["path"]);
+
+
+        $this->redirectTo($route);
     }
 
     /**

@@ -48,15 +48,18 @@ body {
       ul {
         display: none;
         line-height: $buttonSize;
-        li {
-          text-align: center;
-          &:hover {
-            background-color: $colorLightBlue;
-          }
-        }
 
         a {
           text-decoration: none;
+
+          li {
+            text-align: center;
+            color: white;
+
+            &:hover {
+              background-color: $colorLightBlue;
+            }
+          }
         }
       }
 

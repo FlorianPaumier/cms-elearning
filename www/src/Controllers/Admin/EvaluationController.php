@@ -32,7 +32,7 @@ class EvaluationController extends BaseController
     public function new(Request $request)
     {
         if($request->getMethod() == "POST" ){
-            $formTypeBuilder = (new FormTypeBuilderServices($request->getRequest()->get("admin_evaluation")))->generateContact(EvaluationInput::class);
+            $formTypeBuilder = (new FormTypeBuilderServices($request->getRequest()->get("admin_evaluation")))->generateForm(EvaluationInput::class);
 
             $inputs = $formTypeBuilder->getInputs();
             $form = $formTypeBuilder->createFormTypeClass($request->getRequest()->all(), Evaluation::class);
@@ -40,6 +40,7 @@ class EvaluationController extends BaseController
             $form->setDescription($request->getRequest()->get("admin_evaluation_description"));
             $form->setLesson((new LessonRepository())->find($request->getRequest()->get("admin_evaluation_lesson")));
             $this->entityManager->persist($form);
+
             $this->entityManager->flush();
 
             /** @var EvaluationInput $input */
@@ -62,8 +63,7 @@ class EvaluationController extends BaseController
         $json = $serializer->serialize($inputs, "json");
 
         if($request->getMethod() == "POST"){
-//            dump($request->getRequest()->all());
-            $formTypeBuilder = (new FormTypeBuilderServices($request->getRequest()->get("admin_evaluation")))->generateContact(EvaluationInput::class, $evaluation);
+            $formTypeBuilder = (new FormTypeBuilderServices($request->getRequest()->get("admin_evaluation")))->generateForm(EvaluationInput::class, $evaluation);
 
             $inputs = $formTypeBuilder->getInputs();
             $form = $formTypeBuilder->createFormTypeClass($request->getRequest()->all(),Evaluation::class, $evaluation);

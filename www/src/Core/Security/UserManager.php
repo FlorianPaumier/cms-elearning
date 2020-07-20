@@ -11,6 +11,7 @@ use App\Core\Mailer\MailerHandler;
 use App\Core\Mailer\MailerMessage;
 use App\Core\Request\ParameterBag;
 use App\Core\Request\Request;
+use App\Core\Request\SessionBag;
 use App\Core\Session\PHPSession;
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -28,7 +29,7 @@ class UserManager
     private $repository;
 
     /**
-     * @var PHPSession
+     * @var SessionBag
      */
     private $session;
 
@@ -67,8 +68,8 @@ class UserManager
                 "roles" => $q->getRoles(),
                 "timestamp" => time() + 2 * 60 * 60,
             ]);
-        }
 
+        }
 
 //        dump($this->session->getSession());
         return $response;
@@ -87,15 +88,14 @@ class UserManager
      */
     public function isConnected()
     {
-        dump($this->session->getSession());
-
         if ($this->session->offsetGet("app.user")) {
-
             if (!$this->session->offsetGet("app.user")["timestamp"] < time()) {
                 $this->disconnectUser();
             } else {
                 return true;
             }
+        }else{
+            return false;
         }
 
         return false;

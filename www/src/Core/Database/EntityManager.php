@@ -26,6 +26,9 @@ class EntityManager extends QueryBuilder
      */
     protected $queries = [];
 
+    /**
+     * @var array
+     */
     protected $fieldsValues = [];
 
     /**
@@ -37,6 +40,10 @@ class EntityManager extends QueryBuilder
         parent::__construct($pdo);
     }
 
+    /**
+     * @param object $objet
+     * @return $this
+     */
     public function persist(object &$objet): self
     {
         $this->from(EntityHelper::getClass($objet));
@@ -48,17 +55,19 @@ class EntityManager extends QueryBuilder
         } else {
             $this->update($objet);
         }
-
         return $this;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function flush()
     {
         foreach ($this->queries as $query) {
             try {
                 $this->execute($query["sql"], $query["data"]);
-//                dump($query["sql"]);
-//                dump($query["data"]);
+               //dump($query["sql"]);
+                //dump($query["data"]);
 
                 if (is_null($query["object"]->getId())) {
                     $query["object"]->setId($this->pdo->lastInsertId());
@@ -71,6 +80,10 @@ class EntityManager extends QueryBuilder
         $this->clear(true);
     }
 
+    /**
+     * @param array $params
+     * @return string
+     */
     private function buildWhereFieldQuery(array $params)
     {
         return join(
@@ -129,6 +142,9 @@ class EntityManager extends QueryBuilder
         );
     }
 
+    /**
+     * @param object $object
+     */
     protected function addToQueue(object &$object)
     {
         $this->queries[] = [
@@ -140,7 +156,13 @@ class EntityManager extends QueryBuilder
         $this->clear();
     }
 
-    public function delete(object $object)
+
+    /**
+     * @param object $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function delete(object $object): self
     {
         if (!is_callable([$object, 'getId'])) {
             throw new \Exception("No id in object");
@@ -153,6 +175,8 @@ class EntityManager extends QueryBuilder
 
         $this->addToQueue($object);
         $this->flush();
+
+        return $this;
     }
 
     /**
@@ -175,6 +199,10 @@ class EntityManager extends QueryBuilder
         return Hydrator::hydrate($data, $object);
     }
 
+    /**
+     * @param string $class
+     * @return mixed|null
+     */
     public function getRepository(string $class)
     {
         if (class_exists($class)) {
@@ -190,6 +218,9 @@ class EntityManager extends QueryBuilder
         return null;
     }
 
+    /**
+     * @param array $values
+     */
     private function setFieldsValues(array $values): void
     {
         $this->fieldsValues = [];

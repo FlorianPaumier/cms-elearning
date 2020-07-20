@@ -170,15 +170,12 @@ class UserController extends BaseController
 
         $user = $this->entityManager->setEntity(User::class)->findBy(["email" => $currentUser["user"]]);
 
-        if($this->entityManager->from("user")->delete($user->getId())) {
+        if($this->entityManager->delete($user)) {
             $this->session->offsetUnset("app.user");
         }else{
-                $this->redirect->redirectToRoute("app_user_profile");
+            $this->redirect->redirectToRoute("app_user_profile");
         }
-
-
             $this->redirect->redirectToRoute("app_home");
-
         }
 
     /**

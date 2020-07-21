@@ -72,17 +72,17 @@ class ChatController extends BaseController
     }
 
     public function getAnnonce(){
-        $query = $db->query("SELECT * FROM chat_annonce LIMIT 0,1");
+        $query = $this->entityManager->getPdo()->query("SELECT * FROM chat_annonce LIMIT 0,1");
         while ($data = $query->fetch())
             $json['annonce'] = $data['annonce_text'];
         $query->closeCursor();
     }
 
     public function getMessage(ChatGlobalRepository $repository) {
-        $messages = $repository->select('*')->leftJoin('user','u')->fetch();
+        $messages = $repository->leftJoin('user','u')->fetch();
             dump($messages);
-            die();
-        $query = $db->prepare("
+
+        $query = $this->entityManager->getPdo()->prepare("
             SELECT message_id, message_user, message_time, message_text, account_id, account_login
             FROM chat_messages
             LEFT JOIN chat_accounts ON chat_accounts.account_id = chat_messages.message_user

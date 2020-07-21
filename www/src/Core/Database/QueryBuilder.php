@@ -434,7 +434,7 @@ abstract class QueryBuilder
     public function fetch(bool $clear = true)
     {
         $query = $this->pdo->prepare($this->toSQL());
-        dump($query);
+
         if (!$query->execute($this->parameters)) {
             dump($query->errorInfo());
             throw new \Exception("Un erreur est survenu lors de la requête", 500);

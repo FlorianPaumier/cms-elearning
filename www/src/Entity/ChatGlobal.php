@@ -27,10 +27,11 @@ class ChatGlobal
     /**
      * @param mixed $user
      */
-    public function setUser($user): void
+    public function setUser(User $user): void
     {
         $this->user = $user;
     }
+
 
     /**
      * @return mixed

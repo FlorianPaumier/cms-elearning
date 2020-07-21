@@ -7,7 +7,7 @@ use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
-use App\Entity\Chat;
+use App\Entity\ChatGlobal;
 
 class ChatForm extends AbstractForm
 {
@@ -43,7 +43,7 @@ class ChatForm extends AbstractForm
     public function configureOptions()
     {
         $this->options = [
-            "data_class" => Chat::class
+            "data_class" => ChatGlobal::class
         ];
     }
 }

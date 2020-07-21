@@ -167,7 +167,7 @@ class EntityManager extends QueryBuilder
         if (!is_callable([$object, 'getId'])) {
             throw new \Exception("No id in object");
         }
-
+        $this->from(EntityHelper::getClass($object));
         $this->method = "DELETE";
 
         $this->where("id = :id")

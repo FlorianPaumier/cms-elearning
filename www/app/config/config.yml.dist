@@ -7,7 +7,7 @@ database:
     username: utilisateur
     password: motdepasse
     charset: UTF8
-phpmailer:
+mailer:
     transport: smtp
     host: smtp.gmail.com
     port: null

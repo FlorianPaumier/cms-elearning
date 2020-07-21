@@ -59,7 +59,7 @@ class UserController extends BaseController
         $form = $this->createForm(UserRegisterForm::class, $user);
         $form->handleRequest($request);
 
-        if ($this->query->getMethod() == "POST") {
+
 
             if ($form->isValid()) {
                 $password = $user->getPassword();
@@ -68,26 +68,17 @@ class UserController extends BaseController
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 
+                if (($response = $this->userManager->confirmRegister($user->getEmail())) !== true) {
+
+                    $this->session->offsetSet("app.flash", ["error" => [$response]]);
+
+
+                }
+
                 $this->redirect->redirectToRoute("app_user_login");
             } else {
                 $this->session->offsetSet("app.flash", ["error" => $form->getErrorFeedback()]);
             }
-
-            $email = $user->get("email");
-
-            if (($response = $this->userManager->confirmRegister($email)) !== true) {
-
-                $this->session->set("app.flash", ["error" => [$response]]);
-
-                if (($response = $this->userManager->confirmRegister($email)) == true) {
-
-                   $user->setRoles(1);
-
-                }
-            } else {
-                $this->redirect->redirectToRoute("app_home");
-            }
-        }
 
         return $this->renderer->render(
             ROOT_PATH . "/public/views/security/frontend/register",
@@ -142,7 +133,7 @@ class UserController extends BaseController
 
                 if (($response = $this->userManager->forgetPassword($email)) !== true) {
 
-                    $this->session->set("app.flash", ["error" => [$response]]);
+                    $this->session->offsetSet("app.flash", ["error" => [$response]]);
 
                 } else {
                     $this->redirect->redirectToRoute("app_home");

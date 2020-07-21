@@ -1,0 +1,1 @@
+<a href="{{host}}/confirmation?token={{token}}">Confirmation de votre inscription</a>

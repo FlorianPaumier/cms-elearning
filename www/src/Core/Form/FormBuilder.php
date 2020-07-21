@@ -191,7 +191,6 @@ class FormBuilder
                     continue;
                 }
             }
-
             if (is_null($this->entity) || is_array($this->entity)) {
                 $this->entity[$key] = $value;
             } else {

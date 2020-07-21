@@ -9,6 +9,7 @@ use App\Core\Database\QueryBuilder;
 use App\Core\Database\EntityManager;
 use App\Core\Mailer\MailerHandler;
 use App\Core\Mailer\MailerMessage;
+use App\Core\Render\RenderView;
 use App\Core\Request\ParameterBag;
 use App\Core\Request\Request;
 use App\Core\Request\SessionBag;
@@ -174,16 +175,17 @@ class UserManager
      */
     public function forgetPassword(string $email)
     {
-        if ($this->entityManager->from("user")->exists(["email" => $email])) {
+        $userRepo = new UserRepository();
+        if ($userRepo->exists(["email" => $email])) {
 
-            $user = $this->entityManager->setEntity(User::class)->findBy(["email" => $email]);
+            $user = $userRepo->findOneBy(["email" => $email]);
             $user->setForgetPasswordToken(bin2hex(random_bytes(32)));
 
             $server = ConfigHandler::get("request")->getServer();
             $mailer = new MailerHandler();
             $message = (new MailerMessage())
                 ->setSubjet("Forget Password")
-                ->setBody("<a href='" . $server['HTTP_HOST'] . "/reset-token?token=" . $user->getForgetPasswordToken() . "'>Reset Password</a>")
+                ->setBody((new RenderView())->render("views/mailer/forgetPassword",["host" => $server["HTTP_HOST"], "token" => $user->getForgetPasswordToken()]))
                 ->setDest($email)
                 ->setContentType("text/html");
             if ($mailer->send($message)) {
@@ -205,16 +207,19 @@ class UserManager
 
     public function confirmRegister(string $email)
     {
-        if ($this->entityManager->from("user")->exists(["email" => $email])) {
 
-            $user = $this->entityManager->setEntity(User::class)->findBy(["email" => $email]);
+        $userRepo = new UserRepository();
+        if ($userRepo->exists(["email" => $email])) {
+
+            $user = $userRepo->findOneBy(["email" => $email]);
+            dump($user);
             $user->setconfirmationToken(bin2hex(random_bytes(32)));
 
             $server = ConfigHandler::get("request")->getServer();
             $mailer = new MailerHandler();
             $message = (new MailerMessage())
                 ->setSubjet("Confirmation de l'inscription")
-                ->setBody("<a href='" . $server['HTTP_HOST'] . "/confirmation=" . $user->getconfirmationToken() . "'>Confirmation de votre inscription</a>")
+                ->setBody((new RenderView())->render("views/mailer/confirmPassword", ["host" => $server["HTTP_HOST"], "token" => $user->getConfirmationToken()]))
                 ->setDest($email)
                 ->setContentType("text/html");
             if ($mailer->send($message)) {

@@ -21,6 +21,7 @@ class UserRegisterForm extends AbstractForm
                 "username", TextType::class, [
                     'type' => 'text',
                     'required' => true,
+                    'unique' => true,
                     'label' => 'Identifiant',
                     'placeholder' => 'Votre identifiant',
                     "class" => "form-control form-control-user",
@@ -31,6 +32,7 @@ class UserRegisterForm extends AbstractForm
                 "email", TextType::class, [
                     'type' => 'email',
                     'required' => true,
+                    'unique' => true,
                     'label' => 'Email',
                     'placeholder' => 'exemple@gmail.com',
                     "class" => "form-control form-control-user",

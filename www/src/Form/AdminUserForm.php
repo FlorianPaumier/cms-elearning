@@ -56,7 +56,7 @@ class AdminUserForm extends AbstractForm
                     "mapped" => false,
                 ]
             )
-            /*->add(
+            ->add(
                 "roles", SelectType::class, [
                     'required' => true,
                     'choices' => ['ROLE_USER'=> 'utilisateur', 'ROLE_ADMIN' => 'admin'],
@@ -65,7 +65,7 @@ class AdminUserForm extends AbstractForm
                     'placeholder' => '',
                     "class" => "form-control form-control-user select-two",
                 ]
-            )*/
+            )
             ->add(
                 "status", CheckboxType::class, [
                     'required' => true,

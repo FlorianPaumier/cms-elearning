@@ -84,4 +84,6 @@ abstract class AbstractForm implements FormTypeInterface
     public function getParentPrefix(){
         return $this->parentPrefix;
     }
+
+    public function configureOptions(){}
 }

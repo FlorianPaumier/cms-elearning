@@ -212,9 +212,9 @@ abstract class AbstractRepository extends QueryBuilder
         }
 
         if($this->alias){
-            $this->relations[$key][] = "$tableTarget AS $alias on ".$this->alias.".id"." = $alias.".$this->table."_id";
+            $this->relations[$key][] = "\"$tableTarget\" AS $alias on ".$this->alias.".id"." = $alias.id";
         }else{
-            $this->relations[$key][] = "$tableTarget AS $alias on ".$this->table.".id"." = $alias.".$this->table."_id";
+            $this->relations[$key][] = "\"$tableTarget\" AS $alias on ".$this->table.".id"." = $alias.id";
         }
 
         $this->addSelect($tableTarget, $alias);

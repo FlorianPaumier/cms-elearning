@@ -7,10 +7,7 @@ namespace App\Controllers\Admin;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
-use App\Entity\Article;
 use App\Entity\Category;
-use App\Entity\Commentary;
-use App\Form\ArticleForm;
 use App\Form\CategoryForm;
 use App\Repository\CategoryRepository;
 use Exception;
@@ -20,20 +17,20 @@ class CategoryController extends BaseController
 
     public function index(CategoryRepository $repository)
     {
-        $category = $repository->paginate(5);
+        $categories = $repository->paginate(5);
 
         return $this->renderer->render("admin/category/index",[
-            "categories" => $category,
-            "title" => "Liste d'articles"
+            "categories" => $categories,
+            "title" => "Liste des catégories"
         ]);
     }
 
-    public function list(ArticleRepository $repository)
+    public function list(CategoryRepository $repository)
     {
-        $articles = $repository->paginate(5);
+        $categories = $repository->paginate(5);
 
-        return $this->renderer->render("admin/category/category_list",[
-            "category" => $articles,
+        return $this->renderer->render("admin/category/index",[
+            "categories" => $categories,
             "title" => "Liste des catégories"
         ]);
     }
@@ -45,14 +42,14 @@ class CategoryController extends BaseController
      */
     public function new(Request $request)
     {
-        $article = new Category();
+        $category = new Category();
 
-        $form = $this->createForm(CategoryForm::class, $article);
+        $form = $this->createForm(CategoryForm::class, $category);
         $form->handleRequest($request);
 
-        if($request->getMethod() == "POST" && $form->isValid()) {
+        if($form->isValid()) {
             $em = ConfigHandler::get("entityManager");
-            $em->persist($article)->flush();
+            $em->persist($category)->flush();
             $this->redirect->redirectToRoute("admin_category");
         }
 
@@ -63,39 +60,29 @@ class CategoryController extends BaseController
         ]);
     }
 
-    public function edit(Request $request, CategoryRepository $repository, Category $category)
+    public function edit(Request $request, CategoryRepository $repository, Category $categories)
     {
-        $lesson = $repository
-            ->where("category.id = :id")
-            ->setParameter("id", $category->getId())
-            ->fetch();
+        $category = $repository->findBy(['id' => $categories->getId()]);
 
-        $form = $this->createForm(ArticleForm::class, $article);
+        $form = $this->createForm(CategoryForm::class, $category);
         $form->handleRequest($request);
 
-        if ($request->getMethod() == "POST" && $form->isValid()) {
+        if ($form->isValid()) {
             $em = ConfigHandler::get("entityManager");
-            $em->persist($article);
+            $em->persist($category);
             $em->flush();
-            $this->redirect->redirectToRoute("admin_article_list");
+            $this->redirect->redirectToRoute("admin_category");
         }
 
-        return $this->renderer->render("admin/articles/new", [
+        return $this->renderer->render("admin/category/edit", [
             "form" => $form->createView(),
-            "title" => "Modification de l'article"
+            "title" => "Modification de la catégorie"
         ]);
     }
 
-    public function delete(Request $request, Article $article)
+    public function delete(Category $category)
     {
-        $this->redirect->redirectToRoute("admin_article_index");
-    }
-
-
-    public function design()
-    {
-        return $this->renderer->render("admin/article/article_design",[
-            "title" => "Design d'article"
-        ]);
+        $this->entityManager->delete($category);
+        $this->redirect->redirectToRoute("admin_category");
     }
 }

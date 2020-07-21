@@ -1,45 +1,36 @@
-{{ @View/partials/header|include }}
+@extend(templates/front)
 
+@section(style)
+<link rel="stylesheet" href="/assets/styles/frontend/register.css">
+@endsection
 
-<body class="bg-gradient-primary">
+@section(body)
+<section class="wrapper">
+    <a href="#" id="link">Link</a>
+    <div class="register">
+        <p class="title">S'incrire</p>
+        {{ form }}
 
-<div class="container">
-
-    <div class="card o-hidden border-0 shadow-lg my-5">
-        <div class="card-body p-0">
-            <!-- Nested Row within Card Body -->
-            <div class="row">
-                <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-                <div class="col-lg-7">
-                    <div class="p-5">
-                        <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
-                        </div>
-                        <form class="user">
-                            {form}
-                            <button type="submit" class="btn btn-primary btn-user btn-block">
-                                Register Account
-                            </button>
-                            <a href="{{ app_home|path }}" class="btn btn-google btn-user btn-block">
-                                <i class="fab fa-google fa-fw"></i> Register with Google
-                            </a>
-                            <a href="{{ app_home|path }}" class="btn btn-facebook btn-user btn-block">
-                                <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-                            </a>
-                        </form>
-                        <hr>
-                        <div class="text-center">
-                            <a class="small" href="{{ app_user_forget_password|path }}">Forgot Password?</a>
-                        </div>
-                        <div class="text-center">
-                            <a class="small" href="{{ app_user_login|path }}">Already have an account? Login!</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="text-center">
+            <a class="small" href=" @path(app_user_login)"><strong>Vous avez déjà un compte ? Connectez-vous !</strong></a>
         </div>
+        <a href="{{ app_home|path }}" class="btn btn-google btn-user btn-block">
+            <i class="fab fa-google fa-fw"></i><strong>S'inscrire avec Google</strong>
+        </a>
+        <a href="{{ app_home|path }}" class="btn btn-facebook btn-user btn-block">
+            <i class="fab fa-facebook-f fa-fw"></i><strong>S'inscrire avec Facebook</strong>
+        </a>
+        <hr>
+
     </div>
+</section>
+@endsection
 
-</div>
+@section(javascript)
+<script>
 
-{{ @View/partials/footer|include }}
+    let item = document.getElementById("link");
+    console.log(item.style);
+</script>
+<script type="javascript" src="assets/scripts/login.js"></script>
+@endsection

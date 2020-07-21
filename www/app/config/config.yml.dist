@@ -7,3 +7,12 @@ database:
     username: utilisateur
     password: motdepasse
     charset: UTF8
+    prefix: null
+mailer:
+    transport: smtp
+    host: smtp.gmail.com
+    port: null
+    encryption: ssl
+    username: null
+    password: null
+    spool: { type: memory }

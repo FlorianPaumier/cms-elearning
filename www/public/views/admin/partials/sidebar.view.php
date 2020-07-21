@@ -35,9 +35,8 @@
                 <i class="fas fa-books icon"></i>
                 <span>Cours</span>
                 <ul class="submenu">
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
+                    <a href="@path(admin_lesson_list)"><li>Cours</li></a>
+                    <a href="@path(admin_lesson_chapter_index)"><li>Chapitre</li></a>
                 </ul>
             </li>
             <li class="item">

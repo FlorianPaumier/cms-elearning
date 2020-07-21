@@ -19,9 +19,13 @@ class EventEmmiter
     /** @var EventListener[][] */
     private $listeners = [];
 
+    /**
+     * EventEmmiter constructor.
+     */
     private function __construct(){}
 
     /**
+     * If an instance doesn't exist, create a new one with all defined subcribe class
      * @return EventEmmiter
      * @throws DoubleEventException
      */
@@ -43,6 +47,7 @@ class EventEmmiter
     }
 
     /**
+     * If the event listner exist for this one, we call all function
      * @param string $event
      * @param mixed ...$args
      */
@@ -60,6 +65,7 @@ class EventEmmiter
     }
 
     /**
+     * Add a event listener if doesn't already exist
      * @param string $event
      * @param callable $callable
      * @param int $priority
@@ -81,6 +87,7 @@ class EventEmmiter
     }
 
     /**
+     * Set the event call one time
      * @param string $event
      * @param callable $callable
      * @param int $priority
@@ -93,6 +100,7 @@ class EventEmmiter
     }
 
     /**
+     * Delete the event for the listener
      * @param string $event
      * @param callable $callable
      * @param int $priority
@@ -107,6 +115,7 @@ class EventEmmiter
     }
 
     /**
+     * Create all events
      * @param SubscriberInterface $subscriber
      * @throws DoubleEventException
      */
@@ -146,6 +155,7 @@ class EventEmmiter
     }
 
     /**
+     * Test if an event doesn't already be set
      * @param string $event
      * @param callable $callable
      * @return bool
@@ -162,6 +172,9 @@ class EventEmmiter
         return false;
     }
 
+    /**
+     *
+     */
     public function testEvent()
     {
     }

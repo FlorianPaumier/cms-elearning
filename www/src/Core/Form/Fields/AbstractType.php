@@ -8,8 +8,14 @@ use App\Core\Form\FormBuilder;
 use App\Core\Interfaces\FormTypeInterface;
 use App\Core\Render\RenderView;
 
+/**
+ * Class AbstractType
+ * @package App\Core\Form\Fields
+ */
 abstract class AbstractType implements FieldsInterface
 {
+
+    #region Field
     /** @var RenderView */
     private $render;
 
@@ -17,32 +23,61 @@ abstract class AbstractType implements FieldsInterface
     private $name;
 
     /** @var string */
-    private $html;
+    protected $html;
 
     /** @var array */
     private $constraints = [];
 
+    /**
+     * @var
+     */
     private $value;
 
+    /**
+     * @var array
+     */
     private $args = [];
 
+    /**
+     * @var
+     */
     private $parent;
 
+    /**
+     * @var
+     */
     protected $entity;
 
+    /**
+     * @var array
+     */
     private $defaultOptions = [
         "require" => true,
         'compound' => false,
         'extended' => false,
         'choice_label' => "id",
         'multiple' => false,
+        'placeholder' => "",
+        "class" => "",
     ];
 
+    #endregion
+
+    /**
+     * AbstractType constructor.
+     */
     public function __construct()
     {
         $this->render = new RenderView();
     }
 
+    /**
+     * @deprecated
+     * @param string $key
+     * @param FormTypeInterface $field
+     * @param array $args
+     * @throws \Exception
+     */
     public function generatePrototype(string $key, FormTypeInterface $field, array $args)
     {
 
@@ -65,22 +100,40 @@ abstract class AbstractType implements FieldsInterface
         $this->html = htmlentities($html);
     }
 
+    /**
+     * @return mixed
+     */
     public function getParent()
     {
         return $this->parent;
     }
 
+    /**
+     * Set options for the field and overwrite the default one
+     * @param string $key
+     * @param array $args
+     */
     public function setOptions(string $key, array $args)
     {
         $this->name = $key;
         /** @var FormTypeInterface $parent */
         $parent = $this->getParent();
 
+        if(method_exists($parent, "getBlockPrefix")){
+            if(is_null($parent->getBlockPrefix()) || empty($parent->getBlockPrefix())){
+                $parent->setBlockPrefix();
+            }
+
+            $name = $parent->getBlockPrefix() ."_" .$key;
+        }else {
+            $name = "option_" . $key;
+        }
+
         $this->defaultOptions = array_merge($this->defaultOptions, [
             "key" => $key,
             "require" => true,
             "label" => $args["label"] ?? $key,
-            "name" => method_exists($parent, "getBlockPrefix") ? $parent->getBlockPrefix() . "_" . $key : "option_" . $key,
+            "name" => $name
         ]);
 
         foreach ($args as $key => $arg){
@@ -90,6 +143,11 @@ abstract class AbstractType implements FieldsInterface
         $this->addArgs($this->defaultOptions);
     }
 
+    /**
+     * @deprecated
+     * @param string $key
+     * @return mixed|null
+     */
     public function getConstraintOffset(string $key)
     {
         if (key_exists($key, $this->constraints)) {
@@ -98,11 +156,18 @@ abstract class AbstractType implements FieldsInterface
         return null;
     }
 
+    /**
+     * @param string $key
+     * @param $value
+     */
     public function addData(string $key, $value)
     {
         $this->constraints[$key] = $value;
     }
 
+    /**
+     * @param array $data
+     */
     public function addArgs(array $data)
     {
         foreach ($data as $key => $arg){
@@ -145,6 +210,11 @@ abstract class AbstractType implements FieldsInterface
         return $this;
     }
 
+    /**
+     * Render the element to get the html
+     * @return string
+     * @throws \Exception
+     */
     public function renderElement()
     {
         return $this->render->renderHtmlElement($this, $this->constraints);
@@ -158,6 +228,10 @@ abstract class AbstractType implements FieldsInterface
         return "";
     }
 
+    /**
+     * @param FormTypeInterface $field
+     * @return string
+     */
     private function getPrefix(FormTypeInterface &$field)
     {
         $parent = $field->getParent();

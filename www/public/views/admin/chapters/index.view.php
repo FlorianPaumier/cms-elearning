@@ -16,16 +16,16 @@
         </thead>
         <tbody>
         <?php
-        foreach( $chapters as $chapter):
+        foreach( $chapters["data"] as $chapter):
             ?>
             <tr>
                 <td><?= $chapter->getId(); ?></td>
                 <td><?= $chapter->getTitle(); ?></td>
-                <td>
-                    <a href="@path(admin_lesson_chapter_edit)">
+                <td class="row">
+                    <a href="@path(admin_lesson_chapter_edit, <?= $chapter->getId() ?>)">
                         <button class="btn btn-succes">Modifier</button>
                     </a>
-                    <form action="@path(admin_lesson_chapter_delete)">
+                    <form action="@path(admin_lesson_chapter_delete, <?= $chapter->getId() ?>)">
                         <button id="delete-lesson" class="btn btn-danger">Delete</button>
                     </form></td>
             </tr>
@@ -34,5 +34,7 @@
         ?>
         </tbody>
     </table>
+
+    <?php $chapters["links"]?>
 </section>
 @endsection

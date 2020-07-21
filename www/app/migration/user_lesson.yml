@@ -1,0 +1,35 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: SERIAL
+      options:
+        - PRIMARY KEY
+        - NOT NULL
+    lesson_id:
+      name: lesson_id
+      type: integer
+      options:
+        - NOT NULL
+    user_id:
+      name: user_id
+      type: integer
+      options:
+        - NOT NULL
+    chapter:
+      name: chapter
+      type: integer
+      options:
+        - DEFAULT 1
+    isOver:
+      name: is_over
+      type: boolean
+      options:
+        - DEFAULT 0
+    created_at:
+      name: created_at
+      type: timestamp
+    updated_at:
+      name: updated_at
+      type: timestamp

@@ -16,4 +16,9 @@ app_catalogue:
 app_chat:
   path: "/chat"
   controller: App\Controllers\Chat\Chat:index
-  method: [GET]
+  method: [GET,POST]
+
+app_upload:
+  path: "/upload/file"
+  controller: App\Controllers\Upload:upload
+  method: [GET, POST]

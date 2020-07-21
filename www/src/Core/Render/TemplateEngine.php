@@ -10,6 +10,7 @@ use App\Core\Cache\ConfigHandler;
 
 class TemplateEngine
 {
+    #region Field
     private const TPL_EXT = [
         ".view.php",
         ".tpl.php",
@@ -53,6 +54,8 @@ class TemplateEngine
     /** @var bool */
     private $rendering;
 
+    #endregion
+
     public function __construct()
     {
         $this->viewParser = new ParseView();
@@ -66,6 +69,7 @@ class TemplateEngine
      */
     public function setView(string $view)
     {
+
         foreach (self::TPL_EXT as $ext) {
             if (file_exists(VIEW_PATH . DIRECTORY_SEPARATOR . $view . $ext)) {
                 $this->view = VIEW_PATH . DIRECTORY_SEPARATOR . $view . $ext;
@@ -80,7 +84,7 @@ class TemplateEngine
         }
 
         if (empty($this->view)) {
-            ConfigHandler::get("eventEmmiter")->emit("error.404");
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "$view not found");
         }
 
         return true;
@@ -127,7 +131,7 @@ class TemplateEngine
     private function _parseTemplate()
     {
         preg_match_all("/{{\s?(\w+)\s?}}/m", $this->content, $this->fieldEntries, PREG_SET_ORDER, 0);
-        preg_match_all("/@(\w+)\((.*?)(,(.*?))?\)/m", $this->content, $this->methodEntries, PREG_SET_ORDER, 0);
+        preg_match_all("/@(\w+)\((.*?)(,(\[?.*?\]?))?\)/m", $this->content, $this->methodEntries, PREG_SET_ORDER, 0);
     }
 
     /**
@@ -173,10 +177,13 @@ class TemplateEngine
     {
         $this->_parseTemplate();
 
-        if ($tags) {
-//            CacheHandler::set($this->view, $this->content);
 
+        if ($tags) {
             $this->content = $this->getParsePhpView($this->content, $this->data["parameter"]);
+            if ($_SERVER["APP_ENV"] == "prod") {
+                CacheHandler::set($this->view, $this->content);
+            }
+
             if (count($this->fieldEntries) > 0) {
                 $this->_parseTags();
                 $this->_parseTemplate();
@@ -194,7 +201,6 @@ class TemplateEngine
         if (isset($this->data["render"]) && $this->data["render"]) {
             return $this->content;
         }
-
 
         if (!is_null($this->view)) {
             return $this->getParsePhpView($this->content, $this->data);
@@ -221,6 +227,10 @@ class TemplateEngine
             $value = $tag[1];
             $html = null;
             $this->content = RenderFunction::extend($value, $this->content);
+        }
+
+        if (preg_match("#@extend\(([^)]*)\)#m", $this->content)) {
+            $this->_extendFile();
         }
     }
 
@@ -283,12 +293,20 @@ class TemplateEngine
         }
     }
 
+    /**
+     * Execute the php in the file
+     * @param string $content
+     * @param array $data
+     * @return false|string
+     */
     private function getParsePhpView(string $content, array $data)
     {
         ob_start();
         $tmp = tmpfile();
         fwrite($tmp, $content);
         extract($data);
+        extract($this->data["config"]);
+
         require stream_get_meta_data($tmp)['uri'];
         return ob_get_clean();
     }

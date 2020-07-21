@@ -1,0 +1,59 @@
+.pagination {
+  list-style: none;
+}
+.pagination li {
+  min-width: 38px;
+  min-height: 38px;
+  margin: 0 5px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: center;
+  background-color: transparent;
+}
+.pagination a {
+  background-color: blue;
+  padding: 8px 14px;
+  min-width: 38px;
+  min-height: 38px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 5px;
+  vertical-align: center;
+}
+.pagination .active {
+  width: 38px;
+}
+.pagination .active a {
+  background-color: gray;
+}
+
+.article {
+  margin: auto;
+  width: 100%;
+}
+
+.article-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+.article-list .article-row {
+  align-items: center;
+  width: 560px;
+  border-bottom: 1px solid black;
+  text-transform: capitalize;
+}
+.article-list .article-row-title {
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+}
+.article-list .article-row-watch {
+  text-decoration: none;
+}
+.article-list .article-row:last-child {
+  border: none;
+}
+
+/*# sourceMappingURL=article.css.map */

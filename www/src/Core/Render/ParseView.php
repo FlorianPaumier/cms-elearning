@@ -21,6 +21,7 @@ class ParseView
         foreach ($data["parameter"] as $key => $value) {
             foreach ($fieldEntries as $tag) {
                 if ($tag[1] == $key) {
+                    if($value instanceof \DateTime) $value = $value->format("Y-m-d");
                     $content = preg_replace("/{{\s?($key)\s?}}/m", $value, $content);
                 }
             }
@@ -47,8 +48,8 @@ class ParseView
 
             switch ($template) {
                 case "path":
-                    $value = explode(",", $value);
-                    $path = ConfigHandler::get("router")->getPath($value[0], $value[1]);
+                    $param = $tag[4] ?? null;
+                    $path = ConfigHandler::get("router")->getPath($value, $param);
                     $html = $path ?? "";
                     break;
                 case "isRequired":
@@ -66,7 +67,7 @@ class ParseView
             }
 
             if (!is_null($html)) {
-                $regex = addcslashes($tag[0], "/|()");
+                $regex = addcslashes($tag[0], "/|()[]");
                 $functions[$regex] = $html;
             }
         }

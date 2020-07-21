@@ -6,36 +6,50 @@ namespace App\Core\Form;
 
 use App\Core\Interfaces\FormTypeInterface;
 
+/**
+ * Class AbstractForm
+ * @package App\Core\Form
+ */
 abstract class AbstractForm implements FormTypeInterface
 {
-    protected $prefix;
+    #region field
+    /**
+     * @var string
+     */
+    protected $prefix = "";
 
+    /**
+     * @var array
+     */
     protected $options = [];
 
+    /**
+     * @var
+     */
     protected $parent;
 
+    /**
+     * @var
+     */
     protected $parentPrefix;
 
+    #endregion
+
+    /**
+     * AbstractForm constructor.
+     */
     public function __construct()
     {
         $this->configureOptions();
     }
 
+    /**
+     * @return array
+     */
     public function getOptions(): array
     {
         return $this->options;
     }
-
-    /**
-     * @param FormBuilder $builder
-     * @return FormBuilder
-     */
-    public function buildForm(FormBuilder $builder) {}
-
-    /**
-     * @return string
-     */
-    public function getBlockPrefix(){}
 
     /**
      * @param string|null $prefix
@@ -43,11 +57,6 @@ abstract class AbstractForm implements FormTypeInterface
     public function setBlockPrefix(string $prefix = null) {
         $this->prefix = $prefix;
     }
-
-    /**
-     * @return mixed
-     */
-    public function configureOptions(){}
 
     /**
      * @return mixed

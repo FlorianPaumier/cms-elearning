@@ -3,12 +3,11 @@
 namespace App\Core\Render;
 
 use App\Core\Cache\ConfigHandler;
-use App\Core\Exceptions\ExceptionHandler;
-use App\Core\Kernel\Kernel;
 use App\Core\Session\PHPSession;
 
 class RenderView
 {
+
     /**
      * @var PHPSession
      */
@@ -17,49 +16,18 @@ class RenderView
     /** @var array */
     private $defaultData = [];
 
-    /** @var TemplateEngine  */
+    /** @var TemplateEngine */
     private $templateEngine;
 
+    /**
+     * RenderView constructor.
+     */
     public function __construct()
     {
         $this->templateEngine = new TemplateEngine();
-        $this->defaultData["session"] = ConfigHandler::get("session");
+        $this->defaultData["session"] = ConfigHandler::get("session")->getSession();
     }
 
-    /**
-     * @param string $template
-     * @param array $param
-     * @return false|string
-     */
-//    public static function include(string $template, array $param = [])
-//    {
-//        $defaultData = [
-//            "session" => ConfigHandler::get("session")->offsetGet("app.user") ? ["connected" => true, "roles" => null] : ["connected" => false, "roles" => null],
-//            "flash" => ConfigHandler::get("session")->get("app.flash") ?? "",
-//        ];
-//
-//        ob_start();
-//
-//        extract($param, EXTR_OVERWRITE);
-//        extract($defaultData, EXTR_SKIP);
-//
-//        $includeEngine = new TemplateEngine();
-//
-//        if($includeEngine->setView($template)) {
-//            $includeEngine->setData(["parameter" => $param, "config" => $param]);
-//            $includeEngine->generate_markup();
-//            $includeEngine->compile(false);
-//        }else{
-//            ExceptionHandler::defaultRequestHandler("View Not Found");
-//        }
-//
-//        $ret = ob_get_contents();
-//        ob_end_clean();
-//
-//        return $ret;
-//
-//    }
-//
 
     /**
      * Parse and Include the file
@@ -72,7 +40,7 @@ class RenderView
     {
         $defaultData = [
             "session" => ConfigHandler::get("session")->offsetGet("app.user") ? ["connected" => true, "roles" => null] : ["connected" => false, "roles" => null],
-            "flash" => ConfigHandler::get("session")->get("app.flash") ?? "",
+            "flash" => ConfigHandler::get("session")->offsetGet("app.flash") ?? "",
         ];
 
         $includeEngine = new TemplateEngine();
@@ -81,12 +49,12 @@ class RenderView
 
         $args["render"] = true;
 
-        if($includeEngine->setView($template)){
+        if ($includeEngine->setView($template)) {
             $includeEngine->setData($args);
             $includeEngine->generate_markup();
             return $includeEngine->compile(false);
-        }else{
-            ConfigHandler::get("eventEmmiter")->emit("error.404","View Not Found");
+        } else {
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "View Not Found");
         }
     }
 
@@ -100,13 +68,13 @@ class RenderView
      */
     public function render(string $template, array $param = [], bool $display = false)
     {
-        if($this->templateEngine->setView($template)) {
+        if ($this->templateEngine->setView($template)) {
             $this->templateEngine->setData(["parameter" => $param, "config" => $this->defaultData, "render" => $display]);
             $this->templateEngine->generate_markup();
 
-            if($display){
-                if(ConfigHandler::get("session")){
-                    ConfigHandler::get("session")->set("app.flash", null);
+            if ($display) {
+                if (ConfigHandler::get("session")) {
+                    ConfigHandler::get("session")->offsetSet("app.flash", null);
                 }
                 return $this->templateEngine->compile($display);
             }
@@ -114,7 +82,7 @@ class RenderView
             return $this;
         }
 
-        ConfigHandler::get("eventEmmiter")->emit("error.404");
+        ConfigHandler::get("eventEmmiter")->emit("error.404", "The view $template doesn't exist");
     }
 
     /**
@@ -126,23 +94,23 @@ class RenderView
      */
     public function renderHtmlElement($type, array $options)
     {
-        if(!gettype($type) == "object"){
-            if(class_exists($type)){
+        if (!gettype($type) == "object") {
+            if (class_exists($type)) {
                 $type = new $type;
             }
         }
 
-        $view = gettype($type) == "object" ? $type::getTemplate() : FORM_PATH."/input.tpl.php";
+        $view = gettype($type) == "object" ? $type::getTemplate() : FORM_PATH . "/input.tpl.php";
         $options["prefix"] = "app_form";
 
 
         $this->templateEngine->setData(["parameter" => $options]);
-        if($this->templateEngine->setView($view)){
+        if ($this->templateEngine->setView($view)) {
             $html = $this->templateEngine->renderHtmlElement($type);
             return $html;
         };
 
-        ConfigHandler::get("eventEmmiter")->emit("error.404","View Not Found");
+        ConfigHandler::get("eventEmmiter")->emit("error.404", "View Not Found");
     }
 
     /**
@@ -150,7 +118,25 @@ class RenderView
      * @return string|string[]|null
      * @throws \Exception
      */
-    public function compile(){
+    public function compile()
+    {
         return $this->templateEngine->compile();
+    }
+
+    /**
+     * Render en pretty error to the user
+     * @param string $view
+     * @param \Exception $exception
+     * @throws \Exception
+     */
+    public function renderErrors(string $view, \Exception $exception)
+    {
+        echo $this->render($view, [
+            "message" => $exception->getMessage(),
+            "line" => $exception->getLine(),
+            "trace" => $exception->getTrace(),
+            "code" => $exception->getCode(),
+        ])->compile();
+
     }
 }

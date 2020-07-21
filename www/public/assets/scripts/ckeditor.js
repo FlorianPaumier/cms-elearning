@@ -7,10 +7,13 @@ function createCkeditor(container){
     let component = $(container).find(".ckeditor");
 
     component.each((key,element) => {
-        ClassicEditor
-            .create( element )
-            .catch( error => {
-                console.error( error );
-            } );
-    })
+        $(element).froalaEditor({
+            // Set the file upload URL.
+            imageUploadURL: '/upload/file',
+
+            imageUploadParams: {
+                id: 'my_editor'
+            }
+        })
+    });
 }

@@ -1,0 +1,11 @@
+admin_commentary:
+  path: /admin/commentary
+  controller: App\Controllers\Admin\Commentary:index
+
+admin_commentary_list:
+  path: /admin/commentary/list
+  controller: App\Controllers\Admin\Commentary:index
+
+admin_commentary_destroy:
+  path: /admin/commentary/delete/{id}
+  controller: App\Controllers\Admin\Commentary:delete

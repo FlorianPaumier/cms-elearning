@@ -1,0 +1,1 @@
+@path(admin_lesson_list)

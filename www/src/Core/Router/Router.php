@@ -5,7 +5,9 @@ namespace App\Core\Router;
 use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Kernel\Kernel;
+use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
+use App\Core\Security\RolesManager;
 
 class Router
 {
@@ -47,7 +49,20 @@ class Router
          * / | /url
          */
         $this->formatUrl();
+        $match = false;
 
+
+        if(!file_exists(CONFIG_PATH."/config.yml") && !preg_match ('/\/install/',$this->uri)) {
+            (new RedirectionHandler())->redirectToRoute("installer_index");
+        }
+
+
+        /**
+         * Read all routing configurations
+         * First try to match url with parameters
+         * Second try a match with the url
+         */
+         
         foreach ($this->routes as $route) {
             if ($this->hadParams($route["path"])) {
                 if ($this->matchComplexRoute($route)) {
@@ -61,14 +76,16 @@ class Router
             }
         }
 
+        /** If no route found throw Exception */
+        if (is_null($this->matchRoute)) {
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "La route n'existe pas");
+        }
+
+        /** If configuration ask method and the method ask doesn't match with the current method throw error */
         if (!isset($this->matchRoute["method"]) || in_array($this->request->getMethod(), $this->matchRoute["method"])) {
             $match = true;
         } else {
-            throw new \Exception("Method not allowed", 405);
-        }
-
-        if (!$match) {
-            throw new \Exception("Page Not Found", 404);
+            ConfigHandler::get("eventEmmiter")->emit("error.405", "La méthode " . $this->request->getMethod() . " n'est pas autorisée pour cette route");
         }
 
         return $match;
@@ -82,8 +99,14 @@ class Router
      */
     public function exec()
     {
+        /** get the controller name in the configuration */
         $controllerParam = explode(":", $this->matchRoute["controller"]);
-        #TODO : denied access with wrong role
+
+        /** Denied acces to the route with the roles ask in the configuration doesn't match */
+        if (!RolesManager::routeAllowed($this->matchRoute, 'roles')) {
+            ConfigHandler::get("eventEmmiter")->emit("error.403", "Vous n'avez pas les droits nécessaire à l'accès de cette page");
+        };
+
         $class = "$controllerParam[0]Controller";
 
         if (class_exists($class)) {
@@ -91,13 +114,16 @@ class Router
             $action = $controllerParam[1];
 
             if (is_callable([$controller, $action])) {
+                /**
+                 * try to add object ask in the method parameter
+                 */
                 $methodParameters = (new DependencyInjection($class, $action))->getParameters($this->matchRoute["params"]);
                 return !empty($methodParameters) ? call_user_func_array([$controller, $action], $methodParameters) : $controller->$action();
             } else {
                 ConfigHandler::get("eventEmmiter")->emit("error.404", "Action $action not found");
             }
         } else {
-            ConfigHandler::get("eventEmmiter")->emit("error.404","Class $class not found");
+            ConfigHandler::get("eventEmmiter")->emit("error.404", "Class $class not found");
         }
     }
 
@@ -106,25 +132,36 @@ class Router
      * @param string $route
      * @return string|null
      */
-    public function getPath(string $route, string $param = null): ?string
+    public function getPath(string $route, $params = null): ?string
     {
         $path = key_exists($route, $this->routes) ? $this->routes[$route]["path"] : null;
 
-        if(is_null($path)){
+        if (is_null($path)) {
             ConfigHandler::get("eventEmmiter")->emit("error.404", "La route $route n'exsite pas");
         }
 
-        if(!is_null($param)){
+        if (!is_null($params)) {
             $pathTab = explode("/", $path);
-            foreach ($pathTab as $key => $item) {
-                // If the uri the element don't math with the current route, stop
-                if ($this->hadParams($item)) {
-                    dump($param);
-                    $pathTab[$key] = trim($param);
+
+            if (gettype($params) === "string") {
+                if (strpos($params, "[") !== false) {
+                    $params = json_decode($params);
+                } else {
+                    $params = [$params];
                 }
             }
 
-            $path = implode("/",$pathTab);
+            foreach ($params as $param) {
+                foreach ($pathTab as $key => $item) {
+                    // If the uri the element don't math with the current route, stop
+                    if ($this->hadParams($item)) {
+                        $pathTab[$key] = trim($param);
+                        break;
+                    }
+                }
+            }
+
+            $path = implode("/", $pathTab);
         }
 
         return $path;
@@ -207,19 +244,24 @@ class Router
         /**
          * Regex to extract the parameters name and is type
          */
-        preg_match_all('/{(\w+)<{1}(.*?)>{1}\??}/m', $str, $pregParameters);
+        preg_match_all('/{(\w+)(<{1}(.*?)>{1}\?)?}/m', $str, $pregParameters);
 
         // Retrieve the entire match result
         $params = $this->getParameters($str);
 
         // Test if the parameters had regex rule and test it
-        if (isset($pregParameters[2][0]) && isset($pregParameters[1][0])) {
+        if ((isset($pregParameters[2][0]) && !empty($pregParameters[2][0])) && isset($pregParameters[1][0])) {
             $reg = $pregParameters[2][0];
             $reg = preg_replace('#\\\\#', "", $reg, 1);
+
             if (preg_match("/${reg}/", $params)) {
                 return [$pregParameters[1][0] => $params];
             } else {
-                throw new \Exception("Parameter is not in the correct type");
+                ConfigHandler::get("eventEmmiter")->emit("error.500", "La paramètre $params ne correspond pas au type demandé");
+            }
+        } else {
+            if (isset($pregParameters[1][0])) {
+                return [$pregParameters[1][0] => $params];
             }
         }
 

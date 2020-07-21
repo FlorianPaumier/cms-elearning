@@ -13,4 +13,9 @@ $(document).ready(function () {
         let parent = $(this).parent()[0];
         parent.classList.toggle("is-active");
     })
+
+    $('.close').click((e) => {
+        const target = e.target.closest("div."+ $(e.target).parent().data("dismiss"))
+        target.classList.add("hide")
+    });
 });

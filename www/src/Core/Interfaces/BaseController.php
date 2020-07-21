@@ -1,9 +1,8 @@
 <?php
-
 namespace App\Core\Interfaces;
 
 use App\Core\Cache\ConfigHandler;
-use App\Core\Database\Table;
+use App\Core\Database\EntityManager;
 use App\Core\Form\FormBuilder;
 use App\Core\Form\Validator\Validator;
 use App\Core\Render\RenderView;
@@ -11,6 +10,8 @@ use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Core\Security\UserManager;
 use App\Core\Session\PHPSession;
+use App\Entity\User;
+use App\Repository\UserRepository;
 
 /**
  * Class BaseController
@@ -27,9 +28,9 @@ abstract class BaseController
     protected $renderer;
 
     /**
-     * @var Table
+     * @var EntityManager
      */
-    protected $repository;
+    protected $entityManager;
 
     /**
      * @var UserManager
@@ -47,6 +48,11 @@ abstract class BaseController
     protected $redirect;
 
     /**
+     * @var FormBuilder $form
+     */
+    protected $form;
+
+    /**
      * @var PHPSession
      */
     protected $session;
@@ -58,21 +64,19 @@ abstract class BaseController
          * @deprected use render function
          */
         $this->renderer = new RenderView();
-        $this->repository = ConfigHandler::get('repository');
+        $this->entityManager = ConfigHandler::get('entityManager');
         $this->userManager = ConfigHandler::get("userManager");
         $this->query = ConfigHandler::get("request");
         $this->session = ConfigHandler::get("session");
         $this->redirect = new RedirectionHandler();
     }
 
-    /**
-     * Return une instance d'un validator pour le form donner
-     * @param FormTypeInterface $formType
-     * @return Validator
-     */
-    protected function getValidator(FormTypeInterface $formType)
+    /** Return current log in user */
+    protected function getUser(): ?User
     {
-        return new Validator($formType);
+        $session = $this->session->offsetGet("app.user");
+
+        return $this->entityManager->getRepository(UserRepository::class)->findOneBy(["email" => $session["user"]]);
     }
 
     /**
@@ -80,13 +84,21 @@ abstract class BaseController
      */
     protected function createForm(string $type, &$data = null, array $options = []): FormBuilder
     {
-        if(!class_exists($type)) throw new \Exception();
+        if (!class_exists($type)) {
+            throw new \Exception();
+        }
 
         $form = (new $type);
         $formBuilder = (new FormBuilder($data))->setParent($type)->setFormType($form);
         return $form->buildForm($formBuilder);
     }
 
+    /**
+     * @param string $view
+     * @param array $data
+     * @return RenderView|string|string[]|null
+     * @throws \Exception
+     */
     protected function render(string $view, array $data = []){
         return (new RenderView())->render($view, $data);
     }

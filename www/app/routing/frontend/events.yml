@@ -1,0 +1,14 @@
+frontend_event_calendar:
+  controller: App\Controllers\Frontend\Event:index
+  method: [GET]
+  path: /events
+
+app_event_stream:
+  controller: App\Controllers\Frontend\Event:stream
+  method: [GET]
+  path: /events/stream/{id}
+
+app_event_stream_inscription:
+  controller: App\Controllers\Frontend\Event:streamSubscribe
+  method: [POST]
+  path: /events/stream/{id}/inscription

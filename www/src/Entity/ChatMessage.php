@@ -53,18 +53,18 @@ class ChatMessage
     /**
      * @return ChatSession
      */
-    public function getChatSession(): ChatSession
+    /*public function getChatSession(): ChatSession
     {
         return $this->chatSession;
-    }
+    }*/
 
     /**
      * @param ChatSession $chatSession
      */
-    public function setChatSession(ChatSession $chatSession): void
+    /*public function setChatSession(ChatSession $chatSession): void
     {
         $this->chatSession = $chatSession;
-    }
+    }*
 
 
 

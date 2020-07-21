@@ -1,0 +1,20 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: SERIAL
+      options:
+        - PRIMARY KEY
+        - NOT NULL
+    stream:
+      name: stream_id
+      type: integer
+    user:
+      name: user_id
+      type: integer
+      options:
+        - UNIQUE
+    hasCame:
+      name: has_came
+      type: boolean

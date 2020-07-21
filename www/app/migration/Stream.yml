@@ -1,0 +1,18 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: SERIAL
+      options:
+        - PRIMARY KEY
+        - NOT NULL
+    identifiant:
+      name: identifiant
+      type: character varying
+    startAt:
+      name: start_at
+      type: timestamps
+    event:
+      name: event_id
+      type: integer

@@ -13,26 +13,19 @@ use Exception;
 
 class CommentaryController extends BaseController
 {
-    public function index(Request $request)
-    {
-        return $this->renderer->render("admin/commentary/commentary",[
-            "method" => $request->getMethod(),
-            "title" => "Index"
-        ]);
-    }
-
-    public function list(CommentaryRepository $repository)
+    public function index(CommentaryRepository $repository)
     {
         $commentary = $repository->paginate(5);
 
-        return $this->renderer->render("admin/commentary/commentary_list",[
+        return $this->renderer->render("admin/commentary/index",[
             "commentary" => $commentary,
             "title" => "Liste des commentaires"
         ]);
     }
 
-    public function delete(Request $request, Commentary $commentary)
+    public function delete(Commentary $commentary)
     {
+        $this->entityManager->delete($commentary);
         $this->redirect->redirectToRoute("admin_commentary_list");
     }
 }

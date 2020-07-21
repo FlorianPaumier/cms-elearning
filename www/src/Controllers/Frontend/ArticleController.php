@@ -35,7 +35,7 @@ class ArticleController extends BaseController
         $commentForm = $this->createForm(CommentaryForm::class, $comment);
         $commentForm->handleRequest($request);
 
-        if($request->getMethod() == "POST" && $commentForm->isValid()) {
+        if($commentForm->isValid()) {
             $em = ConfigHandler::get("entityManager");
             $em->persist($comment);
             $em->flush();

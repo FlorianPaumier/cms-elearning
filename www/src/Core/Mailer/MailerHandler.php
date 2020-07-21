@@ -15,6 +15,8 @@ use PHPMailer\PHPMailer\SMTP;
 class MailerHandler
 {
 
+    #region fields
+
     /** @var PHPMailer */
     private $mail;
 
@@ -27,52 +29,8 @@ class MailerHandler
     /** @var string */
     private $charset = "UTF-8";
 
-    /**
-     * MailerHandler constructor.
-     * @throws \Exception
-     */
-    public function __construct()
-    {
-        if (file_exists(ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php")) {
-            $this->mail = $this->createTransport();
-        }else{
-            throw new \Exception("You need to install phpmailer");
-        }
-    }
-
-    /**
-     * Transform the message to a mail
-     * @param MailerMessage $message
-     * @return bool
-     * @throws Exception
-     */
-    public function send(MailerMessage $message)
-    {
-        $this->mail->setFrom($this->sender);
-
-        $this->setDest($message->getDest());
-        $this->setBcc($message->getBcc());
-        $this->setCc($message->getCc());
-        $this->mail->addReplyTo($this->replyTo);
-        $this->mail->isHTML(true);
-
-        $content = $message->getBody();
-        if ($content instanceof RenderView) {
-            $content = $content->compile();
-        }
-
-        $this->mail->Subject = $message->getSubjet();
-        $this->mail->Body = $content;
-
-        try {
-            $this->mail->send();
-            return true;
-        } catch (Exception $exception) {
-            dump($exception->getMessage());
-        }
-
-        return false;
-    }
+    #endregion
+    #region getter/setter
 
     /**
      * @return string
@@ -109,6 +67,7 @@ class MailerHandler
         $this->charset = $charset;
         return $this;
     }
+
 
     /**
      * Create the configuration to use phpmailer
@@ -190,6 +149,56 @@ class MailerHandler
         }
     }
 
+    #endregion
+    #region functions
+
+    /**
+     * MailerHandler constructor.
+     * @throws \Exception
+     */
+    public function __construct()
+    {
+        if (file_exists(ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php")) {
+            $this->mail = $this->createTransport();
+        }else{
+            throw new \Exception("You need to install phpmailer");
+        }
+    }
+
+    /**
+     * Transform the message to a mail
+     * @param MailerMessage $message
+     * @return bool
+     * @throws Exception
+     */
+    public function send(MailerMessage $message)
+    {
+        $this->mail->setFrom($this->sender);
+
+        $this->setDest($message->getDest());
+        $this->setBcc($message->getBcc());
+        $this->setCc($message->getCc());
+        $this->mail->addReplyTo($this->replyTo);
+        $this->mail->isHTML(true);
+
+        $content = $message->getBody();
+        if ($content instanceof RenderView) {
+            $content = $content->compile();
+        }
+
+        $this->mail->Subject = $message->getSubjet();
+        $this->mail->Body = $content;
+
+        try {
+            $this->mail->send();
+            return true;
+        } catch (Exception $exception) {
+            dump($exception->getMessage());
+        }
+
+        return false;
+    }
+
     /**
      * Sending a mail to test the configuration given
      * @return bool
@@ -205,5 +214,7 @@ class MailerHandler
 
         return $this->send($msg);
     }
+
+    #endregion
 
 }

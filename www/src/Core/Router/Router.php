@@ -5,6 +5,7 @@ namespace App\Core\Router;
 use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Kernel\Kernel;
+use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Core\Security\RolesManager;
 
@@ -50,11 +51,18 @@ class Router
         $this->formatUrl();
         $match = false;
 
+
+        if(!file_exists(CONFIG_PATH."/config.yml") && !preg_match ('/\/install/',$this->uri)) {
+            (new RedirectionHandler())->redirectToRoute("installer_index");
+        }
+
+
         /**
          * Read all routing configurations
          * First try to match url with parameters
          * Second try a match with the url
          */
+         
         foreach ($this->routes as $route) {
             if ($this->hadParams($route["path"])) {
                 if ($this->matchComplexRoute($route)) {

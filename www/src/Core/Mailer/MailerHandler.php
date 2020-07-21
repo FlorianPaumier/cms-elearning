@@ -3,8 +3,6 @@
 namespace App\Core\Mailer;
 
 use App\Core\Cache\CacheHandler;
-use App\Core\Cache\ConfigHandler;
-use App\Core\Kernel\Kernel;
 use App\Core\Render\RenderView;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;

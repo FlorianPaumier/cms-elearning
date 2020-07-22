@@ -91,6 +91,16 @@ class MigrationController extends BaseController
         );
     }
 
+    public function installerMigration()
+    {
+        $this->migration = new Migration();
+
+        $this->processMigration();
+
+        $this->redirect->redirectToRoute("installer_configuration_migration");
+
+    }
+
     /**
      * Set list of file for migration
      *

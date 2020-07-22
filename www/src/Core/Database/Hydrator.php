@@ -14,8 +14,21 @@ use App\Core\Helpers\StringTransformer;
  */
 abstract class Hydrator
 {
+    /**
+     * @var bool
+     */
     static $relations = false;
+
+    /**
+     * @var bool
+     */
     static $recursif = false;
+
+    /** @var array */
+    static $parents = [];
+
+    /** @var int */
+    static $count = 0;
 
 
     /**
@@ -42,7 +55,7 @@ abstract class Hydrator
 
         foreach ($array as $key => $value) {
             if (self::$relations) {
-                $key = str_replace(EntityHelper::getClass($instance) . "s_", "", $key);
+                $key = str_replace(EntityHelper::getClass($instance) . "_", "", $key);
             }
 
             $method = self::getSetter($key);
@@ -53,12 +66,19 @@ abstract class Hydrator
 
             $type = self::getParameterType($instance, $method);
 
+            /** If the proccess is not in a children hydration request and the type is not null  */
             if (!is_null($type) && !self::isRecursif()) {
                 $class = $type->getName();
 
+                /**
+                 * If we have en class in parameters function and the result from sql is a int
+                 * Perfom a find on the repository of the class and had parent to avoid a infinit loop
+                 */
                 if (!($value instanceof $class)) {
                     if (gettype($value) == "integer") {
+                        self::$parents[] = get_class($instance);
                         self::$recursif = true;
+                        ++self::$count;
                         /** @var AbstractRepository $repo */
                         $repo = ConfigHandler::get("entityManager")->getRepository($class . "Repository");
                         $value = $repo->find($value);
@@ -67,10 +87,24 @@ abstract class Hydrator
 
                 self::$recursif = false;
                 ConfigHandler::get("entityManager")->setEntity(get_class($instance));
+
             } else {
+                /**
+                 * If we are in a children hydration request
+                 */
                 if (!is_null($type) && self::isRecursif()) {
                     $class = $type->getName();
-                    if ($class !== \DateTime::class) {
+                    ++self::$count;
+
+                    /** if class isn't a datetime and the class isn't already class to avoid infinit loop and no more then 6 call to increase performance */
+                    if ($class !== \DateTime::class && !in_array($class, self::$parents) && self::$count < 6) {
+
+                        /** @var AbstractRepository $repo */
+                        $repo = ConfigHandler::get("entityManager")->getRepository($class . "Repository");
+                        $value = $repo->find($value);
+
+                        self::$parents[] = $class;
+                    } elseif ($class !== \DateTime::class) {
                         $value = (new $class())->setId($value);
                     }
                 }
@@ -80,7 +114,7 @@ abstract class Hydrator
                 $value = $serializer->deserialize($value, "json");
             }
 
-            if (!is_null($type) && $type->getName() == "DateTime" || $type == "datetime") {
+            if (!is_null($type) && ($type == "datetime" || $type->getName() == "DateTime")) {
                 $value = new \DateTime($value);
             }
 
@@ -96,6 +130,13 @@ abstract class Hydrator
         return $instance;
     }
 
+    /**
+     * Hydrate object after a join request
+     * @param array $array
+     * @param $object
+     * @return array
+     * @throws \ReflectionException
+     */
     public static function hydrateRelation(array $array, $object)
     {
 
@@ -110,6 +151,9 @@ abstract class Hydrator
         $principalClass = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($object));
         $principalKey = $principalClass . "_";
 
+        /**
+         * First we get the main entity information
+         */
         foreach ($array as $row) {
             foreach ($row as $key => $value) {
                 if (is_null($value)) {
@@ -147,6 +191,9 @@ abstract class Hydrator
         $reflection = new \ReflectionClass($object);
         $properties = $reflection->getProperties();
 
+        /**
+         * Second we get all information from the join table and insert it into main entity
+         */
         foreach ($properties as $propertie) {
             $add = self::getSetter($propertie->getName(), true);
 
@@ -184,6 +231,12 @@ abstract class Hydrator
         return $data;
     }
 
+    /**
+     * Get data from object to perfom a sql query
+     * @param object $object
+     * @return array
+     * @throws \ReflectionException
+     */
     public static function getData(object $object): array
     {
 
@@ -244,18 +297,27 @@ abstract class Hydrator
         return self::$recursif;
     }
 
+    /**
+     * Return type of the parameter in the called method
+     * @param object $instance
+     * @param string $method
+     * @return \ReflectionClass|string|null
+     * @throws \ReflectionException
+     */
     private static function getParameterType(object $instance, string $method)
     {
-        if (in_array($method, ["setCreatedAt", "setUpdatedAt"])) {
-            return "datetime";
-        }
-
         $reflection = new \ReflectionMethod($instance, $method);
 
         /** @var \ReflectionParameter $parameter */
         return !is_null($reflection->getParameters()[0]) ? $reflection->getParameters()[0]->getClass() : null;
     }
 
+    /**
+     * @param object $instance
+     * @param string $method
+     * @return bool|null
+     * @throws \ReflectionException
+     */
     private static function isTypeArray(object $instance, string $method)
     {
         $reflection = new \ReflectionMethod($instance, $method);

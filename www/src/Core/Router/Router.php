@@ -5,6 +5,7 @@ namespace App\Core\Router;
 use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Kernel\Kernel;
+use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Core\Security\RolesManager;
 
@@ -50,6 +51,18 @@ class Router
         $this->formatUrl();
         $match = false;
 
+
+        if(!file_exists(CONFIG_PATH."/config.yml") && !preg_match ('/\/install/',$this->uri)) {
+            (new RedirectionHandler())->redirectToRoute("installer_index");
+        }
+
+
+        /**
+         * Read all routing configurations
+         * First try to match url with parameters
+         * Second try a match with the url
+         */
+         
         foreach ($this->routes as $route) {
             if ($this->hadParams($route["path"])) {
                 if ($this->matchComplexRoute($route)) {
@@ -63,18 +76,16 @@ class Router
             }
         }
 
+        /** If no route found throw Exception */
         if (is_null($this->matchRoute)) {
             ConfigHandler::get("eventEmmiter")->emit("error.404", "La route n'existe pas");
         }
 
+        /** If configuration ask method and the method ask doesn't match with the current method throw error */
         if (!isset($this->matchRoute["method"]) || in_array($this->request->getMethod(), $this->matchRoute["method"])) {
             $match = true;
         } else {
             ConfigHandler::get("eventEmmiter")->emit("error.405", "La méthode " . $this->request->getMethod() . " n'est pas autorisée pour cette route");
-        }
-
-        if (!$match) {
-            ConfigHandler::get("eventEmmiter")->emit("error.404", "La route $route n'exsite pas");
         }
 
         return $match;
@@ -88,10 +99,10 @@ class Router
      */
     public function exec()
     {
+        /** get the controller name in the configuration */
         $controllerParam = explode(":", $this->matchRoute["controller"]);
 
-        #TODO : denied access with wrong role
-
+        /** Denied acces to the route with the roles ask in the configuration doesn't match */
         if (!RolesManager::routeAllowed($this->matchRoute, 'roles')) {
             ConfigHandler::get("eventEmmiter")->emit("error.403", "Vous n'avez pas les droits nécessaire à l'accès de cette page");
         };
@@ -103,6 +114,9 @@ class Router
             $action = $controllerParam[1];
 
             if (is_callable([$controller, $action])) {
+                /**
+                 * try to add object ask in the method parameter
+                 */
                 $methodParameters = (new DependencyInjection($class, $action))->getParameters($this->matchRoute["params"]);
                 return !empty($methodParameters) ? call_user_func_array([$controller, $action], $methodParameters) : $controller->$action();
             } else {

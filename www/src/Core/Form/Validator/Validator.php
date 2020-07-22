@@ -9,6 +9,7 @@ use App\Core\Database\EntityManager;
 use App\Core\Database\Repository\AbstractRepository;
 use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
+use App\Core\Form\Fields\ImageType;
 use App\Core\Helpers\EntityHelper;
 use App\Core\Helpers\StringTransformer;
 use App\Core\Interfaces\FormTypeInterface;
@@ -21,6 +22,7 @@ use App\Core\Request\Request;
  */
 class Validator
 {
+    #region field
     /**
      *
      */
@@ -30,7 +32,7 @@ class Validator
         'pdf' => 'application/pdf'
     ];
 
-    /** @var ParameterBag */
+    /** @var Request */
     private $request;
 
     /** @var EntityManager */
@@ -48,7 +50,12 @@ class Validator
      */
     private $parent;
 
+    /**
+     * @var null
+     */
     private $entity;
+
+    #endregion
 
     /**
      * Validator constructor.
@@ -76,13 +83,20 @@ class Validator
             if ($constraint["type"] == ButtonType::class) {
                 continue;
             }
+
             foreach ($constraint["args"] as $param => $value) {
+
+//                dump($param);
                 switch ($param) {
                     case "length":
                         $this->length($input, $value["min"], isset($value["max"]) ?: null);
                         break;
                     case "required":
                         if (!$value) {
+                            break;
+                        }
+                        if ($constraint["type"] == ImageType::class) {
+                            $this->requiredImage($input);
                             break;
                         }
                         $this->required($input);
@@ -139,6 +153,7 @@ class Validator
     }
 
     /**
+     * Test the length of the value from the constraint input
      * @param string $key
      * @param int|null $min
      * @param int|null $max
@@ -171,6 +186,7 @@ class Validator
     }
 
     /**
+     * Test the present of the key
      * @param string ...$keys
      * @return $this
      */
@@ -201,6 +217,7 @@ class Validator
     }
 
     /**
+     * Test if the value is a valid email
      * @param string $key
      * @return mixed
      */
@@ -219,6 +236,7 @@ class Validator
     }
 
     /**
+     * Test the confirmation of the key
      * @param string $key
      * @return $this
      */
@@ -232,14 +250,11 @@ class Validator
         $method = "get" . ucfirst(StringTransformer::toPascalCase($index));
 
         if (is_callable([$this->entity, $method])) {
-            $prevValue = $this->entity->$method();
-            if ($prevValue !== $value && !password_verify($value, $this->entity->$method())) {
-                if ($valueConfirm !== $value) {
-                    $this->addError($index, 'confirmation');
-                }
+
+            if ($valueConfirm !== $value) {
+                $this->addError($index, 'confirmation');
             }
         }
-
 
         return $this;
     }
@@ -253,6 +268,7 @@ class Validator
     }
 
     /**
+     * Test if the value doesn't exist in the bdd
      * @param string $key
      * @param string $target
      * @param int|null $exclude
@@ -291,11 +307,17 @@ class Validator
         return $this->request->get($key);
     }
 
+    /**
+     * @return array
+     */
     public function getErrors()
     {
         return $this->errors;
     }
 
+    /**
+     *
+     */
     public function resetErrors()
     {
         $this->errors = [];
@@ -310,6 +332,13 @@ class Validator
      */
     private function addError(string $key, string $rule, array $attributes = []): void
     {
+        foreach ($this->form as $index => $form){
+            if($form["key"] == $key)
+            {
+                $this->form[$index]["args"]["class"] .= " input-invalid";
+            }
+        }
+
         $this->errors[$key] = (new ValidationError($key, $rule, $attributes))->__toString();
     }
 
@@ -321,4 +350,8 @@ class Validator
 
     }
 
+    private function requiredImage(string $key){
+
+        isset($this->request->getFile()[$key])?:$this->addError($key, 'required');
+    }
 }

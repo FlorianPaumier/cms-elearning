@@ -42,6 +42,7 @@ class UserRegisterForm extends AbstractForm
                     'required' => false,
                     'label' => 'Mot de passe',
                     'placeholder' => 'Votre mot de passe',
+                    "confirmation" => true,
                     "class" => "form-control form-control-user",
                 ]
             )

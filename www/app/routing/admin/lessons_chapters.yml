@@ -1,18 +1,22 @@
 admin_lesson_chapter_index:
   path: /admin/lesson_chapter
   controller: App\Controllers\Admin\LessonChapter:index
+  roles: ["ROLE_ADMIN"]
 
 admin_lesson_chapter_new:
   path: /admin/lesson_chapter/new
   controller: App\Controllers\Admin\LessonChapter:new
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_lesson_chapter_edit:
   path: /admin/lesson_chapter/edit/{id}
   controller: App\Controllers\Admin\LessonChapter:edit
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_lesson_chapter_delete:
   path: /admin/lesson_chapter/delete/{id}
   controller: App\Controllers\Admin\LessonChapter:delete
   method: [DELETE]
+  roles: ["ROLE_ADMIN"]

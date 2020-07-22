@@ -149,6 +149,8 @@ class Router
                 } else {
                     $params = [$params];
                 }
+            }else{
+                $params = [$params];
             }
 
             foreach ($params as $param) {

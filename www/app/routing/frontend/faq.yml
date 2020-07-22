@@ -6,3 +6,4 @@ frontend_faq_show:
   path: /faq/show/{id<\\d+>}
   controller: App\Controllers\Faq:show
   method: [GET,POST]
+  entity: Faq

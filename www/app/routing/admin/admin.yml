@@ -6,15 +6,24 @@ admin_home:
 admin_config:
   path: /admin/configuration
   controller: App\Controllers\Admin\Home:configuration
+  roles: ["ROLE_ADMIN"]
+
+admin_config_sitemap:
+  path: /admin/configuration/sitemap
+  controller: App\Controllers\Admin\Home:generateSiteMap
+  roles: ["ROLE_ADMIN"]
 
 admin_config_database:
   path: /admin/configuration/database
   controller: App\Controllers\Admin\Home:database
+  roles: ["ROLE_ADMIN"]
 
 admin_config_create_admin:
   path: /admin/configuration/admin
   controller: App\Controllers\Admin\Home:createAdmin
+  roles: ["ROLE_ADMIN"]
 
 admin_test_mailer:
   path: /admin/mailer-test
   controller: App\Controllers\Admin\Home:testMailer
+  roles: ["ROLE_ADMIN"]

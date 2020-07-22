@@ -70,15 +70,23 @@
 
 
 <?php
-if (isset($session)) {
-    if (isset($flash)) {
-        if (isset($flash["success"])) {
-            foreach ($flash["success"] as $key => $message) {
+
+if (!is_null($errors)) {
+    foreach ($errors as $error) {
+        var_dump($error);
+    }
+}
+
+if (isset($session) && !is_null($session)) {
+    if (isset($flash) && !is_null($flash)) {
+        dump(isset($flash["app.flash"]["success"]));
+        if (isset($flash["app.flash"]["success"]) && !is_null($flash["app.flash"]["success"])) {
+            foreach ($flash["app.flash"]["success"] as $key => $message) {
                 echo "<div class='alert alert-sucess'>$message</div>";
             }
         }
-        if (isset($flash["error"])) {
-            foreach ($flash["error"] as $key => $message) {
+        if (isset($flash["app.flash"]["error"]) && !is_null($flash["app.flash"]["error"])) {
+            foreach ($flash["app.flash"]["error"] as $key => $message) {
                 echo "<div class='alert alert-error'>$message</div>";
             }
         }

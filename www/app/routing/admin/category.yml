@@ -1,19 +1,24 @@
 admin_category:
   path: /admin/category
   controller: App\Controllers\Admin\Category:index
+  roles: ["ROLE_ADMIN"]
 
 admin_category_list:
   path: /admin/category/list
   controller: App\Controllers\Admin\Category:index
+  roles: ["ROLE_ADMIN"]
 
 admin_category_new:
   path: /admin/category/new
   controller: App\Controllers\Admin\Category:new
+  roles: ["ROLE_ADMIN"]
 
 admin_category_edit:
   path: /admin/category/edit/{id}
   controller: App\Controllers\Admin\Category:edit
+  roles: ["ROLE_ADMIN"]
 
 admin_category_delete:
   path: /admin/category/delete/{id}
   controller: App\Controllers\Admin\Category:delete
+  roles: ["ROLE_ADMIN"]

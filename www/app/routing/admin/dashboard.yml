@@ -1,7 +1,9 @@
 app_dashboard:
   path: /dashboard
   controller: App\Controllers\Dashboard\Dashboard:index
+  roles: ["ROLE_ADMIN"]
 
 app_dashboard_design:
   path: /admin/design
   controller: App\Controllers\Dashboard\Dashboard:design
+  roles: ["ROLE_ADMIN"]

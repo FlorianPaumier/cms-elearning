@@ -219,13 +219,12 @@ abstract class QueryBuilder
     }
 
     /**
-     * @param string $key
-     * @param $value
+     * @param string $value
      * @return $this
      */
-    public function groupBy(string $key, $value): self
+    public function groupBy(string $value): self
     {
-        $this->group[$key] = $value;
+        $this->group[] = $value;
         return $this;
     }
 

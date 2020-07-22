@@ -1,17 +1,21 @@
 admin_article_list:
   path: /admin/chat
   controller: App\Controllers\Admin\Chat:index
+  roles: ["ROLE_ADMIN"]
 
 admin_article_global:
   path: /admin/chat/global
   controller: App\Controllers\Admin\Chat:global
+  roles: ["ROLE_ADMIN"]
 
 admin_article_session:
   path: /admin/chat/session/{id}
   controller: App\Controllers\Admin\Chat:session
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_article_report:
   path: /admin/chat/report
   controller: App\Controllers\Admin\Chat:session
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]

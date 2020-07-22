@@ -2,15 +2,6 @@ chat_list:
   path: /chat
   controller: App\Controllers\Frontend\Chat:index
 
-chat_global:
-  path: /chat
-  controller: App\Controllers\Frontend\Chat:global
-
-chat_session:
-  path: /chat/session/{id}
-  controller: App\Controllers\Frontend\Chat:session
-  method: [GET,POST]
-
 chat_send:
   path: /chat/send
   controller: App\Controllers\Frontend\Chat:sendMessage

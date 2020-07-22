@@ -1,18 +1,22 @@
 admin_evaluation_list:
   path: /admin/evaluation
   controller: App\Controllers\Admin\Evaluation:index
+  roles: ["ROLE_ADMIN"]
 
 admin_evaluation_new:
   path: /admin/evaluation/new
   controller: App\Controllers\Admin\Evaluation:new
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_evaluation_edit:
   path: /admin/evaluation/edit/{id}
   controller: App\Controllers\Admin\Evaluation:edit
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_evaluation_delete:
   path: /admin/evaluation/delete/{id}
   controller: App\Controllers\Admin\Evaluation:delete
   method: [GET]
+  roles: ["ROLE_ADMIN"]

@@ -1,18 +1,22 @@
 admin_lesson_list:
   path: /admin/lesson
   controller: App\Controllers\Admin\Lesson:index
+  roles: ["ROLE_ADMIN"]
 
 admin_lesson_new:
   path: /admin/lesson/new
   controller: App\Controllers\Admin\Lesson:new
+  roles: ["ROLE_ADMIN"]
   method: [GET,POST]
 
 admin_lesson_edit:
   path: /admin/lesson/edit/{id}
   controller: App\Controllers\Admin\Lesson:edit
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_lesson_delete:
   path: /admin/lesson/delete/{id}
   controller: App\Controllers\Admin\Lesson:delete
   method: [DELETE]
+  roles: ["ROLE_ADMIN"]

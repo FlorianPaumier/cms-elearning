@@ -7,3 +7,4 @@ category_view:
   path: /category/{id}
   controller: App\Controllers\category:view
   method: [GET]
+  entity: Category

@@ -1,3 +1,4 @@
 admin_db_migration:
   path: /admin/migration
   controller: App\Controllers\Admin\Migration:index
+  roles: ["ROLE_ADMIN"]

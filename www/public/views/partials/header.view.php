@@ -34,6 +34,8 @@
                 <li class="link"><a href="#">Evenements</a></li>
                 <li class="link"><a href="#">Contact</a></li>
                 <li class="link"><a href="#">Recherche</a></li>
+                <li class="link"><a href="@path(frontend_sondage_list)">Sondages</a></li>
+                <li class="link"><a href="@path(frontend_faq_list)">FAQ</a></li>
                 <li class="profile user-menu acilir">
                     <span class="icon"><i class="fa fa-user"></i></span>
                     <div class="login-menu">

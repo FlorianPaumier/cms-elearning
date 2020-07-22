@@ -294,6 +294,8 @@ class TemplateEngine
                 $this->content = preg_replace("#$regex#", $function, $this->content);
             }
         }
+
+        $this->content = $this->getParsePhpView($this->content, $this->data["parameter"]);
     }
 
     /**
@@ -308,7 +310,7 @@ class TemplateEngine
         $tmp = tmpfile();
         fwrite($tmp, $content);
         extract($data);
-        extract($this->data["config"]);
+        extract($this->data["config"] ?? []);
 
         require stream_get_meta_data($tmp)['uri'];
         return ob_get_clean();

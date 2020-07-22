@@ -8,7 +8,6 @@ use App\Core\Cache\ConfigHandler;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
 use App\Entity\ChatGlobal;
-use App\Entity\ChatMessage;
 use App\Entity\ChatOnline;
 use App\Form\ChatForm;
 use App\Form\ChatStatusForm;

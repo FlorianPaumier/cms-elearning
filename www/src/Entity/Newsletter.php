@@ -22,19 +22,29 @@ class Newsletter
     /** @var boolean */
     protected $sended;
 
-    protected $id_user;
+    /** @var User */
+    protected $user;
 
     public function __construct()
     {
-        $this->id_user = 1;
+        $this->user = 1;
     }
 
     /**
-     * @return null|int
+     * @param User $user
+     * @return void
      */
-    public function getIdUser(): ?int
+    public function setUser(User $user): void
     {
-        return $this->id_user;
+        $this->user = $user;
+    }
+
+    /**
+     * @return null|User
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
     }
 
     /**

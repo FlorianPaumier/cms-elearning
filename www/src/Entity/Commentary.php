@@ -14,15 +14,15 @@ class Commentary
     /** @var string */
     protected $commentary;
 
-    /** @var int */
-    protected $id_user;
+    /** @var User */
+    protected $user;
 
-    /** @var int */
-    protected $id_article;
+    /** @var Article */
+    protected $article;
 
     public function __construct()
     {
-        $this->id_user = 1;
+        $this->user = 1;
     }
 
     public function setCommentary(?string $commentary): void
@@ -35,18 +35,23 @@ class Commentary
         return $this->commentary;
     }
 
-    public function getIdUser(): ?int
+    public function setUser(User $user): void
     {
-        return $this->id_user;
+        $this->user = $user;
     }
 
-    public function setIdArticle(?int $idArticle): void
+    public function getUser(): ?User
     {
-        $this->id_article = $id_article;
+        return $this->user;
     }
 
-    public function getIdArticle(): ?int
+    public function setArticle(?Article $article): void
     {
-        return $this->id_article;
+        $this->article = $article;
+    }
+
+    public function getArticle(): ?Article
+    {
+        return $this->article;
     }
 }

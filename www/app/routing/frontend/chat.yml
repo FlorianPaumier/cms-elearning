@@ -10,3 +10,4 @@ article_session:
   path: /chat/session/{id}
   controller: App\Controllers\Frontend\Chat:session
   method: [GET,POST]
+  entity: ChatSession

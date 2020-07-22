@@ -2,6 +2,7 @@
 
 namespace App\Core\Database;
 
+use App\Core\Database\Repository\AbstractRepository;
 use App\Core\Exception\NoRecordException;
 use App\Core\Helpers\EntityHelper;
 use PDO;
@@ -204,7 +205,7 @@ class EntityManager extends QueryBuilder
      * @param string $class
      * @return mixed|null
      */
-    public function getRepository(string $class)
+    public function getRepository(string $class): ?AbstractRepository
     {
         if (class_exists($class)) {
             return new $class;

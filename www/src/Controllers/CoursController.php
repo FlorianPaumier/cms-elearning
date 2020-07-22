@@ -107,7 +107,6 @@ class CoursController extends BaseController
             $lessonUsers = [];
         }
 
-
         $nav = [];
 
         foreach ($chapters as $chapter) {

@@ -17,6 +17,7 @@ app_user_logout:
   path: "/logout"
   controller: App\Controllers\Users\User:logout
   method: [GET]
+  roles: ["ROLE_USER", "ROLE_ADMIN"]
 
 app_user_forget_password:
   path: "/forget_password"
@@ -27,6 +28,7 @@ app_user_delete_user:
   path: "/user/delete"
   controller: App\Controllers\Users\User:deleteUser
   method: [GET, POST]
+  roles: ["ROLE_USER", "ROLE_ADMIN"]
 
 app_user_profile:
   path: "/me"

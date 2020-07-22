@@ -7,7 +7,7 @@ app_catalogue_show:
   path: "/cours/{id}"
   controller: App\Controllers\Cours:show
   method: [GET]
-
+  entity: Lesson
 
 app_cours_management:
   path: "/cours/{id}/management"
@@ -18,3 +18,4 @@ app_catalogue_notate:
   path: "/cours/{id}/notation"
   controller: App\Controllers\Cours:notation
   method: [GET]
+  roles: ["ROLE_USER", "ROLE_ADMIN"]

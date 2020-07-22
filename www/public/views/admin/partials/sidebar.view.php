@@ -89,7 +89,7 @@
             "pictogramme" => "fas fa-thumbtack icon",
             "menu" => [
                 [
-                    "link" => "@path(admin_faq_list)",
+                    "link" => "/admin/faq",
                     "name" => "Gestion des FAQ"
                 ],
             ]
@@ -98,7 +98,7 @@
             "pictogramme" => "fas fa-question icon",
             "menu" => [
                 [
-                    "link" => "@path(admin_sondage_list)",
+                    "link" => "/admin/sondage",
                     "name" => "Gestion des sondages"
                 ],
             ]

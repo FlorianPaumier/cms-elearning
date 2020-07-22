@@ -8,7 +8,6 @@ use App\Core\Cache\ConfigHandler;
 use App\Core\Interfaces\BaseController;
 use App\Core\Request\Request;
 use App\Entity\ChatMessage;
-use App\Entity\ChatSession;
 use App\Form\ChatForm;
 
 class ChatController extends BaseController
@@ -22,9 +21,6 @@ class ChatController extends BaseController
 
         $this->entityManager->getClass(ChatMessage::class);
         $messages = $this->entityManager->findBy(['id_session' => $_SESSION['id_session']]);
-
-        $this->entityManager->getClass(ChatSession::class);
-        $chatSession = $this->entityManager->findAll();
 
         $form = $this->createForm(ChatForm::class, $chatMessage);
         $form->handleRequest($request);
@@ -42,7 +38,6 @@ class ChatController extends BaseController
             "chat/chat", [
                 "form" => $form->createView(),
                 "messages" => $messages,
-                "chatSession" => $chatSession
                 //"users" => $users
             ]
         );

@@ -10,14 +10,31 @@ use App\Core\Interfaces\Entity;
 class ChatGlobal
 {
     use Entity;
-    use TimestampableEntity;
 
     protected $user;
 
     protected $message;
 
+    protected $time;
+
     /**
-     * @return mixed
+     * @return int
+     */
+    public function getTime()
+    {
+        return $this->time;
+    }
+
+    /**
+     * @param int $time
+     */
+    public function setTime(int $time): void
+    {
+        $this->time = $time;
+    }
+
+    /**
+     * @return User
      */
     public function getUser()
     {
@@ -25,7 +42,7 @@ class ChatGlobal
     }
 
     /**
-     * @param mixed $user
+     * @param User $user
      */
     public function setUser(User $user): void
     {
@@ -34,17 +51,17 @@ class ChatGlobal
 
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
 
     /**
-     * @param mixed $message
+     * @param string $message
      */
-    public function setMessage($message): void
+    public function setMessage(string $message): void
     {
         $this->message = $message;
     }

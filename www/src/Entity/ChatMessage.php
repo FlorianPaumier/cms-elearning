@@ -16,8 +16,6 @@ class ChatMessage
 
     protected $message;
 
-    protected $chatSession;
-
     /**
      * @return User
      */
@@ -49,23 +47,6 @@ class ChatMessage
     {
         $this->message = $message;
     }
-
-    /**
-     * @return ChatSession
-     */
-    /*public function getChatSession(): ChatSession
-    {
-        return $this->chatSession;
-    }*/
-
-    /**
-     * @param ChatSession $chatSession
-     */
-    /*public function setChatSession(ChatSession $chatSession): void
-    {
-        $this->chatSession = $chatSession;
-    }*
-
 
 
 }

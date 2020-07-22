@@ -13,7 +13,7 @@ use App\Repository\SondageVoteRepository;
 class SondageController extends BaseController
 {
     /**
-     * I
+     * Home Survey
      * @param SondageRepository $sondageRepository
      * @param SondageVoteRepository $sondageVoteRepository
      * @return \App\Core\Render\RenderView|string|string[]|null
@@ -21,8 +21,10 @@ class SondageController extends BaseController
      */
     public function index(SondageRepository $sondageRepository,  SondageVoteRepository $sondageVoteRepository)
     {
+        // Get the surveys
         $sondages = $sondageRepository->findAll();
 
+        // Return the home view with surveys, userId and the repository of survey vote
         return $this->renderer->render("sondage/index", [
             'sondages' => $sondages,
             'userId' => $this->getUser()->getId(),
@@ -31,24 +33,42 @@ class SondageController extends BaseController
         ]);
     }
 
+    /**
+     * Vote a survey
+     * @param Request $request
+     * @param Sondage $sondage
+     * @param SondageRepository $sondageRepository
+     * @param SondageVoteRepository $sondageVoteRepository
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws \Exception
+     */
     public function vote(Request $request, Sondage $sondage, SondageRepository $sondageRepository, SondageVoteRepository $sondageVoteRepository)
     {
+        // Initialization of a new survey vote
         $sondageVote = new SondageVote();
 
+        // If the form is in POST
         if ($request->getMethod() == "POST") {
+            // Assigning the voting choice to the object SondageVote
             $sondageVote->setSondage($sondage)->setChoix(intval($request->get("option")))->setUser($this->getUser());
 
+            // Saving the vote
             /** @var Table $em */
             $em = ConfigHandler::get("entityManager");
             $em->persist($sondageVote);
             $em->flush();
+            // Redirection to the home page
             $this->redirect->redirectToRoute("frontend_sondage_list");
         }
 
-        $questions = $sondageRepository->findAll();
+        // Get the surveys
+        $sondages = $sondageRepository->findAll();
 
+        // Return the home view with surveys, userId and the repository of survey vote
         return $this->renderer->render("sondage/index", [
-            'questions' => $questions,
+            'sondages' => $sondages,
+            'userId' => $this->getUser()->getId(),
+            'sondageVoteRepository' => $sondageVoteRepository,
             'title' => 'Liste des sondages'
         ]);
     }

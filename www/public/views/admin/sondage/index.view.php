@@ -17,20 +17,20 @@
         </thead>
         <tbody>
         <?php
-        foreach( $questions as $question):
+        foreach( $sondages as $sondage):
             ?>
             <tr>
-                <td><?= $question->getId(); ?></td>
-                <td><?= $question->getQuestion(); ?></td>
+                <td><?= $sondage->getId(); ?></td>
+                <td><?= $sondage->getQuestion(); ?></td>
 <!--                <td>--><?//= !is_null($question->getCreatedAt()) ? $question->getCreatedAt()->format("d/m/Y") : "N/A"; ?><!--</td>-->
                 <td></td>
                 <td>
-                    <a href="/admin/sondage/edit/<?= $question->getId(); ?>">
+                    <a href="/admin/sondage/edit/<?= $sondage->getId(); ?>">
                         <button id="edit-sondage" class="btn btn-danger">Modifier</button>
                     </a>
                 </td>
                 <td>
-                    <form action="/admin/sondage/delete/<?= $question->getId(); ?>" method="post">
+                    <form action="/admin/sondage/delete/<?= $sondage->getId(); ?>" method="post">
                         <button id="delete-sondage" class="btn btn-danger">Supprimer</button>
                     </form>
                 </td>

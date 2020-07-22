@@ -17,12 +17,12 @@ class ChatForm extends AbstractForm
             ->add("message", TextType::class,[
                 "label" => "message",
                 "required" => true,
-                "class" => "col-md-6 col-lg-6 col-sm-12",
+                "class" => "col-md-6 col-lg-6 col-sm-12 chat-message",
                 "placeholder" => "message..."
             ])
             ->add("valider", ButtonType::class, [
                 "label" => "Valider",
-                "class" => "btn-submit",
+                "class" => "btn-submit chat-message-submit",
                 "type" => "submit",
             ]);
     }

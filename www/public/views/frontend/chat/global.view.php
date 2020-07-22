@@ -4,8 +4,8 @@
 <link type="text/css" rel="stylesheet" href="../../../assets/styles/frontend/chat.css">
 @endsection
 
-@section(javascripts)
-<script src="../../../assets/scripts/chat.js"></script>
+@section(javascript)
+<script src="/assets/scripts/chat.js"></script>
 @endsection
 
 @section(body)

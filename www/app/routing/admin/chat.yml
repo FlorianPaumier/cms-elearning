@@ -1,4 +1,4 @@
-admin_article_list:
+admin_chat_list:
   path: /admin/chat
   controller: App\Controllers\Admin\Chat:index
   roles: ["ROLE_ADMIN"]

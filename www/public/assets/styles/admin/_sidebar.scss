@@ -16,78 +16,81 @@ body {
   z-index: 1;
   top: 0;
   left: 0;
-  overflow-x: hidden;
+  overflow: hidden;
 
   .logo {
-    height: $buttonSize;
     text-align: center;
     img {
       height: $buttonSize;
-      width: 100%;
     }
   }
+  nav {
+    width: $sidebarSize;
+    height: 80%;
+    overflow: auto;
+    ul {
+      padding-left: 0;
 
-  ul {
-    padding-left: 0;
-
-    li {
-      text-align: left;
-      vertical-align: middle;
-      background-color: #364885;
-
-      &:hover {
-        background-color: $colorBlue;
-      }
-
-      i {
-        display: inline-block;
-        height: $buttonSize;
+      li {
+        text-align: left;
+        vertical-align: middle;
         background-color: #364885;
-      }
 
-      ul {
-        display: none;
-        line-height: $buttonSize;
+        &:hover {
+          background-color: $colorBlue;
+        }
 
-        a {
-          text-decoration: none;
+        i .no-i{
+          display: inline-block;
+          height: $buttonSize;
+          background-color: #364885;
+        }
 
-          li {
-            text-align: center;
-            color: white;
+        ul {
+          display: none;
+          line-height: $buttonSize;
 
-            &:hover {
-              background-color: $colorLightBlue;
+          a {
+            text-decoration: none;
+
+            li {
+              text-align: center;
+              color: white;
+
+              &:hover {
+                background-color: $colorLightBlue;
+              }
             }
           }
         }
-      }
 
-      span {
-        display: inline-block;
-        vertical-align: top;
-        line-height: $buttonSize;
-        background-color: rgba(0,0,0,0);
+        span {
+          display: inline-block;
+          vertical-align: top;
+          line-height: $buttonSize;
+          background-color: rgba(0,0,0,0);
 
+        }
       }
     }
-  }
 
-  ul {
+    ul {
 
 
-    li {
-      list-style: none;
-      color: white;
+      li {
+        list-style: none;
+        color: white;
 
-      &:hover {
-        .submenu {
-          display: block;
-          background-color: #87b7ff;
+        &:hover {
+          .submenu {
+            display: block;
+            background-color: #87b7ff;
+          }
         }
       }
     }
   }
+
 
   .additonal-list {
     position: absolute;

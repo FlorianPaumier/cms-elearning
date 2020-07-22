@@ -75,13 +75,12 @@
 
 if (!is_null($errors)) {
     foreach ($errors as $error) {
-        var_dump($error);
+        echo $error;
     }
 }
 
 if (isset($session) && !is_null($session)) {
     if (isset($flash) && !is_null($flash)) {
-        dump(isset($flash["app.flash"]["success"]));
         if (isset($flash["app.flash"]["success"]) && !is_null($flash["app.flash"]["success"])) {
             foreach ($flash["app.flash"]["success"] as $key => $message) {
                 echo "<div class='alert alert-sucess'>$message</div>";

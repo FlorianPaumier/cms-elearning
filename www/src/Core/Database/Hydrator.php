@@ -208,7 +208,7 @@ abstract class Hydrator
                 if (!is_null($addType)) {
                     $typeName = $addType->getName();
                     $joinClass = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($typeName));
-                    dump($joinClass);
+
                     foreach ($data as $key => $object) {
                         foreach ($array as $row) {
                             $currentInstance = new $typeName();

@@ -64,7 +64,7 @@ class ChatMessage
     /*public function setChatSession(ChatSession $chatSession): void
     {
         $this->chatSession = $chatSession;
-    }*
+    }*/
 
 
 

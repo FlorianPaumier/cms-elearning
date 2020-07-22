@@ -16,7 +16,7 @@ class ContactMeta
     /** @var string */
     private $value;
 
-    /** @var ContactObject */
+    /** @var EvaluationObject */
     private $contact;
 
     /**
@@ -56,18 +56,18 @@ class ContactMeta
     }
 
     /**
-     * @return ContactObject
+     * @return EvaluationObject
      */
-    public function getContact(): ?ContactObject
+    public function getContact(): ?EvaluationObject
     {
         return $this->contact;
     }
 
     /**
-     * @param ContactObject $contact
+     * @param EvaluationObject $contact
      * @return ContactMeta
      */
-    public function setContact(ContactObject $contact): ContactMeta
+    public function setContact(EvaluationObject $contact): ContactMeta
     {
         $this->contact = $contact;
         return $this;

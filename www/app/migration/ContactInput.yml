@@ -1,0 +1,33 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: SERIAL
+      options:
+        - PRIMARY KEY
+        - NOT NULL
+    formKey:
+      name: form_key
+      type: character varying
+    label:
+      name: label
+      type: character varying
+    type:
+      name: type
+      type: character varying
+    placeholder:
+      name: placeholder
+      type: character varying
+    required:
+      name: required
+      type: integer
+    position:
+      name: position
+      type: integer
+    contactForm:
+      name: contact_form_id
+      type: integer
+    choices:
+      name: choices
+      type: json

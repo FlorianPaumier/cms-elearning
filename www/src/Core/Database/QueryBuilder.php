@@ -7,8 +7,13 @@ use App\Entity\Lesson;
 use PDO;
 use PHPMailer\PHPMailer\Exception;
 
+/**
+ * Class QueryBuilder
+ * @package App\Core\Database
+ */
 abstract class QueryBuilder
 {
+    #region field
     /** @var \PDO */
     protected $pdo;
 
@@ -68,14 +73,41 @@ abstract class QueryBuilder
     /** @var object */
     protected $entity = null;
 
+    /**
+     * @var array
+     */
     protected $relations = [];
+    /**
+     * @var array
+     */
+    protected $orWhere = [];
 
-    public function __construct(\PDO $pdo = null)
+    #endregion
+
+    #region getter/setter
+
+    /**
+     * @param string|null $entity
+     * @return EntityManager
+     */
+    public function setEntity(?string $entity): self
     {
-        if (is_null($pdo)) {
-            $pdo = Connection::instance();
-        }
-        $this->pdo = $pdo;
+        $this->entity = $entity;
+        return $this;
+    }
+
+    /**
+     *
+     * @param string $table
+     * @param string $alias
+     * @return $this
+     */
+    public function from(string $table, string $alias = null): self
+    {
+        $this->from = $table;
+        $this->alias = $alias;
+
+        return $this;
     }
 
     /**
@@ -97,28 +129,6 @@ abstract class QueryBuilder
         return $this;
     }
 
-    /**
-     * @param string|null $entity
-     * @return EntityManager
-     */
-    public function setEntity(?string $entity): self
-    {
-        $this->entity = $entity;
-        return $this;
-    }
-
-    /**
-     * @param string $table
-     * @param string $alias
-     * @return $this
-     */
-    public function from(string $table, string $alias = null): self
-    {
-        $this->from = $table;
-        $this->alias = $alias;
-
-        return $this;
-    }
 
     /**
      * @param string $condition
@@ -141,6 +151,18 @@ abstract class QueryBuilder
 
         return $this;
     }
+
+    /**
+     * @param string $condition
+     * @return $this
+     */
+    public function orWhere(string $condition): self
+    {
+        $this->orWhere[] = $condition;
+
+        return $this;
+    }
+
 
     /**
      * @param string $key
@@ -169,12 +191,23 @@ abstract class QueryBuilder
         return $this;
     }
 
+    /**
+     * @param string $alias
+     * @return $this
+     */
     public function setAlias(string $alias): self
     {
         $this->alias = $alias;
         return $this;
     }
 
+
+    /**
+     * @param string $key
+     * @param string $value
+     * @return $this
+     * @throws \Exception
+     */
     public function orderBy(string $key, $value = ""): self
     {
         if (!empty($value) && !in_array($value, ["ASC", "DESC"])) {
@@ -185,30 +218,51 @@ abstract class QueryBuilder
         return $this;
     }
 
+    /**
+     * @param string $key
+     * @param $value
+     * @return $this
+     */
     public function groupBy(string $key, $value): self
     {
         $this->group[$key] = $value;
         return $this;
     }
 
+    /**
+     * @param int $limit
+     * @return $this
+     */
     public function setMaxResult(int $limit): self
     {
         $this->limit = $limit;
         return $this;
     }
 
+    /**
+     * @param int $offset
+     * @return $this
+     */
     public function setFirstResult(int $offset): self
     {
         $this->offset = $offset;
         return $this;
     }
 
+    /**
+     * @param int $page
+     * @return $this
+     */
     public function page(int $page): self
     {
         $this->offset = ($page - 1) * $this->limit;
         return $this;
     }
 
+    /**
+     * @return int
+     * @throws \Exception
+     */
     public function count()
     {
         $this->select("count(*)");
@@ -223,11 +277,80 @@ abstract class QueryBuilder
         return isset($results["count"]) ? (int)$results["count"] : (int)$results["count(id)"];
     }
 
+
+    /**
+     * @return string
+     */
+    private function setField()
+    {
+        switch ($this->method) {
+            case "INSERT INTO":
+                $fields = $this->getNotNullValues();
+                return "(" . join(", ", array_keys($this->fieldsValues)) . ") VALUES 
+            (:" . join(", :", array_keys($this->fieldsValues)) . ")";
+            case "UPDATE":
+                return "SET " . join(" , ", array_map(function ($value) {
+                        return "$value = :$value";
+                    }, array_keys($this->fieldsValues)));
+            case "SELECT":
+                if ($this->alias) {
+                    $this->from .= " AS {$this->alias}";
+                    $alias = $this->alias;
+                    if (!in_array("*", $this->select)) {
+                        $this->select = array_map(function ($value) use ($alias) {
+                            return "$value";
+                        }, $this->select);
+                    }
+                } elseif ($this->relations) {
+                    $this->alias = $this->from;
+                }
+                $fields = join(", ", $this->select);
+
+                return $fields;
+            default:
+                return "";
+        }
+    }
+
+    /**
+     * @return array|null[]
+     */
+    private function getNotNullValues()
+    {
+        return array_map(function ($key, $value) {
+            if (!is_null($this->fieldsValues[$key])) {
+                return $key;
+            } else {
+                return null;
+            }
+        }, array_keys($this->fieldsValues), $this->fieldsValues);
+    }
+
+    #endregion
+
+    #region fonction
+    /**
+     * QueryBuilder constructor.
+     * @param PDO|null $pdo
+     */
+    public function __construct(\PDO $pdo = null)
+    {
+        if (is_null($pdo)) {
+            $pdo = Connection::instance();
+        }
+        $this->pdo = $pdo;
+    }
+
+    /**
+     * Execute raw sql with parameters
+     * @param string $sql
+     * @param array $values
+     * @return bool|\PDOStatement
+     */
     public function execute(string $sql, array $values)
     {
         $sql = $this->pdo->prepare($sql);
         $sql->execute($values);
-
         return $sql;
     }
 
@@ -237,6 +360,9 @@ abstract class QueryBuilder
      */
     public function toSQL(): string
     {
+        $fromCache = $this->from;
+
+        $this->from = "\"{$this->from}\"";
         if (empty($this->select)) {
             $this->select = ["*"];
         }
@@ -269,6 +395,12 @@ abstract class QueryBuilder
             }
         }
 
+        if (!empty($this->orWhere)) {
+            foreach ($this->orWhere as $or) {
+                $sql .= " OR " . $or;
+            }
+        }
+
         $alias = $this->alias;
         if (!empty($this->order)) {
             $sql .= " ORDER BY " . implode(', ', array_map(function ($key, $value) use ($alias) {
@@ -288,9 +420,17 @@ abstract class QueryBuilder
             $sql .= " OFFSET " . $this->offset;
         }
 
+        $this->from = $fromCache;
+
         return $sql;
     }
 
+    /**
+     * Execute sql to retrieve data and hydrate object if is necessary
+     * @param bool $clear
+     * @return array|mixed|null
+     * @throws \ReflectionException
+     */
     public function fetch(bool $clear = true)
     {
         $query = $this->pdo->prepare($this->toSQL());
@@ -301,19 +441,17 @@ abstract class QueryBuilder
         }
 
         $results = $query->fetchAll(PDO::FETCH_ASSOC);
-
-
         if (!is_null($this->entity)) {
 
             if ($this->relations) {
                 Hydrator::$relations = true;
                 $records = Hydrator::hydrateRelation($results, $this->entity);
+
             } else {
                 foreach ($results as $result) {
                     $records[] = Hydrator::hydrate($result, $this->entity);
                 }
             }
-
         } else {
             $records = $results;
         }
@@ -327,46 +465,16 @@ abstract class QueryBuilder
         }
 
 
-        return count($records) > 1 ? $records : (!empty($records) ? $records[0] : null);
+        return count($records) > 1 ? $records : (!empty($records) ? array_pop($records) : null);
     }
 
-    private function setField()
-    {
-        switch ($this->method) {
-            case "INSERT INTO":
-                $fields = $this->getNotNullValues();
-                return "(" . join(", ", array_keys($this->fieldsValues)) . ") VALUES 
-            (:" . join(", :", array_keys($this->fieldsValues)) . ")";
-            case "UPDATE":
-                return "SET " . join(" , ", array_map(function ($value) {
-                        return "$value = :$value";
-                    }, array_keys($this->fieldsValues)));
-            case "SELECT":
-                if ($this->alias) {
-                    $this->from .= " AS {$this->alias}";
-                } elseif ($this->relations) {
-                    $this->alias = $this->from;
-                }
 
-                $fields = join(", ", $this->select);
-
-                return $fields;
-            default:
-                return "";
-        }
-    }
-
-    private function getNotNullValues()
-    {
-        return array_map(function ($key, $value) {
-            if (!is_null($this->fieldsValues[$key])) {
-                return $key;
-            } else {
-                return null;
-            }
-        }, array_keys($this->fieldsValues), $this->fieldsValues);
-    }
-
+    /**
+     * Put all sql data to the original state to avoid conflict
+     * @param bool $all
+     * @return $this
+     * @throws \ReflectionException
+     */
     public function clear(bool $all = false)
     {
         /** @var \ReflectionClass $class */
@@ -388,4 +496,6 @@ abstract class QueryBuilder
 
         return $this;
     }
+
+    #endregion
 }

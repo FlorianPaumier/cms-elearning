@@ -11,6 +11,7 @@ use App\Core\Mailer\MailerHandler;
 use App\Core\Mailer\MailerMessage;
 use App\Core\Request\ParameterBag;
 use App\Core\Request\Request;
+use App\Core\Request\SessionBag;
 use App\Core\Session\PHPSession;
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -28,7 +29,7 @@ class UserManager
     private $repository;
 
     /**
-     * @var PHPSession
+     * @var SessionBag
      */
     private $session;
 
@@ -37,7 +38,7 @@ class UserManager
     public function __construct()
     {
         $this->entityManager = ConfigHandler::get("entityManager");
-        $this->repository =  new UserRepository();
+        $this->repository = new UserRepository();
         $this->session = ConfigHandler::get("session");
         $this->security = CacheHandler::get("security");
 
@@ -48,23 +49,29 @@ class UserManager
      */
     public function connectUser(?string $username, ?string $password): bool
     {
-        $q = $this->repository->setEntity(User::class)->findBy([
-            "username" => $username,
-            "password" => md5($password),
-            //            "enable" => true,
-        ]);
+        /** @var User $q */
+        $q = $this->repository->where("username = :username")->orWhere("email = :email")
+            ->setParameters([
+                "username" => $username,
+                "email" => $username,
+            ])->fetch();
 
         $response = false;
 
-        if (!empty($q)) {
+        if (!empty($q) && !is_null($q)) {
+            if (!password_verify($password, $q->getPassword())) {
+                //return false;
+            }
             $response = true;
             $this->session->offsetSet("app.user", [
                 "user" => $q->getEmail(),
                 "roles" => $q->getRoles(),
                 "timestamp" => time() + 2 * 60 * 60,
             ]);
+
         }
 
+//        dump($this->session->getSession());
         return $response;
     }
 
@@ -81,18 +88,14 @@ class UserManager
      */
     public function isConnected()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        /*if (!isset($_SESSION['auth'])) {
-        throw new ForbiddenException();
-        }*/
-
-        if ($this->session->offsetGet("app.user")["timestamp"] < time()) {
-            $this->disconnectUser();
-        } else {
-            return true;
+        if ($this->session->offsetGet("app.user")) {
+            if (!$this->session->offsetGet("app.user")["timestamp"] < time()) {
+                $this->disconnectUser();
+            } else {
+                return true;
+            }
+        }else{
+            return false;
         }
 
         return false;
@@ -106,7 +109,7 @@ class UserManager
     public function getUser()
     {
         $session = $this->session->offsetGet("app.user");
-        //        $user = $this->repository->from('user')->findBy(["email" => $session["user"]]);
+        //        $user = $this->entityManager->from('user')->findBy(["email" => $session["user"]]);
         return $session;
     }
 
@@ -153,15 +156,17 @@ class UserManager
 
         $error = [];
 
-        if ($this->repository->findBy(["email" => $value["email"]])) {
+        if ($this->entityManager->findBy(["email" => $user->getEmail()])) {
             return "Votre email exist déjà. Veuillez le modifier";
         }
 
-        if ($this->entityManager->persist($value)) {
-            return true;
+        try {
+            $this->entityManager->persist($user)->flush();
+        }catch (\Exception $e){
+            return "Une erreur est survenue. Veuilliez réessayer. Si l'erreur persist contacter l'admin";
         }
 
-        return "Une erreur estr survenue. Veuilliez réessayer. Si l'erreur persist contacter l'admin";
+        return $user;
     }
 
     /**
@@ -169,24 +174,23 @@ class UserManager
      */
     public function forgetPassword(string $email)
     {
-        if ($this->repository->from("user")->exists(["email" => $email])) {
+        if ($this->entityManager->from("user")->exists(["email" => $email])) {
 
-            $user = $this->repository->setEntity(User::class)->findBy(["email" => $email]);
+            $user = $this->entityManager->setEntity(User::class)->findBy(["email" => $email]);
             $user->setForgetPasswordToken(bin2hex(random_bytes(32)));
 
             $server = ConfigHandler::get("request")->getServer();
             $mailer = new MailerHandler();
             $message = (new MailerMessage())
                 ->setSubjet("Forget Password")
-                ->setBody("<a href='".$server['HTTP_HOST']."/reset-token?token=".$user->getForgetPasswordToken()."'>Reset Password</a>")
+                ->setBody("<a href='" . $server['HTTP_HOST'] . "/reset-token?token=" . $user->getForgetPasswordToken() . "'>Reset Password</a>")
                 ->setDest($email)
-                ->setContentType("text/html")
-                ;
-                if($mailer->send($message)){
-                    return "un mail a été envoyé";
-                }
+                ->setContentType("text/html");
+            if ($mailer->send($message)) {
+                return "un mail a été envoyé";
+            }
 
-                return "Un problème est survenue lors de l'envoi";
+            return "Un problème est survenue lors de l'envoi";
         }
 
         return "Aucun utilisateur ne correspond à cette email";

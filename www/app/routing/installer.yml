@@ -1,0 +1,27 @@
+installer_index:
+  path: /install
+  controller: App\Controllers\Installer:index
+
+installer_configuration:
+  path: /install/configuration
+  controller: App\Controllers\Installer:configuration
+
+installer_configuration_database:
+  path: /install/configuration/database
+  controller: App\Controllers\Installer:database
+
+installer_configuration_admin:
+  path: /install/configuration/admin
+  controller: App\Controllers\Installer:createAdmin
+
+installer_configuration_success:
+  path: /install/configuration/success
+  controller: App\Controllers\Installer:success
+
+installer_configuration_migration:
+  path: /install/configuration/migration
+  controller: App\Controllers\Admin\Migration:installerMigration
+
+installer_configuration_migration_test:
+  path: /install/configuration/test
+  controller: App\Controllers\Installer:initDatabase

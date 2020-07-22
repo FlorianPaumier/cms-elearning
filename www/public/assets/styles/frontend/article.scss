@@ -1,0 +1,37 @@
+@import '../globals/pagination';
+
+.article {
+  margin: auto;
+  width: 100%;
+}
+
+.article-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+
+  .article-row {
+    align-items: center;
+    width: 560px;
+    border-bottom: 1px solid black;
+    text-transform: capitalize;
+
+    &-title {
+      font-weight: bold;
+      text-decoration: none;
+      color: black;
+    }
+
+    &-image {
+    }
+
+    &-watch {
+      text-decoration: none;
+
+    }
+
+    &:last-child {
+      border: none;
+    }
+  }
+}

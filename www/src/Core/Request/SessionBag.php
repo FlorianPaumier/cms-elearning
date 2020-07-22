@@ -4,45 +4,63 @@
 namespace App\Core\Request;
 
 
-class SessionBag
+class SessionBag implements \ArrayAccess
 {
-
     /**
-     * Return the data in the request if the key exist
-     * @param $key
-     * @return mixed
+     * @var array
      */
-    public function get($key)
+    private $session;
+
+    public function __construct(array &$session)
     {
-        if (preg_match("/\[\]/", $key)) {
-            $key = preg_replace("/\[\]/", "", $key);
-        }
-        return $this->exist($key) ? $_SESSION[$key] : null;
+        $this->session = $session;
     }
 
     /**
      * Return the Session array
      * @return array
      */
-    public function all()
+    public function getSession()
     {
-        return $_SESSION;
+        return $this->session;
     }
 
-    /** Add or update entry in session */
-    public function set(string $key, $value)
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
     {
-        return $_SESSION[$key] = $value;
+        return key_exists($offset, $this->session);
     }
 
-    /** If key exist delete entry */
-    public function delete(string $key){
-        if($this->exist($key)) unset($_SESSION[$key]);
+    /**
+     * @param mixed $offset
+     * @return mixed
+     */
+    public function offsetGet($offset)
+    {
+        if (preg_match("/\[\]/", $offset)) {
+            $offset = preg_replace("/\[\]/", "", $offset);
+        }
+        return $this->offsetExists($offset) ? $this->session[$offset] : null;
     }
 
-    /** Search if key exist in session */
-    public function exist(string $key)
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
+    public function offsetSet($offset, $value)
     {
-        return key_exists($key, $_SESSION);
+        return $this->session[$offset] = $value;
     }
+
+    /**
+     * @param mixed $offset
+     */
+    public function offsetUnset($offset)
+    {
+        if($this->offsetExists($offset)) unset($this->session[$offset]);
+    }
+
 }

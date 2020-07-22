@@ -1,0 +1,7 @@
+article_list:
+  path: /article
+  controller: App\Controllers\Frontend\Article:index
+
+article_view:
+  path: /article/{id}
+  controller: App\Controllers\Frontend\Article:view

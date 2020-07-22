@@ -6,8 +6,8 @@
 
 @section(body)
 
-<div class="contactForm">
-    <form action="" method="post">
+<div class="container-form form-container">
+    <form action="" method="post" data-id="admin_contact">
 
     <section class="form  drag-sort-enable">
         <label for="admin_contact_class">Titre du formulaire <input type="text" name="admin_contact_class" required value="<?= $form->getName() ?>"></label>
@@ -23,7 +23,7 @@
     </section>
         <button>Valider</button>
     </form>
-    <button type="button" class="add-input" data-length="1">Ajout</button>
+    <button type="button" class="add-input" data-length="1" data-id="admin_contact">Ajout</button>
 
 </div>
 
@@ -35,6 +35,6 @@
 <script>
     const json = {{inputs}}
 </script>
-<script type="text/javascript" src="/assets/scripts/core/contact.js"></script>
+<script type="text/javascript" src="/assets/scripts/core/input_form.js"></script>
 
 @endsection

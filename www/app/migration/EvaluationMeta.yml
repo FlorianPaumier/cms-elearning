@@ -1,0 +1,20 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: SERIAL
+      options:
+        - PRIMARY KEY
+        - NOT NULL
+      input:
+        name: input_id
+        type: integer
+        options:
+          - UNIQUE
+      value:
+        name: value
+        type: character varying
+      EvaluationObject:
+        name: evaluation_object_id
+        type: integer

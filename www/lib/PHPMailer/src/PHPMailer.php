@@ -3504,10 +3504,10 @@ class PHPMailer
 
     /**
      * Add an embedded (inline) attachment from a file.
-     * This can include images, sounds, and just about any other document type.
+     * This can include uploads, sounds, and just about any other document type.
      * These differ from 'regular' attachments in that they are intended to be
      * displayed inline with the message, not just attached for download.
-     * This is used in HTML messages that embed the images
+     * This is used in HTML messages that embed the uploads
      * the HTML refers to using the $cid value.
      * Never use a user-supplied path to a file!
      *
@@ -3576,7 +3576,7 @@ class PHPMailer
 
     /**
      * Add an embedded stringified attachment.
-     * This can include images, sounds, and just about any other document type.
+     * This can include uploads, sounds, and just about any other document type.
      * If your filename doesn't contain an extension, be sure to set the $type to an appropriate MIME type.
      *
      * @param string $string      The attachment binary data
@@ -3987,17 +3987,17 @@ class PHPMailer
 
     /**
      * Create a message body from an HTML string.
-     * Automatically inlines images and creates a plain-text version by converting the HTML,
+     * Automatically inlines uploads and creates a plain-text version by converting the HTML,
      * overwriting any existing values in Body and AltBody.
      * Do not source $message content from user input!
-     * $basedir is prepended when handling relative URLs, e.g. <img src="/images/a.png"> and must not be empty
-     * will look for an image file in $basedir/images/a.png and convert it to inline.
+     * $basedir is prepended when handling relative URLs, e.g. <img src="/uploads/a.png"> and must not be empty
+     * will look for an image file in $basedir/uploads/a.png and convert it to inline.
      * If you don't provide a $basedir, relative paths will be left untouched (and thus probably break in email)
-     * Converts data-uri images into embedded attachments.
+     * Converts data-uri uploads into embedded attachments.
      * If you don't want to apply these transformations to your HTML, just set Body and AltBody directly.
      *
      * @param string        $message  HTML message string
-     * @param string        $basedir  Absolute path to a base directory to prepend to relative paths to images
+     * @param string        $basedir  Absolute path to a base directory to prepend to relative paths to uploads
      * @param bool|callable $advanced Whether to use the internal HTML to text converter
      *                                or your own custom converter @return string $message The transformed message Body
      *
@@ -4014,7 +4014,7 @@ class PHPMailer
                 $basedir .= '/';
             }
             foreach ($images[2] as $imgindex => $url) {
-                // Convert data URIs into embedded images
+                // Convert data URIs into embedded uploads
                 //e.g. "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                 $match = [];
                 if (preg_match('#^data:(image/(?:jpe?g|gif|png));?(base64)?,(.+)#', $url, $match)) {
@@ -4050,7 +4050,7 @@ class PHPMailer
                     !empty($basedir)
                     // Ignore URLs containing parent dir traversal (..)
                     && (strpos($url, '..') === false)
-                    // Do not change urls that are already inline images
+                    // Do not change urls that are already inline uploads
                     && 0 !== strpos($url, 'cid:')
                     // Do not change absolute URLs, including anonymous protocol
                     && !preg_match('#^[a-z][a-z0-9+.-]*:?//#i', $url)

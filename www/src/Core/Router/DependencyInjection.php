@@ -7,6 +7,7 @@ namespace App\Core\Router;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Database\EntityManager;
 use App\Core\Database\Repository\AbstractRepository;
+use App\Core\Exceptions\NotFoundAbsctractException;
 use App\Core\Kernel\Kernel;
 
 class DependencyInjection
@@ -34,12 +35,11 @@ class DependencyInjection
             foreach ($functionParams->getParameters() as $parameter) {
                 $name = $parameter->getName();
 
-
                 if (!is_null($var = ConfigHandler::get($parameter->getName()))) {
                     array_splice($parameters, $parameter->getPosition(), 0, [$var]);
                 } else {
                     try {
-                        if(is_null($parameter->getClass())){
+                        if (is_null($parameter->getClass())) {
                             array_splice($parameters, $parameter->getPosition(), 0, [$args[$name]]);
                             continue;
                         }
@@ -49,10 +49,15 @@ class DependencyInjection
 
                         if (!empty($args)) {
                             /** @var AbstractRepository $repo */
-                            $repo = ConfigHandler::get("entityManager")->getRepository($className."Repository");
+                            $repo = ConfigHandler::get("entityManager")->getRepository($className . "Repository");
 
-                            if(!is_null($repo))
-                                $class = $repo->findBy($args);
+                            if (!is_null($repo)) {
+                                $class = $repo->findOneBy($args);
+                            }
+
+                            if(is_null($class)){
+                                ConfigHandler::get("eventEmmiter")->emit("error.404","Cette page n'existe pas. Veuillez revenir à la page précédente");
+                            }
                         }
                         array_splice($parameters, $parameter->getPosition(), 0, [$name => $class]);
                     } catch (\Exception $e) {

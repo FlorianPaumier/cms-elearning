@@ -21,7 +21,8 @@ class UserRegisterForm extends AbstractForm
                 "username", TextType::class, [
                     'type' => 'text',
                     'required' => true,
-                    'label' => 'Username',
+                    'label' => 'Identifiant',
+                    'placeholder' => 'Votre identifiant',
                     "class" => "form-control form-control-user",
                     "before" => "<i class=\"fa fa-user\"></i>",
                 ]
@@ -31,6 +32,7 @@ class UserRegisterForm extends AbstractForm
                     'type' => 'email',
                     'required' => true,
                     'label' => 'Email',
+                    'placeholder' => 'exemple@gmail.com',
                     "class" => "form-control form-control-user",
                     "before" => "<i class=\"fa fa-user\"></i>",
                 ]
@@ -39,6 +41,8 @@ class UserRegisterForm extends AbstractForm
                 "password", PasswordType::class, [
                     'required' => false,
                     'label' => 'Mot de passe',
+                    'placeholder' => 'Votre mot de passe',
+                    "confirmation" => true,
                     "class" => "form-control form-control-user",
                 ]
             )
@@ -46,6 +50,7 @@ class UserRegisterForm extends AbstractForm
                 "password_confirmation", PasswordType::class, [
                     'required' => false,
                     'label' => 'Confirmation Mot de passe',
+                    'placeholder' => '',
                     "class" => "form-control form-control-user",
                     "mapped" => false,
                 ]

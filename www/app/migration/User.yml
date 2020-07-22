@@ -1,0 +1,56 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: SERIAL
+      options:
+
+        - PRIMARY KEY
+        - NOT NULL
+    username:
+      name: username
+      type: character varying
+      options:
+        - UNIQUE
+    email:
+      name: email
+      type: character varying
+      options:
+        - UNIQUE
+        - NOT NULL
+    status:
+      name: status
+      type: character varying
+    created_at:
+      name: created_at
+      type: timestamp
+    updated_at:
+      name: updated_at
+      type: timestamp
+    password:
+      name: password
+      type: character varying
+      options:
+        - NOT NULL
+    forgetPasswordToken:
+      name: forget_password_token
+      type: character varying
+    forgetPasswordTokenAvailable:
+      name: forget_password_token_available
+      type: timestamp
+    roles:
+      name: roles
+      type: json
+    firstname:
+      name: firstname
+      type: character varying
+    laststname:
+      name: laststname
+      type: character varying
+    age:
+      name: age
+      type: date
+    description:
+      name: description
+      type: text

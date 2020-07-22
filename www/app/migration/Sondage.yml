@@ -1,0 +1,36 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: SERIAL
+      options:
+        - PRIMARY KEY
+        - NOT NULL
+    question:
+      name: question
+      type: character varying
+      options:
+        - NOT NULL
+    answer1:
+      name: option_One
+      type: character varying
+      options:
+        - NOT NULL
+    answer2:
+      name: option_Two
+      type: character varying
+      options:
+        - NOT NULL
+    answer3:
+      name: option_Three
+      type: character varying
+    answer4:
+      name: option_Four
+      type: character varying
+    created_at:
+      name: created_at
+      type: timestamp
+    updated_at:
+      name: updated_at
+      type: timestamp

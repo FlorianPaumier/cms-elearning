@@ -7,9 +7,11 @@ namespace App\Core\Form;
 use App\Core\Cache\ConfigHandler;
 use App\Core\Contact\ContactForm;
 use App\Core\Contact\ContactInput;
+use App\Core\Evaluation\Evaluation;
 use App\Core\Form\Fields\AddressType;
 use App\Core\Form\Fields\CaptchaType;
 use App\Core\Form\Fields\CheckboxType;
+use App\Core\Form\Fields\SimpleCheckboxType;
 use App\Core\Form\Fields\DateType;
 use App\Core\Form\Fields\EmailType;
 use App\Core\Form\Fields\IntegerType;
@@ -17,7 +19,9 @@ use App\Core\Form\Fields\PhoneType;
 use App\Core\Form\Fields\SubmitType;
 use App\Core\Form\Fields\TextAreaType;
 use App\Core\Form\Fields\TextType;
+use App\Core\Formatter\Serializer;
 use App\Core\Helpers\StringTransformer;
+use App\Core\Interfaces\GenerateFormInterface;
 
 class FormTypeBuilderServices
 {
@@ -37,13 +41,16 @@ class FormTypeBuilderServices
     private $prefix = "";
     private $inputs = [];
 
+    /** @var Serializer */
+    private $serializer;
+
     public function __construct(array $data)
     {
         $this->data = $data;
-
+        $this->serializer = new Serializer();
     }
 
-    public function generate(ContactForm $contactForm = null)
+    public function generateForm(string $class, GenerateFormInterface $form = null): self
     {
         foreach ($this->data as $field) {
             $slug = StringTransformer::slugify($field["label_input"]);
@@ -53,33 +60,48 @@ class FormTypeBuilderServices
                     "placeholder" => $field["placeholder_input"],
                     "label" => $field["label_input"],
                     "key" => $slug,
-                    "position" => $field["position_input"]
+                    "position" => $field["position_input"],
+                    "choices" => $this->translateChoices($field["choice_input"]),
                 ],
                 "type" => $this->translateType($field["type_input"]),
             ];
 
-            $this->inputs[$slug] = (new ContactInput())
+            $this->inputs[$slug] = (new $class())
                 ->setFormKey($slug)
                 ->setType($field["type_input"])
                 ->setPlaceholder($field["placeholder_input"])
                 ->setLabel($field["label_input"])
                 ->setRequired(!is_null($field["require_input"]))
-                ->setPosition($field["position_input"]);
+                ->setPosition($field["position_input"])
+                ->setChoices($this->fields[$slug]["parameters"]["choices"]);
 
             if (!empty($field["id_input"])) {
-                $this->inputs[$slug]->setId($field["id_input"]);
+                $this->inputs[$slug]->setId((int)$field["id_input"]);
             }
-            if(!is_null($contactForm)){
-                $this->inputs[$slug]->setContactForm($contactForm);
+            if (!is_null($form)) {
+                if ($form instanceof ContactForm) {
+                    $this->inputs[$slug]->setContactForm($form);
+                } elseif ($form instanceof Evaluation) {
+                    $this->inputs[$slug]->setEvaluation($form);
+                }
             }
         }
 
         return $this;
     }
 
-    public function createFormTypeClass(array $data, ContactForm $form = null): ContactForm
+    public function createFormTypeClass(array $data, string $class, GenerateFormInterface $form = null): GenerateFormInterface
     {
-        $className = $data["admin_contact_class"];
+        $ext = ["admin_evaluation", "admin_contact"];
+
+        if (key_exists($ext[0], $data)) {
+            $key = $ext[0];
+        } else {
+            if (key_exists($ext[0], $data)) {
+                $key = $ext[0];
+            }
+        }
+        $className = $data[$key . "_class"];
 
         $this->generateFile([
             "form_fields" => $this->fields,
@@ -89,11 +111,11 @@ class FormTypeBuilderServices
         ]);
 
         if (is_null($form)) {
-            $form = new ContactForm();
+            $form = new $class();
         }
 
         return $form->setName($className)
-            ->setEnabled(!is_null($data["admin_contact_enable"]))
+            ->setEnabled(!is_null($data[$key . "_enable"]))
             ->setPath("App\Form\\" . StringTransformer::toPascalCase($className) . "Form");
     }
 
@@ -102,7 +124,7 @@ class FormTypeBuilderServices
         return $this->inputs;
     }
 
-    private function translateType(string $type)
+    private function translateType(string $type): string
     {
 
         switch ($type) {
@@ -136,6 +158,8 @@ class FormTypeBuilderServices
             case "submit":
                 $this->usesType[] = SubmitType::class;
                 return "SubmitType::class";
+            default:
+                return "TextType::class";
         }
     }
 
@@ -150,6 +174,20 @@ class FormTypeBuilderServices
         require $this->template;
         $content = ob_get_clean();
         file_put_contents(ROOT_PATH . "/src/Form/" . $data["class_name"] . ".php", $content);
+
         return ROOT_PATH . "/src/Form/" . $data["class"] . ".php";
+    }
+
+    private function translateChoices(string $choicesString): ?array
+    {
+        $choices = [];
+
+        $choicesArray = explode(",", $choicesString);
+        foreach ($choicesArray as $choice) {
+            $value = explode(":", $choice, 2);
+            $choices[$value[0]] = $value[1];
+        }
+
+        return $choices;
     }
 }

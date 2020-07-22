@@ -91,6 +91,16 @@ class MigrationController extends BaseController
         );
     }
 
+    public function installerMigration()
+    {
+        $this->migration = new Migration();
+
+        $this->processMigration();
+
+        $this->redirect->redirectToRoute("installer_configuration_migration");
+
+    }
+
     /**
      * Set list of file for migration
      *
@@ -261,7 +271,7 @@ class MigrationController extends BaseController
         $patchList->setTableName($this->tableName);
         $patchList->setCurrentVersion($this->version);
 
-        $this->repository->from('patch_list')->persist($patchList)->flush();
+        $this->entityManager->from('patch_list')->persist($patchList)->flush();
     }
 
     /**
@@ -274,7 +284,7 @@ class MigrationController extends BaseController
         $patchList->setCurrentVersion($this->version);
         $patchList->setId($this->id);
 
-        $this->repository->persist($patchList)->flush();
+        $this->entityManager->persist($patchList)->flush();
     }
 
     /**

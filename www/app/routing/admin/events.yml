@@ -13,6 +13,11 @@ admin_events_edit:
   path: "/admin/events/edit/{id}"
   method: [GET, POST]
 
+admin_events_stream:
+  controller: App\Controllers\Admin\Event:stream
+  path: "/admin/events/edit/{id}/stream"
+  method: [GET, POST]
+
 admin_events_delete:
   controller: App\Controllers\Admin\Event:delete
   path: "/admin/events/delete/{id}"

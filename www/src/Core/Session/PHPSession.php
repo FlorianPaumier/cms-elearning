@@ -9,26 +9,11 @@ use App\Core\Request\SessionBag;
 class PHPSession implements \ArrayAccess
 {
 
-    /** @var SessionBag */
-    private $session;
 
-    public function __construct()
+    public function getSession()
     {
-        $this->ensureStarted();
-        $this->session = ConfigHandler::get("request")->getSession();
+        return $_SESSION;
     }
-
-    /**
-     * Assure que la Session est démarrée
-     */
-    private function ensureStarted()
-    {
-        if (session_status() === PHP_SESSION_NONE) {
-//            session_start();
-        }
-    }
-
-
 
     /**
      * Whether a offset exists
@@ -45,8 +30,7 @@ class PHPSession implements \ArrayAccess
      */
     public function offsetExists($offset)
     {
-        $this->ensureStarted();
-        return $this->session->exist($offset);
+        return array_key_exists($offset, $_SESSION);
     }
 
     /**
@@ -61,10 +45,10 @@ class PHPSession implements \ArrayAccess
      */
     public function offsetGet($offset)
     {
-        if ($this->session->exist($offset)) {
-            return $this->session->get($offset);
+        if ($this->offsetExists($offset)) {
+            return $_SESSION[$offset];
         }
-        return [];
+        return false;
     }
 
     /**
@@ -85,7 +69,7 @@ class PHPSession implements \ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        return $this->session->set($offset, $value);
+        return $_SESSION[$offset] =  $value;
     }
 
     /**
@@ -100,34 +84,6 @@ class PHPSession implements \ArrayAccess
      */
     public function offsetUnset($offset)
     {
-        $this->session->delete($offset);
-    }
-
-    /**
-     * @param string $key
-     * @param mixed|null $default
-     * @return mixed
-     */
-    public function get(string $key, $default = null)
-    {
-        // TODO: Implement get() method.
-    }
-
-    /**
-     * @param string $key
-     * @param $value
-     * @return mixed|void
-     */
-    public function set(string $key, $value): void
-    {
-        // TODO: Implement set() method.
-    }
-
-    /**
-     * @param string $key
-     */
-    public function delete(string $key): void
-    {
-        // TODO: Implement delete() method.
+        unset($_SESSION[$offset]);
     }
 }

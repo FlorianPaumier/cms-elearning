@@ -1,0 +1,8 @@
+frontend_sondage_list:
+  path: /sondage
+  controller: App\Controllers\Sondage:index
+
+frontend_sondage_vote:
+  path: /sondage/vote/{id}
+  controller: App\Controllers\Sondage:vote
+  method: [GET,POST]

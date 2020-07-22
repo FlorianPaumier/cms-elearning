@@ -1,7 +1,9 @@
 @extend(templates/back)
 
 @section(body)
-
+<section>
+    <a href="@path(admin_contact_new)" id="add-contact" class="btn c-blue">Ajout</a>
+</section>
 <table>
     <thead>
     <tr>
@@ -11,7 +13,7 @@
     </tr>
     </thead>
     <tbody>
-        <?php foreach ($forms as $form): ?>
+        <?php foreach ($forms["data"] as $form): ?>
             <tr>
                 <td><?= $form->getId() ?></td>
                 <td><?= $form->getName() ?></td>
@@ -22,5 +24,7 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<?= $forms["links"]?>
 
 @endsection

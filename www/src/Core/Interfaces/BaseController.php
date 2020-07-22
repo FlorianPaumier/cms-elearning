@@ -10,6 +10,8 @@ use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Core\Security\UserManager;
 use App\Core\Session\PHPSession;
+use App\Entity\User;
+use App\Repository\UserRepository;
 
 /**
  * Class BaseController
@@ -28,7 +30,7 @@ abstract class BaseController
     /**
      * @var EntityManager
      */
-    protected $repository;
+    protected $entityManager;
 
     /**
      * @var UserManager
@@ -62,7 +64,7 @@ abstract class BaseController
          * @deprected use render function
          */
         $this->renderer = new RenderView();
-        $this->repository = ConfigHandler::get('entityManager');
+        $this->entityManager = ConfigHandler::get('entityManager');
         $this->userManager = ConfigHandler::get("userManager");
         $this->query = ConfigHandler::get("request");
         $this->session = ConfigHandler::get("session");
@@ -70,9 +72,11 @@ abstract class BaseController
     }
 
     /** Return current log in user */
-    protected function getUser(){
-        dump($_SESSION);
-        return $this->session->offsetGet("app.user");
+    protected function getUser(): ?User
+    {
+        $session = $this->session->offsetGet("app.user");
+
+        return $this->entityManager->getRepository(UserRepository::class)->findOneBy(["email" => $session["user"]]);
     }
 
     /**
@@ -89,6 +93,12 @@ abstract class BaseController
         return $form->buildForm($formBuilder);
     }
 
+    /**
+     * @param string $view
+     * @param array $data
+     * @return RenderView|string|string[]|null
+     * @throws \Exception
+     */
     protected function render(string $view, array $data = []){
         return (new RenderView())->render($view, $data);
     }

@@ -26,15 +26,26 @@ abstract class AbstractRepository extends QueryBuilder
     /** @var AbstractRepository */
     private $repository;
 
+    /**
+     * AbstractRepository constructor.
+     * Create a new instance of a repository and prepare the query
+     * @param \PDO|null $pdo
+     */
     public function __construct(\PDO $pdo = null)
     {
         $repository = explode("\\", get_called_class());
         $this->repository = array_pop($repository);
 
         $this->class .= explode("Repository", $this->repository)[0];
-        $this->table = explode("_", StringTransformer::PascalCaseToSnakeCase($this->class), 3)[2]."s";
+        $this->table = explode("_", StringTransformer::PascalCaseToSnakeCase($this->class), 3)[2];
 
-        $this->setEntity(get_class(new $this->class()));
+        if(class_exists($this->class)){
+            $class = get_class(new $this->class());
+        }else{
+            $class = $this->getEntity();
+        }
+
+        $this->setEntity($class);
         $this->from($this->table);
         parent::__construct($pdo);
     }
@@ -125,6 +136,7 @@ abstract class AbstractRepository extends QueryBuilder
     }
 
     /**
+     * Create a pagination from the query and return array with result and html
      * @param int $length
      * @param bool $paginate
      * @return array
@@ -150,10 +162,17 @@ abstract class AbstractRepository extends QueryBuilder
             $links = $this->createLinkPagination("http://".$server["HTTP_HOST"]. explode("?", $server["REQUEST_URI"], 2)[0]. "?page=", $page, $start, $end);
         }
 
-        return [
-            "data" => $this->setMaxResult($length)
+        $data = $this->setMaxResult($length)
+                ->orderBy("id" , "ASC")
                 ->page($page)
-                ->findAll(),
+                ->fetch();
+
+        if(!is_array($data)){
+            $data = [$data];
+        }
+
+        return [
+            "data" => $data,
             "total" => $count,
             "per_page" => $length,
             "links" => $links,
@@ -161,6 +180,7 @@ abstract class AbstractRepository extends QueryBuilder
     }
 
     /**
+     * Count the entry with some arguments
      * @param array $args
      * @return int
      */
@@ -180,20 +200,21 @@ abstract class AbstractRepository extends QueryBuilder
     }
 
     /**
+     * Create the query for join table
      * @param string $tableTarget
      * @param string $alias
      * @return AbstractRepository
      */
-    public function join(string $tableTarget, string $alias)
+    private function join(string $tableTarget,string $key,  string $alias)
     {
         if(strpos($tableTarget, "\\") !== false){
-            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget))."s";
+            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget));
         }
 
         if($this->alias){
-            $this->relations["JOIN"][] = "$tableTarget AS $alias on ".$this->alias.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
+            $this->relations[$key][] = "\"$tableTarget\" AS $alias on ".$this->alias.".id"." = $alias.id";
         }else{
-            $this->relations["JOIN"][] = "$tableTarget AS $alias on ".$this->table.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
+            $this->relations[$key][] = "\"$tableTarget\" AS $alias on ".$this->table.".id"." = $alias.id";
         }
 
         $this->addSelect($tableTarget, $alias);
@@ -201,47 +222,47 @@ abstract class AbstractRepository extends QueryBuilder
         return $this;
     }
 
+    /**
+     * Create join for left option
+     * @param string $tableTarget
+     * @param string $alias
+     * @return AbstractRepository
+     */
     public function leftJoin(string $tableTarget, string $alias)
     {
-        if(strpos($tableTarget, "\\") !== false){
-            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget))."s";
-        }
-
-        $this->relations["LEFT JOIN"][] = "$tableTarget AS $alias on ".$this->alias.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
-
-        $this->addSelect($tableTarget, $alias);
-
-        return $this;
+        return $this->join($tableTarget, "LEFT JOIN", $alias);
     }
 
+    /**
+     * Create join for inner option
+     * @param string $tableTarget
+     * @param string $alias
+     * @return AbstractRepository
+     */
     public function innerJoin(string $tableTarget, string $alias)
     {
-        if(strpos($tableTarget, "\\") !== false){
-            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget))."s";
-        }
-
-        $this->relations["INNER JOIN"][] = "$tableTarget AS $alias on ".$this->alias.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
-
-
-        $this->addSelect($tableTarget, $alias);
-
-        return $this;
+        return $this->join($tableTarget, "INNER JOIN", $alias);
     }
 
+    /**
+     * Create join for right option
+     * @param string $tableTarget
+     * @param string $alias
+     * @return AbstractRepository
+     */
     public function rightJoin(string $tableTarget, string $alias)
     {
-        if(strpos($tableTarget, "\\") !== false){
-            $tableTarget = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($tableTarget))."s";
-        }
-
-        $this->relations["RIGHT JOIN"][] = "$tableTarget AS $alias on ".$this->table.".id"." = $alias.".mb_substr($this->table, 0, -1)."_id";
-
-
-        $this->addSelect($tableTarget, $alias);
-
-        return $this;
+        return $this->join($tableTarget, "RIGHT JOIN", $alias);
     }
 
+    /**
+     * Create join for relation many to many option
+     * @param string $tableTarget
+     * @param string $alias
+     * @param string $type
+     * @param string $joinTable
+     * @return $this
+     */
     public function joinMany(string $tableTarget, string $alias, string $type = "JOIN", string $joinTable = ""){
 
         if(strpos($tableTarget, "\\") !== false){
@@ -261,6 +282,11 @@ abstract class AbstractRepository extends QueryBuilder
 
     }
 
+    /**
+     * add all collumn with alias from both table
+     * @param string $table
+     * @param string $alias
+     */
     private function addSelect(string $table, string $alias)
     {
         if(empty($this->select)){
@@ -270,6 +296,11 @@ abstract class AbstractRepository extends QueryBuilder
         $this->addColumns($table,$alias, $this->getColumns($table));
     }
 
+    /**
+     * Get all collumn name from the table
+     * @param string $table
+     * @return array
+     */
     private function getColumns(string $table){
 
         $q = $this->pdo->prepare("SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_NAME = '$table'");
@@ -278,6 +309,12 @@ abstract class AbstractRepository extends QueryBuilder
         return $q->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Add the collumns in the select array for the query
+     * @param string $table
+     * @param string|null $alias
+     * @param array $columns
+     */
     private function addColumns(string $table,?string $alias, array $columns){
         foreach ($columns as $column){
             $name = $column["column_name"];
@@ -291,23 +328,32 @@ abstract class AbstractRepository extends QueryBuilder
             $this->select($target);
         }
     }
+
+    /**
+     * Creation of the html part for the pagination.
+     * @param string $url
+     * @param int $page
+     * @param int $start
+     * @param int $end
+     * @return string
+     */
     private function createLinkPagination(string $url, int $page, int $start, int $end)
     {
 
-        $link = '<nav aria-label="Page navigation example">';
-        $link .= '<ul class="pagination">';
-        $link .= '<li class="page-item ' . (($page - 1) < 1 ? "disabled" : "" ). '"><a rel="external" class="page-link" href="' . $url . ($page - 1) . '" > Previous</a></li>';
+        $link = '<nav aria-label="Page navigation example" class="pagination-bar">';
+        $link .= '<ul class="pagination list-unstyle">';
+        $link .= '<li class="page-item ' . (($page - 1) < 1 ? "disabled" : "" ). '"><a '.(($page - 1) < 1 ? "disabled" : "" ).' rel="external" class="page-link" href="' . $url . ($page - 1) . '" ><span>Previous</span></a></li>';
         $link .= '<li class="page-item ' . (($page - 1) <= 1 ? "disabled" : "" ) . '">';
-        $link .= '<a class="page-link" rel="external" href="' . $url . '1" aria-label="Previous">';
-        $link .= '<span aria-hidden="true">&laquo;</span></a></li>';//<span class="sr-only"> Previous</span>
-        for ($i = $start; $i < $end; $i++) {
-            $link .= '<li class="page-item ' . (($page == $i) ? "active" : "" ) . '"><a rel="external" target="_blank" class="page-link" href="' . $url . $i . '">' . $i . '</a></li>';
+        $link .= '<a class="page-link" rel="external" href="' . $url . '1" aria-label="Previous" '.(($page - 1) < 1 ? "disabled" : "" ).'>';
+        $link .= '<span aria-hidden="true">←</span></a></li>';//<span class="sr-only"> Previous</span>
+        for ($i = $start; $i <= $end; $i++) {
+            $link .= '<li class="page-item ' . (($page == $i) ? "active disabled" : "" ) . '"><a rel="external" class="page-link" href="' . $url . $i . '">' . $i . '</a></li>';
 
         }
-        $link .= '<li class="page-item ' . (($page + 1) === $end ? "disabled" : "" ). '">';
-        $link .= '<a rel="external" class="page-link" href = "' . $url . $end . '" aria-label="Next" >';
-        $link .= '<span aria-hidden="true">&laquo;</span></a></li>';//<span class="sr-only"> Next</span>
-        $link .= '<li class="page-item ' .(($page + 1) > $end ? "disabled" : "" ) . '"><a rel="external" class="page-link" href = "' . $url . ($page + 1) . '"> Next</a></li>';
+        $link .= '<li class="page-item ' . (($page + 1) > $end ? "disabled" : "" ). '">';
+        $link .= '<a rel="external" class="page-link" href = "' . $url . $end . '" aria-label="Next" '.(($page + 1) > $end ? "disabled" : "" ).'>';
+        $link .= '<span aria-hidden="true">→</span></a></li>';//<span class="sr-only"> Next</span>
+        $link .= '<li class="page-item ' .(($page + 1) > $end ? "disabled" : "" ) . '"><a rel="external" class="page-link" href = "' . $url . ($page + 1) . '" '.(($page - 1) < 1 ? "disabled" : "" ).'><span>Next</span></a></li>';
         $link .= '</ul>';
         return $link;
     }

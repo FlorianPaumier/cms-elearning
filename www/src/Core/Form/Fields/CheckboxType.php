@@ -4,12 +4,16 @@
 namespace App\Core\Form\Fields;
 
 
-class CheckboxType extends AbstractType
+class CheckboxType extends ChoiceType
 {
-
+    public function setHtml(string $html)
+    {
+        $this->html = $html;
+        return $this;
+    }
     public static function getTemplate()
     {
-        return PATH_FORM."/ChoiceType.tpl.php";
+        return PATH_FORM."/ChoiceInputType.tpl.php";
     }
 
     public function getBlockName(){

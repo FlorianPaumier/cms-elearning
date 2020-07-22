@@ -15,17 +15,19 @@ class SondageController extends BaseController
     /**
      * I
      * @param SondageRepository $sondageRepository
+     * @param SondageVoteRepository $sondageVoteRepository
      * @return \App\Core\Render\RenderView|string|string[]|null
      * @throws \Exception
-     *
      */
-    public function index(SondageRepository $sondageRepository)
+    public function index(SondageRepository $sondageRepository,  SondageVoteRepository $sondageVoteRepository)
     {
         $sondages = $sondageRepository->findAll();
 
         return $this->renderer->render("sondage/index", [
             'sondages' => $sondages,
-            'title' => 'Liste des sondages'
+            'userId' => $this->getUser()->getId(),
+            'sondageVoteRepository' => $sondageVoteRepository,
+            'title' => 'Liste des sondages',
         ]);
     }
 

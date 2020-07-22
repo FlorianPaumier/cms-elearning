@@ -13,7 +13,44 @@
     ?>
     <ul class="cards" style="max-width: 50%; margin:auto;">
         <?php
-            foreach( $sondages as $sondage):
+            foreach($sondages as $sondage):
+                $voteUser = $sondageVoteRepository->select('choix')->where('user_id = '.$userId)->andWhere('sondage_id = '.$sondage->getId())->fetch();
+
+                if (!is_null($voteUser)){
+                    $votesChoixUn = $sondageVoteRepository->where('sondage_id = '.$sondage->getId())->andWhere('choix = 1')->count();
+                    $votesChoixDeux = $sondageVoteRepository->where('sondage_id = '.$sondage->getId())->andWhere('choix = 2')->count();
+                    $votesChoixTrois = $sondageVoteRepository->where('sondage_id = '.$sondage->getId())->andWhere('choix = 3')->count();
+                    $votesChoixQuatre = $sondageVoteRepository->where('sondage_id = '.$sondage->getId())->andWhere('choix = 4')->count();
+                    $votes = $votesChoixUn+$votesChoixDeux+$votesChoixTrois+$votesChoixQuatre;
+        ?>
+                    <li class="cards__item">
+                        <div class="card">
+                            <div class="card__content">
+                                <div class="card__title"><?=$sondage->getQuestion();?></div>
+                                <p>
+                                    <br>
+                                    <label><?=$sondage->getOptionOne();?> ( <?=($votesChoixUn/($votes))*100?>% )</label><input type="radio" disabled <?php echo $voteUser->getChoix() == 1 ? "checked" : ""?>><br>
+                                    <label><?=$sondage->getOptionTwo();?> ( <?=($votesChoixDeux/($votes))*100?>% )</label><input type="radio" disabled <?php echo $voteUser->getChoix() == 2 ? "checked" : ""?>><br>
+                                    <?php
+                                    if ($sondage->getOptionThree() != ""):
+                                        ?>
+                                        <label><?=$sondage->getOptionThree();?> ( <?=($votesChoixTrois/($votes))*100?>% )</label><input type="radio" disabled <?php echo $voteUser->getChoix() == 3 ? "checked" : ""?>><br>
+                                    <?php
+                                    endif;
+                                    if ($sondage->getOptionFour() != ""):
+
+                                        ?>
+                                        <label><?=$sondage->getOptionFour();?> ( <?=($votesChoixTrois/($votes))*100?>% )</label><input type="radio" disabled <?php echo $voteUser->getChoix() == 4 ? "checked" : ""?>><br>
+                                    <?php
+                                    endif;
+                                    ?>
+                                </p>
+                            </div>
+                        </div>
+                        </div>
+                    </li>
+        <?php
+                } else {
         ?>
             <li class="cards__item">
                 <div class="card">
@@ -46,6 +83,7 @@
                 </div>
             </li>
         <?php
+                }
             endforeach;
         ?>
     </ul>

@@ -1,3 +1,10 @@
+<style>
+    a, a:active, a:hover{
+        color: white;
+        text-decoration: none;
+    }
+</style>
+
 <div class="sidebar-tmp"></div>
 <div class="sidebar">
     <div class="logo">
@@ -48,24 +55,18 @@
                     <a href="#"><li>Menu item</li></a>
                 </ul>
             </li>
-            <li class="item">
-                <i class="fas fa-thumbtack icon"></i>
-                <span>FAQ</span>
-                <ul class="submenu">
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                </ul>
-            </li>
-            <li class="item">
-                <i class="fas fa-question icon"></i>
-                <span>Sondage</span>
-                <ul class="submenu">
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                </ul>
-            </li>
+            <a href="@path(admin_faq_list)">
+                <li class="item">
+                    <i class="fas fa-thumbtack icon"></i>
+                    FAQ
+                </li>
+            </a>
+            <a href="@path(admin_sondage_list)">
+                <li class="item">
+                    <i class="fas fa-question icon"></i>
+                    Sondages
+                </li>
+            </a>
             <li class="item">
                 <i class="fas fa-thumbtack icon"></i>
                 <span>Utilisateurs</span>

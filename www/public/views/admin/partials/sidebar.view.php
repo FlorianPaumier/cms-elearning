@@ -153,6 +153,24 @@
                 ],
             ]
         ],
+        "Sondages" => [
+            "pictogramme" => "fas fa-envelope icon",
+            "menu" => [
+                [
+                    "link" => "Gestion des sondages",
+                    "name" => "@path(admin_sondage_list)"
+                ],
+            ]
+        ],
+        "FAQ" => [
+            "pictogramme" => "fas fa-envelope icon",
+            "menu" => [
+                [
+                    "link" => "Gestion des FAQ",
+                    "name" => "@path(admin_faq_list)"
+                ],
+            ]
+        ],
     ];
 ?>
 <div class="sidebar-tmp"></div>

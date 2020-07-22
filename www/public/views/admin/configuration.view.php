@@ -4,6 +4,9 @@
 
 <section class="container">
     {{ form }}
+    <a target="_blank" href="@path(admin_config_sitemap)">
+        <button>Générer la SiteMap</button>
+    </a>
 </section>
 @endsection
 

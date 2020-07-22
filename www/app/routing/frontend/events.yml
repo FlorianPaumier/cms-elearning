@@ -7,8 +7,10 @@ app_event_stream:
   controller: App\Controllers\Frontend\Event:stream
   method: [GET]
   path: /events/stream/{id}
+  entity: Stream
 
 app_event_stream_inscription:
   controller: App\Controllers\Frontend\Event:streamSubscribe
   method: [POST]
   path: /events/stream/{id}/inscription
+  entity: Stream

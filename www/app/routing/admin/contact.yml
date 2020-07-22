@@ -1,18 +1,22 @@
 admin_contact_list:
   path: /admin/contact
   controller: App\Controllers\Admin\Contact:index
+  roles: ["ROLE_ADMIN"]
 
 admin_contact_new:
   path: /admin/contact/new
   controller: App\Controllers\Admin\Contact:new
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_contact_edit:
   path: /admin/contact/edit/{id}
   controller: App\Controllers\Admin\Contact:edit
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_contact_delete:
   path: /admin/contact/delete/{id}
   controller: App\Controllers\Admin\Contact:delete
   method: [GET]
+  roles: ["ROLE_ADMIN"]

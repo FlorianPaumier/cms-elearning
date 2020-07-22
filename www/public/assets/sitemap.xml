@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<root>
+  <sitemap></sitemap>
+  <sitemap>/chat</sitemap>
+  <sitemap>
+    <article_view>/article/1</article_view>
+    <article_view>/article/1</article_view>
+    <article_view>/article/2</article_view>
+    <article_view>/article/2</article_view>
+    <article_view>/article/3</article_view>
+    <article_view>/article/4</article_view>
+    <article_view>/article/5</article_view>
+    <article_view>/article/6</article_view>
+    <article_view>/article/7</article_view>
+    <article_view>/article/8</article_view>
+  </sitemap>
+  <sitemap>/category</sitemap>
+  <sitemap>/contact</sitemap>
+  <sitemap>/cours</sitemap>
+  <sitemap>/events</sitemap>
+  <sitemap>/faq</sitemap>
+  <sitemap>/sondage</sitemap>
+  <sitemap>/login</sitemap>
+  <sitemap>/register</sitemap>
+  <sitemap>/login-check</sitemap>
+  <sitemap>/forget_password</sitemap>
+  <sitemap>/install</sitemap>
+  <sitemap>/install/configuration</sitemap>
+  <sitemap>/install/configuration/database</sitemap>
+  <sitemap>/install/configuration/admin</sitemap>
+  <sitemap>/install/configuration/success</sitemap>
+  <sitemap>/install/configuration/migration</sitemap>
+  <sitemap>/</sitemap>
+  <sitemap>/doc</sitemap>
+  <sitemap>/upload/file</sitemap>
+  <sitemap>/path</sitemap>
+</root>

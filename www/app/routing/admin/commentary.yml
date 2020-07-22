@@ -1,11 +1,14 @@
 admin_commentary:
   path: /admin/commentary
   controller: App\Controllers\Admin\Commentary:index
+  roles: ["ROLE_ADMIN"]
 
 admin_commentary_list:
   path: /admin/commentary/list
   controller: App\Controllers\Admin\Commentary:index
+  roles: ["ROLE_ADMIN"]
 
 admin_commentary_destroy:
   path: /admin/commentary/delete/{id}
   controller: App\Controllers\Admin\Commentary:delete
+  roles: ["ROLE_ADMIN"]

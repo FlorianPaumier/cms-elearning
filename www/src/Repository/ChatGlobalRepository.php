@@ -6,7 +6,7 @@ namespace App\Repository;
 
 use App\Core\Database\Repository\AbstractRepository;
 
-class ChatRepository extends AbstractRepository
+class ChatGlobalRepository extends AbstractRepository
 {
 
 }

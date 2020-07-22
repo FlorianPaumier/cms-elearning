@@ -89,33 +89,17 @@
             "pictogramme" => "fas fa-thumbtack icon",
             "menu" => [
                 [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
+                    "link" => "@path(admin_faq_list)",
+                    "name" => "Gestion des FAQ"
                 ],
             ]
         ],
-        "Sondage" => [
+        "Sondages" => [
             "pictogramme" => "fas fa-question icon",
             "menu" => [
                 [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
+                    "link" => "@path(admin_sondage_list)",
+                    "name" => "Gestion des sondages"
                 ],
             ]
         ],
@@ -150,24 +134,6 @@
                 [
                     "link" => "#",
                     "name" => "Menu Item"
-                ],
-            ]
-        ],
-        "Sondages" => [
-            "pictogramme" => "fas fa-envelope icon",
-            "menu" => [
-                [
-                    "link" => "Gestion des sondages",
-                    "name" => "@path(admin_sondage_list)"
-                ],
-            ]
-        ],
-        "FAQ" => [
-            "pictogramme" => "fas fa-envelope icon",
-            "menu" => [
-                [
-                    "link" => "Gestion des FAQ",
-                    "name" => "@path(admin_faq_list)"
                 ],
             ]
         ],

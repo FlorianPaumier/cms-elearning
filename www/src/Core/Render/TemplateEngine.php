@@ -110,6 +110,10 @@ class TemplateEngine
             $this->_load_template();
             $this->_extendFile();
             $this->_includedFile();
+
+            if ($_SERVER["APP_ENV"] == "dev") {
+                CacheHandler::set($this->view, $this->content);
+            }
         } else {
             $this->content = CacheHandler::get($this->view);
         }
@@ -180,9 +184,6 @@ class TemplateEngine
 
         if ($tags) {
             $this->content = $this->getParsePhpView($this->content, $this->data["parameter"]);
-            if ($_SERVER["APP_ENV"] == "prod") {
-                CacheHandler::set($this->view, $this->content);
-            }
 
             if (count($this->fieldEntries) > 0) {
                 $this->_parseTags();
@@ -202,8 +203,10 @@ class TemplateEngine
             return $this->content;
         }
 
-        if (!is_null($this->view)) {
+        if (!is_null($this->view) && $tags) {
             return $this->getParsePhpView($this->content, $this->data);
+        }elseif (!is_null($this->view)){
+            return $this->content;
         }
 
         return false;

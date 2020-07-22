@@ -6,7 +6,13 @@
         position: relative;
         top: -17px;
     }
+    .div-canvas{
+        max-width: 500px;
+        max-height: 500px;
+        margin: auto;
+    }
 </style>
+
 <section>
     <?php
         // If there is at least one survey
@@ -26,30 +32,58 @@
                     $votesChoixTrois = $sondageVoteRepository->where('sondage_id = '.$sondage->getId())->andWhere('choix = 3')->count();
                     $votesChoixQuatre = $sondageVoteRepository->where('sondage_id = '.$sondage->getId())->andWhere('choix = 4')->count();
 
-                    // The total number of votes
-                    $votes = $votesChoixUn+$votesChoixDeux+$votesChoixTrois+$votesChoixQuatre;
+                    $nbVotes = [$votesChoixUn, $votesChoixDeux];
+
+                    // Labels declaration
+                    $labels = [$sondage->getOptionOne(), $sondage->getOptionTwo()];
+
+                    if ($sondage->getOptionThree() != "") { // If option 3 is present
+                        $labels[] = $sondage->getOptionThree();
+                        $nbVotes[] = $votesChoixTrois;
+                    }
+                    if ($sondage->getOptionFour() != "") { // If option 4 is present
+                        $labels[] = $sondage->getOptionFour();
+                        $nbVotes[] = $votesChoixQuatre;
+                    }
         ?>
                     <li class="cards__item">
                         <div class="card">
                             <div class="card__content">
                                 <div class="card__title"><?=$sondage->getQuestion();?></div>
-                                <p>
-                                    <br>
-                                    <label><?=$sondage->getOptionOne();?> ( <?=($votesChoixUn/($votes))*100?>% )</label><input type="radio" disabled <?php echo $voteUser->getChoix() == 1 ? "checked" : ""?>><br>
-                                    <label><?=$sondage->getOptionTwo();?> ( <?=($votesChoixDeux/($votes))*100?>% )</label><input type="radio" disabled <?php echo $voteUser->getChoix() == 2 ? "checked" : ""?>><br>
-                                    <?php
-                                    if ($sondage->getOptionThree() != ""): // If there is a third choice
-                                        ?>
-                                        <label><?=$sondage->getOptionThree();?> ( <?=($votesChoixTrois/($votes))*100?>% )</label><input type="radio" disabled <?php echo $voteUser->getChoix() == 3 ? "checked" : ""?>><br>
-                                    <?php
-                                    endif;
-                                    if ($sondage->getOptionFour() != ""): // If there is a fourth choice
-                                        ?>
-                                        <label><?=$sondage->getOptionFour();?> ( <?=($votesChoixQuatre/($votes))*100?>% )</label><input type="radio" disabled <?php echo $voteUser->getChoix() == 4 ? "checked" : ""?>><br>
-                                    <?php
-                                    endif;
-                                    ?>
-                                </p>
+                                <div class="div-canvas">
+                                    <canvas id="myChart<?=$sondage->getId();?>"></canvas>
+                                    <script>
+                                        $(document).ready(function () {
+                                            var ctx = document.getElementById('myChart<?=$sondage->getId();?>').getContext('2d');
+                                            var myChart = new Chart(ctx, {
+                                                type: 'pie',
+                                                data: {
+                                                    labels: <?=json_encode($labels)?>,
+                                                    datasets: [{
+                                                        label: 'Nombre de votes du sondage',
+                                                        data: <?=json_encode($nbVotes)?>,
+                                                        backgroundColor: [
+                                                            'rgba(255, 99, 132, 0.2)',
+                                                            'rgba(54, 162, 235, 0.2)',
+                                                            'rgba(255, 206, 86, 0.2)',
+                                                            'rgba(75, 192, 192, 0.2)',
+                                                        ],
+                                                        borderColor: [
+                                                            'rgba(255, 99, 132, 1)',
+                                                            'rgba(54, 162, 235, 1)',
+                                                            'rgba(255, 206, 86, 1)',
+                                                            'rgba(75, 192, 192, 1)',
+                                                        ],
+                                                        borderWidth: 1
+                                                    }],
+                                                    options: {
+                                                        responsive: true
+                                                    }
+                                                },
+                                            });
+                                        });
+                                    </script>
+                                </div>
                             </div>
                         </div>
                     </li>

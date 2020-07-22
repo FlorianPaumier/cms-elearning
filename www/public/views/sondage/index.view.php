@@ -2,7 +2,7 @@
 
 @section(body)
 <style>
-    input{
+    ul input{
         position: relative;
         top: -17px;
     }

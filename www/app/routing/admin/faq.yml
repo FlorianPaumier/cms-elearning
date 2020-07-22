@@ -1,18 +1,22 @@
 admin_faq_list:
   path: /admin/faq
   controller: App\Controllers\Admin\Faq:index
+  roles: ["ROLE_ADMIN"]
 
 admin_faq_new:
   path: /admin/faq/new
   controller: App\Controllers\Admin\Faq:new
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_faq_edit:
   path: /admin/faq/edit/{id<\\d+>}
   controller: App\Controllers\Admin\Faq:edit
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_faq_delete:
   path: /admin/faq/delete/{id<\\d+>}
   controller: App\Controllers\Admin\Faq:delete
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]

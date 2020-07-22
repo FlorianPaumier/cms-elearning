@@ -6,7 +6,7 @@
 
 @section(body)
 <section>
-    <a href="@path(admin_faq_list)" id="add-faq" class="btn c-blue">Retour</a>
+    <a href="@path(admin_sondage_list)" id="add-sondage" class="btn c-blue">Retour</a>
 </section>
 <section class="col-6">
     {{ form }}

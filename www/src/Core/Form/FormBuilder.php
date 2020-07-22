@@ -630,13 +630,17 @@ class FormBuilder
      * Transform the value into the right shape if it's necessary
      * @param string $key
      * @param $value
-     * @return array|\DateTime
+     * @return mixed
      * @throws \Exception
      */
     private function transformValue(string $key, $value)
     {
         if ($this->fields[$key]["type"] !== TextAreaType::class){
-            $value = htmlentities($value);
+            if($this->fields[$key]["type"] === SelectType::class){
+                $value = array_map(function($value) { return htmlentities($value);}, $value);
+            }else{
+                $value = htmlentities($value);
+            }
         }
 
         if ($this->fields[$key]["type"] == EntityType::class) {

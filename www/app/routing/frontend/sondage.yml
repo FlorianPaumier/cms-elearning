@@ -2,7 +2,8 @@ frontend_sondage_list:
   path: /sondage
   controller: App\Controllers\Sondage:index
 
-frontend_sondage_show:
-  path: /sondage/show/{id<\\d+>}
-  controller: App\Controllers\Sondage:show
+frontend_sondage_vote:
+  path: /sondage/vote/{id}
+  controller: App\Controllers\Sondage:vote
   method: [GET,POST]
+  entity: Sondage

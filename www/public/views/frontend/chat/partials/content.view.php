@@ -1,18 +1,20 @@
 <div>
-    chat
-    <?php foreach ( $messages as $message ):?>
-        <div class="
-            <?php
-                if ($message->getId() === $_SESSION['user_id']) {
-                    echo 'left-chat';
-                } else {
-                    echo 'right-chat';
-                } ?>">
-            <div><?= $message->getIdUser(); ?></div>
-            <div><?= $message->getMessageDate(); ?></div>
-            <div><?= $message->getMessage(); ?></div>
-        </div>
-    <?php endforeach;?>
-
-    {{ form }}
+    <div id="container">
+        <table class="chat">
+            <tr>
+                <td valign="top" id="text-td">
+                    <div id="text">
+                        <div id="loading">
+                            <div>
+                                <span class="info" id="info">Chargement du chat en cours...</span><br />
+                                <img src="ajax-loader.gif" alt="patientez...">
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        {{ formMessage }}
+    </div>
+    <div id="responsePost" style="display:none"></div>
 </div>

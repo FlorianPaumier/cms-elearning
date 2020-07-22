@@ -23,11 +23,13 @@ class FaqForm extends AbstractForm
         return $builder
             ->add("question", TextType::class, [
                 "label" => "Question",
+                "placeholder" => "Question",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
             ->add("reponse", TextAreaType::class, [
                 "label" => "Réponse",
+                "placeholder" => "Réponse",
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12 ckeditor",
             ])

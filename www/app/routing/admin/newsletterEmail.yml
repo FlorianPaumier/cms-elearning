@@ -1,24 +1,30 @@
 admin_newsletter_email:
   path: /admin/newsletter/email
   controller: App\Controllers\Admin\NewsletterEmail:index
+  roles: ["ROLE_ADMIN"]
 
 admin_newsletter_email_list:
   path: /admin/newsletter/email/list
   controller: App\Controllers\Admin\NewsletterEmail:list
+  roles: ["ROLE_ADMIN"]
 
 admin_newsletter_email_new:
   path: /admin/newsletter/email/new
   controller: App\Controllers\Admin\NewsletterEmail:new
+  roles: ["ROLE_ADMIN"]
 
 admin_newsletter_email_edit:
   path: /admin/newsletter/email/edit/{id}
   controller: App\Controllers\Admin\NewsletterEmail:edit
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_newsletter_email_delete:
   path: /admin/newsletter/email/delete/{id}
   controller: App\Controllers\Admin\NewsletterEmail:delete
+  roles: ["ROLE_ADMIN"]
 
 admin_newsletter_email_send:
   path: /admin/newsletter/email/send/{id}
   controller: App\Controllers\Admin\NewsletterEmail:send
+  roles: ["ROLE_ADMIN"]

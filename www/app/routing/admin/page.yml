@@ -2,3 +2,4 @@ admin-show-page:
     path: "/page/{id<\\d+>}"
     controller: App\Controllers\Users\User:show
     method: [GET]
+    roles: ["ROLE_ADMIN"]

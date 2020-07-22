@@ -117,7 +117,7 @@ class Router
                 /**
                  * try to add object ask in the method parameter
                  */
-                $methodParameters = (new DependencyInjection($class, $action))->getParameters($this->matchRoute["params"]);
+                $methodParameters = (new DependencyInjection($class, $action))->getParameters($this->matchRoute["params"] ?? []);
                 return !empty($methodParameters) ? call_user_func_array([$controller, $action], $methodParameters) : $controller->$action();
             } else {
                 ConfigHandler::get("eventEmmiter")->emit("error.404", "Action $action not found");
@@ -149,6 +149,8 @@ class Router
                 } else {
                     $params = [$params];
                 }
+            }else{
+                $params = [$params];
             }
 
             foreach ($params as $param) {

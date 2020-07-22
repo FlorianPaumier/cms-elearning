@@ -11,38 +11,24 @@ class Sondage
 {
 
     use Entity;
-    use TimestampableEntity;
-
-    /** @var int */
-    protected $id;
+//    use TimestampableEntity;
 
     /** @var string */
     protected $question;
 
-    /** @var \DateTime */
-    protected $dateCreated;
+    /** @var string */
+    protected $optionOne;
 
-    public function __construct(){
-        $this->dateCreated = new \DateTime();
-    }
+    /** @var string */
+    protected $optionTwo;
 
-    /**
-     * @return int
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    /** @var string */
+    protected $optionThree;
 
-    /**
-     * @param int $id
-     * @return Sondage
-     */
-    public function setId(int $id): Sondage
-    {
-        $this->id = $id;
-        return $this;
-    }
+    /** @var string */
+    protected $optionFour;
+
+    public function __construct(){}
 
     /**
      * @return string
@@ -63,20 +49,74 @@ class Sondage
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
-    public function getDateCreated(): ?\DateTime
+    public function getOptionOne(): ?string
     {
-        return $this->dateCreated;
+        return $this->optionOne;
     }
 
     /**
-     * @param \DateTime $dateCreated
+     * @param string $optionOne
      * @return Sondage
      */
-    public function setDateCreated(\DateTime $dateCreated): Sondage
+    public function setOptionOne(string $optionOne): Sondage
     {
-        $this->dateCreated = $dateCreated;
+        $this->optionOne = $optionOne;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOptionTwo(): ?string
+    {
+        return $this->optionTwo;
+    }
+
+    /**
+     * @param string $optionTwo
+     * @return Sondage
+     */
+    public function setOptionTwo(string $optionTwo): Sondage
+    {
+        $this->optionTwo = $optionTwo;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOptionThree(): ?string
+    {
+        return $this->optionThree;
+    }
+
+    /**
+     * @param string $optionThree
+     * @return Sondage
+     */
+    public function setOptionThree(?string $optionThree): Sondage
+    {
+        $this->optionThree = $optionThree;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOptionFour(): ?string
+    {
+        return $this->optionFour;
+    }
+
+    /**
+     * @param string $optionFour
+     * @return Sondage
+     */
+    public function setOptionFour(?string $optionFour): Sondage
+    {
+        $this->optionFour = $optionFour;
         return $this;
     }
 }

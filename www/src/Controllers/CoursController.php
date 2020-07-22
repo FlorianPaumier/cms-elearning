@@ -57,7 +57,7 @@ class CoursController extends BaseController
 
         $userLesson = null;
 
-        if(is_null($this->getUser())){
+        if (is_null($this->getUser())) {
             header('Status: 200 Sucess', false, 200);
             return json_encode(["message" => true]);
         }
@@ -95,13 +95,15 @@ class CoursController extends BaseController
     {
         /** @var LessonChapter[] $chapters */
         $chapters = $chapterRepository
-            ->orderBy("position", "ASC")
-            ->findBy(["lesson_id" => $lesson->getId()]) ?? [];
+                ->orderBy("position", "ASC")
+                ->findBy(["lesson_id" => $lesson->getId()]) ?? [];
 
         if (!is_null($this->getUser())) {
             /** @var UserLesson[] $lessonUsers */
             $lessonUsers = $lessonRepository->findBy(["lesson_id" => $lesson->getId(), "user_id" => $this->getUser()->getId()]);
-        } else {
+        }
+
+        if (is_null($lessonUsers)) {
             $lessonUsers = [];
         }
 

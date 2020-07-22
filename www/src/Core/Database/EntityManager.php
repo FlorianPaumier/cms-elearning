@@ -2,6 +2,7 @@
 
 namespace App\Core\Database;
 
+use App\Core\Database\Repository\AbstractRepository;
 use App\Core\Exception\NoRecordException;
 use App\Core\Helpers\EntityHelper;
 use PDO;
@@ -159,22 +160,36 @@ class EntityManager extends QueryBuilder
 
     /**
      * @param object $object
+     * @param string $condition
+     * @param array $value
      * @return $this
      * @throws \Exception
      */
-    public function delete(object $object): self
+    public function delete(object $object, string $condition = null, array $value = null): self
     {
-        if (!is_callable([$object, 'getId'])) {
-            throw new \Exception("No id in object");
+        if (!is_null($condition) && !is_null($value)) {
+            $this->from(EntityHelper::getClass($object));
+            $this->method = "DELETE";
+
+            $this->where($condition)
+                ->setFieldsValues($value);
+
+            $this->addToQueue($object);
+
+            $this->flush();
+        } else {
+            if (!is_callable([$object, 'getId'])) {
+                throw new \Exception("No id in object");
+            }
+            $this->from(EntityHelper::getClass($object));
+            $this->method = "DELETE";
+
+            $this->where("id = :id")
+                ->setFieldsValues(["id" => $object->getId()]);
+
+            $this->addToQueue($object);
+            $this->flush();
         }
-        $this->from(EntityHelper::getClass($object));
-        $this->method = "DELETE";
-
-        $this->where("id = :id")
-            ->setFieldsValues(["id" => $object->getId()]);
-
-        $this->addToQueue($object);
-        $this->flush();
 
         return $this;
     }
@@ -203,7 +218,7 @@ class EntityManager extends QueryBuilder
      * @param string $class
      * @return mixed|null
      */
-    public function getRepository(string $class)
+    public function getRepository(string $class): ?AbstractRepository
     {
         if (class_exists($class)) {
             return new $class;

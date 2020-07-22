@@ -181,7 +181,13 @@ abstract class Hydrator
                     }
 
                     $type = self::getParameterType($data[$id], $method);
+
                     if (is_null($type)) {
+                        $data[$id]->$method($value);
+                    }elseif ($type->getName() !== "DateTime"){
+                        $class = EntityHelper::getClassName($type->getName());
+                        $repo = ConfigHandler::get("entityManager")->getRepository($class . "Repository");
+                        $value = $repo->find($value);
                         $data[$id]->$method($value);
                     }
                 }
@@ -202,6 +208,7 @@ abstract class Hydrator
                 if (!is_null($addType)) {
                     $typeName = $addType->getName();
                     $joinClass = StringTransformer::PascalCaseToSnakeCase(EntityHelper::getClassName($typeName));
+                    dump($joinClass);
                     foreach ($data as $key => $object) {
                         foreach ($array as $row) {
                             $currentInstance = new $typeName();

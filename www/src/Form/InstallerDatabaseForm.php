@@ -85,4 +85,8 @@ class InstallerDatabaseForm extends AbstractForm
     {
         return $this->prefix ?? "admin_configuration";
     }
+
+    public function configureOptions()
+    {
+    }
 }

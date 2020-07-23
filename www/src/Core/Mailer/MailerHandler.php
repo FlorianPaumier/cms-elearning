@@ -68,30 +68,6 @@ class MailerHandler
         return $this;
     }
 
-
-    /**
-     * Create the configuration to use phpmailer
-     * @return PHPMailer
-     */
-    private function createTransport(): PhpMailer
-    {
-        $config = CacheHandler::get("config")["mailer"];
-        $mail = new PHPMailer(true);
-
-        $this->sender = $config["username"];
-        $this->replyTo = $config["username"];
-        $mail->SMTPDebug = SMTP::DEBUG_OFF;                     // Enable verbose debug output
-        $mail->isSMTP();                                        // Send using SMTP
-        $mail->Host = $config["host"];                          // Set the SMTP server to send through
-        $mail->SMTPAuth = $config["transport"] == "smtp";       // Enable SMTP authentication
-        $mail->Username = $config["username"];                  // SMTP username
-        $mail->Password = $config["password"];                  // SMTP password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;     // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-        $mail->Port = $config["port"] ?? 25;                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
-
-        return $mail;
-    }
-
     /**
      * @param array $recipients
      */
@@ -166,6 +142,29 @@ class MailerHandler
     }
 
     /**
+     * Create the configuration to use phpmailer
+     * @return PHPMailer
+     */
+    private function createTransport(): PhpMailer
+    {
+        $config = CacheHandler::get("config")["mailer"];
+        $mail = new PHPMailer(true);
+
+        $this->sender = $config["email"] ?? $this->sender;
+        $this->replyTo = $config["email"] ?? $this->sender;
+        $mail->SMTPDebug = $_SERVER["APP_ENV"] == "dev" ? SMTP::DEBUG_SERVER: SMTP::DEBUG_OFF;                     // Enable verbose debug output
+        $mail->isSMTP();                                        // Send using SMTP
+        $mail->Host = $config["host"];                          // Set the SMTP server to send through
+        $mail->SMTPAuth = $config["transport"] == "smtp";       // Enable SMTP authentication
+        $mail->Username = $config["username"];                  // SMTP username
+        $mail->Password = $config["password"];                  // SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;     // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+        $mail->Port = $config["port"] ?? 25;                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+
+        return $mail;
+    }
+
+    /**
      * Transform the message to a mail
      * @param MailerMessage $message
      * @return bool
@@ -173,8 +172,8 @@ class MailerHandler
      */
     public function send(MailerMessage $message)
     {
+        dump($this->sender);
         $this->mail->setFrom($this->sender);
-
         $this->setDest($message->getDest());
         $this->setBcc($message->getBcc());
         $this->setCc($message->getCc());

@@ -175,6 +175,7 @@ class UserManager
      */
     public function forgetPassword(string $email)
     {
+
         $userRepo = new UserRepository();
         if ($userRepo->exists(["email" => $email])) {
 

@@ -76,8 +76,6 @@ class UserController extends BaseController
         ]);
     }
 
-
-
     public function deleteUser(Request $request, User $user){
 
         $this->entityManager->delete($user);

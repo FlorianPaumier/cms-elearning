@@ -120,3 +120,4 @@ builds
 www/lib/PHPMailer/vendor
 node_modules
 www/public/assets/images/
+www/public/assets/sitemap.xml

@@ -14,7 +14,7 @@ use App\Core\Database\Repository\AbstractRepository;
  * findOneBy
  * findBy
  */
-class ContacObjectRepository extends AbstractRepository
+class ContactObjectRepository extends AbstractRepository
 {
 
     public function getEntity()

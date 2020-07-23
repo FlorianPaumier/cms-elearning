@@ -1,88 +1,44 @@
-<section id="header">
-    <section id="search">
-        <div>
-            <a href="@path(app_home)">
-                <img src="https://i1.wp.com/s1.wp.com/wp-content/themes/h4/landing/marketing/pages/_common/components/vip-pitch/media/vip-logo.png?ssl=1" alt="">
-            </a>
-        </div>
-        <form action="" method="post" class="input-group search">
-            <input type="text" placeholder="Chercher dans le site" class="input-search">
-            <button class="btn-search">
-                <i class="fa fa-search"></i>
-            </button>
-        </form>
+<!-- Scroll to Top Button-->
+<!--<button class="scroll-to-top btn-jelly" data-target="#page-top">-->
+<!--    <i class="fa fa-angle-up"></i>-->
+<!--</button>-->
 
-        <div class="hamburger" id="hamburger-10" data-target="#nav-header">
-            <span class="line"></span>
-            <span class="line"></span>
-            <span class="line"></span>
-        </div>
-    </section>
-    <section id="nav-header">
-        <nav>
+<footer>
+    <ul class="footer-list">
+        <li>
             <ul>
-                <li class="search-mobile">
-                    <form action="" method="post" class="input-group search">
-                        <input type="text" placeholder="Chercher dans le site" class="input-search">
-                        <button class="btn-search">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </form>
-                </li>
-                <li class="link"><a href="@path(app_catalogue)">Cours</a></li>
-                <li class="link"><a href="#">Article</a></li>
-                <li class="link"><a href="#">Evenements</a></li>
-                <li class="link"><a href="#">Contact</a></li>
-                <li class="link"><a href="#">Recherche</a></li>
-                <li class="profile user-menu acilir">
-                    <span class="icon"><i class="fa fa-user"></i></span>
-                    <div class="login-menu">
-                        <?php
-                        if (!is_null($session["app.user"])):
-                            ?>
-                            <a href="@path(app_user_logout)">Déconnexion</a>
-                        <?php
-                        else:
-                            ?>
-                            <a href="@path(app_user_login)">Se connecter</a>
-                            <a href="@path(app_user_register)">S'inscrire</a>
-                        <?php
-                        endif;
-                        ?>
-                    </div>
-                </li>
-                <li class="profile-mobile">
-                    <a href="@path(app_user_login)">
-                        <button class="btn btn-primary btn-ghost btn-slide">Se connecter</button>
-                    </a>
-                    <a href="@path(app_user_register)">
-                        <button class="btn btn-primary btn-ghost btn-slide">S'inscrire</button>
-                    </a>
-                    <a href="@path(app_user_logout))">
-                        <button class="btn btn-primary btn-ghost btn-slide">Déconnexion</button>
-                    </a>
+                <li class="footer-title is-active">L'entreprise <i class="fa fa-chevron-down"></i></li>
+                <li class="footer--item">Lorem Ipsum</li>
+                <li class="footer--item">Lorem Ipsum</li>
+                <li class="footer--item">Lorem Ipsum</li>
+            </ul>
+        </li>
+        <li>
+            <ul>
+                <li class="footer-title">L'entreprise <i class="fa fa-chevron-down"></i></li>
+                <li class="footer--item">Lorem Ipsum</li>
+                <li class="footer--item">Lorem Ipsum</li>
+                <li class="footer--item">Lorem Ipsum</li>
+            </ul>
+        </li>
+        <li>
+            <ul class="network-links">
+                <li class="footer-title">Réseaux Sociaux</li>
+                <li>
+                    <ul class="row">
+                        <li class="col-3"><a href="#"><i class="fab fa-twitter-square"></i></a></li>
+                        <li class="col-3"><a href="#"><i class="fab fa-facebook-square"></i></a></li>
+                        <li class="col-3"><a href="#"><i class="fab fa-youtube-square"></i></a></li>
+                        <li class="col-3"><a href="#"><i class="fab fa-instagram-square"></i></a></li>
+                    </ul>
                 </li>
             </ul>
-        </nav>
-    </section>
+        </li>
+    </ul>
+</footer>
 
-</section>
+<!-- Core plugin JavaScript-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
 
-
-<?php
-if (isset($session)) {
-    if (isset($flash)) {
-        if (isset($flash["success"])) {
-            foreach ($flash["success"] as $key => $message) {
-                echo "<div class='alert alert-sucess'>$message</div>";
-            }
-        }
-        if (isset($flash["error"])) {
-            foreach ($flash["error"] as $key => $message) {
-                echo "<div class='alert alert-error'>$message</div>";
-            }
-        }
-    }
-}
-
-?>
+<script src="/assets/scripts/global.js"></script>
+<script src="/assets/dist/fontawesome/js/all.min.js"></script>

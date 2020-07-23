@@ -1,6 +1,7 @@
 var reloadTime = 1000;
 var scrollBar = false;
 
+
 function getMessages() {
     $.getJSON('/chat/message', function(data) {
         if(data['error'] === undefined) {

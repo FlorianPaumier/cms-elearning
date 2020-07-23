@@ -55,23 +55,29 @@ class ConfigHandler
         $this->getConfig();
         $this->getRouting();
 
-        if(!file_exists(CONFIG_PATH."/config.yml") && !preg_match ('/\/install/',$this->formatUrl())) {
+        if (!file_exists(CONFIG_PATH."/config.yml") && !preg_match ('/\/install/',$this->formatUrl())) {
             (new RedirectionHandler())->redirectToRoute("installer_index");
         }
 
         self::bind("request", Request::createFromGlobals());
+        self::bind("router", new Router());
+        self::bind("session", new PHPSession());
+        self::bind("eventEmmiter", EventEmmiter::getInstance());
+
+        if (!file_exists(CONFIG_PATH."/config.yml"))
+        {
+            return;
+        }
 
         if (file_exists(ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php")) {
             require_once ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php";
             self::bind("mailer", new MailerHandler());
         }
 
-        self::bind("session", new PHPSession());
+
         self::bind("entityManager", new EntityManager());
         self::bind("userManager", new UserManager());
-        self::bind("router", new Router());
         self::bind("logger", AbstractLogger::getInstance());
-        self::bind("eventEmmiter", EventEmmiter::getInstance());
         self::bind("serializer", new Serializer());
 
     }

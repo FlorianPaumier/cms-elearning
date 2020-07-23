@@ -97,8 +97,7 @@ class MigrationController extends BaseController
 
         $this->processMigration();
 
-        $this->redirect->redirectToRoute("installer_configuration_migration");
-
+        $this->redirect->redirectToRoute("installer_configuration_config");
     }
 
     /**

@@ -18,6 +18,7 @@ use App\Repository\EvaluationObjectRepository;
 use App\Repository\LessonRepository;
 use App\Repository\StreamInscriptionRepository;
 use App\Repository\UserLessonRepository;
+use App\Repository\UserRepository;
 
 class UserController extends BaseController
 {
@@ -135,11 +136,8 @@ class UserController extends BaseController
 
         if ($this->query->getMethod() == "POST" && $form->isValid()) {
                 $email = $form->get("email");
-
                 if (($response = $this->userManager->forgetPassword($email)) !== true) {
-
                     $this->session->offsetSet("app.flash", ["error" => [$response]]);
-
                 } else {
                     $this->redirect->redirectToRoute("app_home");
                 }
@@ -152,6 +150,27 @@ class UserController extends BaseController
                 "form" => $form->createView(),
             ]
         );
+    }
+
+    public function confirmationAccount(Request $request, UserRepository $userRepository)
+    {
+        $token = $request->getQuery()->get("token");
+
+        if(is_null($token)){
+            $this->redirect->redirectToRoute("app_home");
+        }
+
+        /** @var User $user */
+        $user = $userRepository->findOneBy(["confirmation_token" => $token]);
+
+        if (is_null($user) || is_array($user))
+            $this->redirect->redirectToRoute("app_home");
+
+        $user->setStatus(true);
+        $this->entityManager->persist($user)->flush();
+
+        $this->redirect->redirectToRoute("app_home");
+
     }
 
     /**

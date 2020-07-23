@@ -48,6 +48,11 @@ app_user_parameters :
   method: [GET, POST]
   roles: [ROLE_USER]
 
+app_user_confirmation :
+  path: "/confirmation"
+  controller: App\Controllers\Users\User:confirmationAccount
+  method: [GET, POST]
+
 
 
 

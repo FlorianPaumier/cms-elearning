@@ -30,10 +30,6 @@
                     "name" => "Chapitres"
                 ],
                 [
-                    "link" => "@path(admin_notation_index)",
-                    "name" => "Notations"
-                ],
-                [
                     "link" => "@path(admin_evaluation_list)",
                     "name" => "Evaluation"
                 ]

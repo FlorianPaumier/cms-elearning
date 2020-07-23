@@ -10,7 +10,7 @@
         <tr>
             <th>Id</th>
             <th>Question</th>
-            <th>Réponse</th>
+            <th>Actions</th>
             <th></th>
             <th></th>
         </tr>

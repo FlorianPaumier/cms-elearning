@@ -1,0 +1,1 @@
+<a href="{{host}}/reset-token?token={{token}}">Reset Password</a>

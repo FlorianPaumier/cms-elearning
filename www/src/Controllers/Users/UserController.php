@@ -26,6 +26,8 @@ class UserController extends BaseController
      * @param Request $request
      * @return \App\Core\Render\RenderView|string|string[]|null
      * @throws \Exception
+     *
+     * verifie si user connecté et redirige vers la home
      */
     public function login(Request $request)
     {
@@ -52,30 +54,34 @@ class UserController extends BaseController
      * @param Request $request
      * @return \App\Core\Render\RenderView|string|string[]|null
      * @throws \Exception
+     *
      */
     public function register(Request $request)
     {
-        /*if($this->userManager->isConnected()){
-        $this->redirect->redirectToRoute("app_home");
-        }*/
         $user = new user();
         $form = $this->createForm(UserRegisterForm::class, $user);
         $form->handleRequest($request);
 
-        if ($this->query->getMethod() == "POST") {
+
 
             if ($form->isValid()) {
                 $password = $user->getPassword();
-                $user->setPassword(password_hash($password, PASSWORD_BCRYPT));
+                $user->setPassword(md5($password));
                 
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
+
+                if (($response = $this->userManager->confirmRegister($user->getEmail())) !== true) {
+
+                    $this->session->offsetSet("app.flash", ["error" => [$response]]);
+
+
+                }
 
                 $this->redirect->redirectToRoute("app_user_login");
             } else {
                 $this->session->offsetSet("app.flash", ["error" => $form->getErrorFeedback()]);
             }
-        }
 
         return $this->renderer->render(
             ROOT_PATH . "/public/views/security/frontend/register",
@@ -99,7 +105,6 @@ class UserController extends BaseController
             if (($response = $this->userManager->connectUser($user->getUsername(), $user->getPassword())) !== true) {
                 $this->session->offsetSet("app.flash", ["error" => [$response]]);
             } else {
-//                dump(ConfigHandler::get("session")->getSession());
                 $this->redirect->redirectToRoute("app_home");
             }
         }
@@ -133,7 +138,7 @@ class UserController extends BaseController
 
                 if (($response = $this->userManager->forgetPassword($email)) !== true) {
 
-                    $this->session->set("app.flash", ["error" => [$response]]);
+                    $this->session->offsetSet("app.flash", ["error" => [$response]]);
 
                 } else {
                     $this->redirect->redirectToRoute("app_home");

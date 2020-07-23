@@ -1,6 +1,6 @@
 admin_home:
   path: /admin
-  controller: App\Controllers\Admin\Home:index
+  controller: App\Controllers\Admin\Dashboard:index
   roles: ["ROLE_ADMIN"]
 
 admin_config:

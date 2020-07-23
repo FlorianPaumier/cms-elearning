@@ -29,6 +29,7 @@
     <!-- Custom styles for this template-->
     <link href="/assets/styles/admin/main.css" rel="stylesheet">
     @yield(styles)
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 </head>
 
@@ -51,8 +52,8 @@ if ($errors) {
 
 @include(partials/modal)
 
-<script src="https://cdn.ckeditor.com/ckeditor5/17.0.0/classic/ckeditor.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
@@ -63,7 +64,6 @@ if ($errors) {
 <!-- Include Editor JS files. -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@2.5.1//js/froala_editor.pkgd.min.js"></script>
 
-<script src="/assets/scripts/ckfinder/ckfinder.js"></script>
 <script src="/assets/scripts/ckeditor.js"></script>
 
 @yield(javascripts)

@@ -30,3 +30,15 @@
   position: absolute;
   right: 300px;
 }
+
+#dashboard {
+  .card-dashboard-content {
+    display: none;
+    height: auto;
+    background-color: white;
+
+    &.active {
+      display: flex;
+    }
+  }
+}

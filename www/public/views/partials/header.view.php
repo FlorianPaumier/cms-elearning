@@ -2,7 +2,7 @@
     <section id="search">
         <div>
             <a href="@path(app_home)">
-                <img src="https://i1.wp.com/s1.wp.com/wp-content/themes/h4/landing/marketing/pages/_common/components/vip-pitch/media/vip-logo.png?ssl=1" alt="">
+                <img src="/assets/images/logo.png" alt="Logo Entreprise">
             </a>
         </div>
         <form action="" method="post" class="input-group search">

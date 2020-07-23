@@ -26,7 +26,7 @@
             <div class="cards">
                 <div class="cards__item cards-dashboard">
                     <div class="card">
-                        <div class="card__content card-dashboard-content active" id="show_user" style="display: none">
+                        <div class="card__content card-dashboard-content active" id="show_user">
                             <div>
                                 <p class="card__text card-dashboard-content-text">Utilisateurs</p>
                                 <p class="card__text card-dashboard-content-price"><?= $statsUser['total'] ?></p>
@@ -254,12 +254,12 @@
             <div class="cards">
                 <script>
                     function user_button() {
-                        var article = document.getElementById("show_user");
+                        var user = document.getElementById("show_user");
 
-                        if (article.style.display === "none"){
-                            article.style.display = "block";
+                        if (user.style.display === "block"){
+                            user.style.display = "none";
                         }else{
-                            article.style.display = "none";
+                            user.style.display = "block";
                         }
                     }
 
@@ -267,6 +267,7 @@
                         var article = document.getElementById("show_article");
 
                         if (article.style.display === "none"){
+                            document.getElementById("show_user").style.display = "none";
                             article.style.display = "block";
                         }else{
                             article.style.display = "none";
@@ -274,22 +275,24 @@
                     }
 
                     function lesson_button() {
-                        var article = document.getElementById("show_lesson");
+                        var lesson = document.getElementById("show_lesson");
 
-                        if (article.style.display === "none"){
-                            article.style.display = "block";
+                        if (lesson.style.display === "none"){
+                            document.getElementById("show_user").style.display = "none";
+                            lesson.style.display = "block";
                         }else{
-                            article.style.display = "none";
+                            lesson.style.display = "none";
                         }
                     }
 
                     function contact_button() {
-                        var article = document.getElementById("shwo_contact");
+                        var contact = document.getElementById("shwo_contact");
 
-                        if (article.style.display === "none"){
-                            article.style.display = "block";
+                        if (contact.style.display === "none"){
+                            document.getElementById("show_user").style.display = "none";
+                            contact.style.display = "block";
                         }else{
-                            article.style.display = "none";
+                            contact.style.display = "none";
                         }
                     }
 

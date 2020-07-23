@@ -4,7 +4,7 @@ frontend_faq_list:
   roles: ["ROLE_USER", "ROLE_ADMIN"]
 
 frontend_faq_show:
-  path: /faq/show/{id<\\d+>}
+  path: /faq/show/{id}
   controller: App\Controllers\Faq:show
   method: [GET,POST]
   entity: Faq

@@ -13,8 +13,8 @@ class NewsletterEmail
     use Entity;
     use TimestampableEntity;
 
-    /** @var string */
-    protected $email;
+    /** @var null|string */
+    protected ?string $email;
 
     /**
      * @return null|string

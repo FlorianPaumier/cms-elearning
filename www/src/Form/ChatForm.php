@@ -8,9 +8,15 @@ use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\TextType;
 use App\Core\Form\FormBuilder;
 use App\Entity\ChatGlobal;
+use Exception;
 
 class ChatForm extends AbstractForm
 {
+    /**
+     * @param FormBuilder $builder
+     * @return FormBuilder
+     * @throws Exception
+     */
     public function buildForm(FormBuilder $builder): FormBuilder
     {
         return $builder
@@ -27,11 +33,17 @@ class ChatForm extends AbstractForm
             ]);
     }
 
+    /**
+     * @param string|null $prefix
+     */
     public function setBlockPrefix(string $prefix = null): void
     {
         $this->prefix = $prefix;
     }
 
+    /**
+     * @return string
+     */
     public function getBlockPrefix(): string
     {
         return "frontend_chat";

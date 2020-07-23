@@ -9,38 +9,44 @@ class PatchList
 {
     use Entity;
 
-    public $tableName;
-
-    public $currentVersion;
+    /**
+     * @var string $tableName;
+     */
+    public string $tableName;
 
     /**
-     * @return mixed
+     * @var int $currentVersion;
      */
-    public function getTableName()
+    public int $currentVersion;
+
+    /**
+     * @return string
+     */
+    public function getTableName(): string
     {
         return $this->tableName;
     }
 
     /**
-     * @param mixed $tableName
+     * @param string $tableName
      */
-    public function setTableName($tableName)
+    public function setTableName(string $tableName): void
     {
         $this->tableName = $tableName;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getCurrentVersion()
+    public function getCurrentVersion(): int
     {
         return $this->currentVersion;
     }
 
     /**
-     * @param mixed $currentVersion
+     * @param int $currentVersion
      */
-    public function setCurrentVersion($currentVersion)
+    public function setCurrentVersion(int $currentVersion): void
     {
         $this->currentVersion = $currentVersion;
     }

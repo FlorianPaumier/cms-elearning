@@ -13,22 +13,18 @@ class Newsletter
     use Entity;
     use TimestampableEntity;
 
-    /** @var string */
-    protected $title;
+    /** @var null|string $title */
+    protected ?string $title;
 
-    /** @var string */
-    protected $content;
+    /** @var null|string $content */
+    protected ?string $content;
 
-    /** @var boolean */
-    protected $sended;
+    /** @var null|boolean $sended */
+    protected ?bool $sended;
 
-    /** @var User */
-    protected $user;
+    /** @var null|User $user*/
+    protected ?User $user;
 
-    public function __construct()
-    {
-        $this->user = 1;
-    }
 
     /**
      * @param User $user

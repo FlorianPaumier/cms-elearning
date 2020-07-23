@@ -5,7 +5,9 @@ namespace App\Controllers\Admin;
 
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\Exception\NoRecordException;
 use App\Core\Interfaces\BaseController;
+use App\Core\Render\RenderView;
 use App\Core\Request\Request;
 use App\Entity\ChatGlobal;
 use App\Entity\ChatOnline;
@@ -13,9 +15,19 @@ use App\Form\ChatForm;
 use App\Form\ChatStatusForm;
 use App\Repository\ChatGlobalRepository;
 use App\Repository\ChatOnlineRepository;
+use Exception;
+use ReflectionException;
 
 class ChatController extends BaseController
 {
+    /**
+     * display the list of article
+     *
+     * @param Request $request
+     * @param ChatGlobalRepository $chat
+     * @return RenderView|string|string[]|null
+     * @throws Exception
+     */
     public function index(Request $request, ChatGlobalRepository $chat)
     {
         $chat->findAll();
@@ -32,32 +44,27 @@ class ChatController extends BaseController
         );
     }
 
-    public function session()
-    {
-
-    }
-
-    public function chat()
-    {
-
-    }
-
-    public function delete()
-    {
-        //si id utilisateur = id utilisateur message
-    }
-
-    public function report()
-    {
-        //faire un report d'un message
-    }
-
+    /**
+     * call function setOnline and checkConnect
+     *
+     * @param ChatOnlineRepository $repository
+     * @param ChatOnline $online
+     * @return false|string
+     * @throws NoRecordException
+     * @throws ReflectionException
+     */
     public function online(ChatOnlineRepository $repository, ChatOnline $online) {
         $this->setOnline($repository);
         $this->checkConnect($online);
         return $this->getOnline($repository);
     }
 
+    /**
+     * add user in online list
+     *
+     * @param ChatOnlineRepository $repository
+     * @throws NoRecordException
+     */
     public function setOnline(ChatOnlineRepository $repository) {
         $user = $repository->findOneBy(['user_id' => $this->getUser()->getId()]);
         $em = ConfigHandler::get("entityManager");
@@ -73,6 +80,13 @@ class ChatController extends BaseController
         $em->flush();
     }
 
+    /**
+     * get online user list
+     *
+     * @param ChatOnlineRepository $repository
+     * @return false|string
+     * @throws ReflectionException
+     */
     public function getOnline(ChatOnlineRepository $repository) {
         $onlines = $repository->leftJoin('user','u')->orderBy("time", "ASC")->fetch();
 
@@ -101,6 +115,12 @@ class ChatController extends BaseController
         return json_encode($json);
     }
 
+    /**
+     * return status value
+     *
+     * @param $status
+     * @return string|null
+     */
     public function status($status)  {
         switch ($status) {
             case '0':
@@ -117,6 +137,13 @@ class ChatController extends BaseController
         }
     }
 
+    /**
+     * get all message and return json
+     *
+     * @param ChatGlobalRepository $repository
+     * @return false|string
+     * @throws ReflectionException
+     */
     public function getMessage(ChatGlobalRepository $repository) {
         $messages = $repository->leftJoin('user','u')->orderBy("time", "ASC")->fetch();
 
@@ -175,11 +202,26 @@ class ChatController extends BaseController
         return json_encode($json);
     }
 
+    /**
+     * check if user is still connected
+     *
+     * @param ChatOnline $online
+     * @throws Exception
+     */
     public function checkConnect(ChatOnline $online) {
         $time_out = time()-5;
         $this->entityManager->delete($online, 'time < :time',["time" => $time_out]);
     }
 
+    /**
+     * change status value
+     *
+     * @param Request $request
+     * @param ChatOnlineRepository $repository
+     * @param ChatOnline $online
+     * @return string
+     * @throws NoRecordException
+     */
     public function changeStatus(Request $request, ChatOnlineRepository $repository, ChatOnline $online)
     {
         $user = $repository->findBy(['user_id' => $this->getUser()->getId()]);
@@ -197,6 +239,12 @@ class ChatController extends BaseController
         return 'Status changed';
     }
 
+    /**
+     * send message
+     *
+     * @param Request $request
+     * @return string
+     */
     public function sendMessage(Request $request) {
         $chatGlobal = new ChatGlobal();
 

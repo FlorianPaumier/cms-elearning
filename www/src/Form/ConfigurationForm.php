@@ -100,11 +100,17 @@ class ConfigurationForm extends AbstractForm
         $this->prefix = $prefix;
     }
 
+    /**
+     * @return string
+     */
     public function getBlockPrefix(): string
     {
         return $this->prefix ?? "admin_configuration";
     }
 
+    /**
+     *
+     */
     public function configureOptions()
     {
 

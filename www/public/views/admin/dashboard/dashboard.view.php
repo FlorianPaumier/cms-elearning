@@ -1,17 +1,23 @@
 @extend(templates/back)
+@section(body)
 
 <div class="card">
     <div class="left-side">
         <div>
             <div class="cards">
                 <div class="cards__item cards-welcome">
+
                     <div class="card">
                         <div class="card__content card-welcome-content">
-                            <p class="card__text card-welcome-content-text">Salut Jean,</p>
+
+
+
+                            <p>Salut <?= $user->getUsername() ?>,</p>
                             <div class="card__title card-welcome-content-title">Bienvenu sur CMS E-LEARNING</div><br>
                             <p class="card__text card-welcome-content-text">Ceci est du contenu de description</p>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -19,24 +25,57 @@
             <div class="cards">
                 <div class="cards__item cards-dashboard">
                     <div class="card">
+                        <div class="card__content card-dashboard-content active">
+                            <div>
+                                <p class="card__text card-dashboard-content-text">Utilisateurs</p>
+                                <p class="card__text card-dashboard-content-price"><?= $statsUser['total'] ?></p>
+                            </div>
+                            <div>
+                                <div class="canva-div">
+                                    <canvas id="data_user"></canvas>
+                                    <script>
+                                        $(document).ready(function ()
+                                        {
+                                            const stat = JSON.parse(<?= json_encode($statsUser, true) ?>);
+                                            console.log(stat);
+                                            var myLineChart = new Chart(ctx, {
+                                                type: 'line',
+                                                data: data,
+                                                options: options
+                                            });
+                                        })
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
                         <div class="card__content card-dashboard-content">
                             <div>
                                 <p class="card__text card-dashboard-content-text">Profits</p>
                                 <p class="card__text card-dashboard-content-price">3092 €</p>
                             </div>
                             <div>
-                                <div class="date-selector">
-                                    <i class="fas fa-caret-left"></i>
-                                    15 janvier
-                                    <i class="fas fa-caret-right"></i>
+                                <div class="canva-div">
+                                    <canvas id="data"></canvas>
                                 </div>
-                                <ul class="time">
-                                    <li><button>Hour</button></li>
-                                    <li><button>Day</button></li>
-                                    <li><button>Week</button></li>
-                                    <li><button>Month</button></li>
-                                    <li><button>Year</button></li>
-                                </ul>
+                            </div>
+                        </div>
+                        <div class="card__content card-dashboard-content">
+                            <div>
+                                <p class="card__text card-dashboard-content-text">Profits</p>
+                                <p class="card__text card-dashboard-content-price">3092 €</p>
+                            </div>
+                            <div>
+                                <div class="canva-div">
+                                    <canvas id="data"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card__content card-dashboard-content">
+                            <div>
+                                <p class="card__text card-dashboard-content-text">Profits</p>
+                                <p class="card__text card-dashboard-content-price">3092 €</p>
+                            </div>
+                            <div>
                                 <div class="canva-div">
                                     <canvas id="data"></canvas>
                                 </div>
@@ -57,8 +96,8 @@
                     </div>
                     <div class="card">
                         <div class="card__content card-multicards-content">
-                            <div class="card__title card-multicards-content-title">Visiteurs</div>
-                            <p class="card__text card-multicards-content-text">1000</p>
+                            <div class="card__title card-multicards-content-title">Utilisateurs</div>
+                            <p class="card__text card-multicards-content-text"><?= $statsUser['total'] ?></p>
                         </div>
                     </div>
                     <div class="card">
@@ -102,6 +141,7 @@
     </div>
 </div>
 
+@endsection
 @section(javascripts)
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 

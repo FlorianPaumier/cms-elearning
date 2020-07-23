@@ -26,6 +26,8 @@ class UserController extends BaseController
      * @param Request $request
      * @return \App\Core\Render\RenderView|string|string[]|null
      * @throws \Exception
+     *
+     * verifie si user connecté et redirige vers la home
      */
     public function login(Request $request)
     {
@@ -52,6 +54,7 @@ class UserController extends BaseController
      * @param Request $request
      * @return \App\Core\Render\RenderView|string|string[]|null
      * @throws \Exception
+     *
      */
     public function register(Request $request)
     {

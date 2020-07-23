@@ -41,6 +41,7 @@ class UserController extends BaseController
                 $user->setPassword(md5($password));
 
 
+
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 

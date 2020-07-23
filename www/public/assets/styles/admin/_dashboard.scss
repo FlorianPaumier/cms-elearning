@@ -30,3 +30,10 @@
   position: absolute;
   right: 300px;
 }
+
+.card__content{
+  display: none;
+  &.active{
+    display: flex;
+  }
+}

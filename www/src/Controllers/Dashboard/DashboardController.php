@@ -3,12 +3,30 @@
 namespace App\Controllers\Dashboard;
 
 use App\Core\Interfaces\BaseController;
+use App\Entity\User;
+use App\Repository\UserRepository;
 
 class DashboardController extends BaseController
 {
-    public function index()
+    public function index(UserRepository $userRepository)
     {
-        return $this->renderer->render("admin/dashboard/dashboard");
+        $users = $userRepository->findAll();
+        $statsUser = ['data' => [],
+                     'total' => count($users)??0,
+        ];
+        foreach ($users as $user){
+            $created_at = $user->getCreatedAt()->format('Y-m-d');
+            $statsUser["data"][$created_at] = is_int($statsUser["data"][$created_at])?$statsUser["data"][$created_at]+1:1;
+
+        }
+
+
+
+        return $this->renderer->render("admin/dashboard/dashboard",
+        [
+            'user' => $this->getUser(),
+            'statsUser' => $statsUser,
+        ]);
     }
 
     public function sidebar()

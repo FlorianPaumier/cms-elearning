@@ -23,6 +23,7 @@ class AdminUserForm extends AbstractForm
                 "username", TextType::class, [
                     'type' => 'text',
                     'required' => true,
+                    'unique' => true,
                     'label' => 'Identifiant',
                     'placeholder' => 'identifiant',
                     "class" => "form-control form-control-user",
@@ -32,6 +33,7 @@ class AdminUserForm extends AbstractForm
             ->add(
                 "email", TextType::class, [
                     'type' => 'email',
+                    'unique' => true,
                     'required' => true,
                     'label' => 'Email',
                     'placeholder' => 'exemple@gmail.com',

@@ -200,6 +200,8 @@ class FormBuilder
 
                     $value = $this->transformValue($key, $value);
 
+
+
                     $property = $this->fields[$key]["key"];
 
                     $method .= StringTransformer::toPascalCase($property);
@@ -214,9 +216,9 @@ class FormBuilder
                         //                        if($value instanceof $paramClass) dump("Hello");
 
                         if (gettype($value) == "array") {
-                            foreach ($value as $entity) {
-                                $this->entity->$method($entity);
-                            }
+                           // foreach ($value as $entity) {
+                                $this->entity->$method($value);
+                           // }
                         } else {
                             $this->entity->$method($value);
                         }

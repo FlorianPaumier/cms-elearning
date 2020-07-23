@@ -172,6 +172,34 @@ class UserController extends BaseController
 
     }
 
+
+    public function resetPassword(Request $request, UserRepository $userRepository)
+    {
+        $user = new user();
+        $form = $this->createForm(UserResetPasswordForm::class, $user);
+        $form->handleRequest($request);
+
+        $token = $request->getQuery()->get("token");
+
+        if(is_null($token)){
+            $this->redirect->redirectToRoute("app_home");
+        }
+
+        /** @var User $user */
+        $user = $userRepository->findOneBy(["confirmation_token" => $token]);
+
+        if (is_null($user) || is_array($user))
+            $this->redirect->redirectToRoute("app_home");
+
+        $password = $user->getPassword();
+        $user->setPassword(password_hash($password, PASSWORD_BCRYPT));
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        $this->redirect->redirectToRoute("app_home");
+
+    }
+
     /**
      * @param Request $request
      * @throws \Exception

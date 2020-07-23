@@ -53,6 +53,11 @@ app_user_confirmation :
   controller: App\Controllers\Users\User:confirmationAccount
   method: [GET, POST]
 
+app_user_reset-token :
+  path: "/reset-token"
+  controller: App\Controllers\Users\User:resetPassword
+  method: [GET, POST]
+
 
 
 

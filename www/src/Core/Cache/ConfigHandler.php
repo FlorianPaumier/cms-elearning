@@ -8,6 +8,7 @@ use App\Core\Formatter\Serializer;
 use App\Core\Logger\AbstractLogger;
 use App\Core\Mailer\MailerHandler;
 use App\Core\Mailer\MailerMessage;
+use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Core\Router\Router;
 use App\Core\Security\UserManager;
@@ -53,6 +54,10 @@ class ConfigHandler
     {
         $this->getConfig();
         $this->getRouting();
+
+        if(!file_exists(CONFIG_PATH."/config.yml") && !preg_match ('/\/install/',$this->formatUrl())) {
+            (new RedirectionHandler())->redirectToRoute("installer_index");
+        }
 
         self::bind("request", Request::createFromGlobals());
 
@@ -146,6 +151,23 @@ class ConfigHandler
         };
 
         CacheHandler::set("routing", $routing);
+    }
+
+    /**
+     * Get the url and return an useable string
+     */
+    private function formatUrl(): string
+    {
+        $requestUri = rtrim($_SERVER["REQUEST_URI"], "/");
+
+        if ($requestUri === "") {
+            return "/";
+        } elseif (strpos($requestUri, "?")) {
+            return explode("?", $requestUri)[0];
+        } else {
+            return $requestUri;
+        }
+
     }
 
 }

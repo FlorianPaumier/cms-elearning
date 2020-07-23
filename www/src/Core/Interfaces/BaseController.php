@@ -89,7 +89,7 @@ abstract class BaseController
         }
 
         $form = (new $type);
-        $formBuilder = (new FormBuilder($data))->setParent($type)->setFormType($form);
+        $formBuilder = (new FormBuilder($data, $form->getBlockPrefix()))->setParent($type)->setFormType($form);
         return $form->buildForm($formBuilder);
     }
 

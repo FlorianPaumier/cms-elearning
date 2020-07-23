@@ -61,7 +61,7 @@ class UserManager
 
         if (!empty($q) && !is_null($q)) {
             if (!password_verify($password, $q->getPassword())) {
-                //return false;
+                return false;
             }
             $response = true;
             $this->session->offsetSet("app.user", [

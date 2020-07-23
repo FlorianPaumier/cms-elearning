@@ -2645,57 +2645,60 @@ body {
   z-index: 1;
   top: 0;
   left: 0;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 .sidebar .logo {
-  height: 50px;
   text-align: center;
 }
 .sidebar .logo img {
   height: 50px;
-  width: 100%;
 }
-.sidebar ul {
+.sidebar nav {
+  width: 200px;
+  height: 80%;
+  overflow: auto;
+}
+.sidebar nav ul {
   padding-left: 0;
 }
-.sidebar ul li {
+.sidebar nav ul li {
   text-align: left;
   vertical-align: middle;
   background-color: #364885;
 }
-.sidebar ul li:hover {
+.sidebar nav ul li:hover {
   background-color: #7695ff;
 }
-.sidebar ul li i {
+.sidebar nav ul li i .no-i {
   display: inline-block;
   height: 50px;
   background-color: #364885;
 }
-.sidebar ul li ul {
+.sidebar nav ul li ul {
   display: none;
   line-height: 50px;
 }
-.sidebar ul li ul a {
+.sidebar nav ul li ul a {
   text-decoration: none;
 }
-.sidebar ul li ul a li {
+.sidebar nav ul li ul a li {
   text-align: center;
   color: white;
 }
-.sidebar ul li ul a li:hover {
+.sidebar nav ul li ul a li:hover {
   background-color: #87b7ff;
 }
-.sidebar ul li span {
+.sidebar nav ul li span {
   display: inline-block;
   vertical-align: top;
   line-height: 50px;
   background-color: rgba(0, 0, 0, 0);
 }
-.sidebar ul li {
+.sidebar nav ul li {
   list-style: none;
   color: white;
 }
-.sidebar ul li:hover .submenu {
+.sidebar nav ul li:hover .submenu {
   display: block;
   background-color: #87b7ff;
 }
@@ -2823,10 +2826,12 @@ table td {
   right: 300px;
 }
 
-.card__content {
+#dashboard .card-dashboard-content {
   display: none;
+  height: auto;
+  background-color: white;
 }
-.card__content.active {
+#dashboard .card-dashboard-content.active {
   display: flex;
 }
 

@@ -1,7 +1,7 @@
 admin_user_list:
   path: "/admin/user/list"
   controller: App\Controllers\Admin\User:indexUser
-
+  roles: ["ROLE_ADMIN"]
 
 
 
@@ -9,7 +9,7 @@ admin_user_new:
   path: "/admin/user/new"
   controller: App\Controllers\Admin\User:newUser
   method: [GET, POST]
-
+  roles: ["ROLE_ADMIN"]
 
 
 
@@ -17,7 +17,7 @@ admin_user_edit:
   path: "/admin/user/edit/{id}"
   controller: App\Controllers\Admin\User:editUser
   method: [GET, POST]
-
+  roles: ["ROLE_ADMIN"]
 
 
 
@@ -25,7 +25,7 @@ admin_user_delete:
   path: "/admin/user/delete/{id}"
   controller: App\Controllers\Admin\User:deleteUser
   method: [GET]
-
+  roles: ["ROLE_ADMIN"]
 
 
 

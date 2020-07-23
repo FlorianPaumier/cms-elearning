@@ -4,7 +4,6 @@ namespace App\Core\Router;
 
 use App\Core\Cache\CacheHandler;
 use App\Core\Cache\ConfigHandler;
-use App\Core\Kernel\Kernel;
 use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Core\Security\RolesManager;

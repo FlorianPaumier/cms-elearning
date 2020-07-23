@@ -7,3 +7,7 @@
            name="{{name}}" value="{{value}}" @isRequired(required)>
 </div>
 @endblock
+
+@block(hidden)
+    <input type="hidden" name="input_token_csrf" value="{{value}}" @isRequired(required)>
+@endblock

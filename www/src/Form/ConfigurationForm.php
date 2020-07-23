@@ -68,13 +68,12 @@ class ConfigurationForm extends AbstractForm
                 "required" => false,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->add("maintenance", RadioType::class, [
-                "label" => "Maintenance",
+            ->add("maintenance", CheckboxType::class, [
                 "required" => false,
+                "label" => "",
                 "class" => "col-md-6 col-lg-6 col-sm-12",
                 "choices" => [
-                    true => "Oui",
-                    false => "Non"
+                    true => "Mise en Maintenance",
                 ]
             ])
             ->add("indexation", CheckboxType::class, [
@@ -102,7 +101,7 @@ class ConfigurationForm extends AbstractForm
 
     public function getBlockPrefix(): string
     {
-        return $this->prefix ?? "admin_configuration";
+        return "admin_configuration";
     }
 
     public function configureOptions()

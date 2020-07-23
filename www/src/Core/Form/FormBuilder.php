@@ -87,7 +87,7 @@ class FormBuilder
     /**
      * FormBuilder constructor.
      */
-    public function __construct($entity = null)
+    public function __construct($entity = null, string $prefix = null)
     {
         $this->entity = $entity;
         $this->render = new RenderView();
@@ -122,7 +122,7 @@ class FormBuilder
     }
 
     /**
-     * Create the element with 
+     * Create the element with
      * @param FieldsInterface $field
      * @param string $key
      * @param array $args
@@ -138,11 +138,12 @@ class FormBuilder
         $args["value"] = $this->setValue($key, $args["type"]);
         $args["key"] = $key;
 
-        $field = $this->translateField($field, $args);
-
         if (!is_null($this->parent) && class_exists($this->parent)) {
             $field->setParent(new $this->parent);
         }
+
+        $this->translateField($field, $args);
+
 
         $args = $this->setName($field, $args);
         $field->setOptions($key, $args);
@@ -171,6 +172,7 @@ class FormBuilder
             if (!empty($matches)) {
                 $requestKey = preg_replace('~\[\]~', "", $key);
             }
+
             if (key_exists($requestKey, $request->getQuery()->all())) {
                 $value = $request->getQuery()->get($requestKey);
             } else {
@@ -181,26 +183,23 @@ class FormBuilder
 
 
             if (is_null($value)) {
-                if (!key_exists($requestKey, $request->getFile())) {
-                    break;
-                }
-
-                if (!empty($request->getFile()[$requestKey]) && $request->getFile()[$requestKey]["size"] > 0) {
-                    $value = FileUploader::UploadFile($request->getFile()[$requestKey]);
-                } else {
-                    continue;
+                if (key_exists($requestKey, $request->getFile())) {
+                    if (!empty($request->getFile()[$requestKey]) && $request->getFile()[$requestKey]["size"] > 0) {
+                        $value = FileUploader::UploadFile($request->getFile()[$requestKey]);
+                    } else {
+                        continue;
+                    }
                 }
             }
+
+
             if (is_null($this->entity) || is_array($this->entity)) {
                 $this->entity[$key] = $value;
             } else {
                 if (is_object($this->entity)) {
 
                     $method = "set";
-
                     $value = $this->transformValue($key, $value);
-
-
 
                     $property = $this->fields[$key]["key"];
 
@@ -216,10 +215,10 @@ class FormBuilder
                         //                        if($value instanceof $paramClass) dump("Hello");
 
                         if (gettype($value) == "array") {
-                           // foreach ($value as $entity) {
-                                $this->entity->$method($value);
-                           // }
-                        } else {
+                            foreach ($value as $entity) {
+                                $this->entity->$method($entity);
+                            }
+                        } else if (!is_null($value)) {
                             $this->entity->$method($value);
                         }
                     }
@@ -228,14 +227,10 @@ class FormBuilder
         }
     }
 
-    public function getErrors()
-    {
-    }
-
     /**
-     * @deprecated
      * @param string $key
      * @return mixed|string|null
+     * @deprecated
      */
     private function getValue(string $key)
     {
@@ -262,7 +257,7 @@ class FormBuilder
         if (ConfigHandler::get("request")->getMethod() != "POST") {
             return false;
         }
-        
+
         $validator = new Validator($this->fields, $this->entity, $this->parent);
         $isValid = $validator->isValid();
         $this->errors = $validator->getErrors();
@@ -282,10 +277,10 @@ class FormBuilder
     }
 
     /**
-     * @deprecated
      * @param string $key
      * @param array $options
      * @return string
+     * @deprecated
      */
     private function getInputClass(string $key, array $options = []): string
     {
@@ -380,6 +375,8 @@ class FormBuilder
             return $html;
         }
 
+        $html.="@csrf()";
+
         return $this->render->render(__DIR__ . "/form.view.php", [
             "form_view" => $html,
             "method" => "POST",
@@ -417,7 +414,7 @@ class FormBuilder
      * @return ChoiceType|CollectionType|EntityType|FieldsInterface|SelectType
      * @throws \Exception
      */
-    private function translateField(FieldsInterface $field, array $args)
+    private function translateField(FieldsInterface &$field, array $args)
     {
         if ($field instanceof ChoiceType) {
             $options = [
@@ -539,10 +536,10 @@ class FormBuilder
     }
 
     /**
-     * @deprecated
      * @param CollectionType $field
      * @param array $args
      * @throws \Exception
+     * @deprecated
      */
     private function createCollectionType(CollectionType &$field, array $args)
     {
@@ -590,6 +587,7 @@ class FormBuilder
      */
     private function setName(FieldsInterface $field, array $args): array
     {
+
         if (!is_null($this->formParentType)) {
             $args["name"] = $this->formType->getBlockPrefix() . "[" . $args["key"] . "]";
         }
@@ -599,6 +597,7 @@ class FormBuilder
 
             $args["name"] = $parent->getBlockPrefix() . "_" . $args['key'] . "[]";
         }
+
 
         return $args;
     }
@@ -637,10 +636,12 @@ class FormBuilder
      */
     private function transformValue(string $key, $value)
     {
-        if ($this->fields[$key]["type"] !== TextAreaType::class){
-            if($this->fields[$key]["type"] === SelectType::class){
-                $value = array_map(function($value) { return htmlentities($value);}, $value);
-            }else{
+        if ($this->fields[$key]["type"] !== TextAreaType::class) {
+            if ($this->fields[$key]["type"] === SelectType::class) {
+                $value = array_map(function ($value) {
+                    return htmlentities($value);
+                }, $value);
+            } else {
                 $value = htmlentities($value);
             }
         }
@@ -745,14 +746,15 @@ class FormBuilder
     private function createChoiceInput(ChoiceType $field, array $args)
     {
         $inputs = "";
+
         foreach ($args["choices"] as $key => $choice) {
 
             $name = $this->formType->getBlockPrefix() . "_" . $args["key"];
-
             $params = [
                 "key" => $args["key"],
                 "label" => $choice,
                 "value" => $key,
+                "selected" => in_array($key, json_decode($this->entity[$args["key"]], true)),
                 "placeholder" => $choice,
                 "class" => "form-control",
                 "type" => $field->getBlockName(),
@@ -775,9 +777,9 @@ class FormBuilder
     }
 
     /**
-     * @deprecated
      * @param $value
      * @return false|string|null
+     * @deprecated
      */
     private function transformPassword($value)
     {

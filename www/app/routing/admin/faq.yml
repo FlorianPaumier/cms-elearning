@@ -10,13 +10,13 @@ admin_faq_new:
   roles: ["ROLE_ADMIN"]
 
 admin_faq_edit:
-  path: /admin/faq/edit/{id<\\d+>}
+  path: /admin/faq/edit/{id}
   controller: App\Controllers\Admin\Faq:edit
   method: [GET,POST]
   roles: ["ROLE_ADMIN"]
 
 admin_faq_delete:
-  path: /admin/faq/delete/{id<\\d+>}
+  path: /admin/faq/delete/{id}
   controller: App\Controllers\Admin\Faq:delete
   method: [GET,POST]
   roles: ["ROLE_ADMIN"]

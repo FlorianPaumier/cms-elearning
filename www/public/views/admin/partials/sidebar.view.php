@@ -1,89 +1,162 @@
+<?php
+    $menus = [
+        "Tableau de bord" => [
+            "pictogramme" => "fas fa-home icon",
+            "menu" => [
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+            ]
+        ],
+        "Page" => [
+            "pictogramme" => "fas fa-file icon",
+            "menu" => [
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+            ]
+        ],
+        "Article" => [
+            "pictogramme" => "fas fa-file icon",
+            "menu" => [
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+            ]
+        ],
+        "Cours" => [
+            "pictogramme" => "fas fa-books icon",
+            "menu" => [
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+            ]
+        ],
+        "Evenements" => [
+            "pictogramme" => "fas fa-calendat-alt icon",
+            "menu" => [
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+            ]
+        ],
+        "FAQ" => [
+            "pictogramme" => "fas fa-thumbtack icon",
+            "menu" => [
+                [
+                    "link" => "/admin/faq",
+                    "name" => "Gestion des FAQ"
+                ],
+            ]
+        ],
+        "Sondages" => [
+            "pictogramme" => "fas fa-question icon",
+            "menu" => [
+                [
+                    "link" => "/admin/sondage",
+                    "name" => "Gestion des sondages"
+                ],
+            ]
+        ],
+        "Utilisateurs" => [
+            "pictogramme" => "fas fa-thumbtack icon",
+            "menu" => [
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+            ]
+        ],
+        "Newsletter" => [
+            "pictogramme" => "fas fa-envelope icon",
+            "menu" => [
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+                [
+                    "link" => "#",
+                    "name" => "Menu Item"
+                ],
+            ]
+        ],
+    ];
+?>
 <div class="sidebar-tmp"></div>
 <div class="sidebar">
     <div class="logo">
-        <img alt="CMS-ELEARNING">
+        <img src="/assets/images/logo.png" alt="CMS-ELEARNING">
     </div>
     <nav>
         <ul>
-            <li class="item">
-                <i class="fas fa-home icon"></i>
-                <span>Tableau de bord</span>
-                <ul class="submenu">
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                </ul>
-            </li>
-            <li class="item">
-                <i class="fas fa-file icon"></i>
-                <span>Page</span>
-                <ul class="submenu">
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                </ul>
-            </li>
-            <li class="item">
-                <span>Article</span>
-                <ul class="submenu">
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                </ul>
-            </li>
-            <li class="item">
-                <i class="fas fa-books icon"></i>
-                <span>Cours</span>
-                <ul class="submenu">
-                    <a href="@path(admin_lesson_list)"><li>Cours</li></a>
-                    <a href="@path(admin_lesson_chapter_index)"><li>Chapitre</li></a>
-                </ul>
-            </li>
-            <li class="item">
-                <i class="fas fa-calendar-alt icon"></i>
-                <span>évenements</span>
-                <ul class="submenu">
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                </ul>
-            </li>
-            <li class="item">
-                <i class="fas fa-thumbtack icon"></i>
-                <span>FAQ</span>
-                <ul class="submenu">
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                </ul>
-            </li>
-            <li class="item">
-                <i class="fas fa-question icon"></i>
-                <span>Sondage</span>
-                <ul class="submenu">
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                </ul>
-            </li>
-            <li class="item">
-                <i class="fas fa-thumbtack icon"></i>
-                <span>Utilisateurs</span>
-                <ul class="submenu">
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                </ul>
-            </li>
-            <li class="item">
-                <i class="fas fa-envelope icon"></i>
-                <span>Newsletter</span>
-                <ul class="submenu">
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                    <a href="#"><li>Menu item</li></a>
-                </ul>
-            </li>
+            <?php foreach ($menus as $menu => $buttons): ?>
+                <li class="item">
+                    <i class="<?= $buttons['pictogramme'] ?>>"></i>
+                    <span><?= $menu ?></span>
+                    <ul class="submenu">
+                        <?php foreach ($buttons['menu'] as $button): ?>
+                        <a href="<?php $button['link'] ?>"><li><?= $button['name'] ?></li></a>
+                        <?php endforeach; ?>
+                    </ul>
+                </li>
+            <?php endforeach; ?>
         </ul>
     </nav>
     <div class="additonal-list">

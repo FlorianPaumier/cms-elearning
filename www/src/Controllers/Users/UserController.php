@@ -109,6 +109,8 @@ class UserController extends BaseController
             }
         }
 
+        ConfigHandler::get('session')->offsetSet("app.flash", ["error" => $form->getErrorFeedback()]);
+
         $this->redirect->redirectToRoute("app_user_login");
     }
 

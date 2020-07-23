@@ -31,9 +31,14 @@
   right: 300px;
 }
 
-.card__content{
-  display: none;
-  &.active{
-    display: flex;
+#dashboard {
+  .card-dashboard-content {
+    display: none;
+    height: auto;
+    background-color: white;
+
+    &.active {
+      display: flex;
+    }
   }
 }

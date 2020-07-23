@@ -1,6 +1,10 @@
 @extend(templates/back)
+@section(styles)
+<link href="/assets/admin/dashboard.css"/>
+@endsection
 @section(body)
 
+<section id="dashboard">
 <div class="card">
     <div class="left-side">
         <div>
@@ -36,12 +40,44 @@
                                     <script>
                                         $(document).ready(function ()
                                         {
-                                            const stat = JSON.parse(<?= json_encode($statsUser, true) ?>);
-                                            console.log(stat);
+                                            let max=0;
+                                            const stats = <?= json_encode($statsUser, true) ?>;
+                                            let keys=[], values=[];
+                                            for(let stat in stats['data']){
+                                                keys.push(stat)
+                                                values.push(stats['data'][stat])
+
+
+
+                                            }
+                                            let ctx = $('#data_user');
                                             var myLineChart = new Chart(ctx, {
                                                 type: 'line',
-                                                data: data,
-                                                options: options
+                                                data: {
+                                                    labels: keys,
+                                                    datasets:[
+                                                        {
+                                                            label:'nombre d\'utilisateur',
+                                                            data: values,
+                                                            fill: false,
+                                                            "borderColor": "rgb(75, 192, 192)", "lineTension": 1
+                                                        }
+
+                                                    ]
+
+                                                },
+                                                options: {
+                                                    scales: {
+                                                        yAxes: [{
+                                                            ticks: {
+                                                                max: Math.max(...values),
+                                                                min: 0,
+                                                                stepSize: 1
+                                                            }
+                                                        }]
+                                                    }
+                                                }
+
                                             });
                                         })
                                     </script>
@@ -140,125 +176,15 @@
         </div>
     </div>
 </div>
-
+</section>
 @endsection
 @section(javascripts)
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
 
 <!-- Core plugin JavaScript-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+
 
 <script src="assets/scripts/global.js"></script>
 <script src="assets/dist/fontawesome/js/all.min.js"></script>
-<script>
-    var ctx = document.getElementById('data').getContext("2d");
-    ctx.canvas.width = 400;
-    ctx.canvas.height = 90;
-    var myBarChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [
-                "0",
-                "1",
-                "2",
-                "3",
-                "4",
-                "5",
-                "6",
-                "7",
-                "8",
-                "9",
-                "10",
-                "11",
-                "12",
-                "13",
-                "14",
-                "15",
-                "16",
-                "17",
-                "18",
-                "19",
-                "20",
-                "21",
-                "22",
-                "23",
-            ],
-            datasets: [{
-                data: [0, 100, 18,12,15,15,42,25,66,53,56,59,32,15,23,16,12,15,99,100,39,82,34,56],
-                backgroundColor: [
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                ],
-                hoverBackgroundColor: [
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                    "#364885",
-                ]
-            }]
-        },
-        options: {
-            legend: {
-                display: false
-            },
-            scales: {
-                xAxes: [{
-                    display: true,
-                    ticks: {
-                        min: 0
-                    }
-                }],
-                yAxes: [{
-                    display: true
-                }],
-            },
-            responsive: true
-        }
-    });
 
-</script>
 @endsection

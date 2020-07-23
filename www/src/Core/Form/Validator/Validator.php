@@ -79,6 +79,13 @@ class Validator
      */
     public function buildValidator()
     {
+        $csrf = $this->request->getRequest()->get('input_token_csrf');
+
+        if (is_null($csrf) || $csrf !== ConfigHandler::get('session')->offsetGet('input_csrf')){
+            $this->addError('', 'csrf');
+            return $this;
+        }
+
         foreach ($this->form as $input => $constraint) {
             if ($constraint["type"] == ButtonType::class) {
                 continue;

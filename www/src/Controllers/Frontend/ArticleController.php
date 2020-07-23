@@ -38,18 +38,17 @@ class ArticleController extends BaseController
      * display an article information and his commentary
      *
      * @param Request $request
-     * @param ArticleRepository $repository
      * @param Article $article
      * @param CategoryRepository $category
      * @param CommentaryRepository $commentary
      * @return RenderView|string|string[]|null
      * @throws NoRecordException
      */
-    public function view(Request $request, ArticleRepository $repository, Article $article, CategoryRepository $category, CommentaryRepository $commentary)
+    public function view(Request $request, Article $article, CategoryRepository $category, CommentaryRepository $commentary)
     {
-        if(!$article->getVisible()){
+        /*if(!$article->getVisible()){
             $this->redirect->redirectToRoute("article_list");
-        }
+        }*/
 
         $comment = new Commentary();
 
@@ -59,20 +58,21 @@ class ArticleController extends BaseController
         if($commentForm->isValid()) {
             $em = ConfigHandler::get("entityManager");
             $comment->setUser($this->getUser());
+            $comment->setArticle($article);
             $em->persist($comment);
             $em->flush();
-            $this->redirect->redirectToRoute("article_view", ['id' => $article->getId()]);
+            $this->redirect->redirectTo("/article/".$article->getId());
         }
 
-        $comments = $commentary->findBy(['id_article' => $article->getId()]);
-        $category = $category->findBy(['id' => $article->getIdCategory()]);
+        $comments = $commentary->findBy(['article_id' => $article->getId()]);
+        $category = $category->findBy(['id' => $article->getCategory()]);
 
         return $this->renderer->render("frontend/article/view", [
             "commentaryForm" => $commentForm->createView(),
             "category" => $category,
-            "commentary" => $comments,
+            "comments" => $comments,
             "article" => $article,
-            "title" => "Modification de l'article"
+            "title" => "Article"
         ]);
     }
 }

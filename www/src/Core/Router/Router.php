@@ -50,7 +50,6 @@ class Router
         $this->formatUrl();
         $match = false;
 
-
         if(!file_exists(CONFIG_PATH."/config.yml") && !preg_match ('/\/install/',$this->uri)) {
             (new RedirectionHandler())->redirectToRoute("installer_index");
         }
@@ -61,7 +60,6 @@ class Router
          * First try to match url with parameters
          * Second try a match with the url
          */
-         
         foreach ($this->routes as $route) {
             if ($this->hadParams($route["path"])) {
                 if ($this->matchComplexRoute($route)) {

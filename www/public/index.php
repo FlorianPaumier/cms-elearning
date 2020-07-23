@@ -27,7 +27,6 @@ if($env == "dev"){
 
 //Create new Environment
 $kernel = new Kernel($env, $debug);
-
 //Prepare all default value
 $kernel->init();
 

@@ -13,9 +13,6 @@
 
                     <div class="card">
                         <div class="card__content card-welcome-content">
-
-
-
                             <p>Salut <?= $user->getUsername() ?>,</p>
                             <div class="card__title card-welcome-content-title">Bienvenu sur CMS E-LEARNING</div><br>
                             <p class="card__text card-welcome-content-text">Ceci est du contenu de description</p>
@@ -38,49 +35,49 @@
                                 <div class="canva-div">
                                     <canvas id="data_user"></canvas>
                                     <script>
-                                        $(document).ready(function ()
-                                        {
-                                            let max=0;
-                                            const stats = <?= json_encode($statsUser, true) ?>;
-                                            let keys=[], values=[];
-                                            for(let stat in stats['data']){
-                                                keys.push(stat)
-                                                values.push(stats['data'][stat])
-
-
-
-                                            }
-                                            let ctx = $('#data_user');
-                                            var myLineChart = new Chart(ctx, {
-                                                type: 'line',
-                                                data: {
-                                                    labels: keys,
-                                                    datasets:[
-                                                        {
-                                                            label:'nombre d\'utilisateur',
-                                                            data: values,
-                                                            fill: false,
-                                                            "borderColor": "rgb(75, 192, 192)", "lineTension": 1
-                                                        }
-
-                                                    ]
-
-                                                },
-                                                options: {
-                                                    scales: {
-                                                        yAxes: [{
-                                                            ticks: {
-                                                                max: Math.max(...values),
-                                                                min: 0,
-                                                                stepSize: 1
-                                                            }
-                                                        }]
-                                                    }
-                                                }
-
-                                            });
-                                        })
-                                    </script>
+                                    //    $(document).ready(function ()
+                                    //    {
+                                    //        let max=0;
+                                    //        const stats = <?//= json_encode($statsUser, true) ?>//;
+                                    //        let keys=[], values=[];
+                                    //        for(let stat in stats['data']){
+                                    //            keys.push(stat)
+                                    //            values.push(stats['data'][stat])
+                                    //
+                                    //
+                                    //
+                                    //        }
+                                    //        let ctx = $('#data_user');
+                                    //        var myLineChart = new Chart(ctx, {
+                                    //            type: 'line',
+                                    //            data: {
+                                    //                labels: keys,
+                                    //                datasets:[
+                                    //                    {
+                                    //                        label:'nombre d\'utilisateur',
+                                    //                        data: values,
+                                    //                        fill: false,
+                                    //                        "borderColor": "rgb(75, 192, 192)", "lineTension": 1
+                                    //                    }
+                                    //
+                                    //                ]
+                                    //
+                                    //            },
+                                    //            options: {
+                                    //                scales: {
+                                    //                    yAxes: [{
+                                    //                        ticks: {
+                                    //                            max: Math.max(...values),
+                                    //                            min: 0,
+                                    //                            stepSize: 1
+                                    //                        }
+                                    //                    }]
+                                    //                }
+                                    //            }
+                                    //
+                                    //        });
+                                    //    })
+                                    //</script>
                                 </div>
                             </div>
                         </div>
@@ -93,48 +90,48 @@
                                 <div class="canva-div">
                                     <canvas id="data_lesson"></canvas>
                                     <script>
-                                        $(document).ready(function ()
-                                        {
-                                            let max=0;
-                                            const stats = <?= json_encode($statsLesson, true) ?>;
-                                            let keys=[], values=[];
-                                            for(let stat in stats['data']){
-                                                keys.push(stat)
-                                                values.push(stats['data'][stat])
-
-
-
-                                            }
-                                            let ctx = $('#data_lesson');
-                                            var myLineChart = new Chart(ctx, {
-                                                type: 'line',
-                                                data: {
-                                                    labels: keys,
-                                                    datasets:[
-                                                        {
-                                                            label:'nombre de cours',
-                                                            data: values,
-                                                            fill: false,
-                                                            "borderColor": "rgb(75, 192, 192)", "lineTension": 1
-                                                        }
-
-                                                    ]
-
-                                                },
-                                                options: {
-                                                    scales: {
-                                                        yAxes: [{
-                                                            ticks: {
-                                                                max: Math.max(...values),
-                                                                min: 0,
-                                                                stepSize: 1
-                                                            }
-                                                        }]
-                                                    }
-                                                }
-
-                                            });
-                                        })
+                                        //$(document).ready(function ()
+                                        //{
+                                        //    let max=0;
+                                        //    const stats = <?//= json_encode($statsLesson, true) ?>//;
+                                        //    let keys=[], values=[];
+                                        //    for(let stat in stats['data']){
+                                        //        keys.push(stat)
+                                        //        values.push(stats['data'][stat])
+                                        //
+                                        //
+                                        //
+                                        //    }
+                                        //    let ctx = $('#data_lesson');
+                                        //    var myLineChart = new Chart(ctx, {
+                                        //        type: 'line',
+                                        //        data: {
+                                        //            labels: keys,
+                                        //            datasets:[
+                                        //                {
+                                        //                    label:'nombre de cours',
+                                        //                    data: values,
+                                        //                    fill: false,
+                                        //                    "borderColor": "rgb(75, 192, 192)", "lineTension": 1
+                                        //                }
+                                        //
+                                        //            ]
+                                        //
+                                        //        },
+                                        //        options: {
+                                        //            scales: {
+                                        //                yAxes: [{
+                                        //                    ticks: {
+                                        //                        max: Math.max(...values),
+                                        //                        min: 0,
+                                        //                        stepSize: 1
+                                        //                    }
+                                        //                }]
+                                        //            }
+                                        //        }
+                                        //
+                                        //    });
+                                        //})
                                     </script>
                                 </div>
                             </div>

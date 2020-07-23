@@ -12,35 +12,36 @@ class DashboardController extends BaseController
 {
     public function index(UserRepository $userRepository, LessonRepository $lessonRepository, ArticleRepository $articleRepository)
     {
-        $users = $userRepository->findAll();
+        dd("Hello");
+//        $users = $userRepository->findAll();
         $statsUser = ['data' => [],
-                     'total' => count($users)??0,
+                     'total' => count([])??0,
         ];
-        foreach ($users as $user){
-            $created_at = $user->getCreatedAt()->format('Y-m-d');
-            $statsUser["data"][$created_at] = is_int($statsUser["data"][$created_at])?$statsUser["data"][$created_at]+1:1;
+//        foreach ($users as $user){
+//            $created_at = $user->getCreatedAt()->format('Y-m-d');
+//            $statsUser["data"][$created_at] = is_int($statsUser["data"][$created_at])?$statsUser["data"][$created_at]+1:1;
+//
+//        }
 
-        }
-
-        $lessons = $lessonRepository->findAll();
+//        $lessons = $lessonRepository->findAll();
         $statsLesson = ['data' => [],
-            'total' => count($lessons)??0,
+            'total' => count([])??0,
         ];
-        foreach ($lessons as $lesson){
-            $created_at = $lesson->getCreatedAt()->format('Y-m-d');
-            $statsLesson["data"][$created_at] = is_int($statsLesson["data"][$created_at])?$statsLesson["data"][$created_at]+1:1;
+//        foreach ($lessons as $lesson){
+//            $created_at = $lesson->getCreatedAt()->format('Y-m-d');
+//            $statsLesson["data"][$created_at] = is_int($statsLesson["data"][$created_at])?$statsLesson["data"][$created_at]+1:1;
+//
+//        }
 
-        }
-
-        $articles = $articleRepository->findAll();
+//        $articles = $articleRepository->findAll();
         $statsArticle = ['data' => [],
-            'total' => count($articles)??0,
+            'total' => count([])??0,
         ];
-        foreach ($lessons as $lesson){
-            $created_at = $lesson->getCreatedAt()->format('Y-m-d');
-            $statsLesson["data"][$created_at] = is_int($statsLesson["data"][$created_at])?$statsLesson["data"][$created_at]+1:1;
-
-        }
+//        foreach ($lessons as $lesson){
+//            $created_at = $lesson->getCreatedAt()->format('Y-m-d');
+//            $statsLesson["data"][$created_at] = is_int($statsLesson["data"][$created_at])?$statsLesson["data"][$created_at]+1:1;
+//
+//        }
 
 
 

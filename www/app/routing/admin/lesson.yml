@@ -6,6 +6,7 @@ admin_lesson_list:
 admin_lesson_new:
   path: /admin/lesson/new
   controller: App\Controllers\Admin\Lesson:new
+  roles: ["ROLE_ADMIN"]
   method: [GET,POST]
   roles: ["ROLE_ADMIN"]
 

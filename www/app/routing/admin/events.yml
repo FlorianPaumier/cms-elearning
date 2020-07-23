@@ -4,11 +4,13 @@ admin_events_list:
   method: [GET]
   roles: ["ROLE_ADMIN"]
 
+
 admin_events_new:
   controller: App\Controllers\Admin\Event:new
   path: "/admin/events/new"
   method: [GET, POST]
   roles: ["ROLE_ADMIN"]
+
 
 admin_events_edit:
   controller: App\Controllers\Admin\Event:edit

@@ -8,15 +8,17 @@ admin_contact_new:
   controller: App\Controllers\Admin\Contact:new
   roles: ["ROLE_ADMIN"]
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_contact_edit:
   path: /admin/contact/edit/{id}
   controller: App\Controllers\Admin\Contact:edit
   roles: ["ROLE_ADMIN"]
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_contact_delete:
   path: /admin/contact/delete/{id}
   controller: App\Controllers\Admin\Contact:delete
-  roles: ["ROLE_ADMIN"]
   method: [GET]
+  roles: ["ROLE_ADMIN"]

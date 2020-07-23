@@ -89,33 +89,17 @@
             "pictogramme" => "fas fa-thumbtack icon",
             "menu" => [
                 [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
+                    "link" => "/admin/faq",
+                    "name" => "Gestion des FAQ"
                 ],
             ]
         ],
-        "Sondage" => [
+        "Sondages" => [
             "pictogramme" => "fas fa-question icon",
             "menu" => [
                 [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
+                    "link" => "/admin/sondage",
+                    "name" => "Gestion des sondages"
                 ],
             ]
         ],

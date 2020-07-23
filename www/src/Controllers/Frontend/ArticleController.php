@@ -44,7 +44,7 @@ class ArticleController extends BaseController
      * @return RenderView|string|string[]|null
      * @throws NoRecordException
      */
-    public function view(Request $request, Article $article, CategoryRepository $category, CommentaryRepository $commentary)
+    public function view(Request $request, Article $article, /*CategoryRepository $category,*/ CommentaryRepository $commentary)
     {
         /*if(!$article->getVisible()){
             $this->redirect->redirectToRoute("article_list");
@@ -65,11 +65,11 @@ class ArticleController extends BaseController
         }
 
         $comments = $commentary->findBy(['article_id' => $article->getId()]);
-        $category = $category->findBy(['id' => $article->getCategory()]);
+        //$category = $category->findBy(['id' => $article->getCategory()]);
 
         return $this->renderer->render("frontend/article/view", [
             "commentaryForm" => $commentForm->createView(),
-            "category" => $category,
+            //"category" => $category,
             "comments" => $comments,
             "article" => $article,
             "title" => "Article"

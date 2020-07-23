@@ -80,16 +80,14 @@ if (!is_null($errors)) {
 }
 
 if (isset($session) && !is_null($session)) {
-    if (isset($flash) && !is_null($flash)) {
-        if (isset($flash["app.flash"]["success"]) && !is_null($flash["app.flash"]["success"])) {
-            foreach ($flash["app.flash"]["success"] as $key => $message) {
-                echo "<div class='alert alert-sucess'>$message</div>";
-            }
+    if (isset($session["app.flash"]["success"]) && !is_null($session["app.flash"]["success"])) {
+        foreach ($session["app.flash"]["success"] as $key => $message) {
+            echo "<div class='alert alert-sucess'>$message</div>";
         }
-        if (isset($flash["app.flash"]["error"]) && !is_null($flash["app.flash"]["error"])) {
-            foreach ($flash["app.flash"]["error"] as $key => $message) {
-                echo "<div class='alert alert-error'>$message</div>";
-            }
+    }
+    if (isset($session["app.flash"]["error"]) && !is_null($session["app.flash"]["error"])) {
+        foreach ($session["app.flash"]["error"] as $key => $message) {
+            echo "<div class='alert alert-error'>$message</div>";
         }
     }
 }

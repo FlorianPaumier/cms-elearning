@@ -43,10 +43,8 @@ class Kernel
          */
         ConfigHandler::get("router")->match();
 
-
         /** @var RenderView $response */
         $response = ConfigHandler::get("router")->exec();
-        dd("Hello 2");
 
         if (!$response) {
             ConfigHandler::get("eventEmmiter")->emit("error.500", "Le controller doit retourner une String ou FormBuilder , Null retourner");

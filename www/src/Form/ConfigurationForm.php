@@ -76,6 +76,14 @@ class ConfigurationForm extends AbstractForm
                     true => "Mise en Maintenance",
                 ]
             ])
+            ->add("production", CheckboxType::class, [
+                "required" => false,
+                "label" => "",
+                "class" => "col-md-6 col-lg-6 col-sm-12",
+                "choices" => [
+                    true => "Mise en production",
+                ]
+            ])
             ->add("indexation", CheckboxType::class, [
                 "label" => "Visibilité pour les moteurs de recherche",
                 "required" => false,

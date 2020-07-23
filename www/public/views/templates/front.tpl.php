@@ -14,7 +14,6 @@
     <meta lang="fr">
 
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
@@ -44,16 +43,7 @@
 <script src="/assets/scripts/collapsible.js"></script>
 <!-- Chart.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
-<script>
-    new Chart(document.getElementById("chartjs-0"), {
-        "type": "line",
-        "data": {
-            "labels": ["January", "February", "March", "April", "May", "June", "July"],
-            "datasets": [{"label": "My First Dataset", "data": [65, 59, 80, 81, 56, 55, 40], "fill": false, "borderColor": "rgb(75, 192, 192)", "lineTension": 0.1}]
-        },
-        "options": {}
-    });
-</script>
+
 @yield(javascript)
 </body>
 </html>

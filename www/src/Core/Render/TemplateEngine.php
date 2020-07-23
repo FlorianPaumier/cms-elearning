@@ -112,7 +112,7 @@ class TemplateEngine
             $this->_includedFile();
 
             if ($_SERVER["APP_ENV"] == "dev") {
-//                CacheHandler::set($this->view, $this->content);
+                CacheHandler::set($this->view, $this->content);
             }
         } else {
             $this->content = CacheHandler::get($this->view);

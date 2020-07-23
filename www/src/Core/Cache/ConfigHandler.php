@@ -8,6 +8,7 @@ use App\Core\Formatter\Serializer;
 use App\Core\Logger\AbstractLogger;
 use App\Core\Mailer\MailerHandler;
 use App\Core\Mailer\MailerMessage;
+use App\Core\Render\RenderView;
 use App\Core\Request\RedirectionHandler;
 use App\Core\Request\Request;
 use App\Core\Router\Router;
@@ -69,6 +70,10 @@ class ConfigHandler
             return;
         }
 
+        if(CacheHandler::get("config")["maintenance"] && !preg_match ('/\/admin/',$this->formatUrl())){
+            echo (new RenderView())->render("Errors/maintenance")->compile();
+            die;
+        }
         if (file_exists(ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php")) {
             require_once ROOT_PATH . "/lib/PHPMailer/vendor/autoload.php";
             self::bind("mailer", new MailerHandler());

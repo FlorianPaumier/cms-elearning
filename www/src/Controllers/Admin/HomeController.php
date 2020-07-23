@@ -77,6 +77,8 @@ class HomeController extends BaseController
 
             $serializer = new Serializer();
             $config = $serializer->deserialize(file_get_contents(ROOT_PATH . "/app/config/config.yml"), "yaml");
+            $config["env"] = in_array( 1, $request->getRequest()->get("admin_configuration_production")) ? "prod" : "dev";
+            $config["maintenance"] = in_array( 1, $request->getRequest()->get("admin_configuration_maintenance")) ? true : false;
             $config["mailer"]["host"] = $emailInfo["server_mail_host"];
             $config["mailer"]["port"] = $emailInfo["server_mail_port"];
             $config["mailer"]["username"] = $emailInfo["server_mail_identifiant"];

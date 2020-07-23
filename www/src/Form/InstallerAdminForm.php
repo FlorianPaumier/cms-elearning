@@ -15,6 +15,11 @@ use App\Entity\User;
 class InstallerAdminForm extends AbstractForm
 {
 
+    /**
+     * @param FormBuilder $builder
+     * @return FormBuilder
+     * @throws \Exception
+     */
     public function buildForm(FormBuilder $builder): FormBuilder
     {
         return $builder

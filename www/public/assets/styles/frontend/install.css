@@ -1,0 +1,16 @@
+body {
+  background-color: #87B7FF;
+}
+#install-header {
+  width: 100%;
+  height: 10%;
+  background-color: #87B7FF;
+}
+#install-header div {
+  text-align: center;
+}
+#install-header div img {
+  height: 100px;
+}
+
+/*# sourceMappingURL=install.css.map */

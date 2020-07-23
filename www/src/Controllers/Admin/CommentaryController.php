@@ -13,6 +13,13 @@ use Exception;
 
 class CommentaryController extends BaseController
 {
+    /**
+     * display list of commentary
+     *
+     * @param CommentaryRepository $repository
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws Exception
+     */
     public function index(CommentaryRepository $repository)
     {
         $commentary = $repository->paginate(5);
@@ -23,6 +30,12 @@ class CommentaryController extends BaseController
         ]);
     }
 
+    /**
+     * delete commentary
+     *
+     * @param Commentary $commentary
+     * @throws Exception
+     */
     public function delete(Commentary $commentary)
     {
         $this->entityManager->delete($commentary);

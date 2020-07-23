@@ -11,7 +11,7 @@ class Category
 
     use Entity;
 
-    /** @var string */
+    /** @var null|string $category*/
     protected $category;
 
     /**

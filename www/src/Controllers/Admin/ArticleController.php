@@ -12,14 +12,28 @@ use Exception;
 
 class ArticleController extends BaseController
 {
+    /**
+     * display the list of article
+     *
+     * @param Request $request
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws Exception
+     */
     public function index(Request $request)
     {
-        return $this->renderer->render("admin/article/view",[
+        return $this->renderer->render("admin/article/list",[
             "method" => $request->getMethod(),
             "title" => "Index"
         ]);
     }
 
+    /**
+     * display the list of article
+     *
+     * @param ArticleRepository $repository
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws Exception
+     */
     public function list(ArticleRepository $repository)
     {
         $articles = $repository->paginate(5);
@@ -31,6 +45,8 @@ class ArticleController extends BaseController
     }
 
     /**
+     * display a form to create a new item and insert the data if exist
+     *
      * @param Request $request
      * @return mixed
      * @throws Exception
@@ -58,6 +74,15 @@ class ArticleController extends BaseController
         ]);
     }
 
+    /**
+     * display a form to edit an item and update the data if exist
+     *
+     * @param Request $request
+     * @param ArticleRepository $repository
+     * @param Article $articles
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws \App\Core\Exception\NoRecordException
+     */
     public function edit(Request $request, ArticleRepository $repository, Article $articles)
     {
         $article = $repository->findBy(['id' => $articles->getId()]);
@@ -78,12 +103,24 @@ class ArticleController extends BaseController
         ]);
     }
 
+    /**
+     * delete an item
+     *
+     * @param Article $article
+     * @throws Exception
+     */
     public function delete(Article $article)
     {
         $this->entityManager->delete($article);
         $this->redirect->redirectToRoute("admin_article_index");
     }
 
+    /**
+     * page of design
+     *
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws Exception
+     */
     public function design()
     {
         return $this->renderer->render("admin/article/design",[

@@ -8,6 +8,9 @@ use App\Core\Database\Repository\AbstractRepository;
 
 class CategoryRepository extends AbstractRepository
 {
+    /**
+     * @return array|null
+     */
     public function findCategories(): ?array
     {
         $categoriesAll = $this->findAll();

@@ -13,22 +13,22 @@ class Article
     use Entity;
     use TimestampableEntity;
 
-    /** @var string */
+    /** @var string $title*/
     protected $title;
 
-    /** @var string */
+    /** @var null|string $content*/
     protected $content;
 
-    /** @var Category */
+    /** @var null|Category $category */
     protected $category;
 
-    /** @var string */
+    /** @var null|string $image*/
     protected $image;
 
-    /** @var User */
+    /** @var null|User $user*/
     protected $user;
 
-    /** @var int */
+    /** @var null|int $visible*/
     protected $visible;
 
     /**
@@ -58,7 +58,7 @@ class Article
     /**
      * @param User $user
      */
-    public function setUser(User $user)
+    public function setUser(?User $user)
     {
         $this->user = $user;
     }
@@ -66,7 +66,7 @@ class Article
     /**
      * @param string $title
      */
-    public function setTitle(string $title): void
+    public function setTitle(?string $title): void
     {
         $this->title = $title;
     }
@@ -80,7 +80,7 @@ class Article
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getContent(): ?string
     {
@@ -103,16 +103,25 @@ class Article
         return $this->category;
     }
 
-    public function setCategory(Category $category): void
+    /**
+     * @param Category $category
+     */
+    public function setCategory(?Category $category): void
     {
         $this->category = $category;
     }
 
+    /**
+     * @return string|null
+     */
     public function getImage(): ?string
     {
         return $this->image;
     }
 
+    /**
+     * @param string|null $image
+     */
     public function setImage(?string $image): void
     {
         $this->image = $image;

@@ -1,28 +1,35 @@
 chat_list:
   path: /chat
   controller: App\Controllers\Frontend\Chat:index
+  roles: ["ROLE_ADMIN","ROLE_USER"]
+
+chat_global:
+  path: /chat
+  controller: App\Controllers\Frontend\Chat:global
+  roles: ["ROLE_ADMIN","ROLE_USER"]
 
 chat_send:
   path: /chat/send
   controller: App\Controllers\Frontend\Chat:sendMessage
-
-chat_annonce:
-  path: /chat/annonce
-  controller: App\Controllers\Frontend\Chat:getAnnonce
+  roles: ["ROLE_ADMIN","ROLE_USER"]
 
 chat_get_online:
   path: /chat/get/online
   controller: App\Controllers\Frontend\Chat:getOnline
+  roles: ["ROLE_ADMIN","ROLE_USER"]
 
 chat_online:
   path: /chat/online
   controller: App\Controllers\Frontend\Chat:online
+  roles: ["ROLE_ADMIN","ROLE_USER"]
 
 chat_get_message:
   path: /chat/message
   controller: App\Controllers\Frontend\Chat:getMessage
+  roles: ["ROLE_ADMIN","ROLE_USER"]
 
 chat_status:
   path: /chat/status
   controller: App\Controllers\Frontend\Chat:changeStatus
+  roles: ["ROLE_ADMIN","ROLE_USER"]
 

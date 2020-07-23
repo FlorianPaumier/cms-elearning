@@ -30,9 +30,9 @@
                     </form>
                 </li>
                 <li class="link"><a href="@path(app_catalogue)">Cours</a></li>
-                <li class="link"><a href="#">Article</a></li>
-                <li class="link"><a href="#">Evenements</a></li>
-                <li class="link"><a href="#">Contact</a></li>
+                <li class="link"><a href="@path(article_list)">Article</a></li>
+                <li class="link"><a href="@path(frontend_event_calendar)">Evenements</a></li>
+                <li class="link"><a href="@path(frontend_form_contact)">Contact</a></li>
                 <li class="link"><a href="#">Recherche</a></li>
                 <li class="link"><a href="@path(frontend_sondage_list)">Sondages</a></li>
                 <li class="link"><a href="@path(frontend_faq_list)">FAQ</a></li>
@@ -43,6 +43,11 @@
                         if (!is_null($session["app.user"])):
                             ?>
                             <a href="@path(app_user_logout)">Déconnexion</a>
+                        <?php
+                        if (in_array("ROLE_ADMIN", $session["app.user"]["roles"])):
+                            ?>
+                            <a href="@path(admin_home)">Dashboard</a>
+                        <?php endif; ?>
                         <?php
                         else:
                             ?>

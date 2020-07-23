@@ -4,33 +4,8 @@
             "pictogramme" => "fas fa-home icon",
             "menu" => [
                 [
-                    "link" => "/admin/sondage",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-            ]
-        ],
-        "Page" => [
-            "pictogramme" => "fas fa-file icon",
-            "menu" => [
-                [
-                    "link" => "/admin/pomme",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
+                    "link" => "@path(admin_home)",
+                    "name" => "Dashboard"
                 ],
             ]
         ],
@@ -38,16 +13,8 @@
             "pictogramme" => "fas fa-file icon",
             "menu" => [
                 [
-                    "link" => "/admin/omeafe",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
+                    "link" => "@path(admin_article_list)",
+                    "name" => "Article"
                 ],
             ]
         ],
@@ -55,33 +22,29 @@
             "pictogramme" => "fas fa-books icon",
             "menu" => [
                 [
-                    "link" => "#",
-                    "name" => "Menu Item"
+                    "link" => "@path(admin_lesson_list)",
+                    "name" => "Cours"
                 ],
                 [
-                    "link" => "#",
-                    "name" => "Menu Item"
+                    "link" => "@path(admin_lesson_chapter_index)",
+                    "name" => "Chapitres"
                 ],
                 [
-                    "link" => "#",
-                    "name" => "Menu Item"
+                    "link" => "@path(admin_notation_index)",
+                    "name" => "Notations"
                 ],
+                [
+                    "link" => "@path(admin_evaluation_list)",
+                    "name" => "Evaluation"
+                ]
             ]
         ],
         "Evenements" => [
             "pictogramme" => "fas fa-calendat-alt icon",
             "menu" => [
                 [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
+                    "link" => "@path(admin_events_list)",
+                    "name" => "Evenements"
                 ],
             ]
         ],
@@ -91,6 +54,15 @@
                 [
                     "link" => "/admin/faq",
                     "name" => "Gestion des FAQ"
+                ],
+            ]
+        ],
+        "Contact" => [
+            "pictogramme" => "fas fa-thumbtack icon",
+            "menu" => [
+                [
+                    "link" => "@path(admin_contact_list)",
+                    "name" => "Liste Contact"
                 ],
             ]
         ],
@@ -107,16 +79,8 @@
             "pictogramme" => "fas fa-thumbtack icon",
             "menu" => [
                 [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
+                    "link" => "@path(admin_user_list)",
+                    "name" => "Utilisateur"
                 ],
             ]
         ],
@@ -124,16 +88,8 @@
             "pictogramme" => "fas fa-envelope icon",
             "menu" => [
                 [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
-                ],
-                [
-                    "link" => "#",
-                    "name" => "Menu Item"
+                    "link" => "@path(admin_newsletter)",
+                    "name" => "Newsletter"
                 ],
             ]
         ],
@@ -160,7 +116,7 @@
         </ul>
     </nav>
     <div class="additonal-list">
-        <a href="#" class="additonal-list-button">
+        <a href="@path(admin_config)" class="additonal-list-button">
             <i class="far fa-cogs icon"></i>
             <span>
                 Configuration

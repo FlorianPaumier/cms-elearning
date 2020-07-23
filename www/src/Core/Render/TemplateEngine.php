@@ -111,7 +111,7 @@ class TemplateEngine
             $this->_extendFile();
             $this->_includedFile();
 
-            if ($_SERVER["APP_ENV"] == "dev") {
+            if ($_SERVER["APP_ENV"] == "prod") {
                 CacheHandler::set($this->view, $this->content);
             }
         } else {
@@ -181,18 +181,17 @@ class TemplateEngine
     {
         $this->_parseTemplate();
 
-
         if ($tags) {
             $this->content = $this->getParsePhpView($this->content, $this->data["parameter"]);
 
             if (count($this->fieldEntries) > 0) {
                 $this->_parseTags();
                 $this->_parseTemplate();
+            }
 
                 if (count($this->methodEntries) > 0) {
                     $this->_parseFunctions($this);
                 }
-            }
 
             foreach ($this->functions as $regex => $function) {
                 $this->content = preg_replace("#$regex#", $function, $this->content);

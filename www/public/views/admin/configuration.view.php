@@ -7,6 +7,9 @@
     <a target="_blank" href="@path(admin_config_sitemap)">
         <button>Générer la SiteMap</button>
     </a>
+    <a href="@path(admin_config_clear_cache)">
+        <button>Vider le cache</button>
+    </a>
 </section>
 @endsection
 

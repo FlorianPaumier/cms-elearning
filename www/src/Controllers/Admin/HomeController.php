@@ -226,6 +226,11 @@ class HomeController extends BaseController
         return json_encode(["result" => $handler->sendTest()]);
     }
 
+    public function clearCache()
+    {
+        exec("rm -f ".ROOT_PATH."/app/cache/*");
+        $this->redirect->redirectToRoute("admin_config");
+    }
     private function getPath(array $route, Router $router)
     {
 

@@ -76,7 +76,7 @@ class ExceptionSubscriber implements SubscriberInterface
      */
     private function throwException(string $exception, string $message, int $code)
     {
-        if($_SERVER["APP_ENV"] !== "dev"){
+        if($_SERVER["APP_ENV"] === "dev"){
             http_response_code($code);
             (new RenderView())->renderErrors("Errors/errors", new $exception($message, $code));
         }else{

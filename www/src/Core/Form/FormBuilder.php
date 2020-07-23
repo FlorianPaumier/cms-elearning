@@ -749,12 +749,19 @@ class FormBuilder
 
         foreach ($args["choices"] as $key => $choice) {
 
+            if(is_object($this->entity)){
+                $method = "get".ucfirst($args["key"]);
+                $selectionValue = $this->entity->$method();
+            }else{
+                $selectionValue = $this->entity[$args["key"]];
+            }
+
             $name = $this->formType->getBlockPrefix() . "_" . $args["key"];
             $params = [
                 "key" => $args["key"],
                 "label" => $choice,
                 "value" => $key,
-                "selected" => in_array($key, json_decode($this->entity[$args["key"]], true)),
+                "selected" => in_array($key, json_decode($selectionValue, true)),
                 "placeholder" => $choice,
                 "class" => "form-control",
                 "type" => $field->getBlockName(),

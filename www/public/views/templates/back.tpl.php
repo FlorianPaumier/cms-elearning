@@ -29,6 +29,10 @@
     <link href="/assets/styles/admin/main.css" rel="stylesheet">
     @yield(styles)
 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+
 </head>
 
 <body id="page-top">
@@ -50,9 +54,6 @@ if ($errors) {
 
 @include(partials/modal)
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script src="/assets/scripts/core/observer.js"></script>
 

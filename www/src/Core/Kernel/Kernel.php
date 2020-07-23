@@ -56,6 +56,7 @@ class Kernel
             $view = $response->compile();
         }
 
+        ConfigHandler::get("session")->offsetSet("app.flash", null);
         echo $view;
     }
 

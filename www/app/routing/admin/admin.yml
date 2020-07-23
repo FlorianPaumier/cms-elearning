@@ -13,6 +13,11 @@ admin_config_sitemap:
   controller: App\Controllers\Admin\Home:generateSiteMap
   roles: ["ROLE_ADMIN"]
 
+admin_config_clear_cache:
+  path: /admin/configuration/clear-cache
+  controller: App\Controllers\Admin\Home:clearCache
+  roles: ["ROLE_ADMIN"]
+
 admin_config_database:
   path: /admin/configuration/database
   controller: App\Controllers\Admin\Home:database

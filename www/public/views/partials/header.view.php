@@ -5,13 +5,6 @@
                 <img src="/assets/images/logo.png" alt="Logo Entreprise">
             </a>
         </div>
-        <form action="" method="post" class="input-group search">
-            <input type="text" placeholder="Chercher dans le site" class="input-search">
-            <button class="btn-search">
-                <i class="fa fa-search"></i>
-            </button>
-        </form>
-
         <div class="hamburger" id="hamburger-10" data-target="#nav-header">
             <span class="line"></span>
             <span class="line"></span>
@@ -21,19 +14,10 @@
     <section id="nav-header">
         <nav>
             <ul>
-                <li class="search-mobile">
-                    <form action="" method="post" class="input-group search">
-                        <input type="text" placeholder="Chercher dans le site" class="input-search">
-                        <button class="btn-search">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </form>
-                </li>
                 <li class="link"><a href="@path(app_catalogue)">Cours</a></li>
                 <li class="link"><a href="@path(article_list)">Article</a></li>
                 <li class="link"><a href="@path(frontend_event_calendar)">Evenements</a></li>
                 <li class="link"><a href="@path(frontend_form_contact)">Contact</a></li>
-                <li class="link"><a href="#">Recherche</a></li>
                 <li class="link"><a href="@path(frontend_sondage_list)">Sondages</a></li>
                 <li class="link"><a href="@path(frontend_faq_list)">FAQ</a></li>
                 <li class="profile user-menu acilir">

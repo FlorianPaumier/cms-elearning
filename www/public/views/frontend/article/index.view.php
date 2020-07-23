@@ -11,16 +11,19 @@
     <div class="article">
         <ul class="article-list">
             <?php foreach($articles['data'] as $article): ?>
-            <li class="article-row row">
-                <div class="article-row-image col-2">
-                    <img src='<?= $article->getImage() ?>'>
-                </div >
-                <div class="article-row-content col-10">
-                    <a class="article-row-title" href="/article/<?= $article->getId() ?>"><?= $article->getTitle()?></a>
-                    <p class="article-row-description"><?= mb_strimwidth($article->getContent(), 0, 200, "..."); ?></p>
-                    <a class="article-row-watch" href="/article/<?= $article->getId() ?>">Lire la suite</a>
-                </div>
-            </li>
+            <?php if($article->getVisible() === true) { ?>
+                <li class="article-row row">
+                    <div class="article-row-image col-2">
+                        <img src='<?= $article->getImage() ?>'>
+                    </div >
+                    <div class="article-row-content col-10">
+                        <a class="article-row-title" href="/article/<?= $article->getId() ?>"><?= $article->getTitle()?></a>
+                        <p class="article-row-description"><?= mb_strimwidth($article->getContent(), 0, 200, "..."); ?></p>
+                        <a class="article-row-watch" href="/article/<?= $article->getId() ?>">Lire la suite</a>
+                    </div>
+                </li>
+            <?php } ?>
+
             <?php endforeach; ?>
         </ul>
         <?= $articles["links"] ?>

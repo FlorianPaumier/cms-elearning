@@ -102,8 +102,7 @@
 <section id="newsletter">
     <h2 class="text-center">Newsletter</h2>
     <div>
-        <input type="email" placeholder="Votre Email..." name="newsletter-email">
-        <button class="btn-news">M'inscrire</button>
+        {{ form }}
     </div>
 </section>
 @endsection

@@ -1,4 +1,4 @@
-var reloadTime = 1000;
+var reloadTime = 500;
 var scrollBar = false;
 
 /**

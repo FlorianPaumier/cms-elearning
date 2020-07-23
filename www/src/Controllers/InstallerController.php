@@ -16,7 +16,9 @@ use App\Entity\User;
 use App\Form\InstallerAdminForm;
 use App\Form\InstallerConfigurationForm;
 use App\Form\InstallerDatabaseForm;
+use App\Repository\NewsletterEmailRepository;
 use App\Repository\SiteConfigurationRepository;
+use App\Repository\UserRepository;
 use Exception;
 use PDO;
 
@@ -33,9 +35,9 @@ class InstallerController extends BaseController
      */
     public function index(): RenderView
     {
-        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
+        /*if(file_exists(ROOT_PATH."/app/config/config.yml")) {
             $this->redirect->redirectToRoute("app_home");
-        }
+        }*/
 
         return $this->renderer->render("installer/index",[
             "title" => "Installation"
@@ -48,8 +50,11 @@ class InstallerController extends BaseController
      * @return RenderView|string|string[]|null
      * @throws NoRecordException
      */
-    public function configuration(Request $request, SiteConfigurationRepository $repository): RenderView
+    public function configuration(Request $request, SiteConfigurationRepository $repository, UserRepository $user): RenderView
     {
+        /*if($user->findAll()){
+            $this->redirect->redirectTo('/');
+        }*/
 
         /** @var SiteConfiguration[] $configurations */
         $configurations = $repository->findAll();
@@ -108,6 +113,7 @@ class InstallerController extends BaseController
         return $this->render("installer/configuration", [
             "form" => $form->createView(),
             "errors" => $form->getErrorFeedback(),
+            "title" => "Configuration du site"
         ]);
     }
 
@@ -116,11 +122,11 @@ class InstallerController extends BaseController
      * @return RenderView|string|string[]|null
      * @throws Exception
      */
-    public function database(Request $request/*, SiteConfigurationRepository $repository*/ ) {
+    public function database(Request $request ) {
 
-        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
+        /*if(file_exists(ROOT_PATH."/app/config/config.yml")) {
             $this->redirect->redirectToRoute("app_home");
-        }
+        }*/
 
         $form = $this->createForm(InstallerDatabaseForm::class);
         $form->handleRequest($request);
@@ -148,7 +154,6 @@ class InstallerController extends BaseController
             }
 
             $serializer = new Serializer();
-            //$config = $serializer->deserialize(file_get_contents(ROOT_PATH . "/app/config/config.yml"), "yaml");
             $config = ["env" => "dev",
                 "database" => [
                     "driver" => $databaseInfo["server_database_driver"],
@@ -184,16 +189,21 @@ class InstallerController extends BaseController
         return $this->render("installer/database", [
             "form" => $form->createView(),
             "errors" => $form->getErrorFeedback(),
+            "title" => "Configuration de la base de donnée"
         ]);
     }
 
     /**
      * @param Request $request
+     * @param UserRepository $repository
      * @return RenderView|string|string[]|null
      * @throws Exception
      */
-    public function createAdmin(Request $request)
+    public function createAdmin(Request $request, UserRepository $repository)
     {
+        /*if($repository->findAll()) {
+            $this->redirect->redirectTo('/');
+        }*/
 
         $user = new User();
 
@@ -216,6 +226,7 @@ class InstallerController extends BaseController
             [
                 "errors" => $form->getErrorFeedback(),
                 "form" => $form->createView(),
+                "title" => 'Création d\'un compte admin'
             ]
         );
     }
@@ -234,10 +245,10 @@ class InstallerController extends BaseController
      * @return RenderView|string|string[]|null
      * @throws Exception
      */
-    public function success() {
-        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
-            $this->redirect->redirectToRoute("app_home");
-        }
+    public function success(UserRepository $repository) {
+        /*if($repository->findAll()) {
+            $this->redirect->redirectTo('/');
+        }*/
 
         return $this->renderer->render("installer/success",[
             "title" => "Configuration success"

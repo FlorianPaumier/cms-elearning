@@ -5,7 +5,6 @@
       name: id
       type: SERIAL
       options:
-
         - PRIMARY KEY
         - NOT NULL
     username:

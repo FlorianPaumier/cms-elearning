@@ -11,13 +11,25 @@ class ChatOnline
 {
     use Entity;
 
-    protected $user;
+    /**
+     * @var User $user
+     */
+    protected User $user;
 
-    protected $status;
+    /**
+     * @var int $status
+     */
+    protected int $status;
 
-    protected $ip;
+    /**
+     * @var string $ip
+     */
+    protected string $ip;
 
-    protected $time;
+    /**
+     * @var int $time
+     */
+    protected int $time;
 
     /**
      * @return int

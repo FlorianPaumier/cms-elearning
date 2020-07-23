@@ -11,6 +11,7 @@ admin_article_global:
 admin_article_session:
   path: /admin/chat/session/{id}
   controller: App\Controllers\Admin\Chat:session
+  roles: ["ROLE_ADMIN"]
   method: [GET,POST]
   roles: ["ROLE_ADMIN"]
 

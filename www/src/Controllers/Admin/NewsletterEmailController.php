@@ -6,8 +6,7 @@ namespace App\Controllers\Admin;
 
 use App\Core\Cache\ConfigHandler;
 use App\Core\Interfaces\BaseController;
-use App\Core\Mailer\MailerHandler;
-use App\Core\Mailer\MailerMessage;
+use App\Core\Render\RenderView;
 use App\Core\Request\Request;
 use App\Entity\Newsletter;
 use App\Entity\NewsletterEmail;
@@ -15,17 +14,34 @@ use App\Form\NewsletterEmailForm;
 use App\Form\NewsletterForm;
 use App\Repository\NewsletterEmailRepository;
 use App\Repository\NewsletterRepository;
+use Exception;
 
 class NewsletterEmailController extends BaseController
 {
-    public function index(Request $request)
+    /**
+     * display the list of email subscribers
+     *
+     * @param NewsletterEmailRepository $repository
+     * @return RenderView|string|string[]|null
+     * @throws Exception
+     */
+    public function index(NewsletterEmailRepository $repository)
     {
-        return $this->renderer->render("admin/newsletterEmail/index",[
-            "method" => $request->getMethod(),
-            "title" => "Index"
+        $emails = $repository->paginate(5);
+
+        return $this->renderer->render("admin/newsletterEmail/list",[
+            "emails" => $emails,
+            "title" => "Liste des emails newsletter"
         ]);
     }
 
+    /**
+     * display the list of email subscribers
+     *
+     * @param NewsletterEmailRepository $repository
+     * @return RenderView|string|string[]|null
+     * @throws Exception
+     */
     public function list(NewsletterEmailRepository $repository)
     {
         $emails = $repository->paginate(5);
@@ -37,9 +53,11 @@ class NewsletterEmailController extends BaseController
     }
 
     /**
+     * display a form to create a new item and insert the data if exist
+     *
      * @param Request $request
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function new(Request $request)
     {
@@ -62,6 +80,15 @@ class NewsletterEmailController extends BaseController
         ]);
     }
 
+    /**
+     * display a form to edit an item and update the data if exist
+     *
+     * @param Request $request
+     * @param NewsletterRepository $repository
+     * @param Newsletter $newsletters
+     * @return RenderView|string|string[]|null
+     * @throws \App\Core\Exception\NoRecordException
+     */
     public function edit(Request $request, NewsletterRepository $repository, Newsletter $newsletters)
     {
         $newsletter = $repository->findBy(['id' => $newsletters->getId()]);
@@ -82,6 +109,12 @@ class NewsletterEmailController extends BaseController
         ]);
     }
 
+    /**
+     * delete an item
+     *
+     * @param NewsletterEmail $email
+     * @throws Exception
+     */
     public function delete(NewsletterEmail $email)
     {
         $this->entityManager->delete($email);

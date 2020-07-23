@@ -6,12 +6,14 @@ admin_contact_list:
 admin_contact_new:
   path: /admin/contact/new
   controller: App\Controllers\Admin\Contact:new
+  roles: ["ROLE_ADMIN"]
   method: [GET,POST]
   roles: ["ROLE_ADMIN"]
 
 admin_contact_edit:
   path: /admin/contact/edit/{id}
   controller: App\Controllers\Admin\Contact:edit
+  roles: ["ROLE_ADMIN"]
   method: [GET,POST]
   roles: ["ROLE_ADMIN"]
 

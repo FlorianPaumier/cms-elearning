@@ -11,16 +11,25 @@ class ChatGlobal
 {
     use Entity;
 
+    /**
+     * @var User $user
+     */
     protected $user;
 
+    /**
+     * @var string $message
+     */
     protected $message;
 
+    /**
+     * @var int $time;
+     */
     protected $time;
 
     /**
      * @return int
      */
-    public function getTime()
+    public function getTime(): int
     {
         return $this->time;
     }
@@ -36,7 +45,7 @@ class ChatGlobal
     /**
      * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }

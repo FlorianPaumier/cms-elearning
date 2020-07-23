@@ -1,0 +1,12 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: SERIAL
+      options:
+        - PRIMARY KEY
+        - NOT NULL
+    category:
+      name: category
+      type: varchar(255)

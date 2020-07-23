@@ -14,39 +14,57 @@ class Commentary
     /** @var string */
     protected $commentary;
 
-    /** @var int */
-    protected $id_user;
+    /** @var User */
+    protected $user;
 
-    /** @var int */
-    protected $id_article;
+    /** @var Article */
+    protected $article;
 
-    public function __construct()
-    {
-        $this->id_user = 1;
-    }
-
+    /**
+     * @param string|null $commentary
+     */
     public function setCommentary(?string $commentary): void
     {
         $this->commentary = $commentary;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCommentary(): ?string
     {
         return $this->commentary;
     }
 
-    public function getIdUser(): ?int
+    /**
+     * @param User $user
+     */
+    public function setUser(User $user): void
     {
-        return $this->id_user;
+        $this->user = $user;
     }
 
-    public function setIdArticle(?int $idArticle): void
+    /**
+     * @return User|null
+     */
+    public function getUser(): ?User
     {
-        $this->id_article = $id_article;
+        return $this->user;
     }
 
-    public function getIdArticle(): ?int
+    /**
+     * @param Article|null $article
+     */
+    public function setArticle(?Article $article): void
     {
-        return $this->id_article;
+        $this->article = $article;
+    }
+
+    /**
+     * @return Article|null
+     */
+    public function getArticle(): ?Article
+    {
+        return $this->article;
     }
 }

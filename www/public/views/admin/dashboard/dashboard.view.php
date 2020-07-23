@@ -13,9 +13,6 @@
 
                     <div class="card">
                         <div class="card__content card-welcome-content">
-
-
-
                             <p>Salut <?= $user->getUsername() ?>,</p>
                             <div class="card__title card-welcome-content-title">Bienvenu sur CMS E-LEARNING</div><br>
                             <p class="card__text card-welcome-content-text">Ceci est du contenu de description</p>
@@ -29,7 +26,7 @@
             <div class="cards">
                 <div class="cards__item cards-dashboard">
                     <div class="card">
-                        <div class="card__content card-dashboard-content active">
+                        <div class="card__content card-dashboard-content active" id="show_user" style="display: none">
                             <div>
                                 <p class="card__text card-dashboard-content-text">Utilisateurs</p>
                                 <p class="card__text card-dashboard-content-price"><?= $statsUser['total'] ?></p>
@@ -84,7 +81,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card__content card-dashboard-content active">
+                        <div class="card__content card-dashboard-content active" id="show_lesson" style="display: none">
                             <div>
                                 <p class="card__text card-dashboard-content-text">Cours</p>
                                 <p class="card__text card-dashboard-content-price"><?= $statsLesson['total'] ?></p>
@@ -139,25 +136,113 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card__content card-dashboard-content active">
+                        <div class="card__content card-dashboard-content active" id="show_article" style="display: none">
                             <div>
-                                <p class="card__text card-dashboard-content-text">Profits</p>
-                                <p class="card__text card-dashboard-content-price">3092 €</p>
+                                <p class="card__text card-dashboard-content-text">Articles</p>
+                                <p class="card__text card-dashboard-content-price"><?= $statsArticle['total'] ?></p>
                             </div>
                             <div>
                                 <div class="canva-div">
-                                    <canvas id="data"></canvas>
+                                    <canvas id="data_article"></canvas>
+                                    <script>
+                                        $(document).ready(function ()
+                                        {
+                                            let max=0;
+                                            const stats = <?= json_encode($statsArticle, true) ?>;
+                                            let keys=[], values=[];
+                                            for(let stat in stats['data']){
+                                                keys.push(stat)
+                                                values.push(stats['data'][stat])
+
+
+
+                                            }
+                                            let ctx = $('#data_article');
+                                            var myLineChart = new Chart(ctx, {
+                                                type: 'line',
+                                                data: {
+                                                    labels: keys,
+                                                    datasets:[
+                                                        {
+                                                            label:'nombre d\'article',
+                                                            data: values,
+                                                            fill: false,
+                                                            "borderColor": "rgb(75, 192, 192)", "lineTension": 1
+                                                        }
+
+                                                    ]
+
+                                                },
+                                                options: {
+                                                    scales: {
+                                                        yAxes: [{
+                                                            ticks: {
+                                                                max: Math.max(...values),
+                                                                min: 0,
+                                                                stepSize: 1
+                                                            }
+                                                        }]
+                                                    }
+                                                }
+
+                                            });
+                                        })
+                                    </script>
                                 </div>
                             </div>
                         </div>
-                        <div class="card__content card-dashboard-content">
+                        <div class="card__content card-dashboard-content active" id="shwo_contact" style="display: none">
                             <div>
-                                <p class="card__text card-dashboard-content-text">Profits</p>
-                                <p class="card__text card-dashboard-content-price">3092 €</p>
+                                <p class="card__text card-dashboard-content-text">Contacts</p>
+                                <p class="card__text card-dashboard-content-price"><?= $statsContact['total'] ?></p>
                             </div>
                             <div>
                                 <div class="canva-div">
-                                    <canvas id="data"></canvas>
+                                    <canvas id="data_contact"></canvas>
+                                    <script>
+                                        $(document).ready(function ()
+                                        {
+                                            let max=0;
+                                            const stats = <?= json_encode($statsContact, true) ?>;
+                                            let keys=[], values=[];
+                                            for(let stat in stats['data']){
+                                                keys.push(stat)
+                                                values.push(stats['data'][stat])
+
+
+
+                                            }
+                                            let ctx = $('#data_contact');
+                                            var myLineChart = new Chart(ctx, {
+                                                type: 'line',
+                                                data: {
+                                                    labels: keys,
+                                                    datasets:[
+                                                        {
+                                                            label:'nombre de contact',
+                                                            data: values,
+                                                            fill: false,
+                                                            "borderColor": "rgb(75, 192, 192)", "lineTension": 1
+                                                        }
+
+                                                    ]
+
+                                                },
+                                                options: {
+                                                    scales: {
+                                                        yAxes: [{
+                                                            ticks: {
+                                                                max: Math.max(...values),
+                                                                min: 0,
+                                                                stepSize: 1
+                                                            }
+                                                        }]
+                                                    }
+                                                }
+
+                                            });
+                                        })
+                                    </script>
                                 </div>
                             </div>
                         </div>
@@ -167,29 +252,74 @@
         </div>
         <div>
             <div class="cards">
+                <script>
+                    function user_button() {
+                        var article = document.getElementById("show_user");
+
+                        if (article.style.display === "none"){
+                            article.style.display = "block";
+                        }else{
+                            article.style.display = "none";
+                        }
+                    }
+
+                    function article_button() {
+                        var article = document.getElementById("show_article");
+
+                        if (article.style.display === "none"){
+                            article.style.display = "block";
+                        }else{
+                            article.style.display = "none";
+                        }
+                    }
+
+                    function lesson_button() {
+                        var article = document.getElementById("show_lesson");
+
+                        if (article.style.display === "none"){
+                            article.style.display = "block";
+                        }else{
+                            article.style.display = "none";
+                        }
+                    }
+
+                    function contact_button() {
+                        var article = document.getElementById("shwo_contact");
+
+                        if (article.style.display === "none"){
+                            article.style.display = "block";
+                        }else{
+                            article.style.display = "none";
+                        }
+                    }
+
+
+
+
+                </script>
                 <div class="cards__item cards-multicards">
                     <div class="card">
                         <div class="card__content card-multicards-content">
-                            <div class="card__title card-multicards-content-title">Profits</div>
-                            <p class="card__text card-multicards-content-text">1000€</p>
+                            <div class="card__title card-multicards-content-title">Utilisateurs</div>
+                            <a  href="#" onclick="user_button()" class="card__text card-multicards-content-text"><?= $statsUser['total'] ?></a>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card__content card-multicards-content">
-                            <div class="card__title card-multicards-content-title">Utilisateurs</div>
-                            <p class="card__text card-multicards-content-text"><?= $statsUser['total'] ?></p>
+                            <div class="card__title card-multicards-content-title">Articles</div>
+                            <a  href="#" onclick="article_button()" class="card__text card-multicards-content-text"><?= $statsArticle['total'] ?></a>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card__content card-multicards-content">
                             <div class="card__title card-multicards-content-title">Cours</div>
-                            <p class="card__text card-multicards-content-text"><?= $statsLesson['total'] ?></p>
+                            <a  href="#" onclick="lesson_button()" class="card__text card-multicards-content-text"><?= $statsLesson['total'] ?></a>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card__content card-multicards-content">
-                            <div class="card__title card-multicards-content-title">Membres inscrit</div>
-                            <p class="card__text card-multicards-content-text">1000</p>
+                            <div class="card__title card-multicards-content-title">Contacts</div>
+                            <a  href="#" onclick="contact_button()" class="card__text card-multicards-content-text"><?= $statsContact['total'] ?></a>
                         </div>
                     </div>
                 </div>

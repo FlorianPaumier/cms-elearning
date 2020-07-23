@@ -37,10 +37,11 @@ class InstallerDatabaseForm extends AbstractForm
                 "required" => true,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
             ])
-            ->add("server_database_port", TextType::class, [
+            ->add("server_database_port", IntegerType::class, [
                 "label" => "Port",
-                "required" => true,
+                "required" => false,
                 "class" => "col-md-6 col-lg-6 col-sm-12",
+                "value" => null
             ])
             ->add("server_database_dbname", TextType::class, [
                 "label" => "Database name",
@@ -81,11 +82,17 @@ class InstallerDatabaseForm extends AbstractForm
         $this->prefix = $prefix;
     }
 
+    /**
+     * @return string
+     */
     public function getBlockPrefix(): string
     {
         return $this->prefix ?? "admin_configuration";
     }
 
+    /**
+     *
+     */
     public function configureOptions()
     {
     }

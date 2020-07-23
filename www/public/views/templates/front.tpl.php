@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>{{ title }}</title>
+    <title><?= $title ?? "Easy To Learn" ?> </title>
 
     <meta lang="fr">
 
@@ -44,6 +44,16 @@
 <script src="/assets/scripts/collapsible.js"></script>
 <!-- Chart.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<script>
+    new Chart(document.getElementById("chartjs-0"), {
+        "type": "line",
+        "data": {
+            "labels": ["January", "February", "March", "April", "May", "June", "July"],
+            "datasets": [{"label": "My First Dataset", "data": [65, 59, 80, 81, 56, 55, 40], "fill": false, "borderColor": "rgb(75, 192, 192)", "lineTension": 0.1}]
+        },
+        "options": {}
+    });
+</script>
 @yield(javascript)
 </body>
 </html>

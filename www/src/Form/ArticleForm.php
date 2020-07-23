@@ -17,9 +17,15 @@ use App\Core\Form\FormBuilder;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
+use Exception;
 
 class ArticleForm extends AbstractForm
 {
+    /**
+     * @param FormBuilder $builder
+     * @return FormBuilder
+     * @throws Exception
+     */
     public function buildForm(FormBuilder $builder): FormBuilder
     {
         return $builder
@@ -60,11 +66,17 @@ class ArticleForm extends AbstractForm
             ]);
     }
 
+    /**
+     * @param string|null $prefix
+     */
     public function setBlockPrefix(string $prefix = null): void
     {
         $this->prefix = $prefix;
     }
 
+    /**
+     * @return string
+     */
     public function getBlockPrefix(): string
     {
         return "admin_article";

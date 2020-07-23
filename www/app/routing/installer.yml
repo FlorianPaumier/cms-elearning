@@ -2,8 +2,8 @@ installer_index:
   path: /install
   controller: App\Controllers\Installer:index
 
-installer_configuration:
-  path: /install/configuration
+installer_configuration_config:
+  path: /install/configuration/config
   controller: App\Controllers\Installer:configuration
 
 installer_configuration_database:

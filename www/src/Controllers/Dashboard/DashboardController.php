@@ -36,9 +36,19 @@ class DashboardController extends BaseController
         $statsArticle = ['data' => [],
             'total' => count($articles)??0,
         ];
-        foreach ($lessons as $lesson){
-            $created_at = $lesson->getCreatedAt()->format('Y-m-d');
-            $statsLesson["data"][$created_at] = is_int($statsLesson["data"][$created_at])?$statsLesson["data"][$created_at]+1:1;
+        foreach ($articles as $article){
+            $created_at = $article->getCreatedAt()->format('Y-m-d');
+            $statsArticle["data"][$created_at] = is_int($statsArticle["data"][$created_at])?$statsArticle["data"][$created_at]+1:1;
+
+        }
+
+        $articles = $articleRepository->findAll();
+        $statsArticle = ['data' => [],
+            'total' => count($articles)??0,
+        ];
+        foreach ($articles as $article){
+            $created_at = $article->getCreatedAt()->format('Y-m-d');
+            $statsArticle["data"][$created_at] = is_int($statsArticle["data"][$created_at])?$statsArticle["data"][$created_at]+1:1;
 
         }
 
@@ -48,6 +58,9 @@ class DashboardController extends BaseController
         [
             'user' => $this->getUser(),
             'statsUser' => $statsUser,
+            'statsLesson' => $statsLesson,
+            'statsArticle' => $statsArticle,
+
         ]);
     }
 

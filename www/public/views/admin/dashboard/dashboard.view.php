@@ -182,8 +182,8 @@
                     </div>
                     <div class="card">
                         <div class="card__content card-multicards-content">
-                            <div class="card__title card-multicards-content-title">Vidéos en ligne</div>
-                            <p class="card__text card-multicards-content-text">1000</p>
+                            <div class="card__title card-multicards-content-title">Cours</div>
+                            <p class="card__text card-multicards-content-text"><?= $statsLesson['total'] ?></p>
                         </div>
                     </div>
                     <div class="card">

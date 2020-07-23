@@ -35,9 +35,9 @@ class InstallerController extends BaseController
      */
     public function index(): RenderView
     {
-        /*if(file_exists(ROOT_PATH."/app/config/config.yml")) {
+        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
             $this->redirect->redirectToRoute("app_home");
-        }*/
+        }
 
         return $this->renderer->render("installer/index",[
             "title" => "Installation"
@@ -52,9 +52,9 @@ class InstallerController extends BaseController
      */
     public function configuration(Request $request, SiteConfigurationRepository $repository, UserRepository $user): RenderView
     {
-        /*if($user->findAll()){
+        if($user->findAll()){
             $this->redirect->redirectTo('/');
-        }*/
+        }
 
         /** @var SiteConfiguration[] $configurations */
         $configurations = $repository->findAll();
@@ -124,9 +124,9 @@ class InstallerController extends BaseController
      */
     public function database(Request $request ) {
 
-        /*if(file_exists(ROOT_PATH."/app/config/config.yml")) {
+        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
             $this->redirect->redirectToRoute("app_home");
-        }*/
+        }
 
         $form = $this->createForm(InstallerDatabaseForm::class);
         $form->handleRequest($request);
@@ -201,9 +201,9 @@ class InstallerController extends BaseController
      */
     public function createAdmin(Request $request, UserRepository $repository)
     {
-        /*if($repository->findAll()) {
+        if($repository->findAll()) {
             $this->redirect->redirectTo('/');
-        }*/
+        }
 
         $user = new User();
 
@@ -246,9 +246,9 @@ class InstallerController extends BaseController
      * @throws Exception
      */
     public function success(UserRepository $repository) {
-        /*if($repository->findAll()) {
+        if($repository->findAll()) {
             $this->redirect->redirectTo('/');
-        }*/
+        }
 
         return $this->renderer->render("installer/success",[
             "title" => "Configuration success"

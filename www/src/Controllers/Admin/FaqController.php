@@ -105,7 +105,7 @@ class FaqController extends BaseController
     {
         // Delete the question
         $em = ConfigHandler::get("entityManager");
-        $em->from('faq')->delete($faq->getId());
+        $em->delete($faq);
         // Redirection to the home page
         $this->redirect->redirectToRoute("admin_faq_list");
     }

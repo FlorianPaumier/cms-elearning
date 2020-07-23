@@ -1,9 +1,11 @@
 frontend_sondage_list:
   path: /sondage
   controller: App\Controllers\Sondage:index
+  roles: ["ROLE_USER", "ROLE_ADMIN"]
 
 frontend_sondage_vote:
   path: /sondage/vote/{id}
   controller: App\Controllers\Sondage:vote
   method: [GET,POST]
   entity: Sondage
+  roles: ["ROLE_USER", "ROLE_ADMIN"]

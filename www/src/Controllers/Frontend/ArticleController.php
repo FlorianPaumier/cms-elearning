@@ -26,7 +26,7 @@ class ArticleController extends BaseController
      */
     public function index(ArticleRepository $repository)
     {
-        $articles = $repository->where("visible = 1")->paginate(5);
+        $articles = $repository->where("visible = true")->paginate(5);
 
         return $this->renderer->render("frontend/article/index",[
             "articles" => $articles,
@@ -61,7 +61,7 @@ class ArticleController extends BaseController
             $comment->setUser($this->getUser());
             $em->persist($comment);
             $em->flush();
-            $this->redirect->redirectToRoute("article_view", ['id' =>$article->getId()]);
+            $this->redirect->redirectToRoute("article_view", ['id' => $article->getId()]);
         }
 
         $comments = $commentary->findBy(['id_article' => $article->getId()]);

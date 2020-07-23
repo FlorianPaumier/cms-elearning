@@ -13,17 +13,17 @@ class Newsletter
     use Entity;
     use TimestampableEntity;
 
-    /** @var null|string $title */
-    protected ?string $title;
+    /** @var string $title */
+    protected $title;
 
-    /** @var null|string $content */
-    protected ?string $content;
+    /** @var string $content */
+    protected $content;
 
-    /** @var null|boolean $sended */
-    protected ?bool $sended;
+    /** @var boolean $sended */
+    protected $sended;
 
-    /** @var null|User $user*/
-    protected ?User $user;
+    /** @var User $user*/
+    protected $user;
 
 
     /**

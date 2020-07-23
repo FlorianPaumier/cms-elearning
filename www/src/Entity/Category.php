@@ -12,7 +12,7 @@ class Category
     use Entity;
 
     /** @var null|string $category*/
-    protected ?string $category;
+    protected $category;
 
     /**
      * @param string $category

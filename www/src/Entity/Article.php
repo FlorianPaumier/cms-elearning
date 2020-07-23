@@ -13,23 +13,23 @@ class Article
     use Entity;
     use TimestampableEntity;
 
-    /** @var null|string $title*/
-    protected ?string $title;
+    /** @var string $title*/
+    protected $title;
 
     /** @var null|string $content*/
-    protected ?string $content;
+    protected $content;
 
     /** @var null|Category $category */
-    protected ?Category $category;
+    protected $category;
 
     /** @var null|string $image*/
-    protected ?string $image;
+    protected $image;
 
     /** @var null|User $user*/
-    protected ?User $user;
+    protected $user;
 
     /** @var null|int $visible*/
-    protected ?int $visible;
+    protected $visible;
 
     /**
      * @return int

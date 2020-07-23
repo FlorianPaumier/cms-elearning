@@ -218,7 +218,7 @@ class FormBuilder
                             foreach ($value as $entity) {
                                 $this->entity->$method($entity);
                             }
-                        } else {
+                        } else if (!is_null($value)) {
                             $this->entity->$method($value);
                         }
                     }

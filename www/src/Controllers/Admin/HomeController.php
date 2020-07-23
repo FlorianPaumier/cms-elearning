@@ -59,17 +59,30 @@ class HomeController extends BaseController
                     $siteConfig->setValue($value);
                 }
 
+                if (in_array($index, [
+                    "server_database_driver",
+                    "server_database_host",
+                    "server_database_port",
+                    "server_database_dbname",
+                    "server_database_username",
+                    "server_database_password",
+                    "server_database_charset",
+                ])
+                ) {
+                    $databaseInfo[$index] = $value;
+                }
+
                 $this->entityManager->persist($siteConfig);
             }
 
             $serializer = new Serializer();
-            $config = $serializer->deserialize(file_get_contents(ROOT_PATH."/app/config/config.yml"), "yaml");
+            $config = $serializer->deserialize(file_get_contents(ROOT_PATH . "/app/config/config.yml"), "yaml");
             $config["mailer"]["host"] = $emailInfo["server_mail_host"];
             $config["mailer"]["port"] = $emailInfo["server_mail_port"];
             $config["mailer"]["username"] = $emailInfo["server_mail_identifiant"];
             $config["mailer"]["password"] = $emailInfo["server_mail_password"];
             $config = $serializer->serialize($config, "yaml");
-            file_put_contents(ROOT_PATH."/app/config/config.yml",$config);
+            file_put_contents(ROOT_PATH . "/app/config/config.yml", $config);
 
             $this->entityManager->flush();
             $this->redirect->redirectToRoute("admin_config");
@@ -81,30 +94,32 @@ class HomeController extends BaseController
         ]);
     }
 
-    public function generateSiteMap(Serializer $serializer, Router $router){
+    public function generateSiteMap(Serializer $serializer, Router $router)
+    {
         $routes = CacheHandler::get("routing");
 
-        $map = array_map(function ($key, $route) use ($router){
-            if(!key_exists("roles", $route) && strpos($route["path"], "test") === false){
+        $map = array_map(function ($key, $route) use ($router) {
+            if (!key_exists("roles", $route) && strpos($route["path"], "test") === false) {
                 $route["key"] = $key;
-                return $this->getPath($route,$router);
+                return $this->getPath($route, $router);
             }
         }, array_keys($routes), $routes);
 
         $map = array_unique($map);
 
         $sitemap = $serializer->serialize(["sitemap" => $map], "xml");
-        file_put_contents(ROOT_PATH."/public/assets/sitemap.xml", $sitemap, EXTR_OVERWRITE);
+        file_put_contents(ROOT_PATH . "/public/assets/sitemap.xml", $sitemap, EXTR_OVERWRITE);
 
         header("Content-Description: File Transfer");
         header("Content-Type: application/octet-stream");
-        header("Content-Disposition: attachment; filename=\"". basename("/assets/sitemap.xml") ."\"");
+        header("Content-Disposition: attachment; filename=\"" . basename("/assets/sitemap.xml") . "\"");
 
-        readfile (ROOT_PATH."/public/assets/sitemap.xml");
+        readfile(ROOT_PATH . "/public/assets/sitemap.xml");
         exit();
     }
 
-    public function database(Request $request, SiteConfigurationRepository $repository ) {
+    public function database(Request $request, SiteConfigurationRepository $repository)
+    {
 
         /** @var SiteConfiguration[] $configurations */
         $configurations = $repository->findAll();
@@ -204,27 +219,32 @@ class HomeController extends BaseController
         );
     }
 
-    public function testMailer(MailerHandler $handler){
-        header("Status: 200", 0,200);
+    public function testMailer(MailerHandler $handler)
+    {
+        header("Status: 200", 0, 200);
         return json_encode(["result" => $handler->sendTest()]);
     }
 
     private function getPath(array $route, Router $router)
     {
 
-        if(strpos($route["path"], '{') !== false && !key_exists( "entity", $route)) return null;
+        if (strpos($route["path"], '{') !== false && !key_exists("entity", $route)) {
+            return null;
+        }
 
-        if(!$route["entity"]) return $route["path"];
+        if (!$route["entity"]) {
+            return $route["path"];
+        }
 
-        $repo = $this->entityManager->getRepository($route["entity"]."Repository");
+        $repo = $this->entityManager->getRepository($route["entity"] . "Repository");
 
         $items = $repo->select("id")->findAll();
 
         $paths = [];
-        if (is_null($items)){
+        if (is_null($items)) {
             return $paths;
         }
-        foreach ($items as $item){
+        foreach ($items as $item) {
             $paths[$route["key"]][] = $router->getPath($route["key"], $item->getId());
         }
         return $paths;

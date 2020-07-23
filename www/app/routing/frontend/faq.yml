@@ -1,11 +1,3 @@
 frontend_faq_list:
   path: /faq
   controller: App\Controllers\Faq:index
-  roles: ["ROLE_USER", "ROLE_ADMIN"]
-
-frontend_faq_show:
-  path: /faq/show/{id}
-  controller: App\Controllers\Faq:show
-  method: [GET,POST]
-  entity: Faq
-  roles: ["ROLE_USER", "ROLE_ADMIN"]

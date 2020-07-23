@@ -51,7 +51,7 @@ class UserManager
     public function connectUser(?string $username, ?string $password): bool
     {
         /** @var User $q */
-        $q = $this->repository->where("username = :username")->orWhere("email = :email")
+        $q = $this->repository->where("username = :username")->orWhere("email = :email")->andWhere("status = true")
             ->setParameters([
                 "username" => $username,
                 "email" => $username,

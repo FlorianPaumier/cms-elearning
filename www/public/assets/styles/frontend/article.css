@@ -56,4 +56,9 @@
   border: none;
 }
 
+.block-commentary {
+  display: inline-block;
+  background-color: red;
+}
+
 /*# sourceMappingURL=article.css.map */

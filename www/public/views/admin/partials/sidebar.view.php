@@ -14,7 +14,19 @@
             "menu" => [
                 [
                     "link" => "@path(admin_article_list)",
-                    "name" => "Article"
+                    "name" => "Liste d'article"
+                ],
+                [
+                    "link" => "@path(admin_article_new)",
+                    "name" => "Nouveau Article"
+                ],
+                [
+                    "link" => "@path(admin_category)",
+                    "name" => "Liste des satégories"
+                ],
+                [
+                    "link" => "@path(admin_category_new)",
+                    "name" => "Nouveau Catégorie"
                 ],
             ]
         ],
@@ -81,6 +93,10 @@
                 [
                     "link" => "@path(admin_user_list)",
                     "name" => "Utilisateur"
+                ],
+                [
+                    "link" => "@path(admin_user_new)",
+                    "name" => "Nouveau utilisateur"
                 ],
             ]
         ],

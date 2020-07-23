@@ -8,7 +8,7 @@ use App\Core\Form\AbstractForm;
 use App\Core\Form\Fields\ButtonType;
 use App\Core\Form\Fields\EmailType;
 use App\Core\Form\FormBuilder;
-use App\Entity\Newsletter;
+use App\Entity\NewsletterEmail;
 
 class NewsletterEmailForm extends AbstractForm
 {
@@ -54,7 +54,7 @@ class NewsletterEmailForm extends AbstractForm
      */
     public function configureOptions(){
         $this->options = [
-            "data_class" => Newsletter::class
+            "data_class" => NewsletterEmail::class
         ];
     }
 }

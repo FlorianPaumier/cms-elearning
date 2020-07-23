@@ -1,7 +1,9 @@
 @extend(templates/install)
 
 @section(body)
-    <section class="container">
-        <a href="@path(installer_configuration_database)">Débuter l'installation <i></i></a>
-    </section>
+<section class="container">
+    <div id="wrapper">
+        <a id="start-configuration-button" href="/install/configuration/database">Débuter l'installation</a>
+    </div>
+</section>
 @endsection

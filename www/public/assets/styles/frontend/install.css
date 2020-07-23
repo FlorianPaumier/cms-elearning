@@ -1,6 +1,72 @@
+.form {
+  padding: 10px;
+  background-color: #EDF8FF;
+  border-radius: 10px;
+}
+
+input[type=text], input[type=integer], input[type=email], input[type=password] {
+  width: 98%;
+  border: none;
+  padding-left: 8px;
+  line-height: 2em;
+  border-radius: 5px;
+  margin: 3px;
+}
+
+input[type=date] {
+  width: 98%;
+  border: none;
+  padding-left: 8px;
+  height: 2em;
+  border-radius: 5px;
+  margin: 3px;
+}
+
+input[type=radio] {
+  background-color: white;
+}
+
+select {
+  width: 99%;
+  border: none;
+  height: 2em;
+  border-radius: 5px;
+  margin: 3px;
+  background-color: white;
+}
+select .default {
+  color: lightgrey;
+}
+
+/* Text Area */
+.btn[type=submit] {
+  background-color: #0ad406;
+  border: 1px #0ad406 solid;
+}
+
 body {
   background-color: #87B7FF;
 }
+body #start-configuration-button {
+  display: inline-block;
+  vertical-align: middle;
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 10px;
+}
+body #start-configuration-button:link, body #start-configuration-button:visited {
+  background-color: green;
+  color: white;
+  padding: 14px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+body #start-configuration-button:hover, body #start-configuration-button:active {
+  background-color: darkgreen;
+}
+
 #install-header {
   width: 100%;
   height: 10%;
@@ -11,6 +77,22 @@ body {
 }
 #install-header div img {
   height: 100px;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 2.5rem;
+}
+
+form {
+  display: inline-block;
+}
+
+#wrapper {
+  min-height: 300px;
+  text-align: center;
 }
 
 /*# sourceMappingURL=install.css.map */

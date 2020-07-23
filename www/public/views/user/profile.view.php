@@ -14,6 +14,7 @@
             <li>Nom : <?= $user->getLastname() ?></li>
             <li>Age : <?= $user->getAge() ? $user->getAge()->format("d-m-Y") : "" ?></li>
         </ul>
+    <a href="@path(app_user_delete_user)"><button class="btn btn-danger">Supprimer mon Compte</button></a>
     </section>
     <section class="events">
         <h2>Evenement au quel vous êtes inscrit</h2>

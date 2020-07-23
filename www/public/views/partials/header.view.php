@@ -43,6 +43,7 @@
                         if (!is_null($session["app.user"])):
                             ?>
                             <a href="@path(app_user_logout)">Déconnexion</a>
+                            <a href="@path(app_user_profile)">Profile</a>
                         <?php
                         if (in_array("ROLE_ADMIN", $session["app.user"]["roles"])):
                             ?>

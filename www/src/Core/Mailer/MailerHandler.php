@@ -150,8 +150,8 @@ class MailerHandler
         $config = CacheHandler::get("config")["mailer"];
         $mail = new PHPMailer(true);
 
-        $this->sender = $config["email"] ?? $this->sender;
-        $this->replyTo = $config["email"] ?? $this->sender;
+        $this->sender = $config["username"] ?? $this->sender;
+        $this->replyTo = $config["username"] ?? $this->sender;
         $mail->SMTPDebug = $_SERVER["APP_ENV"] == "dev" ? SMTP::DEBUG_SERVER: SMTP::DEBUG_OFF;                     // Enable verbose debug output
         $mail->isSMTP();                                        // Send using SMTP
         $mail->Host = $config["host"];                          // Set the SMTP server to send through

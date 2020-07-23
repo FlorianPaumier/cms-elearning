@@ -166,12 +166,11 @@ class HomeController extends BaseController
             $this->entityManager->flush();
 
             $this->redirect->redirectToRoute("app_user_login");
-        } else {
-            $this->session->set("app.flash", ["error" => $form->getErrors()]);
         }
 
         return $this->renderer->render("/configuration/register",
             [
+                "errors" => $form->getErrorFeedback(),
                 "form" => $form->createView(),
             ]
         );

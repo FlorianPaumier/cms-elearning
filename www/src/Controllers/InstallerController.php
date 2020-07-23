@@ -26,12 +26,17 @@ use PDO;
  */
 class InstallerController extends BaseController
 {
+
     /**
      * @return RenderView|string|string[]|null
      * @throws Exception
      */
     public function index(): RenderView
     {
+        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
+            $this->redirect->redirectToRoute("app_home");
+        }
+
         return $this->renderer->render("installer/index",[
             "title" => "Installation"
         ]);
@@ -45,7 +50,10 @@ class InstallerController extends BaseController
      */
     public function configuration(Request $request, SiteConfigurationRepository $repository): RenderView
     {
-        dump('nok');
+        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
+            $this->redirect->redirectToRoute("app_home");
+        }
+
         /** @var SiteConfiguration[] $configurations */
         $configurations = $repository->findAll();
 
@@ -113,6 +121,10 @@ class InstallerController extends BaseController
      */
     public function database(Request $request/*, SiteConfigurationRepository $repository*/ ) {
 
+        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
+            $this->redirect->redirectToRoute("app_home");
+        }
+
         $form = $this->createForm(InstallerDatabaseForm::class);
         $form->handleRequest($request);
 
@@ -139,8 +151,9 @@ class InstallerController extends BaseController
             }
 
             $serializer = new Serializer();
-
-            $config = ["database" => [
+            //$config = $serializer->deserialize(file_get_contents(ROOT_PATH . "/app/config/config.yml"), "yaml");
+            $config = ["env" => "dev",
+                "database" => [
                     "driver" => $databaseInfo["server_database_driver"],
                     "host" => $databaseInfo["server_database_host"],
                     "port" => $databaseInfo["server_database_port"],
@@ -150,7 +163,11 @@ class InstallerController extends BaseController
                     "charset" => $databaseInfo["server_database_charset"],
                     "prefix" => $databaseInfo["server_database_prefix"]
                 ],
-                "env" => "dev"
+                "mailer" => [
+                    "transport" => "smtp",
+                    "encryption" => "ssl",
+                    "spool" => ["type" => "memory"]
+                ]
             ];
 
             $this->initDatabase(
@@ -180,7 +197,11 @@ class InstallerController extends BaseController
      */
     public function createAdmin(Request $request)
     {
-        $user = new user();
+        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
+            $this->redirect->redirectToRoute("app_home");
+        }
+
+        $user = new User();
 
         $form = $this->createForm(InstallerAdminForm::class, $user);
         $form->handleRequest($request);
@@ -195,12 +216,11 @@ class InstallerController extends BaseController
             $this->entityManager->flush();
 
             $this->redirect->redirectToRoute("installer_configuration_success");
-        } else {
-            $this->session->set("app.flash", ["error" => $form->getErrors()]);
         }
 
         return $this->renderer->render("installer/register",
             [
+                "errors" => $form->getErrorFeedback(),
                 "form" => $form->createView(),
             ]
         );
@@ -221,6 +241,10 @@ class InstallerController extends BaseController
      * @throws Exception
      */
     public function success() {
+        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
+            $this->redirect->redirectToRoute("app_home");
+        }
+
         return $this->renderer->render("installer/success",[
             "title" => "Configuration success"
         ]);
@@ -235,13 +259,13 @@ class InstallerController extends BaseController
      * @throws Exception
      */
     public function initDatabase(string $dbName,string $password,string $host,string $username, int $port = 5432) {
-        $cmd = "PGPASSWORD=$password createdb -h $host -p $port -U $username $dbName";
-        $result = exec($cmd);
+        $pdo = new PDO("pgsql:dbname=postgres;port=$port;host=$host", $username, $password);
+        $pdo->prepare("CREATE DATABASE $dbName")->execute();
+        $pdo = null;
 
-        if($result){
-            ConfigHandler::get('eventEmmiter')->emit('error.500','Vos identifiants de connexion sont incorrects');
-            return;
-        }
+        $pdo = new PDO("pgsql:dbname=$dbName;port=$port;host=$host", $username, $password);
+        $pdo->prepare("CREATE TABLE IF NOT EXISTS patch_list(id SERIAL PRIMARY KEY NOT NULL, table_name varchar(255), current_version int);")->execute();
+        $pdo = null;
 
     }
 

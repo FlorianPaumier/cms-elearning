@@ -373,7 +373,7 @@ class MigrationController extends BaseController
 
                 $this->content = ltrim(substr($this->content, 0, -3));
 
-                $this->migration->setTableName($this->tableName);
+                $this->migration->setTableName("\"".$this->tableName."\"");
                 $this->migration->setContent($this->content);
                 $this->migration->apply($this->method);
 

@@ -2,23 +2,28 @@ admin_events_list:
   controller: App\Controllers\Admin\Event:list
   path: "/admin/events"
   method: [GET]
+  roles: ["ROLE_ADMIN"]
 
 admin_events_new:
   controller: App\Controllers\Admin\Event:new
   path: "/admin/events/new"
   method: [GET, POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_events_edit:
   controller: App\Controllers\Admin\Event:edit
   path: "/admin/events/edit/{id}"
   method: [GET, POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_events_stream:
   controller: App\Controllers\Admin\Event:stream
   path: "/admin/events/edit/{id}/stream"
   method: [GET, POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_events_delete:
   controller: App\Controllers\Admin\Event:delete
   path: "/admin/events/delete/{id}"
   method: [GET, POST]
+  roles: ["ROLE_ADMIN"]

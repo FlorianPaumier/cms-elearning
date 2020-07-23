@@ -1,23 +1,29 @@
 admin_article:
   path: /admin/article
   controller: App\Controllers\Admin\Article:list
+  roles: ["ROLE_ADMIN"]
 
 admin_article_list:
   path: /admin/article/list
   controller: App\Controllers\Admin\Article:list
+  roles: ["ROLE_ADMIN"]
 
 admin_article_new:
   path: /admin/article/new
   controller: App\Controllers\Admin\Article:new
+  roles: ["ROLE_ADMIN"]
 
 admin_article_edit:
   path: /admin/article/edit/{id}
   controller: App\Controllers\Admin\Article:edit
+  roles: ["ROLE_ADMIN"]
 
 admin_article_design:
   path: /admin/article/design
   controller: App\Controllers\Admin\Article:design
+  roles: ["ROLE_ADMIN"]
 
 admin_article_delete:
   path: /admin/article/delete/{id}
   controller: App\Controllers\Admin\Article:delete
+  roles: ["ROLE_ADMIN"]

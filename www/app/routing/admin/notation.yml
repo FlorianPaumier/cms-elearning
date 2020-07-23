@@ -2,16 +2,20 @@ admin_notation_index:
   path: /admin/notation/{id}
   controller: App\Controllers\Admin\Notation:index
   method: [GET]
+  roles: ["ROLE_ADMIN"]
 
 admin_notation_show:
   path: /admin/notation/{id}/show/{id}
   controller: App\Controllers\Admin\Notation:show
+  roles: ["ROLE_ADMIN"]
 
 admin_notation_edit:
   path: /admin/notation/{id}/edit/{id}
   controller: App\Controllers\Admin\Notation:edit
+  roles: ["ROLE_ADMIN"]
 
 admin_notation_delete:
   path: /admin/notation/{id}/delete
   controller: App\Controllers\Admin\Notation:delete
   methods: [GET]
+  roles: ["ROLE_ADMIN"]

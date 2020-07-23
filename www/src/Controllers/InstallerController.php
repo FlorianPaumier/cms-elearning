@@ -50,9 +50,6 @@ class InstallerController extends BaseController
      */
     public function configuration(Request $request, SiteConfigurationRepository $repository): RenderView
     {
-        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
-            $this->redirect->redirectToRoute("app_home");
-        }
 
         /** @var SiteConfiguration[] $configurations */
         $configurations = $repository->findAll();
@@ -197,9 +194,6 @@ class InstallerController extends BaseController
      */
     public function createAdmin(Request $request)
     {
-        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
-            $this->redirect->redirectToRoute("app_home");
-        }
 
         $user = new User();
 

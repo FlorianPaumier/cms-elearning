@@ -84,18 +84,62 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card__content card-dashboard-content">
+                        <div class="card__content card-dashboard-content active">
                             <div>
-                                <p class="card__text card-dashboard-content-text">Profits</p>
-                                <p class="card__text card-dashboard-content-price">3092 €</p>
+                                <p class="card__text card-dashboard-content-text">Cours</p>
+                                <p class="card__text card-dashboard-content-price"><?= $statsLesson['total'] ?></p>
                             </div>
                             <div>
                                 <div class="canva-div">
-                                    <canvas id="data"></canvas>
+                                    <canvas id="data_lesson"></canvas>
+                                    <script>
+                                        $(document).ready(function ()
+                                        {
+                                            let max=0;
+                                            const stats = <?= json_encode($statsLesson, true) ?>;
+                                            let keys=[], values=[];
+                                            for(let stat in stats['data']){
+                                                keys.push(stat)
+                                                values.push(stats['data'][stat])
+
+
+
+                                            }
+                                            let ctx = $('#data_lesson');
+                                            var myLineChart = new Chart(ctx, {
+                                                type: 'line',
+                                                data: {
+                                                    labels: keys,
+                                                    datasets:[
+                                                        {
+                                                            label:'nombre de cours',
+                                                            data: values,
+                                                            fill: false,
+                                                            "borderColor": "rgb(75, 192, 192)", "lineTension": 1
+                                                        }
+
+                                                    ]
+
+                                                },
+                                                options: {
+                                                    scales: {
+                                                        yAxes: [{
+                                                            ticks: {
+                                                                max: Math.max(...values),
+                                                                min: 0,
+                                                                stepSize: 1
+                                                            }
+                                                        }]
+                                                    }
+                                                }
+
+                                            });
+                                        })
+                                    </script>
                                 </div>
                             </div>
                         </div>
-                        <div class="card__content card-dashboard-content">
+                        <div class="card__content card-dashboard-content active">
                             <div>
                                 <p class="card__text card-dashboard-content-text">Profits</p>
                                 <p class="card__text card-dashboard-content-price">3092 €</p>

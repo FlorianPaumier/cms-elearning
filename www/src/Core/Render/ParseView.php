@@ -91,8 +91,6 @@ class ParseView
         // Save token into session
         ConfigHandler::get('session')->offsetSet('input_csrf', $token);
 
-        dump(ConfigHandler::get('session')->getSession());
-
         // Generate the input hidden
         $input = new HiddenType();
         $input->addArgs([

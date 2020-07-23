@@ -13,20 +13,20 @@
       options:
         - NOT NULL
     answer1:
-      name: option_One
+      name: option_one
       type: character varying
       options:
         - NOT NULL
     answer2:
-      name: option_Two
+      name: option_two
       type: character varying
       options:
         - NOT NULL
     answer3:
-      name: option_Three
+      name: option_three
       type: character varying
     answer4:
-      name: option_Four
+      name: option_four
       type: character varying
     created_at:
       name: created_at

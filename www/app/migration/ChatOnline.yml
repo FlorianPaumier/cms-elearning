@@ -1,0 +1,21 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: SERIAL
+      options:
+        - PRIMARY KEY
+        - NOT NULL
+    ip:
+      name: ip
+      type: varchar(100)
+    user_id:
+      name: user_id
+      type: integer
+    status:
+      name: status
+      type: integer
+    time:
+      name: time
+      type: bigint

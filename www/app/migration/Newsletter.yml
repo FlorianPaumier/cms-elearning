@@ -1,0 +1,27 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: SERIAL
+      options:
+        - PRIMARY KEY
+        - NOT NULL
+    title:
+      name: commentary
+      type: varchar(255)
+    content:
+      name: content
+      type: text
+    sended:
+      name: sended
+      type: boolean
+    user_id:
+      name: user_id
+      type: integer
+    created_at:
+      name: created_at
+      type: timestamp
+    updated_at:
+      name: updated_at
+      type: timestamp

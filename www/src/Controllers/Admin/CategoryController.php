@@ -15,6 +15,13 @@ use Exception;
 class CategoryController extends BaseController
 {
 
+    /**
+     * display the list of category
+     *
+     * @param CategoryRepository $repository
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws Exception
+     */
     public function index(CategoryRepository $repository)
     {
         $categories = $repository->paginate(5);
@@ -25,6 +32,13 @@ class CategoryController extends BaseController
         ]);
     }
 
+    /**
+     * display the list of category
+     *
+     * @param CategoryRepository $repository
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws Exception
+     */
     public function list(CategoryRepository $repository)
     {
         $categories = $repository->paginate(5);
@@ -36,6 +50,8 @@ class CategoryController extends BaseController
     }
 
     /**
+     * display a form to create a new item and insert the data if exist
+     *
      * @param Request $request
      * @return mixed
      * @throws Exception
@@ -60,6 +76,15 @@ class CategoryController extends BaseController
         ]);
     }
 
+    /**
+     * display a form to edit an item and update the data if exist
+     *
+     * @param Request $request
+     * @param CategoryRepository $repository
+     * @param Category $categories
+     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @throws \App\Core\Exception\NoRecordException
+     */
     public function edit(Request $request, CategoryRepository $repository, Category $categories)
     {
         $category = $repository->findBy(['id' => $categories->getId()]);
@@ -80,6 +105,12 @@ class CategoryController extends BaseController
         ]);
     }
 
+    /**
+     * delete an item
+     *
+     * @param Category $category
+     * @throws Exception
+     */
     public function delete(Category $category)
     {
         $this->entityManager->delete($category);

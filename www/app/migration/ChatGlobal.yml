@@ -1,0 +1,18 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: SERIAL
+      options:
+        - PRIMARY KEY
+        - NOT NULL
+    user_id:
+      name: user_id
+      type: int
+    message:
+      name: message
+      type: text
+    time:
+      name: time
+      type: bigint

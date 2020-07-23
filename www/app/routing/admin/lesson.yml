@@ -8,6 +8,7 @@ admin_lesson_new:
   controller: App\Controllers\Admin\Lesson:new
   roles: ["ROLE_ADMIN"]
   method: [GET,POST]
+  roles: ["ROLE_ADMIN"]
 
 admin_lesson_edit:
   path: /admin/lesson/edit/{id}

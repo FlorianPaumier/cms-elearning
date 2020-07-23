@@ -5,9 +5,11 @@ namespace App\Controllers;
 
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\Exception\NoRecordException;
 use App\Core\Formatter\Serializer;
 use App\Core\Interfaces\BaseController;
 use App\Core\Mailer\MailerHandler;
+use App\Core\Render\RenderView;
 use App\Core\Request\Request;
 use App\Entity\SiteConfiguration;
 use App\Entity\User;
@@ -15,19 +17,42 @@ use App\Form\InstallerAdminForm;
 use App\Form\InstallerConfigurationForm;
 use App\Form\InstallerDatabaseForm;
 use App\Repository\SiteConfigurationRepository;
+use Exception;
 use PDO;
 
+/**
+ * Class InstallerController
+ * @package App\Controllers
+ */
 class InstallerController extends BaseController
 {
-    public function index()
+
+    /**
+     * @return RenderView|string|string[]|null
+     * @throws Exception
+     */
+    public function index(): RenderView
     {
+        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
+            $this->redirect->redirectToRoute("app_home");
+        }
+
         return $this->renderer->render("installer/index",[
             "title" => "Installation"
         ]);
     }
 
-    public function configuration(Request $request, SiteConfigurationRepository $repository)
+    /**
+     * @param Request $request
+     * @param SiteConfigurationRepository $repository
+     * @return RenderView|string|string[]|null
+     * @throws NoRecordException
+     */
+    public function configuration(Request $request, SiteConfigurationRepository $repository): RenderView
     {
+        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
+            $this->redirect->redirectToRoute("app_home");
+        }
 
         /** @var SiteConfiguration[] $configurations */
         $configurations = $repository->findAll();
@@ -80,7 +105,7 @@ class InstallerController extends BaseController
                 file_put_contents(ROOT_PATH."/app/config/config.yml",$config);
             }
             $this->entityManager->flush();
-            $this->redirect->redirectToRoute("installer_configuration_database");
+            $this->redirect->redirectToRoute("installer_configuration_admin");
         }
 
         return $this->render("installer/configuration", [
@@ -89,20 +114,18 @@ class InstallerController extends BaseController
         ]);
     }
 
-    public function database(Request $request, SiteConfigurationRepository $repository ) {
+    /**
+     * @param Request $request
+     * @return RenderView|string|string[]|null
+     * @throws Exception
+     */
+    public function database(Request $request/*, SiteConfigurationRepository $repository*/ ) {
 
-        /** @var SiteConfiguration[] $configurations */
-        $configurations = $repository->findAll();
-
-        $config = [];
-
-        foreach ($configurations as $configuration) {
-            $index = $configuration->getKey();
-            $config[$index] = $configuration->getValue();
+        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
+            $this->redirect->redirectToRoute("app_home");
         }
 
-        $form = $this->createForm(InstallerDatabaseForm::class, $config);
-        $form->setData($config);
+        $form = $this->createForm(InstallerDatabaseForm::class);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -112,16 +135,6 @@ class InstallerController extends BaseController
             foreach ($request->getRequest()->all() as $key => $value) {
                 $index = explode("admin_configuration_", $key, 2)[1];
 
-                $siteConfig = $repository->findOneBy(["key" => $index]);
-
-                if (is_null($siteConfig)) {
-                    $siteConfig = (new SiteConfiguration())
-                        ->setKey($index)
-                        ->setValue($value);
-                } else {
-                    $siteConfig->setValue($value);
-                }
-
                 if (in_array($index, [
                     "server_database_driver",
                     "server_database_host",
@@ -130,32 +143,46 @@ class InstallerController extends BaseController
                     "server_database_username",
                     "server_database_password",
                     "server_database_charset",
-                ])
-                ) {
-                    if ($siteConfig->getValue() !== $value) {
-                    }
+                    "server_database_prefix"
+                ]))
+                {
                     $databaseInfo[$index] = $value;
                 }
-
-                $serializer = new Serializer();
-                $config = $serializer->deserialize(file_get_contents(ROOT_PATH . "/app/config/config.yml"), "yaml");
-                $config["database"]["driver"] = $databaseInfo["server_database_driver"];
-                $config["database"]["host"] = $databaseInfo["server_database_host"];
-                $config["database"]["port"] = $databaseInfo["server_database_port"];
-                $config["database"]["dbname"] = $databaseInfo["server_database_dbname"];
-                $config["database"]["username"] = $databaseInfo["server_database_username"];
-                $config["database"]["password"] = $databaseInfo["server_database_password"];
-                $config["database"]["charset"] = $databaseInfo["server_database_charset"];
-                $config["database"]["prefix"] = $databaseInfo["server_database_prefix"];
-                $config = $serializer->serialize($config, "yaml");
-
-                file_put_contents(ROOT_PATH . "/app/config/config.yml", $config);
-
-                $this->entityManager->persist($siteConfig);
             }
 
-            $this->entityManager->flush();
-            $this->initDatabase($databaseInfo["server_database_dbname"]);
+            $serializer = new Serializer();
+            //$config = $serializer->deserialize(file_get_contents(ROOT_PATH . "/app/config/config.yml"), "yaml");
+            $config = ["env" => "dev",
+                "database" => [
+                    "driver" => $databaseInfo["server_database_driver"],
+                    "host" => $databaseInfo["server_database_host"],
+                    "port" => $databaseInfo["server_database_port"],
+                    "dbname" => $databaseInfo["server_database_dbname"],
+                    "username" => $databaseInfo["server_database_username"],
+                    "password" => $databaseInfo["server_database_password"],
+                    "charset" => $databaseInfo["server_database_charset"],
+                    "prefix" => $databaseInfo["server_database_prefix"]
+                ],
+                "mailer" => [
+                    "transport" => "smtp",
+                    "encryption" => "ssl",
+                    "spool" => ["type" => "memory"]
+                ]
+            ];
+
+            $this->initDatabase(
+                $config["database"]["dbname"],
+                $config["database"]["password"],
+                $config["database"]["host"],
+                $config["database"]["username"],
+                $config["database"]["port"]===""?5432:$config["database"]["port"]
+            );
+
+            $config = $serializer->serialize($config, "yaml");
+
+            file_put_contents(ROOT_PATH . "/app/config/config.yml", $config);
+
+            $this->redirect->redirectToRoute("installer_configuration_migration");
         }
         return $this->render("installer/database", [
             "form" => $form->createView(),
@@ -163,9 +190,18 @@ class InstallerController extends BaseController
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return RenderView|string|string[]|null
+     * @throws Exception
+     */
     public function createAdmin(Request $request)
     {
-        $user = new user();
+        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
+            $this->redirect->redirectToRoute("app_home");
+        }
+
+        $user = new User();
 
         $form = $this->createForm(InstallerAdminForm::class, $user);
         $form->handleRequest($request);
@@ -180,48 +216,57 @@ class InstallerController extends BaseController
             $this->entityManager->flush();
 
             $this->redirect->redirectToRoute("installer_configuration_success");
-        } else {
-            $this->session->set("app.flash", ["error" => $form->getErrors()]);
         }
 
         return $this->renderer->render("installer/register",
             [
+                "errors" => $form->getErrorFeedback(),
                 "form" => $form->createView(),
             ]
         );
     }
 
+    /**
+     * @param MailerHandler $handler
+     * @return false|string
+     * @throws \PHPMailer\PHPMailer\Exception
+     */
     public function testMailer(MailerHandler $handler){
         header("Status: 200", 0,200);
         return json_encode(["result" => $handler->sendTest()]);
     }
 
+    /**
+     * @return RenderView|string|string[]|null
+     * @throws Exception
+     */
     public function success() {
-/*
-        $serializer = new Serializer();
-        $config = $serializer->deserialize(file_get_contents(ROOT_PATH . "/app/config/config.yml"), "yaml");
-        $config["install"]["state"] = true;
-        $config = $serializer->serialize($config, "yaml");
+        if(file_exists(ROOT_PATH."/app/config/config.yml")) {
+            $this->redirect->redirectToRoute("app_home");
+        }
 
-        file_put_contents(ROOT_PATH . "/app/config/config.yml", $config);
-
-        $siteConfig = (new SiteConfiguration())
-            ->setKey('install')
-            ->setValue(1);
-        $this->entityManager->persist($siteConfig);
-        $this->entityManager->flush();
-*/
         return $this->renderer->render("installer/success",[
             "title" => "Configuration success"
         ]);
     }
 
-    public function initDatabase($dbName) {
-        $sql = "CREATE DATABASE $dbName";
+    /**
+     * @param string $dbName
+     * @param string $password
+     * @param string $host
+     * @param string $username
+     * @param int $port
+     * @throws Exception
+     */
+    public function initDatabase(string $dbName,string $password,string $host,string $username, int $port = 5432) {
+        $pdo = new PDO("pgsql:dbname=postgres;port=$port;host=$host", $username, $password);
+        $pdo->prepare("CREATE DATABASE $dbName")->execute();
+        $pdo = null;
 
-        ConfigHandler::get("entityManager")->getPdo()->exec($sql);
+        $pdo = new PDO("pgsql:dbname=$dbName;port=$port;host=$host", $username, $password);
+        $pdo->prepare("CREATE TABLE IF NOT EXISTS patch_list(id SERIAL PRIMARY KEY NOT NULL, table_name varchar(255), current_version int);")->execute();
+        $pdo = null;
 
-        $this->redirect->redirectToRoute("installer_configuration_admin");
     }
 
 }

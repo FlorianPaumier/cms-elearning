@@ -375,6 +375,8 @@ class FormBuilder
             return $html;
         }
 
+        $html.="@csrf()";
+
         return $this->render->render(__DIR__ . "/form.view.php", [
             "form_view" => $html,
             "method" => "POST",

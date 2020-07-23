@@ -12,7 +12,7 @@
       type: character varying
     startAt:
       name: start_at
-      type: timestamps
+      type: timestamp
     event:
       name: event_id
       type: integer

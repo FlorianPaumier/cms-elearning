@@ -4,7 +4,7 @@
             "pictogramme" => "fas fa-home icon",
             "menu" => [
                 [
-                    "link" => "#",
+                    "link" => "/admin/sondage",
                     "name" => "Menu Item"
                 ],
                 [
@@ -21,7 +21,7 @@
             "pictogramme" => "fas fa-file icon",
             "menu" => [
                 [
-                    "link" => "#",
+                    "link" => "/admin/pomme",
                     "name" => "Menu Item"
                 ],
                 [
@@ -38,7 +38,7 @@
             "pictogramme" => "fas fa-file icon",
             "menu" => [
                 [
-                    "link" => "#",
+                    "link" => "/admin/omeafe",
                     "name" => "Menu Item"
                 ],
                 [
@@ -152,7 +152,7 @@
                     <span><?= $menu ?></span>
                     <ul class="submenu">
                         <?php foreach ($buttons['menu'] as $button): ?>
-                        <a href="<?php $button['link'] ?>"><li><?= $button['name'] ?></li></a>
+                        <a href="<?= $button['link'] ?>"><li><?= $button['name'] ?></li></a>
                         <?php endforeach; ?>
                     </ul>
                 </li>

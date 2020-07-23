@@ -23,6 +23,9 @@ abstract class Connection
         if (self::$connection === null) {
             // Late static binding (PHP 5.3+)
             $config = CacheHandler::get("config")["database"];
+            if(is_null($config)){
+                return null;
+            }
             $dsn = "${config['driver']}:host=${config['host']};dbname=${config['dbname']}";
 
             try {

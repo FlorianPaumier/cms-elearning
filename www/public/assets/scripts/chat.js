@@ -1,6 +1,10 @@
 var reloadTime = 1000;
 var scrollBar = false;
 
+/**
+ * @function getMessages()
+ * @description get all message;
+ */
 function getMessages() {
     $.getJSON('/chat/message', function(data) {
         if(data['error'] === undefined) {
@@ -29,6 +33,10 @@ function getMessages() {
     });
 }
 
+/**
+ * @function getMessages()
+ * @description get all messages;
+ */
 function postMessage() {
     var message = encodeURIComponent($(".chat-message").val());
 
@@ -49,6 +57,9 @@ function postMessage() {
 
 }
 
+/**
+ * @description reload message and user status
+ */
 $(document).ready(function() {
     if(document.getElementsByClassName('chat-message')) {
         window.setInterval(getMessages, reloadTime);
@@ -57,19 +68,16 @@ $(document).ready(function() {
     }
 });
 
+/**
+ * @function getOnlineUsers()
+ * @description get user status and list of users online;
+ */
 function getOnlineUsers() {
-    // On lance la requête ajax
     $.getJSON('/chat/online', function(data) {
-        // Si data['error'] renvoi 0, alors ça veut dire que personne n'est en ligne
-        // ce qui n'est pas normal d'ailleurs
         if(data['error'] === undefined) {
             var online = '', i = 1, image, text;
-            // On parcours le tableau inscrit dans
-            // la colonne [list] du tableau JSON
             for (var id in data['list']) {
 
-                // On met dans la variable text le statut en toute lettre
-                // Et dans la variable image le lien de l'image
                 if(data["list"][id]["status"] === 'busy') {
                     text = 'Occupé';
                     image = 'busy';
@@ -80,14 +88,9 @@ function getOnlineUsers() {
                     text = 'En ligne';
                     image = 'active';
                 }
-                // On affiche d'abord le lien pour insérer le pseudo dans la zone de texte
                 online += '<a href="#post" onclick="insertLogin(\''+data['list'][id]["login"]+'\')" title="'+text+'">';
-                // Ensuite on affiche l'image
                 online += '<img src="status-'+image+'.png" /> ';
-                // Enfin on affiche le pseudo
                 online += data['list'][id]["login"]+'</a>';
-                // Si i vaut 1, ça veut dire qu'on a affiché un membre
-                // et qu'on doit aller à la ligne
                 if(i === 1) {
                     i = 0;
                     online += '<br>';
@@ -100,6 +103,10 @@ function getOnlineUsers() {
     });
 }
 
+/**
+ * @function getStatus()
+ * @description change user status
+ */
 function setStatus() {
     var status = encodeURIComponent($(".chat-status-select").val());
     $.ajax({
@@ -120,10 +127,17 @@ function setStatus() {
     });
 }
 
+/**
+ * @function rmResponse()
+ * @description clear status response
+ */
 function rmResponse() {
     $("#statusResponse").html('');
 }
 
+/**
+ * @description send message on click
+ */
 $('.chat-message-submit').on('click',(
     function(){
         postMessage();
@@ -131,6 +145,9 @@ $('.chat-message-submit').on('click',(
     }
 ));
 
+/**
+ * @description update status on change
+ */
 $('.chat-status-select').on('change',(
     function(){
         setStatus();

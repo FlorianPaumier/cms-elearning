@@ -1,0 +1,24 @@
+1:
+  method: create
+  column:
+    id:
+      name: id
+      type: SERIAL
+      options:
+        - PRIMARY KEY
+        - NOT NULL
+    sondage_id:
+      name: sondage_id
+      type: integer
+      options:
+        - NOT NULL
+    choix:
+      name: choix
+      type: integer
+      options:
+        - NOT NULL
+    user_id:
+      name: user_id
+      type: integer
+      options:
+        - NOT NULL

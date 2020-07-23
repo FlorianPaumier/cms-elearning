@@ -12,12 +12,12 @@ class PatchList
     /**
      * @var string $tableName;
      */
-    public string $tableName;
+    public $tableName;
 
     /**
      * @var int $currentVersion;
      */
-    public int $currentVersion;
+    public $currentVersion;
 
     /**
      * @return string

@@ -2,7 +2,9 @@
 
 namespace App\Controllers\Admin;
 
+use App\Core\Exception\NoRecordException;
 use App\Core\Interfaces\BaseController;
+use App\Core\Render\RenderView;
 use App\Core\Request\Request;
 use App\Entity\Article;
 use App\Form\ArticleForm;
@@ -16,7 +18,7 @@ class ArticleController extends BaseController
      * display the list of article
      *
      * @param Request $request
-     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @return RenderView|string|string[]|null
      * @throws Exception
      */
     public function index(Request $request)
@@ -31,7 +33,7 @@ class ArticleController extends BaseController
      * display the list of article
      *
      * @param ArticleRepository $repository
-     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @return RenderView|string|string[]|null
      * @throws Exception
      */
     public function list(ArticleRepository $repository)
@@ -80,8 +82,8 @@ class ArticleController extends BaseController
      * @param Request $request
      * @param ArticleRepository $repository
      * @param Article $articles
-     * @return \App\Core\Render\RenderView|string|string[]|null
-     * @throws \App\Core\Exception\NoRecordException
+     * @return RenderView|string|string[]|null
+     * @throws NoRecordException
      */
     public function edit(Request $request, ArticleRepository $repository, Article $articles)
     {
@@ -118,7 +120,7 @@ class ArticleController extends BaseController
     /**
      * page of design
      *
-     * @return \App\Core\Render\RenderView|string|string[]|null
+     * @return RenderView|string|string[]|null
      * @throws Exception
      */
     public function design()

@@ -218,7 +218,7 @@ class FormBuilder
                             foreach ($value as $entity) {
                                 $this->entity->$method($entity);
                             }
-                        } else if (!is_null($value)) {
+                        } else if (!is_null($value) && !empty($value)) {
                             $this->entity->$method($value);
                         }
                     }
@@ -637,7 +637,7 @@ class FormBuilder
     private function transformValue(string $key, $value)
     {
         if ($this->fields[$key]["type"] !== TextAreaType::class) {
-            if ($this->fields[$key]["type"] === SelectType::class) {
+            if ($this->fields[$key]["type"] === SelectType::class || $this->fields[$key]["type"] === CheckboxType::class) {
                 $value = array_map(function ($value) {
                     return htmlentities($value);
                 }, $value);
@@ -677,12 +677,12 @@ class FormBuilder
             $method = "add";
             $items = [];
             foreach ($value as $id) {
-                $result = $repository->select("id", $this->fields[$key]["args"]["choice_label"])->find($id);
+                $result = $repository->select("id", $this->fields[$key]["args"]["choice_label"])->find((int)$id);
                 $items[] = $result;
             }
             $value = $items;
         } else {
-            $value = $repository->select("id", $this->fields[$key]["args"]["choice_label"])->find($value);
+            $value = $repository->select("id", $this->fields[$key]["args"]["choice_label"])->find((int)$value);
         }
 
         return $value;
@@ -751,9 +751,13 @@ class FormBuilder
 
             if(is_object($this->entity)){
                 $method = "get".ucfirst($args["key"]);
-                $selectionValue = $this->entity->$method();
+                $selectionValue = $this->entity->$method()??[];
             }else{
-                $selectionValue = $this->entity[$args["key"]];
+                $selectionValue = $this->entity[$args["key"]]??[];
+            }
+
+            if (is_string($selectionValue)){
+                $selectionValue = json_decode($selectionValue, true);
             }
 
             $name = $this->formType->getBlockPrefix() . "_" . $args["key"];
@@ -761,7 +765,7 @@ class FormBuilder
                 "key" => $args["key"],
                 "label" => $choice,
                 "value" => $key,
-                "selected" => in_array($key, json_decode($selectionValue, true)),
+                "selected" => in_array($key, $selectionValue),
                 "placeholder" => $choice,
                 "class" => "form-control",
                 "type" => $field->getBlockName(),

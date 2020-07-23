@@ -14,22 +14,22 @@ class ChatOnline
     /**
      * @var User $user
      */
-    protected User $user;
+    protected $user;
 
     /**
      * @var int $status
      */
-    protected int $status;
+    protected $status;
 
     /**
      * @var string $ip
      */
-    protected string $ip;
+    protected $ip;
 
     /**
      * @var int $time
      */
-    protected int $time;
+    protected $time;
 
     /**
      * @return int

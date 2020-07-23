@@ -57,7 +57,7 @@ class ConfigHandler
         $this->getRouting();
 
         if (!file_exists(CONFIG_PATH."/config.yml") && !preg_match ('/\/install/',$this->formatUrl())) {
-            (new RedirectionHandler())->redirectToRoute("installer_index");
+            (new RedirectionHandler())->redirectTo("/install");
         }
 
         self::bind("request", Request::createFromGlobals());

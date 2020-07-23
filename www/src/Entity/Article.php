@@ -28,21 +28,21 @@ class Article
     /** @var null|User $user*/
     protected $user;
 
-    /** @var null|int $visible*/
+    /** @var null|bool $visible*/
     protected $visible;
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getVisible(): ?int
+    public function getVisible(): ?bool
     {
         return $this->visible;
     }
 
     /**
-     * @param int $visible
+     * @param bool $visible
      */
-    public function setVisible(?int $visible = 0): void
+    public function setVisible(?bool $visible): void
     {
         $this->visible = $visible;
     }

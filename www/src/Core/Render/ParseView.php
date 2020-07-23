@@ -5,6 +5,8 @@ namespace App\Core\Render;
 
 
 use App\Core\Cache\ConfigHandler;
+use App\Core\Form\Fields\HiddenType;
+use App\Core\Form\Fields\TextType;
 use App\Core\Kernel\Kernel;
 
 class ParseView
@@ -64,6 +66,9 @@ class ParseView
                 case "errorFeedback":
                     $html = RenderFunction::getErrorFeedback($data["errors"] ?? [], $engine);
                     break;
+                case "csrf":
+                    $html = $this->generateCsrf();
+                    break;
             }
 
             if (!is_null($html)) {
@@ -73,5 +78,30 @@ class ParseView
         }
 
         return $functions;
+    }
+
+    /**
+     * Function for generate a csrf token
+     * @return string
+     * @throws \Exception
+     */
+    public function generateCsrf(){
+        // Generate token
+        $token = bin2hex(random_bytes(32));
+        // Save token into session
+        ConfigHandler::get('session')->offsetSet('input_csrf', $token);
+
+        dump(ConfigHandler::get('session')->getSession());
+
+        // Generate the input hidden
+        $input = new HiddenType();
+        $input->addArgs([
+            'mapped' => false,
+            'value' => $token,
+            'required' => true,
+            ]);
+
+        // Return the input generated
+        return $input->renderElement();
     }
 }

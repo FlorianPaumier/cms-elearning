@@ -10,7 +10,6 @@
         <tr>
             <th>Id</th>
             <th>Question</th>
-            <th>Date de création</th>
             <th></th>
             <th></th>
         </tr>
@@ -22,7 +21,6 @@
             <tr>
                 <td><?= $sondage->getId(); ?></td>
                 <td><?= $sondage->getQuestion(); ?></td>
-                <td><?= !is_null($question->getCreatedAt()) ? $question->getCreatedAt()->format("d/m/Y") : "N/A"; ?></td>
                 <td></td>
                 <td>
                     <a href="/admin/sondage/edit/<?= $sondage->getId(); ?>">

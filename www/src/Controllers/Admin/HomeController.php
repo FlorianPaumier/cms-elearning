@@ -79,10 +79,12 @@ class HomeController extends BaseController
             $config = $serializer->deserialize(file_get_contents(ROOT_PATH . "/app/config/config.yml"), "yaml");
             $config["env"] = in_array( 1, $request->getRequest()->get("admin_configuration_production")) ? "prod" : "dev";
             $config["maintenance"] = in_array( 1, $request->getRequest()->get("admin_configuration_maintenance")) ? true : false;
-            $config["mailer"]["host"] = $emailInfo["server_mail_host"];
-            $config["mailer"]["port"] = $emailInfo["server_mail_port"];
-            $config["mailer"]["username"] = $emailInfo["server_mail_identifiant"];
-            $config["mailer"]["password"] = $emailInfo["server_mail_password"];
+            $config["mailer"]["host"] =  $request->getRequest()->get("admin_configuration_server_mail_host");
+            $config["mailer"]["port"] =  $request->getRequest()->get("admin_configuration_server_mail_port");
+            $config["mailer"]["username"] = $request->getRequest()->get("admin_configuration_server_mail_identifiant");
+            $config["mailer"]["password"] = $request->getRequest()->get("admin_configuration_server_mail_password");
+
+            CacheHandler::set("config", $config);
             $config = $serializer->serialize($config, "yaml");
             file_put_contents(ROOT_PATH . "/app/config/config.yml", $config);
 

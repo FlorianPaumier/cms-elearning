@@ -64,7 +64,7 @@ class Router
             if ($this->hadParams($route["path"])) {
                 if ($this->matchComplexRoute($route)) {
                     break;
-                };
+                }
             } else {
                 if ($this->uri === $route["path"]) {
                     $this->matchRoute = $route;
@@ -102,7 +102,7 @@ class Router
         /** Denied acces to the route with the roles ask in the configuration doesn't match */
         if (!RolesManager::routeAllowed($this->matchRoute, 'roles')) {
             ConfigHandler::get("eventEmmiter")->emit("error.403", "Vous n'avez pas les droits nécessaire à l'accès de cette page");
-        };
+        }
 
         $class = "$controllerParam[0]Controller";
 
@@ -132,7 +132,6 @@ class Router
     public function getPath(string $route, $params = null): ?string
     {
         $path = key_exists($route, $this->routes) ? $this->routes[$route]["path"] : null;
-
         if (is_null($path)) {
             ConfigHandler::get("eventEmmiter")->emit("error.404", "La route $route n'exsite pas");
         }

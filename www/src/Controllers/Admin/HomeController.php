@@ -233,6 +233,7 @@ class HomeController extends BaseController
         exec("rm -f ".ROOT_PATH."/app/cache/*");
         $this->redirect->redirectToRoute("admin_config");
     }
+
     private function getPath(array $route, Router $router)
     {
 

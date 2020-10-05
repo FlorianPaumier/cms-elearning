@@ -14,6 +14,7 @@ use App\Form\UserEditForm;
 use App\Form\UserForgetpasswordForm;
 use App\Form\UserLoginForm;
 use App\Form\UserRegisterForm;
+use App\Form\UserResetPasswordForm;
 use App\Repository\EvaluationObjectRepository;
 use App\Repository\LessonRepository;
 use App\Repository\StreamInscriptionRepository;
@@ -181,22 +182,30 @@ class UserController extends BaseController
 
         $token = $request->getQuery()->get("token");
 
+        $form->setAction("?token=".$token);
+
         if(is_null($token)){
             $this->redirect->redirectToRoute("app_home");
         }
 
-        /** @var User $user */
-        $user = $userRepository->findOneBy(["confirmation_token" => $token]);
+        if($form->isValid()){
+            /** @var User $user */
+            $user = $userRepository->findOneBy(["confirmation_token" => $token]);
 
-        if (is_null($user) || is_array($user))
+            if (is_null($user) || is_array($user))
+                $this->redirect->redirectToRoute("app_home");
+
+            $password = $user->getPassword();
+            $user->setPassword(password_hash($password, PASSWORD_BCRYPT));
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+
             $this->redirect->redirectToRoute("app_home");
+        }
 
-        $password = $user->getPassword();
-        $user->setPassword(password_hash($password, PASSWORD_BCRYPT));
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
-
-        $this->redirect->redirectToRoute("app_home");
+        return $this->render("security/frontend/forget_password", [
+            "form" => $form->createView(),
+        ]);
 
     }
 

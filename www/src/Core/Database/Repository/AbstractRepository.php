@@ -167,6 +167,8 @@ abstract class AbstractRepository extends QueryBuilder
                 ->page($page)
                 ->fetch();
 
+        if(is_null($data)) $data = [];
+
         if(!is_array($data)){
             $data = [$data];
         }

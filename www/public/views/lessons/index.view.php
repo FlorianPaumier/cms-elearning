@@ -1,6 +1,5 @@
 @extend(templates/front)
 
-
 @section(body)
 <section id="catalogue-search">
     <form action="" method="get">

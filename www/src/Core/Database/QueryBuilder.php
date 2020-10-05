@@ -117,6 +117,7 @@ abstract class QueryBuilder
      */
     public function select(...$args): self
     {
+        
         foreach ($args as $arg) {
             if (gettype($arg) == "array") {
                 foreach ($arg as $value) {

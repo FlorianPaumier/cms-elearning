@@ -28,7 +28,7 @@ class ParseView
                 }
             }
         }
-        
+
         return $content;
     }
 
@@ -68,6 +68,9 @@ class ParseView
                     break;
                 case "csrf":
                     $html = $this->generateCsrf();
+                    break;
+                default:
+                    $html = "";
                     break;
             }
 

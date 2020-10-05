@@ -74,7 +74,7 @@ class RenderView
 
             if ($display) {
                 if (ConfigHandler::get("session")) {
-//                    ConfigHandler::get("session")->offsetSet("app.flash", null);
+                    ConfigHandler::get("session")->offsetSet("app.flash", null);
                 }
                 return $this->templateEngine->compile($display);
             }

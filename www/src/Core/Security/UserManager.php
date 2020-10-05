@@ -50,6 +50,7 @@ class UserManager
      */
     public function connectUser(?string $username, ?string $password): bool
     {
+
         /** @var User $q */
         $q = $this->repository->where("username = :username")->orWhere("email = :email")->andWhere("status = 1")
             ->setParameters([
@@ -60,9 +61,11 @@ class UserManager
         $response = false;
 
         if (!empty($q) && !is_null($q)) {
+
             if (!password_verify($password, $q->getPassword())) {
                 return false;
             }
+
             $response = true;
             $this->session->offsetSet("app.user", [
                 "user" => $q->getEmail(),
@@ -213,7 +216,6 @@ class UserManager
         if ($userRepo->exists(["email" => $email])) {
 
             $user = $userRepo->findOneBy(["email" => $email]);
-            dump($user);
             $user->setconfirmationToken(bin2hex(random_bytes(32)));
 
             $server = ConfigHandler::get("request")->getServer();

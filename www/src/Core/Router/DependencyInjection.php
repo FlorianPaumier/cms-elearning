@@ -63,7 +63,7 @@ class DependencyInjection
                     } catch (\Exception $e) {
                         dump($e->getMessage(), "Error");
                     }
-                };
+                }
             }
         } catch (\Exception $e) {
             dump($e->getMessage(), "Error");

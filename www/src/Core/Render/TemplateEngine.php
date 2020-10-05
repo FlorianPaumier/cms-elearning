@@ -189,23 +189,21 @@ class TemplateEngine
                 $this->_parseTemplate();
             }
 
-                if (count($this->methodEntries) > 0) {
-                    $this->_parseFunctions($this);
-                }
+            if (count($this->methodEntries) > 0) {
+                $this->_parseFunctions($this);
+            }
 
             foreach ($this->functions as $regex => $function) {
                 $this->content = preg_replace("#$regex#", $function, $this->content);
             }
         }
 
-        if (isset($this->data["render"]) && $this->data["render"]) {
+        if ((isset($this->data["render"]) && $this->data["render"]) || !is_null($this->view)) {
             return $this->content;
-        }
-
-        if (!is_null($this->view) && $tags) {
-            return $this->getParsePhpView($this->content, $this->data);
-        }elseif (!is_null($this->view)){
-            return $this->content;
+        } else {
+            if (!is_null($this->view) && $tags) {
+                return $this->getParsePhpView($this->content, $this->data);
+            }
         }
 
         return false;
